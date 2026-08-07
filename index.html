@@ -1480,6 +1480,23 @@
 </div>
 
 <script>
+    // ============================================================================
+    // 🔒 CÔ LẬP localStorage THEO TỪNG WEB (THTH1 vs THTH2)
+    // ----------------------------------------------------------------------------
+    // Hai web THTH1 & THTH2 nằm CHUNG một origin (ngocquyendang10.github.io) nên
+    // trình duyệt DÙNG CHUNG localStorage -> trước đây bị TRÙNG lịch sử hoạt động.
+    // Đoạn này thêm tiền tố "T2::" cho MỌI khoá localStorage của THTH2, cách ly
+    // hoàn toàn khỏi THTH1 (dùng "T1::"). Phải đặt TRƯỚC mọi lần đọc/ghi localStorage.
+    // ============================================================================
+    (function () {
+        var NS = "T2::";
+        var proto = Storage.prototype;
+        var _get = proto.getItem, _set = proto.setItem, _rem = proto.removeItem;
+        proto.getItem = function (k) { return _get.call(this, this === window.localStorage ? NS + k : k); };
+        proto.setItem = function (k, v) { return _set.call(this, this === window.localStorage ? NS + k : k, v); };
+        proto.removeItem = function (k) { return _rem.call(this, this === window.localStorage ? NS + k : k); };
+    })();
+
     // ⚠️ THTH2: DÁN ĐƯỜNG LINK WEB APP (.../exec) CỦA BACKEND THTH2 MỚI VÀO ĐÂY
     // (Deploy file Ma_THTH2_BACKEND.gs -> Web app -> copy link -> dán vào dòng dưới)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw2lApjY5ixgNwX205iqtVL0tu1-gMNGyiivnxnff925_hMfIP_Mj3NlnW3oNcdxBS4Eg/exec";
