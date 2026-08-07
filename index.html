@@ -1789,28 +1789,68 @@
     }
 
     // --- HỆ THỐNG PHÁT ÂM AUDIO ---
-    function triggerKoreanVoice(text, isMale) {
-        if (typeof text === 'undefined' || !text) return;
-        
-        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
-        if(clean.includes('/')) clean = clean.split('/')[0];
-        if(!clean) return;
+    // 여 (nút nữ): dịch vụ responsivevoice (giọng nữ, chạy ổn định trên web đã đăng).
+    // 남 (nút "nam"): giọng Google Translate — KHÔNG gọi thẳng được từ trình duyệt
+    //   (Google chặn theo Referer), nên nhờ backend Apps Script gọi giùm rồi trả
+    //   file MP3 dạng base64. Miễn phí, không cần key. Có cache + dự phòng giọng nữ.
+    const _ttsMaleCache = {}; // text -> base64 (để bấm lần 2 phát ngay, và giúp iOS phát được)
 
-        let url = "";
-        if (isMale) {
-            // 남: giọng Google
-            url = "https://translate.google.com/translate_tts?ie=UTF-8&tl=ko&client=tw-ob&q=" +
-                  encodeURIComponent(clean);
-        } else {
-            url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" + 
-                  encodeURIComponent(clean) + 
-                  "&lang=ko&engine=g3&name=Korean%20Female" + 
-                  "&pitch=0.5&rate=0.45&volume=1";
-        }
-                  
+    function _cleanKoreanText(text) {
+        if (typeof text === 'undefined' || !text) return "";
+        let clean = text.replace(/\([^)]*\)/g, "").replace(/\.\.\./g, "").replace(/\?/g, "").trim();
+        if (clean.includes('/')) clean = clean.split('/')[0];
+        return clean.trim();
+    }
+
+    function _playFemaleVoice(clean) {
+        let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" +
+                  encodeURIComponent(clean) +
+                  "&lang=ko&engine=g3&name=Korean%20Female&pitch=0.5&rate=0.45&volume=1";
         let audio = new Audio(url);
-        audio.load(); 
-        audio.play().catch(e => console.log("Lỗi phát audio:", e));
+        audio.load();
+        audio.play().catch(function () {
+            try {
+                if ('speechSynthesis' in window) {
+                    let u = new SpeechSynthesisUtterance(clean);
+                    u.lang = 'ko-KR'; u.rate = 0.9;
+                    window.speechSynthesis.cancel();
+                    window.speechSynthesis.speak(u);
+                }
+            } catch (_) {}
+        });
+    }
+
+    function _playBase64Mp3(b64) {
+        try { new Audio("data:audio/mpeg;base64," + b64).play().catch(function () {}); } catch (_) {}
+    }
+
+    // Tải trước base64 giọng nam cho 1 từ (gọi khi hiện flashcard) -> bấm là phát ngay.
+    function prefetchMaleVoice(text) {
+        let clean = _cleanKoreanText(text);
+        if (!clean || _ttsMaleCache[clean]) return;
+        fetch(`${SCRIPT_URL}?action=tts&text=${encodeURIComponent(clean)}`)
+            .then(r => r.json())
+            .then(d => { if (d && d.success && d.audio) _ttsMaleCache[clean] = d.audio; })
+            .catch(function () {});
+    }
+
+    function triggerKoreanVoice(text, isMale) {
+        let clean = _cleanKoreanText(text);
+        if (!clean) return;
+
+        if (!isMale) { _playFemaleVoice(clean); return; }
+
+        // 남: có sẵn trong cache thì phát ngay (đồng bộ -> hợp lệ trên iOS)
+        if (_ttsMaleCache[clean]) { _playBase64Mp3(_ttsMaleCache[clean]); return; }
+
+        // Chưa có -> nhờ backend lấy giọng Google Translate rồi phát
+        fetch(`${SCRIPT_URL}?action=tts&text=${encodeURIComponent(clean)}`)
+            .then(r => r.json())
+            .then(d => {
+                if (d && d.success && d.audio) { _ttsMaleCache[clean] = d.audio; _playBase64Mp3(d.audio); }
+                else { _playFemaleVoice(clean); } // backend chưa hỗ trợ / lỗi -> dùng giọng nữ
+            })
+            .catch(function () { _playFemaleVoice(clean); });
     }
 
     async function executeStudentLogin() {
@@ -2349,6 +2389,7 @@
         const card = vocabData[state.indices[state.current]];
         document.getElementById('fc-ko').innerText = card.ko;
         document.getElementById('fc-vi').innerText = card.vi;
+        prefetchMaleVoice(card.ko); // tải trước giọng nam để bấm 남 phát ngay (kể cả iOS)
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
         document.getElementById('fcard').classList.remove('flipped');
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
