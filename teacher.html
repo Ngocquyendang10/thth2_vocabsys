@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bảng điều khiển giáo viên — NQ Korean 2</title>
+<style>
+  :root{
+    --point:#614CFF; --point-light:#eceafe; --bg:#f4f6fb; --card:#ffffff;
+    --text:#1a202c; --sub:#718096; --line:#e6eaf2; --ok:#16a34a; --warn:#ed8936; --bad:#e53e3e;
+    --radius:16px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif; background:var(--bg); color:var(--text);}
+  a{color:var(--point);}
+  .wrap{max-width:1280px; margin:0 auto; padding:22px 18px 60px;}
+
+  /* Login */
+  #login-box{max-width:400px; margin:8vh auto; background:var(--card); border-radius:var(--radius); padding:30px 26px; box-shadow:0 12px 40px rgba(60,60,120,.12);}
+  #login-box h1{font-size:20px; margin:0 0 4px;}
+  #login-box p{font-size:13px; color:var(--sub); margin:0 0 20px; line-height:1.5;}
+  #login-box input{width:100%; padding:12px 14px; font-size:15px; border:1.5px solid var(--line); border-radius:10px; outline:none;}
+  #login-box input:focus{border-color:var(--point);}
+  .row-check{display:flex; align-items:center; gap:7px; font-size:13px; color:var(--sub); margin:10px 0 16px;}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:11px 18px; font-size:14px; font-weight:700; border:none; border-radius:10px; cursor:pointer; font-family:inherit;}
+  .btn-primary{background:var(--point); color:#fff; width:100%;}
+  .btn-primary:disabled{opacity:.6; cursor:default;}
+  .btn-ghost{background:#eef1f8; color:#4a5568;}
+  .login-msg{font-size:13px; font-weight:600; min-height:18px; margin-top:12px; color:var(--bad);}
+
+  /* Header */
+  .topbar{display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:18px;}
+  .topbar h1{font-size:21px; margin:0;}
+  .topbar .sub{font-size:12.5px; color:var(--sub); margin-top:2px;}
+  .top-actions{display:flex; gap:10px; align-items:center;}
+  .toolbar{display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin-bottom:14px;}
+  .toolbar input[type=search]{padding:9px 13px; font-size:13.5px; border:1.5px solid var(--line); border-radius:9px; outline:none; min-width:220px;}
+  .toolbar input:focus{border-color:var(--point);}
+  .legend{font-size:12px; color:var(--sub); display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-left:auto;}
+  .legend .dot{display:inline-block; width:12px; height:12px; border-radius:3px; vertical-align:-1px; margin-right:4px;}
+
+  /* Matrix table */
+  .table-scroll{overflow-x:auto; background:var(--card); border-radius:var(--radius); box-shadow:0 6px 22px rgba(60,60,120,.07); border:1px solid var(--line);}
+  table{border-collapse:collapse; width:100%; font-size:13px;}
+  th,td{padding:9px 8px; text-align:center; border-bottom:1px solid var(--line);}
+  thead th{position:sticky; top:0; background:#f0f2f9; font-weight:800; font-size:11.5px; color:#4a5568; z-index:2; white-space:nowrap;}
+  th.stick-left, td.stick-left{position:sticky; left:0; background:var(--card); text-align:left; z-index:1; min-width:150px;}
+  thead th.stick-left{z-index:3; background:#f0f2f9;}
+  tbody tr:hover td{background:#faf9ff;}
+  tbody tr:hover td.stick-left{background:#f3f1ff;}
+  .stu-name{font-weight:800; font-size:13.5px;}
+  .stu-meta{font-size:11px; color:var(--sub); margin-top:1px;}
+  .badge-out{display:inline-block; font-size:10px; font-weight:800; color:#fff; background:var(--bad); border-radius:6px; padding:1px 6px; margin-left:6px;}
+
+  /* stars cell */
+  .cell{cursor:default; border-radius:7px; font-weight:800; font-size:12px; padding:5px 2px; min-width:38px;}
+  .s0{color:#c2c8d4;} .s-part{color:var(--warn);} .s-full{color:var(--ok);}
+  .cell .frac{font-size:10.5px; font-weight:700; opacity:.85; display:block;}
+  .cell-locked{color:#cbd2de; font-size:11px;}
+  .cell-off{color:#e2e6ee;}
+
+  .num{font-weight:800;}
+  .muted{color:var(--sub);}
+
+  /* Detail row */
+  .detail-row td{background:#f7f8fd; padding:0;}
+  .detail-inner{padding:14px 16px; display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px;}
+  .u-card{background:#fff; border:1px solid var(--line); border-radius:12px; padding:10px 12px;}
+  .u-card h4{margin:0 0 8px; font-size:13px; display:flex; align-items:center; justify-content:space-between;}
+  .u-card .stars{color:var(--warn); font-size:12px;}
+  .q-line{display:flex; align-items:center; justify-content:space-between; font-size:11.5px; padding:3px 0; border-top:1px dashed #eef1f6;}
+  .q-line:first-of-type{border-top:none;}
+  .q-name{color:#4a5568;}
+  .q-stat{font-weight:700;}
+  .q-done{color:var(--ok);} .q-doing{color:var(--warn);} .q-none{color:#b8c0cd;}
+  .expand-hint{font-size:11px; color:var(--point); cursor:pointer; font-weight:700; white-space:nowrap;}
+  .empty{padding:40px; text-align:center; color:var(--sub); font-size:14px;}
+  @media (max-width:640px){ .legend{display:none;} }
+</style>
+</head>
+<body>
+
+<!-- ĐĂNG NHẬP GIÁO VIÊN -->
+<div id="login-box">
+  <h1>👩‍🏫 Bảng điều khiển giáo viên</h1>
+  <p>NQ Korean 2 — Nhập <b>mật mã giáo viên</b> để xem tiến độ làm bài của tất cả học viên.</p>
+  <input type="password" id="key-input" placeholder="Mật mã giáo viên" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
+  <label class="row-check"><input type="checkbox" id="remember-key" checked> Ghi nhớ trên thiết bị này</label>
+  <button class="btn btn-primary" id="login-btn" onclick="doLogin()">Xem tiến độ lớp học</button>
+  <div class="login-msg" id="login-msg"></div>
+</div>
+
+<!-- BẢNG DỮ LIỆU -->
+<div class="wrap" id="dash" style="display:none;">
+  <div class="topbar">
+    <div>
+      <h1>👩‍🏫 Tiến độ làm bài — NQ Korean 2</h1>
+      <div class="sub" id="summary-line">Đang tải…</div>
+    </div>
+    <div class="top-actions">
+      <button class="btn btn-ghost" onclick="loadReport()">↻ Làm mới</button>
+      <button class="btn btn-ghost" onclick="logout()">Đăng xuất</button>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <input type="search" id="search" placeholder="🔍 Tìm học viên…" oninput="renderTable()">
+    <label class="row-check" style="margin:0;"><input type="checkbox" id="hide-empty" onchange="renderTable()"> Ẩn học viên chưa làm gì</label>
+    <div class="legend">
+      <span><span class="dot" style="background:#16a34a;"></span>Đủ 5/5</span>
+      <span><span class="dot" style="background:#ed8936;"></span>Đang làm</span>
+      <span><span class="dot" style="background:#c2c8d4;"></span>Chưa làm</span>
+      <span><span class="dot" style="background:#e2e6ee;"></span>Chưa mở unit</span>
+    </div>
+  </div>
+
+  <div class="table-scroll">
+    <table id="report-table">
+      <thead id="report-head"></thead>
+      <tbody id="report-body"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+  // ⚠️ Phải TRÙNG với SCRIPT_URL trong index.html (cùng 1 backend đã redeploy có action teacherReport).
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKepdyG-ORWiL_qHy8VDArBIbGyIeNZapGfj6g-p566IuFnUTS1qZDQmEZsU8PLQqQ/exec";
+
+  const QUIZ_TABS = [
+    { key:'listen', label:'Nghe & chọn từ' },
+    { key:'quiz',   label:'Trắc nghiệm' },
+    { key:'visual', label:'Nhìn hình chọn từ' },
+    { key:'guess',  label:'Nghe & tìm nghĩa' },
+    { key:'typing', label:'Viết từ' }
+  ];
+  const MAX_UNIT = 15;
+  const KEY_STORE = 'thth2_teacher_key';
+
+  let teacherKey = '';
+  let students = [];       // dữ liệu thô từ server
+  let parsed = [];         // đã bóc tách tiến độ
+
+  window.onload = function(){
+    const saved = localStorage.getItem(KEY_STORE);
+    if (saved) { document.getElementById('key-input').value = saved; doLogin(); }
+    else document.getElementById('key-input').focus();
+  };
+
+  function setLoginMsg(t){ document.getElementById('login-msg').textContent = t || ''; }
+
+  async function doLogin(){
+    const key = (document.getElementById('key-input').value || '').trim();
+    if (!key) { setLoginMsg('Vui lòng nhập mật mã.'); return; }
+    teacherKey = key;
+    const btn = document.getElementById('login-btn');
+    btn.disabled = true; btn.textContent = 'Đang kiểm tra…'; setLoginMsg('');
+    const ok = await loadReport(true);
+    btn.disabled = false; btn.textContent = 'Xem tiến độ lớp học';
+    if (ok){
+      if (document.getElementById('remember-key').checked) localStorage.setItem(KEY_STORE, teacherKey);
+      else localStorage.removeItem(KEY_STORE);
+      document.getElementById('login-box').style.display = 'none';
+      document.getElementById('dash').style.display = 'block';
+    }
+  }
+
+  function logout(){
+    localStorage.removeItem(KEY_STORE);
+    teacherKey=''; students=[]; parsed=[];
+    document.getElementById('dash').style.display='none';
+    document.getElementById('login-box').style.display='block';
+    document.getElementById('key-input').value='';
+    document.getElementById('key-input').focus();
+  }
+
+  // Gọi server. isLogin=true -> báo lỗi ở màn đăng nhập.
+  async function loadReport(isLogin){
+    try{
+      const res = await fetch(`${SCRIPT_URL}?action=teacherReport&key=${encodeURIComponent(teacherKey)}`);
+      const data = await res.json();
+      if (!data.success){
+        if (isLogin) setLoginMsg(data.message || 'Sai mật mã giáo viên.');
+        else alert(data.message || 'Không tải được dữ liệu.');
+        return false;
+      }
+      students = data.students || [];
+      parsed = students.map(parseStudent);
+      renderTable();
+      return true;
+    }catch(e){
+      if (isLogin) setLoginMsg('Lỗi kết nối máy chủ. Kiểm tra mạng / SCRIPT_URL.');
+      else alert('Lỗi kết nối máy chủ.');
+      return false;
+    }
+  }
+
+  // Bóc tách 1 học viên: unitQuiz theo unit, thời gian học, số unit hoàn thành…
+  function parseStudent(s){
+    const key = String(s.username||'').toLowerCase();
+    let blob = {};
+    try { blob = JSON.parse(s.progress || '{}') || {}; } catch(e){ blob = {}; }
+    function readJson(name){ try { return JSON.parse(blob[name] || 'null'); } catch(e){ return null; } }
+
+    const unitQuiz = readJson('unitQuiz_'+key) || {};
+    const totalSecs = parseInt(blob['total_secs_'+key]||'0',10) || 0;
+    const wrong = readJson('wrongWords_'+key);
+    const wrongCount = Array.isArray(wrong) ? wrong.length : 0;
+
+    // per-unit: số bài done (sao), số bài started, điểm từng loại
+    const units = {};
+    let unitsWithActivity = 0, totalStars = 0;
+    for (let u=1; u<=MAX_UNIT; u++){
+      const q = unitQuiz[u] || unitQuiz[String(u)] || null;
+      if (!q){ units[u] = null; continue; }
+      let stars=0, started=0;
+      const detail = {};
+      QUIZ_TABS.forEach(t=>{
+        const d = q[t.key];
+        if (d){ detail[t.key]=d; if (d.done) stars++; if (d.started) started++; }
+        else detail[t.key]=null;
+      });
+      units[u] = { stars, started, detail };
+      if (started>0 || stars>0) unitsWithActivity++;
+      totalStars += stars;
+    }
+
+    const allowedSet = toSet(s.unlockedUnits);
+    const lessonSet  = toSet(s.unlockLesson);
+
+    return {
+      username: s.username, status: s.status, isOut: String(s.status||'').toUpperCase()==='OUT',
+      unlockedUnits: s.unlockedUnits, unlockLesson: s.unlockLesson, expire: s.expire, updatedAt: s.updatedAt,
+      allowedSet, lessonSet, units, totalSecs, wrongCount, unitsWithActivity, totalStars
+    };
+  }
+
+  function toSet(str){
+    const set = {};
+    String(str||'').split(',').map(x=>x.trim()).filter(Boolean).forEach(x=>set[x]=true);
+    return set;
+  }
+  function fmtTime(sec){
+    sec = sec||0; const h=Math.floor(sec/3600), m=Math.floor((sec%3600)/60);
+    if (h>0) return h+'g'+(m<10?'0':'')+m+'p';
+    return m+' phút';
+  }
+  function fmtDate(s){
+    if (!s) return '—';
+    const d = new Date(s); if (isNaN(d)) return '—';
+    const pad=n=>(n<10?'0':'')+n;
+    return pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
+  }
+
+  function renderTable(){
+    const q = (document.getElementById('search').value||'').trim().toLowerCase();
+    const hideEmpty = document.getElementById('hide-empty').checked;
+
+    // head
+    let head = '<tr><th class="stick-left">Học viên</th><th>Thời gian học</th><th>Cập nhật</th>';
+    for (let u=1; u<=MAX_UNIT; u++) head += `<th>U${u}</th>`;
+    head += '<th>Chi tiết</th></tr>';
+    document.getElementById('report-head').innerHTML = head;
+
+    let rows = parsed.filter(p=>{
+      if (q && !p.username.toLowerCase().includes(q)) return false;
+      if (hideEmpty && p.unitsWithActivity===0) return false;
+      return true;
+    });
+
+    const body = document.getElementById('report-body');
+    if (rows.length===0){ body.innerHTML = `<tr><td class="empty" colspan="${MAX_UNIT+4}">Không có học viên phù hợp.</td></tr>`; }
+    else {
+      body.innerHTML = rows.map((p,i)=>renderRow(p,i)).join('');
+    }
+
+    const totalActive = parsed.filter(p=>p.unitsWithActivity>0).length;
+    document.getElementById('summary-line').textContent =
+      `${parsed.length} học viên · ${totalActive} bạn đã bắt đầu làm bài · nhấn "Chi tiết" để xem điểm từng bài.`;
+  }
+
+  function renderRow(p, idx){
+    let cells = '';
+    for (let u=1; u<=MAX_UNIT; u++){
+      const info = p.units[u];
+      const allowed = p.allowedSet[u];
+      if (!allowed && (!info)) { cells += `<td><span class="cell-off" title="Chưa mở Unit ${u}">·</span></td>`; continue; }
+      if (!info){ cells += `<td><span class="cell s0" title="Đã mở nhưng chưa làm">0<span class="frac">/5</span></span></td>`; continue; }
+      const cls = info.stars>=5 ? 's-full' : (info.stars>0||info.started>0 ? 's-part' : 's0');
+      cells += `<td><span class="cell ${cls}" title="Unit ${u}: ${info.stars}/5 bài hoàn thành, ${info.started}/5 bài đã làm">${info.stars}<span class="frac">/5</span></span></td>`;
+    }
+    const nameMeta = `Mở học: ${p.unlockedUnits||'—'} · Bài giảng: ${p.unlockLesson||'—'}`;
+    return `
+      <tr>
+        <td class="stick-left">
+          <div class="stu-name">${escapeHtml(p.username)}${p.isOut?'<span class="badge-out">OUT</span>':''}</div>
+          <div class="stu-meta">${escapeHtml(nameMeta)}</div>
+        </td>
+        <td class="num">${fmtTime(p.totalSecs)}</td>
+        <td class="muted">${fmtDate(p.updatedAt)}</td>
+        ${cells}
+        <td><span class="expand-hint" onclick="toggleDetail(${idx})">Xem ▾</span></td>
+      </tr>
+      <tr class="detail-row" id="detail-${idx}" style="display:none;"><td colspan="${MAX_UNIT+4}"><div class="detail-inner">${renderDetail(p)}</div></td></tr>
+    `;
+  }
+
+  function renderDetail(p){
+    let html = '';
+    for (let u=1; u<=MAX_UNIT; u++){
+      const info = p.units[u];
+      if (!info) continue; // chỉ hiện unit đã có hoạt động
+      let lines = '';
+      QUIZ_TABS.forEach(t=>{
+        const d = info.detail[t.key];
+        let stat, cls;
+        if (!d || (!d.started && !d.done)){ stat='—'; cls='q-none'; }
+        else if (d.done){ stat=`✓ ${d.right}/${d.total}`; cls='q-done'; }
+        else { stat=`${d.right}/${d.total}`; cls='q-doing'; }
+        lines += `<div class="q-line"><span class="q-name">${t.label}</span><span class="q-stat ${cls}">${stat}</span></div>`;
+      });
+      html += `<div class="u-card"><h4>Unit ${u} <span class="stars">${'★'.repeat(info.stars)}${'☆'.repeat(5-info.stars)}</span></h4>${lines}</div>`;
+    }
+    if (!html) html = '<div class="muted" style="padding:6px;">Học viên chưa làm bài ở unit nào.</div>';
+    return html;
+  }
+
+  function toggleDetail(idx){
+    const el = document.getElementById('detail-'+idx);
+    if (el) el.style.display = (el.style.display==='none') ? 'table-row' : 'none';
+  }
+
+  function escapeHtml(s){
+    return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+</script>
+</body>
+</html>

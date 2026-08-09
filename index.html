@@ -582,6 +582,31 @@
         .grammar-sidebar-item.active { background: var(--bg-color); box-shadow: var(--neu-concave); color: #614CFF; border: 1px solid rgba(97, 76, 255, 0.2); font-weight: 800; }
         .grammar-main-content { flex-grow: 1; background: #ffffff; border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--neu-convex); border: 1px solid rgba(255, 255, 255, 0.8); min-height: 400px; animation: grammarFadeIn 0.3s ease; text-align: left; }
         .grammar-empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--sub-text); height: 350px; font-weight: 500; font-size: 14px; }
+        /* 🔒 Khung "chưa mở khoá" cho Bài giảng & Ngữ pháp (dùng chung) */
+        #lecture-locked-msg.lesson-locked-msg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 6; }
+        .lesson-locked-msg { display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 10px; padding: 32px 26px; box-sizing: border-box; background: linear-gradient(160deg, #f7f9ff 0%, #eef1fb 100%); }
+        #grammar-locked-msg.lesson-locked-msg { min-height: 380px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); }
+        .lesson-locked-msg svg { width: 46px; height: 46px; color: var(--point-color); opacity: 0.85; }
+        .lesson-locked-title { font-size: 17px; font-weight: 800; color: #2d3748; margin: 0; }
+        .lesson-locked-sub { font-size: 13.5px; font-weight: 500; color: var(--sub-text); line-height: 1.6; max-width: 440px; margin: 0; }
+        .lesson-locked-sub b { color: var(--point-color); font-weight: 700; }
+        /* Nút tab / menu bị khoá: hiện ổ khoá mờ */
+        .tab-click-btn.lesson-locked, .menu-item.lesson-locked > a { opacity: 0.72; }
+        .lock-badge { font-size: 0.82em; margin-left: 5px; vertical-align: baseline; }
+        /* 🔑 Nút "Đổi mật khẩu" trong thẻ hồ sơ */
+        .change-pw-btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; margin-top: 12px; padding: 7px 16px; font-size: 12.5px; font-weight: 700; color: var(--point-color); background: #fff; border: 1.5px solid var(--point-light); border-radius: 999px; cursor: pointer; box-shadow: var(--neu-convex); transition: all .15s ease; font-family: inherit; }
+        .change-pw-btn:hover { background: var(--point-light); }
+        .change-pw-btn svg { width: 15px; height: 15px; }
+        /* 🔑 Modal đổi mật khẩu */
+        .change-pw-box { max-width: 380px; width: 90%; text-align: left; }
+        .pw-field { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; text-align: left; }
+        .pw-field label { font-size: 12.5px; font-weight: 700; color: #4a5568; }
+        .pw-field input { padding: 10px 13px; font-size: 14px; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); background: #f8fafc; outline: none; font-family: inherit; transition: border-color .15s; }
+        .pw-field input:focus { border-color: var(--point-color); background: #fff; }
+        .pw-show-row { display: flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--sub-text); font-weight: 600; margin-bottom: 10px; cursor: pointer; }
+        .pw-msg { font-size: 12.5px; font-weight: 600; min-height: 18px; margin-bottom: 8px; line-height: 1.4; }
+        .pw-msg.error { color: #e53e3e; }
+        .pw-msg.success { color: #16a34a; }
         .grammar-section-title { font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; margin: 16px 0 8px 0; letter-spacing: 0.5px; border-left: 3px solid var(--point-color); padding-left: 8px; }
         
         .table-neu-structure { width: 100%; border-collapse: collapse; margin: 8px 0; border-radius: var(--radius-sm); overflow: hidden; box-shadow: var(--neu-convex); }
@@ -905,7 +930,7 @@
                     <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Từ vựng</a>
                 </li>
                 <li class="menu-item" id="menu-grammar" onclick="showAppMode('grammar')"><a href="#">
-                    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Ngữ pháp</a>
+                    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Ngữ pháp<span class="lock-badge" id="grammar-lock-badge" style="display:none;">🔒</span></a>
                 </li>
                 <li class="menu-item" id="menu-review" onclick="showAppMode('review')"><a href="#">
                     <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm0 16H5V8h14v11z"/></svg>Ôn lại từ vựng</a>
@@ -948,7 +973,7 @@
 
                     <!-- SUBTAB LỚN: gộp còn 4 nhóm chính -->
                     <div class="workspace-tabs" id="main-tabs-nav" style="display: none;">
-                        <button id="main-btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng</button>
+                        <button id="main-btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng<span class="lock-badge" id="lecture-lock-badge" style="display:none;">🔒</span></button>
                         <button id="main-btn-vocabTable" class="tab-click-btn" onclick="switchTab('vocabTable')">2. List từ vựng</button>
                         <button id="main-btn-flashcard" class="tab-click-btn" onclick="switchTab('flashcard')">3. Flashcard</button>
                         <button id="main-btn-quizgroup" class="tab-click-btn" onclick="switchTab('listen')">4. Quiz</button>
@@ -1020,7 +1045,14 @@
                         </div>
 
                         <div class="no-embed-msg" id="lecture-empty-msg" style="display: none;">Không có slide bài giảng cho Unit này.</div>
-                        
+
+                        <!-- 🔒 Khoá bài giảng: unit không nằm trong cột UnlockLesson -->
+                        <div class="lesson-locked-msg" id="lecture-locked-msg" style="display: none;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            <p class="lesson-locked-title">Bài giảng của Unit này chưa được mở khoá</p>
+                            <p class="lesson-locked-sub">Phần bài giảng chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn có thể luyện tập đầy đủ ở các mục <b>List từ vựng, Flashcard và Quiz</b> nhé. Nếu cần mở bài giảng, hãy liên hệ giáo viên.</p>
+                        </div>
+
                         <!-- Iframe thêm sự kiện onload để tự báo hiệu cho JavaScript ẩn bộ khung xương -->
                         <iframe id="lecture-iframe" class="lecture-iframe-box" src="" allowfullscreen style="width: 100%; height: 100%; border: none;"></iframe>
                     </div>
@@ -1302,7 +1334,14 @@
                     <h1 id="grammar-main-title">Ngoc Quyen's Classroom</h1>
                     <p id="grammar-subtitle">Vui lòng chọn Unit ở trên để tải danh sách bài học ngữ pháp tương ứng.</p>
                 </div>
-                
+
+                <!-- 🔒 Khoá ngữ pháp: unit không nằm trong cột UnlockLesson -->
+                <div class="lesson-locked-msg" id="grammar-locked-msg" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    <p class="lesson-locked-title">Ngữ pháp của Unit này chưa được mở khoá</p>
+                    <p class="lesson-locked-sub">Phần ngữ pháp chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn luyện tập từ vựng đầy đủ ở mục <b>Từ vựng</b> nhé. Nếu cần mở ngữ pháp, hãy liên hệ giáo viên.</p>
+                </div>
+
                 <div class="grammar-two-column-layout" id="grammar-main-wrapper" style="display: none;">
                     <!-- CỘT TRÁI -->
                     <div class="grammar-sidebar-list" id="grammar-sidebar-container"></div>
@@ -1386,6 +1425,9 @@
         </div>
         <h3 id="student-display-name">Học Viên NQ</h3>
         <span>Tài khoản học viên</span>
+        <button type="button" class="change-pw-btn" onclick="openChangePwModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Đổi mật khẩu
+        </button>
     </div>
 
     <!-- 🌟 KHỐI 1: KHUNG THÀNH TỰU (THỜI GIAN & TRẠNG THÁI REALTIME) -->
@@ -1518,6 +1560,7 @@
     </div>
     <!-- Mobile: Chính sách + Rời phòng học ở cuối ngăn kéo Dashboard -->
     <div class="dash-mobile-actions">
+        <a href="#" class="dash-action-link" onclick="event.preventDefault(); toggleMobileDash(); openChangePwModal();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Đổi mật khẩu</a>
         <a href="#" class="dash-action-link" onclick="event.preventDefault(); toggleMobileDash(); openPolicyModal();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>Chính sách</a>
         <a href="#" class="dash-action-link dash-action-logout" onclick="event.preventDefault(); executeStudentLogout();"><svg viewBox="0 0 24 24"><path d="M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>Rời phòng học</a>
     </div>
@@ -1581,6 +1624,33 @@
             <p>Chúc các bạn có những giờ phút học tập thật nhiều niềm vui và năng lượng! 😊</p>
         </div>
         <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px; margin-top: 14px; flex-shrink: 0;" onclick="closePolicyModal()">Đã hiểu, đóng lại</button>
+    </div>
+</div>
+
+<!-- 🔑 MODAL ĐỔI MẬT KHẨU -->
+<div class="bounce-popup-overlay" id="change-pw-modal">
+    <div class="bounce-popup-box change-pw-box">
+        <button class="policy-modal-close-btn" onclick="closeChangePwModal()" aria-label="Đóng">&times;</button>
+        <h3 style="margin-bottom: 2px;">🔑 Đổi mật khẩu</h3>
+        <p style="font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 16px;">Đặt mật khẩu mới cho tài khoản của bạn. Hãy ghi nhớ để đăng nhập lần sau nhé.</p>
+        <div class="pw-field">
+            <label for="pw-old">Mật khẩu hiện tại</label>
+            <input type="password" id="pw-old" autocomplete="current-password" placeholder="Nhập mật khẩu đang dùng">
+        </div>
+        <div class="pw-field">
+            <label for="pw-new">Mật khẩu mới</label>
+            <input type="password" id="pw-new" autocomplete="new-password" placeholder="Ít nhất 4 ký tự">
+        </div>
+        <div class="pw-field">
+            <label for="pw-new2">Nhập lại mật khẩu mới</label>
+            <input type="password" id="pw-new2" autocomplete="new-password" placeholder="Gõ lại mật khẩu mới">
+        </div>
+        <label class="pw-show-row"><input type="checkbox" id="pw-show" onchange="toggleChangePwVisible(this.checked)"> Hiện mật khẩu</label>
+        <div class="pw-msg" id="pw-msg"></div>
+        <div style="display:flex; gap:10px; margin-top:6px;">
+            <button class="btn" style="flex:1; background:#edf2f7; color:#4a5568; font-size:13px;" onclick="closeChangePwModal()">Huỷ</button>
+            <button class="btn btn-primary" id="pw-submit-btn" style="flex:1; font-size:13px;" onclick="submitChangePassword()">Đổi mật khẩu</button>
+        </div>
     </div>
 </div>
 
@@ -1715,9 +1785,41 @@
         note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
     };
 
-    let unitsConfig = []; 
-    let allowedUnitsList = []; 
-    let allVocabCache = {}; 
+    let unitsConfig = [];
+    let allowedUnitsList = [];
+    // 📘 Danh sách unit được mở "Bài giảng từ vựng" + tab "Ngữ pháp" (cột UnlockLesson trong sheet).
+    let allowedLessonList = [];
+    // Chỉ khoá bài giảng/ngữ pháp khi BACKEND thực sự gửi cột UnlockLesson (đã redeploy).
+    // Backend cũ (chưa redeploy) không gửi trường này -> KHÔNG khoá gì để tương thích ngược.
+    let lessonGatingActive = false;
+    // Lưu / nạp theo từng tài khoản (để đăng nhập offline vẫn khoá đúng).
+    function lessonUnitsKey(user) { return 'lessonUnits_' + String(user || '').toLowerCase(); }
+    function setLessonUnits(raw, user) {
+        if (raw == null) {                       // backend chưa nâng cấp -> tắt khoá
+            lessonGatingActive = false;
+            allowedLessonList = [];
+            try { localStorage.removeItem(lessonUnitsKey(user)); } catch (e) {}
+            return;
+        }
+        lessonGatingActive = true;
+        allowedLessonList = String(raw).split(',').map(s => String(s).trim()).filter(s => s !== '');
+        try { localStorage.setItem(lessonUnitsKey(user), JSON.stringify({ a: 1, u: allowedLessonList })); } catch (e) {}
+    }
+    function loadLessonUnits(user) {
+        try {
+            const saved = JSON.parse(localStorage.getItem(lessonUnitsKey(user)));
+            if (saved && saved.a) { lessonGatingActive = true; allowedLessonList = saved.u || []; }
+            else { lessonGatingActive = false; allowedLessonList = []; }
+        } catch (e) { lessonGatingActive = false; allowedLessonList = []; }
+        return allowedLessonList;
+    }
+    // Unit này có được mở bộ đôi Bài giảng + Ngữ pháp không?
+    // (Nếu backend chưa gửi cột UnlockLesson thì coi như mở hết — không khoá.)
+    function isLessonUnlocked(unit) {
+        if (!lessonGatingActive) return true;
+        return allowedLessonList.map(String).includes(String(unit));
+    }
+    let allVocabCache = {};
     let vocabData = []; 
     let currentUnit = null;
     let currentTab = "lecture";
@@ -1838,6 +1940,63 @@
 
     function openPolicyModal() { document.getElementById('policy-modal-popup').classList.add('active'); }
     function closePolicyModal() { document.getElementById('policy-modal-popup').classList.remove('active'); }
+
+    /* ============================================================
+       🔑 ĐỔI MẬT KHẨU (học viên tự đổi; giáo viên vẫn thấy mật khẩu mới trong sheet)
+       ============================================================ */
+    function openChangePwModal() {
+        const m = document.getElementById('change-pw-modal');
+        if (!m) return;
+        ['pw-old', 'pw-new', 'pw-new2'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+        const show = document.getElementById('pw-show'); if (show) { show.checked = false; toggleChangePwVisible(false); }
+        setPwMsg('', '');
+        m.classList.add('active');
+        setTimeout(() => { const f = document.getElementById('pw-old'); if (f) f.focus(); }, 60);
+    }
+    function closeChangePwModal() { const m = document.getElementById('change-pw-modal'); if (m) m.classList.remove('active'); }
+    function toggleChangePwVisible(on) {
+        ['pw-old', 'pw-new', 'pw-new2'].forEach(id => { const el = document.getElementById(id); if (el) el.type = on ? 'text' : 'password'; });
+    }
+    function setPwMsg(text, type) {
+        const el = document.getElementById('pw-msg'); if (!el) return;
+        el.textContent = text || '';
+        el.className = 'pw-msg' + (type ? ' ' + type : '');
+    }
+    async function submitChangePassword() {
+        const user = localStorage.getItem('studentSession_QuyenClass');
+        const oldPass = (document.getElementById('pw-old').value || '').trim();
+        const newPass = (document.getElementById('pw-new').value || '').trim();
+        const newPass2 = (document.getElementById('pw-new2').value || '').trim();
+
+        if (!user) { setPwMsg('Không tìm thấy phiên đăng nhập. Vui lòng đăng nhập lại.', 'error'); return; }
+        if (!oldPass || !newPass || !newPass2) { setPwMsg('Vui lòng điền đầy đủ 3 ô mật khẩu.', 'error'); return; }
+        if (newPass.length < 4) { setPwMsg('Mật khẩu mới phải từ 4 ký tự trở lên.', 'error'); return; }
+        if (newPass !== newPass2) { setPwMsg('Hai ô mật khẩu mới chưa khớp nhau.', 'error'); return; }
+        if (newPass === oldPass) { setPwMsg('Mật khẩu mới phải khác mật khẩu hiện tại.', 'error'); return; }
+
+        const btn = document.getElementById('pw-submit-btn');
+        if (btn) { btn.disabled = true; btn.textContent = 'Đang đổi...'; }
+        setPwMsg('', '');
+        try {
+            const payload = JSON.stringify({ action: 'changePassword', user: user, oldPass: oldPass, newPass: newPass });
+            const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: payload });
+            const data = await res.json();
+            if (data && data.success) {
+                // Đồng bộ mật khẩu mới cho các cơ chế đang chạy (nhớ đăng nhập + đồng bộ tiến độ + theo dõi vô hiệu hoá)
+                if (localStorage.getItem('saved_pass_QuyenClass') != null) localStorage.setItem('saved_pass_QuyenClass', newPass);
+                if (typeof __authPass !== 'undefined') __authPass = newPass;
+                setPwMsg('✅ Đổi mật khẩu thành công! Lần sau hãy đăng nhập bằng mật khẩu mới nhé.', 'success');
+                if (btn) { btn.textContent = 'Đã đổi ✓'; }
+                setTimeout(closeChangePwModal, 1800);
+            } else {
+                setPwMsg((data && data.message) ? data.message : 'Đổi mật khẩu không thành công. Vui lòng thử lại.', 'error');
+                if (btn) { btn.disabled = false; btn.textContent = 'Đổi mật khẩu'; }
+            }
+        } catch (e) {
+            setPwMsg('Lỗi kết nối máy chủ. Vui lòng kiểm tra mạng và thử lại.', 'error');
+            if (btn) { btn.disabled = false; btn.textContent = 'Đổi mật khẩu'; }
+        }
+    }
 
     // 🌟 Điều hướng thông minh cho nút "Ôn tập ngay lập tức"
     // - Nếu Sổ tay (từ làm sai) còn từ -> vào trang "Nhắc lại từ vựng" như cũ
@@ -2029,6 +2188,7 @@
                 }
                 localStorage.setItem('studentSession_QuyenClass', user);
                 applyServerProgress(user, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
+                setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
                 await parseAndInitApp(data.allowedUnits);
             } else if (data.disabled) {
@@ -2254,7 +2414,8 @@
 
         currentUnit = unitNum;
         renderUnitGrid([]);
-        
+        updateLessonLockUI(); // 📘 bật/tắt ổ khoá Bài giảng + Ngữ pháp theo unit này
+
         if(allVocabCache[unitNum]) {
             vocabData = allVocabCache[unitNum];
             initTabIndices();
@@ -3383,14 +3544,40 @@
         }
     }
 
+    // 📘 Cập nhật ổ khoá của nút "1. Bài giảng" và menu "Ngữ pháp" theo unit hiện tại.
+    function updateLessonLockUI() {
+        const unlocked = currentUnit && isLessonUnlocked(currentUnit);
+        const lecBtn = document.getElementById('main-btn-lecture');
+        const lecBadge = document.getElementById('lecture-lock-badge');
+        const gramItem = document.getElementById('menu-grammar');
+        const gramBadge = document.getElementById('grammar-lock-badge');
+        if (lecBtn) lecBtn.classList.toggle('lesson-locked', !unlocked);
+        if (lecBadge) lecBadge.style.display = unlocked ? 'none' : 'inline';
+        if (gramItem) gramItem.classList.toggle('lesson-locked', !unlocked);
+        if (gramBadge) gramBadge.style.display = unlocked ? 'none' : 'inline';
+    }
+
     function renderLectureTab() {
         clearFeedback();
         let config = unitsConfig.find(c => c.unit == currentUnit);
         const iframe = document.getElementById('lecture-iframe');
         const emptyMsg = document.getElementById('lecture-empty-msg');
+        const lockedMsg = document.getElementById('lecture-locked-msg');
         const guideWrapper = document.getElementById('lecture-guide-wrapper');
         const skeleton = document.getElementById('iframe-skeleton');
-        
+
+        // 🔒 Unit chưa được mở bài giảng (không có trong cột UnlockLesson) -> hiện khoá, ẩn nội dung
+        if (!isLessonUnlocked(currentUnit)) {
+            iframe.src = "";
+            iframe.style.display = "none";
+            emptyMsg.style.display = "none";
+            if (skeleton) skeleton.style.display = "none";
+            if (guideWrapper) guideWrapper.style.display = "none";
+            if (lockedMsg) lockedMsg.style.display = "flex";
+            return;
+        }
+        if (lockedMsg) lockedMsg.style.display = "none";
+
         document.getElementById('global-counter').innerText = "1 / 1";
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
         document.getElementById('ctrl-next-btn').innerText = 'Tiếp theo';
@@ -3434,10 +3621,20 @@
         const sidebarContainer = document.getElementById('grammar-sidebar-container');
         const mainWrapper = document.getElementById('grammar-main-wrapper');
         const subtitle = document.getElementById('grammar-subtitle');
-        
+        const lockedMsg = document.getElementById('grammar-locked-msg');
+
+        // 🔒 Unit chưa được mở ngữ pháp (không có trong cột UnlockLesson) -> hiện khoá, ẩn nội dung
+        if (currentUnit && !isLessonUnlocked(currentUnit)) {
+            if (lockedMsg) lockedMsg.style.display = "flex";
+            mainWrapper.style.display = "none";
+            subtitle.innerText = `Ngữ pháp của Unit ${currentUnit} chỉ mở cho buổi có tham gia học.`;
+            return;
+        }
+        if (lockedMsg) lockedMsg.style.display = "none";
+
         document.getElementById('grammar-real-content').style.display = "none";
         document.getElementById('grammar-empty-msg').style.display = "flex";
-        
+
         sidebarContainer.innerHTML = "";
         grammarDataCache = allVocabCache[currentUnit + "_grammar"] || []; 
         
@@ -3702,6 +3899,7 @@
                 let data = await res.json();
                 if(data.success) {
                     applyServerProgress(savedUser, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
+                    setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
                     await parseAndInitApp(data.allowedUnits);
                 } else if (data.disabled) {
@@ -3711,6 +3909,7 @@
                 }
             } catch(e) {
                 // Mất mạng: dùng lại danh sách unit đã lưu của chính tài khoản này (khoá riêng), có fallback khoá chung cũ.
+                loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
                               || localStorage.getItem('historyUnits_QuyenClass');
                 if(oldHistory) {
