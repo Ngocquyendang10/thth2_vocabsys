@@ -2752,37 +2752,13 @@
     // Tạo câu "đục lỗ": thay từ khoá trong câu ví dụ bằng chỗ trống ______
     function makeClozeSentence(ex, ko) {
         let blank = '<span class="cloze-blank">______</span>';
-        if (!ex || !ko) return ex || '';
-
-        // Danh từ (không kết thúc bằng 다): xuất hiện nguyên dạng -> đục đúng từ, GIỮ trợ từ (선배를 -> ____를)
-        let isVerbAdj = /다$/.test(ko);
-        if (!isVerbAdj && ex.indexOf(ko) >= 0) return ex.replace(ko, blank);
-
-        // Động/tính từ bị chia đuôi (기다리다 -> 기다립니다), hoặc danh từ biến thể:
-        // đục NGUYÊN "cụm từ" (eojeol - đơn vị cách nhau bởi dấu cách) khớp gốc từ nhiều nhất.
-        let stem = ko.replace(/(하다|되다|지다|다)$/, '');
-        if (stem.length === 0) stem = ko;
-        let tokens = ex.split(/(\s+)/); // giữ lại cả khoảng trắng để ghép lại đúng
-        let bestIdx = -1, bestScore = 0;
-        for (let i = 0; i < tokens.length; i++) {
-            if (/^\s*$/.test(tokens[i])) continue;
-            let tok = tokens[i].replace(/[.,!?;、。]+$/, ''); // bỏ dấu câu cuối để so
-            // điểm = tiền tố dài nhất của gốc từ mà cụm này chứa (기다리다 -> 기다 khớp 기다립니다)
-            let score = 0;
-            for (let k = 1; k <= stem.length; k++) {
-                if (tok.indexOf(stem.slice(0, k)) >= 0) score = k; else break;
-            }
-            if (score > bestScore) { bestScore = score; bestIdx = i; }
+        if (!ex) return ex || '';
+        if (ko && ex.indexOf(ko) >= 0) return ex.replace(ko, blank);
+        if (ko) {
+            let stem = ko.replace(/하다$/, '').replace(/되다$/, '').replace(/다$/, '');
+            if (stem.length >= 1 && ex.indexOf(stem) >= 0) return ex.replace(stem, blank);
         }
-        if (bestIdx >= 0 && bestScore >= 1) {
-            let punct = (tokens[bestIdx].match(/[.,!?;、。]+$/) || [''])[0]; // giữ lại dấu câu cuối câu
-            tokens[bestIdx] = blank + punct;
-            return tokens.join('');
-        }
-
-        // Dự phòng: nếu gốc từ xuất hiện đâu đó thì đục phần đó, không thì để nguyên
-        if (ex.indexOf(stem) >= 0) return ex.replace(stem, blank);
-        return ex;
+        return ex; // không chèn được thì để nguyên câu
     }
 
     // Đồng bộ trạng thái các nút toggle về mặc định (gọi khi đổi Unit)
