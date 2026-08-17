@@ -2749,15 +2749,63 @@
         return topSimilar.concat(rest).slice(0, n).map(it => it.exVi);
     }
 
+    // Tách chuỗi Hàn thành danh sách "jamo" (phụ âm/nguyên âm) để so khớp
+    // ngay cả khi động/tính từ bị chia đuôi làm biến đổi âm tiết (오다->올, 좋다->좋아요).
+    function toJamo(str) {
+        let out = [];
+        for (const ch of String(str == null ? '' : str)) {
+            let c = ch.codePointAt(0);
+            if (c >= 0xAC00 && c <= 0xD7A3) { // âm tiết Hangul
+                let s = c - 0xAC00;
+                out.push('L' + Math.floor(s / 588), 'V' + (Math.floor(s / 28) % 21));
+                let t = s % 28; if (t > 0) out.push('T' + t); // phụ âm cuối (받침) nếu có
+            } else out.push(ch);
+        }
+        return out;
+    }
+    function jamoCommonLen(a, b) { let n = 0; while (n < a.length && n < b.length && a[n] === b[n]) n++; return n; }
+
     // Tạo câu "đục lỗ": thay từ khoá trong câu ví dụ bằng chỗ trống ______
     function makeClozeSentence(ex, ko) {
         let blank = '<span class="cloze-blank">______</span>';
         if (!ex) return ex || '';
-        if (ko && ex.indexOf(ko) >= 0) return ex.replace(ko, blank);
-        if (ko) {
+        if (!ko) return ex;
+
+        // 1) Từ khoá xuất hiện nguyên dạng -> thay trực tiếp (danh từ, cụm cố định).
+        //    Với danh từ vẫn giữ trợ từ đi kèm (호텔에서 -> ______에서).
+        if (ex.indexOf(ko) >= 0) return ex.replace(ko, blank);
+
+        // 2) Động/tính từ (đuôi 다): trong câu bị chia đuôi nên không còn nguyên dạng.
+        //    -> Tìm ĐÚNG TỪ (token) chứa động/tính từ đó và đục lỗ TRỌN từ (cả đuôi đã chia):
+        //       날씨가 좋아요  -> 날씨가 ______
+        //       친구가 공부해요 -> 친구가 ______
+        //       내일 비가 올 거예요 -> 내일 비가 ______ 거예요
+        if (/다$/.test(ko)) {
             let stem = ko.replace(/하다$/, '').replace(/되다$/, '').replace(/다$/, '');
-            if (stem.length >= 1 && ex.indexOf(stem) >= 0) return ex.replace(stem, blank);
+            if (stem.length >= 1) {
+                let stemJ = toJamo(stem);
+                let tokens = ex.split(/(\s+)/); // giữ khoảng trắng để ghép lại y nguyên
+                let bestIdx = -1, bestLen = 0;
+                for (let i = 0; i < tokens.length; i++) {
+                    if (tokens[i] === '' || /^\s+$/.test(tokens[i])) continue;
+                    // bỏ dấu câu ở đầu/cuối, chỉ so phần chữ Hàn
+                    let core = tokens[i].replace(/^[^가-힣]+/, '').replace(/[^가-힣]+$/, '');
+                    if (!core) continue;
+                    let n = jamoCommonLen(stemJ, toJamo(core));
+                    if (n > bestLen) { bestLen = n; bestIdx = i; }
+                }
+                // cần khớp gần hết gốc (cho phép âm tiết cuối biến đổi khi chia đuôi)
+                let need = Math.max(2, stemJ.length - 2);
+                if (bestIdx >= 0 && bestLen >= need) {
+                    tokens[bestIdx] = tokens[bestIdx].replace(/[가-힣]+/, blank);
+                    return tokens.join('');
+                }
+            }
         }
+
+        // 3) Dự phòng: khớp phần gốc trực tiếp nếu có.
+        let stem2 = ko.replace(/하다$/, '').replace(/되다$/, '').replace(/다$/, '');
+        if (stem2.length >= 1 && ex.indexOf(stem2) >= 0) return ex.replace(stem2, blank);
         return ex; // không chèn được thì để nguyên câu
     }
 
