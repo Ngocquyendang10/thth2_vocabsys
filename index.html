@@ -263,6 +263,66 @@
         .qm-pill.active .qm-lvl { color: #e3ddff; }
         .qm-pill.qm-hard.active { background: #7a3cff; }
 
+        /* ====== BÁO CÁO UNIT (thiết kế lại — vừa sidebar 324px) ====== */
+        .ur{ --rok:#22C55E; --rwarn:#ed8936; }
+        .ur-sum{ background:var(--bg-color); border-radius:var(--radius-sm); box-shadow:var(--neu-concave); padding:14px 13px; margin-bottom:12px; }
+        .ur-sum-top{ display:flex; align-items:center; gap:14px; }
+        .ur-ring{ position:relative; width:74px; height:74px; flex:0 0 74px; }
+        .ur-ring svg{ transform:rotate(-90deg); }
+        .ur-ring .rc{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .ur-ring .rp{ font-size:17px; font-weight:800; color:var(--point-color); line-height:1; }
+        .ur-ring .rl{ font-size:7.5px; color:var(--sub-text); font-weight:600; margin-top:2px; text-align:center; line-height:1.15; }
+        .ur-info{ flex:1; min-width:0; }
+        .ur-cap{ font-size:11px; color:var(--sub-text); font-weight:600; }
+        .ur-big{ font-size:12px; font-weight:700; color:var(--point-color); margin:2px 0 8px; line-height:1.25; }
+        .ur-pbar{ height:8px; background:#e7ebf3; border-radius:5px; box-shadow:var(--neu-concave); overflow:hidden; }
+        .ur-pbar>div{ height:100%; background:var(--point-color); border-radius:5px; transition:width .4s ease; }
+        .ur-minis{ display:flex; gap:9px; margin-top:11px; }
+        .ur-mini{ flex:1; background:var(--card-color); border-radius:12px; box-shadow:var(--neu-convex); padding:9px 10px; display:flex; align-items:center; gap:8px; }
+        .ur-mini .mic{ width:26px; height:26px; flex:0 0 26px; border-radius:8px; background:var(--point-light); display:flex; align-items:center; justify-content:center; }
+        .ur-mini .mic svg{ width:14px; height:14px; color:var(--point-color); }
+        .ur-mini .ml{ font-size:9px; color:var(--sub-text); font-weight:600; }
+        .ur-mini .mv{ font-size:11.5px; font-weight:800; color:#1a202c; }
+        .ur-legend{ display:flex; align-items:center; justify-content:space-between; gap:6px; background:var(--card-color); border-radius:12px; box-shadow:var(--neu-convex); padding:8px 10px; margin-bottom:14px; }
+        .ur-legend span{ display:flex; align-items:center; gap:5px; font-size:9.5px; color:var(--sub-text); font-weight:700; }
+        .ur-legend .dot{ width:9px; height:9px; border-radius:50%; }
+        .ur-sec{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+        .ur-sec .sic{ width:26px; height:26px; border-radius:8px; background:var(--point-light); display:flex; align-items:center; justify-content:center; }
+        .ur-sec .sic svg{ width:14px; height:14px; color:var(--point-color); }
+        .ur-sec b{ font-size:13px; font-weight:800; color:#1a202c; }
+        .ur-lessons{ display:flex; flex-direction:column; gap:10px; }
+        .ur-lc{ display:flex; align-items:center; gap:11px; background:var(--card-color); border-radius:14px; box-shadow:var(--neu-convex); padding:11px 12px; }
+        .ur-lc-ic{ width:38px; height:38px; flex:0 0 38px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:var(--point-light); }
+        .ur-lc-ic svg{ width:19px; height:19px; color:var(--point-color); }
+        .ur-lc-ic.done{ background:var(--rok); }
+        .ur-lc-ic.done svg{ color:#fff; }
+        .ur-lc-body{ flex:1; min-width:0; }
+        .ur-lc-title{ font-size:12.5px; font-weight:800; color:#1a202c; margin-bottom:4px; }
+        .ur-lc-status{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+        .ur-badge{ font-size:9.5px; font-weight:800; padding:2px 8px; border-radius:999px; }
+        .ur-badge.doing{ background:#fff1e0; color:#c2620a; }
+        .ur-badge.done{ background:#e4f8ec; color:#158240; }
+        .ur-badge.none{ background:#eef1f7; color:#94a3b8; }
+        .ur-frac{ font-size:10.5px; font-weight:800; }
+        .ur-frac.doing{ color:var(--rwarn); } .ur-frac.done{ color:var(--rok); } .ur-frac.none{ color:#94a3b8; }
+        .ur-chips{ display:flex; gap:6px; margin-top:6px; }
+        .ur-chip{ flex:1 1 0; min-width:0; text-align:center; font-size:9px; font-weight:700; color:var(--sub-text); background:var(--bg-color); box-shadow:var(--neu-concave); border-radius:7px; padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .ur-chip.cdone{ color:var(--rok); }
+        .ur-lc-ring{ position:relative; width:40px; height:40px; flex:0 0 40px; }
+        .ur-lc-ring svg{ transform:rotate(-90deg); }
+        .ur-lc-ring .v{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:8.5px; font-weight:800; }
+        .ur-starbox{ display:flex; align-items:center; gap:12px; background:#fff9ee; border-radius:16px; box-shadow:var(--neu-concave); padding:12px 14px; margin-top:14px; }
+        .ur-starbox .big{ width:44px; height:44px; flex:0 0 44px; border-radius:12px; background:#ffefc9; display:flex; align-items:center; justify-content:center; box-shadow:var(--neu-convex); overflow:hidden; }
+        .ur-starbox .big img{ width:30px; height:30px; object-fit:contain; }
+        .ur-starbox .big .fallback{ font-size:24px; color:#f6b73c; }
+        .ur-starbox .st-title{ font-size:11px; font-weight:800; color:#1a202c; }
+        .ur-stars{ display:flex; gap:3px; margin-top:4px; }
+        .ur-stars img{ width:15px; height:15px; object-fit:contain; }
+        .ur-stars img.off{ filter:grayscale(1) opacity(.35); }
+        .ur-stars .s{ font-size:15px; color:#f6b73c; line-height:1; }
+        .ur-stars .s.off{ color:#d7dee8; }
+        .ur-starbox .cap{ font-size:9px; color:var(--sub-text); margin-top:3px; }
+
         /* Dòng trạng thái đúng/sai gọn (Hình 4) — thay cho box kết quả to */
         .feedback.compact { background: transparent !important; border: none !important; padding: 6px 2px !important; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
 
@@ -1480,34 +1540,57 @@
 
     </div>
 
-    <!-- 🌟 KHỐI BÁO CÁO UNIT (thay cho status "Đang học/Đang làm" cũ — theo Hình 5) -->
-    <div style="background: #ffffff; padding: 16px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 14px; text-align: left;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-            <div style="background: var(--point-light); width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex);">
-                <svg style="width: 16px; height: 16px; color: #614CFF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+    <!-- 🌟 KHỐI BÁO CÁO UNIT (thiết kế lại — vừa sidebar 324px) -->
+    <div class="ur" style="background: #ffffff; padding: 16px 15px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 14px; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 14px;">
+            <div style="background: var(--point-light); width: 34px; height: 34px; border-radius: 11px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex);">
+                <svg style="width: 17px; height: 17px; color: #614CFF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
             </div>
-            <div>
-                <h4 id="unit-report-title" style="font-size: 14px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0;">Hoạt động của Unit</h4>
+            <h4 id="unit-report-title" style="font-size: 15.5px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0; flex:1;">Báo cáo Unit</h4>
+        </div>
+
+        <!-- Card tổng tiến độ: vòng % + text + 2 mini card -->
+        <div class="ur-sum">
+            <div class="ur-sum-top">
+                <div class="ur-ring">
+                    <svg width="74" height="74"><circle cx="37" cy="37" r="31" fill="none" stroke="#e7ebf3" stroke-width="8"></circle><circle id="unit-report-ring" cx="37" cy="37" r="31" fill="none" stroke="#614CFF" stroke-width="8" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="195"></circle></svg>
+                    <div class="rc"><div class="rp" id="unit-report-pct">0%</div><div class="rl">Tiến độ<br>hoàn thành</div></div>
+                </div>
+                <div class="ur-info">
+                    <div class="ur-cap">Tiến độ hoàn thành</div>
+                    <div class="ur-big" id="unit-report-summary">0/5 bài đã hoàn thành</div>
+                    <div class="ur-pbar"><div id="unit-report-bar" style="width:0%"></div></div>
+                </div>
+            </div>
+            <div class="ur-minis">
+                <div class="ur-mini"><div class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><div><div class="ml">Tổng số bài</div><div class="mv">5 bài</div></div></div>
+                <div class="ur-mini"><div class="mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"></circle></svg></div><div><div class="ml">Mục tiêu</div><div class="mv">100%</div></div></div>
             </div>
         </div>
 
-        <!-- Thanh tổng tiến độ 5 bài luyện tập -->
-        <div style="text-align: left; margin-bottom: 6px;">
-            <div style="width: 100%; height: 8px; background: var(--bg-color); border-radius: 4px; box-shadow: var(--neu-concave); overflow: hidden;">
-                <div id="unit-report-bar" style="width: 0%; height: 100%; background: #614CFF; border-radius: 4px; transition: width 0.4s ease;"></div>
-            </div>
-            <div id="unit-report-summary" style="font-size: 10px; color: var(--sub-text); font-weight: 600; margin-top: 6px;">0/5 bài đã hoàn thành (0%)</div>
+        <!-- Chú thích màu -->
+        <div class="ur-legend">
+            <span><span class="dot" style="background:#22C55E"></span>Hoàn thành</span>
+            <span><span class="dot" style="background:#ed8936"></span>Đang làm</span>
+            <span><span class="dot" style="background:#cbd5e1"></span>Chưa bắt đầu</span>
         </div>
 
-        <!-- Danh sách 5 bài luyện tập + trạng thái -->
-        <div id="unit-report-list" style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;"></div>
+        <!-- Tiêu đề phần chi tiết -->
+        <div class="ur-sec" id="unit-report-sec">
+            <div class="sic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg></div>
+            <b>Chi tiết theo bài</b>
+        </div>
 
-        <!-- Tổng số sao của Unit -->
-        <div id="unit-report-stars" style="display: flex; align-items: center; gap: 8px; margin-top: 12px; padding: 8px 10px; background: #fffaf0; border-radius: var(--radius-sm); box-shadow: var(--neu-concave);">
-            <span style="font-size: 18px; color:#f6b73c;"><svg viewBox="0 0 24 24" fill="currentColor" style="width:19px;height:19px;"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg></span>
-            <div style="line-height: 1.3;">
-                <div style="font-size: 10px; font-weight: 800; color: #1a202c;">Ngôi sao tích luỹ của <span id="unit-report-stars-unit">Unit</span>: <span id="unit-report-stars-icons" style="letter-spacing: 1px;"></span></div>
-                <div style="font-size: 9px; color: var(--sub-text);">(Tích lũy từ bài làm)</div>
+        <!-- Danh sách bài + trạng thái -->
+        <div id="unit-report-list" class="ur-lessons"></div>
+
+        <!-- Ngôi sao tích luỹ -->
+        <div class="ur-starbox">
+            <div class="big"><img src="assets/star_icon.png" alt="star" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';"><span class="fallback" style="display:none;">★</span></div>
+            <div style="line-height:1.3;">
+                <div class="st-title">Ngôi sao tích luỹ của <span id="unit-report-stars-unit">Unit</span></div>
+                <div class="ur-stars" id="unit-report-stars-icons"></div>
+                <div class="cap">(Tích luỹ từ bài làm)</div>
             </div>
         </div>
     </div>
@@ -4241,15 +4324,26 @@
     }
 
     function starIconsHtml(count, size) {
+        size = size || 15;
         let html = '';
         for (let i = 0; i < 5; i++) {
             const gold = i < count;
-            html += `<span style="font-size:${size}px; color:${gold ? '#f6b73c' : '#d7dee8'};">★</span>`;
+            html += `<span style="font-size:${size}px; color:${gold ? '#f6b73c' : '#d7dee8'}; line-height:1;">★</span>`;
         }
         return html;
     }
 
-    // Chip mode đã làm cho báo cáo học sinh (chỉ dạng có nhiều mode)
+    // Icon từng bài (SVG stroke). Khi bài đã hoàn thành sẽ đổi sang dấu ✓ nền xanh.
+    const UR_ICONS = {
+        listen: '<path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>',
+        quiz:   '<circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line>',
+        visual: '<rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path>',
+        guess:  '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"></path>',
+        typing: '<path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"></path>'
+    };
+    const UR_CHECK = '<polyline points="20 6 9 17 4 12"></polyline>';
+
+    // Chip mode đã làm — chỉ chữ, các chip bằng nhau (không icon).
     function renderReportModeChips(tabKey, modesObj) {
         const labels = QUIZ_MODE_LABELS[tabKey];
         if (!labels || !modesObj) return '';
@@ -4258,28 +4352,42 @@
             const m = modesObj[mk];
             if (!m || (!m.started && !m.done)) return;
             const nm = labels[mk];
-            if (m.done) parts.push(`<span style="color:var(--success-color); font-weight:700;">${nm} ✓ ${m.right}/${m.total}</span>`);
-            else parts.push(`<span style="color:#dd6b20;">${nm} ${m.right}/${m.total}</span>`);
+            const cls = m.done ? ' cdone' : '';
+            const tick = m.done ? '✓ ' : '';
+            parts.push(`<span class="ur-chip${cls}">${nm} ${tick}${m.right}/${m.total}</span>`);
         });
         if (!parts.length) return '';
-        return `<div style="font-size:9px; margin-top:3px; display:flex; flex-wrap:wrap; gap:4px 10px;">${parts.join('')}</div>`;
+        return `<div class="ur-chips">${parts.join('')}</div>`;
     }
 
-    // Vẽ khối "Báo cáo Unit" (Hình 5) từ dữ liệu đã lưu, ưu tiên số liệu live của tab đang mở
+    // Vòng tròn % nhỏ bên phải mỗi bài
+    function ringSvgHtml(pct, color) {
+        const off = Math.max(0, Math.min(100, 100 - pct));
+        return `<div class="ur-lc-ring"><svg width="40" height="40"><circle cx="20" cy="20" r="16" fill="none" stroke="#eef1f7" stroke-width="5"></circle><circle cx="20" cy="20" r="16" fill="none" stroke="${color}" stroke-width="5" stroke-linecap="round" stroke-dasharray="100" stroke-dashoffset="${off}"></circle></svg><span class="v" style="color:${color}">${pct}%</span></div>`;
+    }
+
+    // Vẽ khối "Báo cáo Unit" từ dữ liệu đã lưu, ưu tiên số liệu live của tab đang mở
     function renderUnitReport() {
         const listEl = document.getElementById('unit-report-list');
         if (!listEl || !currentUnit) return;
+        const secEl = document.getElementById('unit-report-sec');
+        const ringEl = document.getElementById('unit-report-ring');
+        const pctEl = document.getElementById('unit-report-pct');
 
         // Chế độ Tổng hợp không gắn với 1 Unit -> hiện thông báo trung tính
         if (currentUnit === 'SUM') {
-            document.getElementById('unit-report-title').innerHTML = SVG.target + 'Ôn tập Tổng hợp ';
-            document.getElementById('unit-report-stars-unit').innerText = '';
+            document.getElementById('unit-report-title').innerText = 'Ôn tập Tổng hợp';
+            document.getElementById('unit-report-stars-unit').innerText = 'Tổng hợp';
             document.getElementById('unit-report-summary').innerText = 'Đang trộn từ vựng nhiều Unit';
             document.getElementById('unit-report-bar').style.width = '0%';
+            if (pctEl) pctEl.innerText = '0%';
+            if (ringEl) ringEl.setAttribute('stroke-dashoffset', '195');
+            if (secEl) secEl.style.display = 'none';
             listEl.innerHTML = '<div style="font-size:11px; color:var(--sub-text); padding:8px 4px;">Sao & tiến độ chỉ ghi nhận khi ôn theo từng Unit riêng.</div>';
-            document.getElementById('unit-report-stars-icons').innerHTML = '';
+            document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(0);
             return;
         }
+        if (secEl) secEl.style.display = 'flex';
 
         const data = getUnitQuizData(currentUnit);
         document.getElementById('unit-report-title').innerText = `Báo cáo Unit ${currentUnit}`;
@@ -4292,20 +4400,13 @@
             let d = data[t.key];
             // Gộp các mode đã làm (bản lưu) + số liệu live của mode đang mở
             let modesObj = (data[t.key] && data[t.key].modes) ? Object.assign({}, data[t.key].modes) : null;
-            // Nếu đang mở đúng bài này, lấy số liệu tức thời cho mượt
             if (currentTab === t.key && tabState[t.key] && tabState[t.key].indices) {
                 const st = tabState[t.key];
                 const liveRight = (t.key === 'typing') ? countTypingCorrect() : (st.right || 0);
                 const liveStarted = (st.seen && st.seen.length > 0) || (st.right || 0) + (st.wrong || 0) > 0
                                     || (t.key === 'typing' && hasTypingProgress());
                 const liveDone = isTabFinished(t.key) || (d && d.done);
-                d = {
-                    right: liveRight,
-                    total: st.indices.length,
-                    done: liveDone,
-                    started: liveStarted || (d && d.started)
-                };
-                // cập nhật live cho mode đang mở
+                d = { right: liveRight, total: st.indices.length, done: liveDone, started: liveStarted || (d && d.started) };
                 if (QUIZ_MODE_LABELS[t.key]) {
                     const mk = currentModeOf(t.key);
                     if (!modesObj) modesObj = {};
@@ -4316,37 +4417,51 @@
                     };
                 }
             }
-            const isDone = d && d.done;
-            const isStarted = d && d.started;
+            const isDone = !!(d && d.done);
+            const isStarted = !!(d && d.started);
             if (isDone) doneCount++;
 
-            let statusLine;
+            const right = d ? (d.right || 0) : 0;
+            const total = d ? (d.total || 0) : 0;
+            let badge, frac, ringPct, ringColor;
             if (isDone) {
-                statusLine = `<span style="color:var(--success-color); font-weight:700;">${d.right}/${d.total} câu đúng • 100% ✓</span>`;
+                badge = '<span class="ur-badge done">Hoàn thành</span>';
+                frac = `<span class="ur-frac done">${right}/${total}</span>`;
+                ringPct = 100; ringColor = '#22C55E';
             } else if (isStarted) {
-                const pct = d.total > 0 ? Math.round((d.right / d.total) * 100) : 0;
-                statusLine = `<span style="color:#dd6b20; font-weight:600;">Đang làm • ${d.right}/${d.total} (${pct}%)</span>`;
+                ringPct = total > 0 ? Math.round((right / total) * 100) : 0;
+                badge = '<span class="ur-badge doing">Đang làm</span>';
+                frac = `<span class="ur-frac doing">${right}/${total}</span>`;
+                ringColor = '#ed8936';
             } else {
-                statusLine = `<span style="color:var(--sub-text);">Chưa bắt đầu</span>`;
+                badge = '<span class="ur-badge none">Chưa bắt đầu</span>';
+                frac = '';
+                ringPct = 0; ringColor = '#cbd5e1';
             }
-            const modeLine = renderReportModeChips(t.key, modesObj);
+            const iconHtml = isDone
+                ? `<div class="ur-lc-ic done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${UR_CHECK}</svg></div>`
+                : `<div class="ur-lc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${UR_ICONS[t.key] || ''}</svg></div>`;
+            const modeChips = renderReportModeChips(t.key, modesObj);
 
             const row = document.createElement('div');
-            row.style.cssText = 'display:flex; align-items:center; gap:8px; padding:7px 9px; background:var(--bg-color); border-radius:10px; box-shadow:var(--neu-concave);';
+            row.className = 'ur-lc';
             row.innerHTML = `
-                <span style="width:16px; height:16px; flex:0 0 16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:800; background:${isDone ? 'var(--success-color)' : '#e2e8f0'}; color:${isDone ? '#fff' : 'var(--sub-text)'};">${isDone ? '✓' : t.no}</span>
-                <div style="flex:1; min-width:0;">
-                    <div style="font-size:11px; font-weight:700; color:#1a202c;">${t.no}. ${t.label}</div>
-                    <div style="font-size:9.5px; margin-top:1px;">${statusLine}</div>
-                    ${modeLine}
-                </div>`;
+                ${iconHtml}
+                <div class="ur-lc-body">
+                    <div class="ur-lc-title">${t.label}</div>
+                    <div class="ur-lc-status">${badge}${frac}</div>
+                    ${modeChips}
+                </div>
+                ${ringSvgHtml(ringPct, ringColor)}`;
             listEl.appendChild(row);
         });
 
         const pct = Math.round((doneCount / 5) * 100);
         document.getElementById('unit-report-bar').style.width = pct + '%';
-        document.getElementById('unit-report-summary').innerText = `${doneCount}/5 bài đã hoàn thành (${pct}%)`;
-        document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(doneCount, 13);
+        document.getElementById('unit-report-summary').innerHTML = `<b>${doneCount}/5</b> bài đã hoàn thành`;
+        if (pctEl) pctEl.innerText = pct + '%';
+        if (ringEl) ringEl.setAttribute('stroke-dashoffset', String(Math.round(195 * (1 - pct / 100))));
+        document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(doneCount);
     }
 
     // ==================== PHÂN HỆ LOGIC DASHBOARD THỐNG KÊ (SIDEBAR PHẢI) ====================
