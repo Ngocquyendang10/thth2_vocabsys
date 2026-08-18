@@ -246,6 +246,22 @@
         .quiz-shuffle-btn { display: inline-flex; align-items: center; gap: 7px; background: var(--card-color); border: none; border-radius: 22px; padding: 9px 18px; font-size: 13px; font-weight: 700; color: var(--text-color); cursor: pointer; box-shadow: var(--neu-convex); outline: none; transition: all 0.18s ease; }
         .quiz-shuffle-btn:hover { color: var(--point-color); }
         .quiz-shuffle-btn svg { width: 16px; height: 16px; }
+        /* Nút "Làm lại" — cùng dáng nút Ngẫu nhiên, chữ tím nhạt để phân biệt */
+        .quiz-restart-btn { color: var(--point-color); }
+        .quiz-restart-btn:hover { color: #4a37c9; }
+
+        /* Thanh chọn dạng luyện (pills) — thay nút xổ, LUÔN HIỆN để học sinh biết đang ở mode nào */
+        .quiz-mode-wrap { display: inline-flex; align-items: center; gap: 9px; flex-wrap: wrap; }
+        .quiz-mode-lead { font-size: 12px; font-weight: 800; color: var(--sub-text); white-space: nowrap; }
+        .quiz-mode-pills { display: inline-flex; gap: 5px; background: var(--bg-color); padding: 5px; border-radius: 999px; box-shadow: var(--neu-concave); flex-wrap: wrap; }
+        .qm-pill { border: none; background: transparent; font-family: inherit; cursor: pointer; padding: 7px 15px; border-radius: 999px; display: inline-flex; flex-direction: column; align-items: center; gap: 2px; line-height: 1.18; outline: none; transition: all 0.18s ease; }
+        .qm-pill .qm-t { font-size: 12.5px; font-weight: 800; color: var(--sub-text); white-space: nowrap; }
+        .qm-pill .qm-lvl { font-size: 9.5px; font-weight: 800; color: #a0aec0; white-space: nowrap; letter-spacing: .2px; }
+        .qm-pill:hover .qm-t { color: var(--point-color); }
+        .qm-pill.active { background: var(--point-color); box-shadow: 0 3px 8px rgba(97,76,255,0.28); }
+        .qm-pill.active .qm-t, .qm-pill.active:hover .qm-t { color: #fff; }
+        .qm-pill.active .qm-lvl { color: #e3ddff; }
+        .qm-pill.qm-hard.active { background: #7a3cff; }
 
         /* Dòng trạng thái đúng/sai gọn (Hình 4) — thay cho box kết quả to */
         .feedback.compact { background: transparent !important; border: none !important; padding: 6px 2px !important; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
@@ -988,14 +1004,23 @@
                         <button id="sub-btn-typing" class="quiz-subtab-btn" onclick="switchTab('typing')">Viết từ</button>
                     </div>
 
-                    <!-- Thanh công cụ quiz: nút Trộn bài ở góc phải (Hình 4) -->
+                    <!-- Thanh công cụ quiz: thanh chọn dạng (pills) bên trái, nút Làm lại + Ngẫu nhiên bên phải -->
                     <div class="quiz-tools" id="quiz-tools">
-                        <!-- Nút xổ chọn dạng/ngôn ngữ (thay đổi theo tab quiz đang mở) -->
-                        <select class="quiz-mode-select" id="quiz-mode-select" style="display:none;" onchange="onQuizModeSelectChange(this.value)"></select>
-                        <button class="quiz-shuffle-btn" onclick="handleMixAction()">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
-                            Ngẫu nhiên
-                        </button>
+                        <!-- Thanh pills chọn dạng luyện — hiện rõ để học sinh biết đang ở mode nào (thay nút xổ cũ) -->
+                        <div class="quiz-mode-wrap" id="quiz-mode-wrap" style="display:none;">
+                            <span class="quiz-mode-lead" id="quiz-mode-lead">Dạng luyện:</span>
+                            <div class="quiz-mode-pills" id="quiz-mode-pills"></div>
+                        </div>
+                        <div style="display:inline-flex; gap:10px; align-items:center;">
+                            <button class="quiz-shuffle-btn quiz-restart-btn" id="ctrl-restart-btn" onclick="restartCurrentTab()" title="Làm lại dạng này từ đầu">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                                Làm lại
+                            </button>
+                            <button class="quiz-shuffle-btn" onclick="handleMixAction()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
+                                Ngẫu nhiên
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1708,7 +1733,8 @@
         return [
             'wrongWords_' + key, 'unitQuiz_' + key, 'unitSecs_' + key,
             'completed_units_' + key, 'today_secs_' + key, 'total_secs_' + key,
-            'study_date_' + key, 'starred_' + key + '_QuyenClass', 'notes_' + key + '_QuyenClass'
+            'study_date_' + key, 'starred_' + key + '_QuyenClass', 'notes_' + key + '_QuyenClass',
+            'quizState_' + key
         ];
     }
     function snapshotProgress(sess) {
@@ -1919,16 +1945,27 @@
 
     function closeTabDonePopup() { document.getElementById('tab-done-popup').classList.remove('active'); }
 
+    // Làm lại 1 tab từ đầu: xáo lại, xoá tiến độ đã lưu của dạng đó, vẽ lại.
+    function restartTab(tab) {
+        let state = tabState[tab];
+        if (!state) return;
+        prepareTabForMode(tab, currentModeOf(tab), { forceFresh: true });
+        if (tab === 'typing') renderTypingSheet(true);
+        else if (tabRenderMap[tab]) tabRenderMap[tab]();
+        updateDashboardStats();
+    }
+
+    // Nút "Làm lại" thường trực (cạnh nút Ngẫu nhiên)
+    function restartCurrentTab() {
+        if (!QUIZ_SUBTABS.includes(currentTab)) return;
+        if (currentTab === 'typing' && hasTypingProgress() &&
+            !confirm("Làm lại sẽ xoá hết đáp án bạn đã nhập ở phần Viết từ. Bạn có chắc không?")) return;
+        restartTab(currentTab);
+    }
+
     function restartCurrentTabFromPopup() {
         closeTabDonePopup();
-        let state = tabState[currentTab];
-        if (!state || !state.indices || state.indices.length === 0) return;
-        state.indices = shuffleArray([...state.indices]);
-        state.current = 0;
-        resetTabScore(currentTab);
-        if (currentTab === 'typing') renderTypingSheet(false);
-        else if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
-        updateDashboardStats();
+        restartTab(currentTab);
     }
 
     function showCustomBouncePopup(title, text) {
@@ -2560,6 +2597,14 @@
 
         if (vocabData.length === 0 && tabName !== 'lecture') return;
 
+        // Khôi phục tiến độ đã lưu của dạng đang mở (làm tiếp thay vì làm mới).
+        // Chỉ nạp lại khi chưa nạp cho đúng unit+mode này trong phiên hiện tại.
+        if (QUIZ_SUBTABS.includes(tabName)) {
+            const _mode = currentModeOf(tabName);
+            const _st = tabState[tabName];
+            if (!_st._loadedFor || _st._loadedFor !== (currentUnit + ':' + _mode)) prepareTabForMode(tabName, _mode);
+        }
+
         if (tabName === 'lecture') renderLectureTab();
         else if (tabName === 'vocabTable') renderVocabTableIndex();    
         else if (tabName === 'flashcard') renderFlashcard();
@@ -2592,6 +2637,7 @@
 
         state.current = (state.current + 1) % state.indices.length;
         if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
+        saveQuizSession(currentTab);   // nhớ vị trí để lần sau làm tiếp
         updateDashboardStats();
     }
 
@@ -2606,26 +2652,17 @@
         if (!state || !state.indices || state.indices.length === 0) return;
         state.current = (state.current - 1 + state.indices.length) % state.indices.length;
         if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
+        saveQuizSession(currentTab);   // nhớ vị trí để lần sau làm tiếp
         updateDashboardStats();
     }
 
     function handleMixAction() {
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
-        if (currentTab === 'typing') {
-            if (hasTypingProgress() && !confirm("Chế độ ngẫu nhiên sẽ xoá hết đáp án bạn đã nhập. Bạn có chắc không?")) return;
-            state.indices = shuffleArray([...state.indices]);
-            state.current = 0;
-            resetTabScore('typing');
-            renderTypingSheet(false); // reset toàn bộ tiến độ, focus lại hàng đầu tiên
-            updateDashboardStats();
-            return;
-        }
-        state.indices = shuffleArray([...state.indices]);
-        state.current = 0;
-        resetTabScore(currentTab);
-        if (tabRenderMap[currentTab]) tabRenderMap[currentTab]();
-        updateDashboardStats();
+        if (currentTab === 'typing' && hasTypingProgress() &&
+            !confirm("Chế độ ngẫu nhiên sẽ xoá hết đáp án bạn đã nhập. Bạn có chắc không?")) return;
+        // Xáo lại từ đầu = bắt đầu vòng mới -> xoá tiến độ đã lưu của dạng này.
+        restartTab(currentTab);
     }
 
     function recordWrongWord(explicitIndex) {
@@ -2809,59 +2846,82 @@
         return ex; // không chèn được thì để nguyên câu
     }
 
-    // Đồng bộ trạng thái các nút toggle về mặc định (gọi khi đổi Unit)
+    // Định nghĩa các dạng (mode) cho từng tab quiz có lựa chọn.
+    // opt = [value, nhãn, nhãn-độ-khó (rỗng nếu không có), làKhó]
+    const QUIZ_MODE_DEFS = {
+        quiz: {
+            get: () => tabState.quiz.replyLang || 'mix',
+            opts: [['vi', 'Đáp án Việt', '', false], ['ko', 'Đáp án Hàn', '', false], ['mix', 'Đáp án Trộn', '', false]]
+        },
+        listen: {
+            get: () => tabState.listen.mode || 'word',
+            opts: [['word', 'Nghe từ', '◆ Cơ bản', false], ['sentence', 'Nghe câu điền từ', '🔥 Thử thách', true]]
+        },
+        guess: {
+            get: () => tabState.guess.mode || 'word',
+            opts: [['word', 'Nghe từ', '◆ Cơ bản', false], ['sentence', 'Nghe câu tìm nghĩa', '🔥 Thử thách', true]]
+        }
+    };
+    // Nhãn mode dùng cho báo cáo (học sinh) & dashboard (giáo viên)
+    const QUIZ_MODE_LABELS = {
+        listen: { word: 'Nghe từ', sentence: 'Nghe câu điền từ' },
+        guess:  { word: 'Nghe từ', sentence: 'Nghe câu tìm nghĩa' },
+        quiz:   { vi: 'Đáp án Việt', ko: 'Đáp án Hàn', mix: 'Đáp án Trộn' }
+    };
+    // Mode hiện tại của 1 tab ('_' cho tab không có mode: visual/typing)
+    function currentModeOf(tab) {
+        if (tab === 'quiz') return tabState.quiz.replyLang || 'mix';
+        if (tab === 'listen') return tabState.listen.mode || 'word';
+        if (tab === 'guess') return tabState.guess.mode || 'word';
+        return '_';
+    }
+
+    // Đồng bộ trạng thái thanh chọn dạng về mặc định (gọi khi đổi Unit)
     function syncQuizModeToggles() { renderQuizModeSelect(currentTab); }
 
-    // Đổ đúng lựa chọn vào nút xổ (dropdown) theo tab quiz đang mở; ẩn nếu tab không có lựa chọn.
+    // Vẽ thanh pills chọn dạng theo tab quiz đang mở; ẩn nếu tab không có lựa chọn.
     function renderQuizModeSelect(tab) {
-        const sel = document.getElementById('quiz-mode-select');
-        if (!sel) return;
-        let opts = [], cur = '';
-        if (tab === 'quiz') {
-            opts = [['vi', 'Đáp án: Việt'], ['ko', 'Đáp án: Hàn'], ['mix', 'Đáp án: Trộn']];
-            cur = tabState.quiz.replyLang || 'mix';
-        } else if (tab === 'listen') {
-            opts = [['word', 'Nghe từ'], ['sentence', 'Nghe câu điền từ']];
-            cur = tabState.listen.mode || 'word';
-        } else if (tab === 'guess') {
-            opts = [['word', 'Nghe từ'], ['sentence', 'Nghe câu tìm nghĩa']];
-            cur = tabState.guess.mode || 'word';
-        } else {
-            sel.style.display = 'none'; return; // visual / typing: không có lựa chọn
-        }
-        sel.innerHTML = opts.map(o => `<option value="${o[0]}"${o[0] === cur ? ' selected' : ''}>${o[1]}</option>`).join('');
-        sel.style.display = 'inline-block';
+        const wrap = document.getElementById('quiz-mode-wrap');
+        const box = document.getElementById('quiz-mode-pills');
+        if (!wrap || !box) return;
+        const def = QUIZ_MODE_DEFS[tab];
+        if (!def) { wrap.style.display = 'none'; return; } // visual / typing: không có lựa chọn
+        const cur = def.get();
+        box.innerHTML = def.opts.map(o => {
+            const active = o[0] === cur ? ' active' : '';
+            const hard = o[3] ? ' qm-hard' : '';
+            const lvl = o[2] ? `<span class="qm-lvl">${o[2]}</span>` : '';
+            return `<button type="button" class="qm-pill${hard}${active}" onclick="selectQuizMode('${tab}','${o[0]}')"><span class="qm-t">${o[1]}</span>${lvl}</button>`;
+        }).join('');
+        wrap.style.display = 'inline-flex';
     }
 
-    // Nút xổ thay đổi -> gọi đúng hàm theo tab hiện tại
-    function onQuizModeSelectChange(value) {
-        if (currentTab === 'quiz') setQuizReplyLang(value);
-        else if (currentTab === 'listen') setListenMode(value);
-        else if (currentTab === 'guess') setGuessMode(value);
+    // Bấm 1 pill -> chuyển dạng (khôi phục tiến độ của dạng đó nếu có), rồi vẽ lại pills.
+    function selectQuizMode(tab, value) {
+        if (tab === 'quiz') setQuizReplyLang(value);
+        else if (tab === 'listen') setListenMode(value);
+        else if (tab === 'guess') setGuessMode(value);
+        renderQuizModeSelect(tab);
     }
 
-    // Trắc nghiệm: chọn ngôn ngữ đáp án (Việt / Hàn / Trộn)
+    // Trắc nghiệm: chọn ngôn ngữ đáp án (Việt / Hàn / Trộn) — mỗi dạng giữ tiến độ riêng.
     function setQuizReplyLang(lang) {
         tabState.quiz.replyLang = lang;
-        if (currentTab === 'quiz') { tabState.quiz.current = 0; resetTabScore('quiz'); generateQuizQuestion(); updateDashboardStats(); }
+        if (currentTab === 'quiz') { prepareTabForMode('quiz', lang); generateQuizQuestion(); updateDashboardStats(); }
     }
 
-    // Nghe & chọn từ: đổi dạng "Nghe từ" <-> "Nghe câu điền từ"
+    // Nghe & chọn từ: đổi dạng "Nghe từ" <-> "Nghe câu điền từ" — khôi phục tiến độ của dạng đã chọn.
     function setListenMode(mode) {
-        let state = tabState.listen; state.mode = mode;
-        let base = Array.from({ length: vocabData.length }, (_, i) => i);
-        if (mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '');
-        state.indices = shuffleArray(base); state.current = 0;
-        resetTabScore('listen'); generateListenQuestion(); updateDashboardStats();
+        tabState.listen.mode = mode;
+        prepareTabForMode('listen', mode);
+        generateListenQuestion(); updateDashboardStats();
     }
 
-    // Nghe & tìm nghĩa: đổi dạng "Nghe từ" <-> "Nghe câu tìm nghĩa"
+    // Nghe & tìm nghĩa: đổi dạng "Nghe từ" <-> "Nghe câu tìm nghĩa" — khôi phục tiến độ của dạng đã chọn.
     function setGuessMode(mode) {
-        let state = tabState.guess; state.mode = mode;
-        let base = Array.from({ length: vocabData.length }, (_, i) => i);
-        if (mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '' && (vocabData[i].exVi || '').trim() !== '');
-        state.indices = shuffleArray(base); state.current = 0;
-        resetTabScore('guess'); generateGuessQuestion(); updateDashboardStats();
+        tabState.guess.mode = mode;
+        prepareTabForMode('guess', mode);
+        generateGuessQuestion(); updateDashboardStats();
     }
 
     function generateQuizQuestion() {
@@ -4039,6 +4099,98 @@
         return (store && store[unit]) ? store[unit] : {};
     }
 
+    /* ---- LƯU & KHÔI PHỤC TIẾN ĐỘ TỪNG QUIZ (làm tiếp thay vì làm mới) ----
+       Store riêng quizState_<key> = { [unit]: { [tab]: { [mode]: session } } }
+       session = { order:[...idx], current, seen:[...], right, wrong, status?, values? }
+       Không đụng unitQuiz_<key> (sao & lịch sử cũ). Có fallback cho dữ liệu cũ. */
+    function quizStateStoreKey() { return `quizState_${getStudentKey()}`; }
+    function loadQuizStateStore() {
+        try { return JSON.parse(localStorage.getItem(quizStateStoreKey())) || {}; } catch (e) { return {}; }
+    }
+    function saveQuizStateStore(store) {
+        try { localStorage.setItem(quizStateStoreKey(), JSON.stringify(store)); } catch (e) {}
+    }
+    // Dựng danh sách câu mới (đã xáo) cho 1 dạng — lọc theo yêu cầu của dạng câu.
+    function buildFreshIndices(tab, mode) {
+        let base = Array.from({ length: vocabData.length }, (_, i) => i);
+        if (tab === 'listen' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '');
+        else if (tab === 'guess' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '' && (vocabData[i].exVi || '').trim() !== '');
+        return shuffleArray(base);
+    }
+    // 1 session đã lưu có phải "đã làm xong" không (xong rồi thì lần sau bắt đầu vòng mới).
+    function isSessionFinished(tab, sess) {
+        if (!sess || !sess.order || sess.order.length === 0) return false;
+        if (tab === 'typing') return (sess.status || []).filter(s => s === 'ok').length >= sess.order.length;
+        return (sess.seen || []).length >= sess.order.length;
+    }
+    // Ghi lại tiến độ hiện tại của 1 tab vào store (theo unit + mode đang mở).
+    function saveQuizSession(tab) {
+        if (!currentUnit || currentUnit === 'SUM') return;
+        const st = tabState[tab];
+        if (!st || !st.indices || st.indices.length === 0) return;
+        const mode = currentModeOf(tab);
+        const store = loadQuizStateStore();
+        if (!store[currentUnit]) store[currentUnit] = {};
+        if (!store[currentUnit][tab]) store[currentUnit][tab] = {};
+        const sess = {
+            order: st.indices.slice(),
+            current: st.current || 0,
+            seen: (st.seen || []).slice(),
+            right: st.right || 0,
+            wrong: st.wrong || 0
+        };
+        if (tab === 'typing') { sess.status = (st.status || []).slice(); sess.values = (st.values || []).slice(); }
+        store[currentUnit][tab][mode] = sess;
+        saveQuizStateStore(store);
+        scheduleProgressPush();
+    }
+    // Xoá session đã lưu của 1 tab+mode (khi bấm "Làm lại" hoặc xáo ngẫu nhiên).
+    function clearQuizSession(tab, mode) {
+        if (!currentUnit || currentUnit === 'SUM') return;
+        const store = loadQuizStateStore();
+        if (store[currentUnit] && store[currentUnit][tab] && store[currentUnit][tab][mode] != null) {
+            delete store[currentUnit][tab][mode];
+            saveQuizStateStore(store);
+            scheduleProgressPush();
+        }
+    }
+    // Chuẩn bị tabState cho 1 dạng: khôi phục tiến độ đã lưu, hoặc dựng mới (forceFresh / đã xong).
+    function prepareTabForMode(tab, mode, opts) {
+        const st = tabState[tab];
+        if (!st) return;
+        const forceFresh = opts && opts.forceFresh;
+        let sess = null;
+        if (!forceFresh) {
+            const store = loadQuizStateStore();
+            const saved = store[currentUnit] && store[currentUnit][tab] ? store[currentUnit][tab][mode] : null;
+            // An toàn: bỏ qua nếu order tham chiếu index vượt phạm vi vocabData hiện tại.
+            const validOrder = saved && Array.isArray(saved.order) && saved.order.length &&
+                               saved.order.every(i => i >= 0 && i < vocabData.length);
+            if (validOrder && !isSessionFinished(tab, saved)) sess = saved;
+        }
+        if (sess) {
+            st.indices = sess.order.slice();
+            st.current = Math.min(sess.current || 0, st.indices.length - 1);
+            st.seen = (sess.seen || []).slice();
+            st.right = sess.right || 0;
+            st.wrong = sess.wrong || 0;
+            if (tab === 'typing') {
+                st.status = (sess.status || st.indices.map(() => 'none')).slice();
+                st.values = (sess.values || st.indices.map(() => '')).slice();
+            }
+        } else {
+            st.indices = buildFreshIndices(tab, mode);
+            st.current = 0;
+            resetTabScore(tab);
+            if (tab === 'typing') {
+                st.status = st.indices.map(() => 'none');
+                st.values = st.indices.map(() => '');
+            }
+            if (forceFresh) clearQuizSession(tab, mode);
+        }
+        st._loadedFor = currentUnit + ':' + mode;
+    }
+
     // Ghi nhận tiến độ/điểm số 1 bài quiz của Unit hiện tại
     function saveUnitQuizFor(tab) {
         if (!currentUnit || currentUnit === 'SUM' || !UNIT_QUIZ_TABS.some(t => t.key === tab)) return;
@@ -4054,14 +4206,28 @@
         if (!store[currentUnit]) store[currentUnit] = {};
         // Không cho "done" bị hạ xuống false khi làm lại giữa chừng — giữ mốc đã hoàn thành
         const prev = store[currentUnit][tab] || {};
+
+        // Ghi nhận mode đang làm (chỉ với dạng có nhiều mode). Giữ lại tất cả mode đã từng làm.
+        const hasModes = QUIZ_MODE_DEFS.hasOwnProperty(tab);
+        const modes = Object.assign({}, prev.modes || {});
+        if (hasModes) {
+            const mk = currentModeOf(tab);
+            modes[mk] = { right: right, wrong: wrong, total: total, done: done, started: started };
+        }
+        // Sao vẫn tính "làm 1 mode = xong": done cấp tab = OR các mode (hoặc mốc cũ).
+        const anyModeDone    = hasModes && Object.keys(modes).some(k => modes[k] && modes[k].done);
+        const anyModeStarted = hasModes && Object.keys(modes).some(k => modes[k] && modes[k].started);
+
         store[currentUnit][tab] = {
             right: right, wrong: wrong, total: total,
-            done: done || !!prev.done,
-            started: started || !!prev.started
+            done: done || !!prev.done || anyModeDone,
+            started: started || !!prev.started || anyModeStarted
         };
+        if (hasModes || prev.modes) store[currentUnit][tab].modes = hasModes ? modes : prev.modes;
         try { localStorage.setItem(unitQuizStoreKey(), JSON.stringify(store)); } catch (e) {}
         scheduleProgressPush();
 
+        saveQuizSession(tab);   // lưu vị trí câu để lần sau làm tiếp
         renderUnitReport();
         renderDashboardUnitGrid();
     }
@@ -4081,6 +4247,22 @@
             html += `<span style="font-size:${size}px; color:${gold ? '#f6b73c' : '#d7dee8'};">★</span>`;
         }
         return html;
+    }
+
+    // Chip mode đã làm cho báo cáo học sinh (chỉ dạng có nhiều mode)
+    function renderReportModeChips(tabKey, modesObj) {
+        const labels = QUIZ_MODE_LABELS[tabKey];
+        if (!labels || !modesObj) return '';
+        const parts = [];
+        Object.keys(labels).forEach(mk => {
+            const m = modesObj[mk];
+            if (!m || (!m.started && !m.done)) return;
+            const nm = labels[mk];
+            if (m.done) parts.push(`<span style="color:var(--success-color); font-weight:700;">${nm} ✓ ${m.right}/${m.total}</span>`);
+            else parts.push(`<span style="color:#dd6b20;">${nm} ${m.right}/${m.total}</span>`);
+        });
+        if (!parts.length) return '';
+        return `<div style="font-size:9px; margin-top:3px; display:flex; flex-wrap:wrap; gap:4px 10px;">${parts.join('')}</div>`;
     }
 
     // Vẽ khối "Báo cáo Unit" (Hình 5) từ dữ liệu đã lưu, ưu tiên số liệu live của tab đang mở
@@ -4108,18 +4290,31 @@
 
         UNIT_QUIZ_TABS.forEach(t => {
             let d = data[t.key];
+            // Gộp các mode đã làm (bản lưu) + số liệu live của mode đang mở
+            let modesObj = (data[t.key] && data[t.key].modes) ? Object.assign({}, data[t.key].modes) : null;
             // Nếu đang mở đúng bài này, lấy số liệu tức thời cho mượt
             if (currentTab === t.key && tabState[t.key] && tabState[t.key].indices) {
                 const st = tabState[t.key];
                 const liveRight = (t.key === 'typing') ? countTypingCorrect() : (st.right || 0);
                 const liveStarted = (st.seen && st.seen.length > 0) || (st.right || 0) + (st.wrong || 0) > 0
                                     || (t.key === 'typing' && hasTypingProgress());
+                const liveDone = isTabFinished(t.key) || (d && d.done);
                 d = {
                     right: liveRight,
                     total: st.indices.length,
-                    done: isTabFinished(t.key) || (d && d.done),
+                    done: liveDone,
                     started: liveStarted || (d && d.started)
                 };
+                // cập nhật live cho mode đang mở
+                if (QUIZ_MODE_LABELS[t.key]) {
+                    const mk = currentModeOf(t.key);
+                    if (!modesObj) modesObj = {};
+                    modesObj[mk] = {
+                        right: liveRight, total: st.indices.length,
+                        done: isTabFinished(t.key) || (modesObj[mk] && modesObj[mk].done),
+                        started: liveStarted || (modesObj[mk] && modesObj[mk].started)
+                    };
+                }
             }
             const isDone = d && d.done;
             const isStarted = d && d.started;
@@ -4134,6 +4329,7 @@
             } else {
                 statusLine = `<span style="color:var(--sub-text);">Chưa bắt đầu</span>`;
             }
+            const modeLine = renderReportModeChips(t.key, modesObj);
 
             const row = document.createElement('div');
             row.style.cssText = 'display:flex; align-items:center; gap:8px; padding:7px 9px; background:var(--bg-color); border-radius:10px; box-shadow:var(--neu-concave);';
@@ -4142,6 +4338,7 @@
                 <div style="flex:1; min-width:0;">
                     <div style="font-size:11px; font-weight:700; color:#1a202c;">${t.no}. ${t.label}</div>
                     <div style="font-size:9.5px; margin-top:1px;">${statusLine}</div>
+                    ${modeLine}
                 </div>`;
             listEl.appendChild(row);
         });

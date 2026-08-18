@@ -73,6 +73,9 @@
   .q-name{color:#4a5568;}
   .q-stat{font-weight:700;}
   .q-done{color:var(--ok);} .q-doing{color:var(--warn);} .q-none{color:#b8c0cd;}
+  .mode-sub{display:flex; flex-wrap:wrap; gap:3px 8px; padding:1px 0 4px 4px; margin-top:-1px;}
+  .mode-chip{font-size:10px; font-weight:700; color:var(--sub);}
+  .mode-chip.q-done{color:var(--ok);} .mode-chip.q-doing{color:var(--warn);}
   .expand-hint{font-size:11px; color:var(--point); cursor:pointer; font-weight:700; white-space:nowrap;}
   .empty{padding:40px; text-align:center; color:var(--sub); font-size:14px;}
   @media (max-width:640px){ .legend{display:none;} }
@@ -133,6 +136,12 @@
     { key:'guess',  label:'Nghe & tìm nghĩa' },
     { key:'typing', label:'Viết từ' }
   ];
+  // Nhãn các mode (dạng) cho những quiz có lựa chọn — để hiện học sinh đã làm dạng nào.
+  const QUIZ_MODE_LABELS = {
+    listen: { word:'Nghe từ', sentence:'Nghe câu điền từ' },
+    guess:  { word:'Nghe từ', sentence:'Nghe câu tìm nghĩa' },
+    quiz:   { vi:'Đáp án Việt', ko:'Đáp án Hàn', mix:'Đáp án Trộn' }
+  };
   const MAX_UNIT = 15;
   const KEY_STORE = 'thth2_teacher_key';
 
@@ -304,6 +313,23 @@
     `;
   }
 
+  // Dòng phụ hiện các dạng (mode) học sinh đã làm trong 1 quiz có nhiều mode.
+  function renderModeSubLine(tabKey, d){
+    const labels = QUIZ_MODE_LABELS[tabKey];
+    if (!labels || !d || !d.modes) return '';
+    const parts = [];
+    Object.keys(labels).forEach(mk=>{
+      const m = d.modes[mk];
+      if (!m || (!m.started && !m.done)) return;
+      const nm = labels[mk];
+      const cls = m.done ? 'q-done' : 'q-doing';
+      const val = m.done ? `✓ ${m.right}/${m.total}` : `${m.right}/${m.total}`;
+      parts.push(`<span class="mode-chip ${cls}">${nm}: ${val}</span>`);
+    });
+    if (!parts.length) return '';
+    return `<div class="mode-sub">${parts.join('')}</div>`;
+  }
+
   function renderDetail(p){
     let html = '';
     for (let u=1; u<=MAX_UNIT; u++){
@@ -317,6 +343,8 @@
         else if (d.done){ stat=`✓ ${d.right}/${d.total}`; cls='q-done'; }
         else { stat=`${d.right}/${d.total}`; cls='q-doing'; }
         lines += `<div class="q-line"><span class="q-name">${t.label}</span><span class="q-stat ${cls}">${stat}</span></div>`;
+        // Dòng phụ: dạng (mode) học sinh đã làm — chỉ quiz có nhiều mode
+        lines += renderModeSubLine(t.key, d);
       });
       html += `<div class="u-card"><h4>Unit ${u} <span class="stars">${'★'.repeat(info.stars)}${'☆'.repeat(5-info.stars)}</span></h4>${lines}</div>`;
     }
