@@ -82,6 +82,8 @@
   .stu-meta{font-size:11px; color:var(--sub); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .badge-out{font-size:9px; font-weight:800; color:#fff; background:var(--bad); border-radius:6px; padding:1px 6px;}
   .stu-time{font-size:14px; font-weight:800;}
+  .stu-time .st-seen{font-size:10px; font-weight:600; color:var(--sub); margin-top:3px; white-space:nowrap;}
+  .stu-time .st-seen svg{width:11px; height:11px; vertical-align:-1px; margin-right:3px;}
   .stu-units{display:flex; gap:6px; flex-wrap:wrap;}
   .uchip{width:42px; flex:0 0 42px; border-radius:10px; padding:5px 2px; text-align:center; box-shadow:var(--neu-sm); background:var(--card);}
   .uchip .un{display:block; font-size:9px; font-weight:800; color:#9aa2b1;}
@@ -438,7 +440,7 @@
               <div class="stu-meta">${meta}</div>
             </div>
           </div>
-          <div class="stu-time">${fmtTime(p.totalSecs)}</div>
+          <div class="stu-time">${fmtTime(p.totalSecs)}<div class="st-seen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15 14"></polyline></svg>Vào: ${fmtDate(p.updatedAt)}</div></div>
           <div class="stu-units">${chips}</div>
           <button class="detail-btn ${isOpen?'open':''}" onclick="toggleDetail(${idx})">Xem chi tiết <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
         </div>
