@@ -306,8 +306,11 @@
         .ur-frac{ font-size:10.5px; font-weight:800; }
         .ur-frac.doing{ color:var(--rwarn); } .ur-frac.done{ color:var(--rok); } .ur-frac.none{ color:#94a3b8; }
         .ur-chips{ display:flex; gap:6px; margin-top:6px; }
-        .ur-chip{ flex:1 1 0; min-width:0; text-align:center; font-size:9px; font-weight:700; color:var(--sub-text); background:var(--bg-color); box-shadow:var(--neu-concave); border-radius:7px; padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .ur-chip.cdone{ color:var(--rok); }
+        .ur-chip{ flex:1 1 0; min-width:0; display:flex; align-items:center; gap:5px; background:var(--bg-color); box-shadow:var(--neu-concave); border-radius:8px; padding:4px 7px; }
+        .ur-chip .lbl{ font-size:9px; font-weight:800; color:var(--sub-text); white-space:nowrap; flex:0 0 auto; }
+        .ur-chip .bar{ flex:1; min-width:14px; height:6px; border-radius:999px; background:#dfe4ee; overflow:hidden; box-shadow:inset 0 1px 2px rgba(163,177,198,.4); }
+        .ur-chip .bar>i{ display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#c6ccda,#8b95a9); transition:width .35s ease; }
+        .ur-chip.cdone .bar>i{ background:linear-gradient(90deg,#aab2c2,#6f7a90); }
         .ur-lc-ring{ position:relative; width:34px; height:34px; flex:0 0 34px; }
         .ur-lc-ring svg{ transform:rotate(-90deg); }
         .ur-lc-ring .v{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:800; }
@@ -474,6 +477,64 @@
         .typing-progress-track { width: 150px; height: 8px; border-radius: 6px; background: var(--bg-color); box-shadow: var(--neu-concave); overflow: hidden; }
         .typing-progress-fill { height: 100%; width: 0%; border-radius: 6px; background: var(--point-color); transition: width 0.35s ease; }
         .typing-progress-pct { font-size: 12px; font-weight: 800; color: var(--point-color); min-width: 38px; text-align: right; }
+
+        /* ===== VIẾT CÂU (write-sentence) ===== */
+        .ws-panel { width: 100%; }
+        .ws-card { background: #f7f9fc; border-radius: var(--radius-md); padding: 20px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #eef2f8; }
+        .ws-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .ws-counter { font-size: 12px; font-weight: 800; color: var(--sub-text); }
+        .ws-toggles { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .ws-toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: var(--text-color); cursor: pointer; user-select: none; }
+        .ws-switch { position: relative; width: 34px; height: 20px; border-radius: 999px; background: #cbd5e0; transition: background .2s; flex: 0 0 auto; }
+        .ws-switch.on { background: var(--point-color); }
+        .ws-switch .knob { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25); transition: left .2s; }
+        .ws-switch.on .knob { left: 16px; }
+        .ws-src { background: #fff; border-radius: var(--radius-sm); padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
+        .ws-src-txt { margin: 0; color: #1a202c; line-height: 1.5; }
+        .ws-src-txt.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; font-size: 22px; font-weight: 800; }
+        .ws-src-txt.vi { font-size: 17px; font-weight: 600; }
+        .ws-speak { flex: 0 0 auto; width: 40px; height: 40px; border-radius: 999px; border: none; background: var(--bg-color); box-shadow: var(--neu-convex); color: var(--point-color); cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .ws-inputrow { display: flex; gap: 10px; }
+        .ws-input { flex: 1; padding: 14px 16px; border: 1.5px solid #cbd5e0; border-radius: var(--radius-sm); font-size: 16px; font-family: inherit; outline: none; box-shadow: var(--neu-concave); background: #fff; min-width: 0; }
+        .ws-input.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
+        .ws-input:focus { border-color: var(--point-color); }
+        .ws-btn { flex: 0 0 auto; padding: 0 22px; border: none; border-radius: var(--radius-sm); background: var(--point-color); color: #fff; font-size: 13.5px; font-weight: 800; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(97,76,255,0.25); }
+        .ws-btn:disabled { background: #c3b8ff; cursor: default; box-shadow: none; }
+        .ws-hintbox { font-size: 13px; color: var(--sub-text); background: #fdfaf1; border: 1px dashed #ecc94b; border-radius: 10px; padding: 10px 14px; }
+        .ws-hintbox b { font-weight: 700; color: #7a5b00; }
+        .ws-fb { padding-top: 12px; border-top: 1px solid #eef2f8; display: flex; flex-direction: column; gap: 14px; }
+        .ws-verdict { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+        .ws-verdict .v { font-size: 16px; font-weight: 800; }
+        .ws-verdict .s { font-size: 12.5px; font-weight: 700; color: var(--sub-text); }
+        .ws-corrected { background: #fff; border-radius: var(--radius-sm); padding: 16px 18px; }
+        .ws-label { font-size: 11px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
+        .ws-line { font-size: 18px; line-height: 2.3; display: flex; flex-wrap: wrap; align-items: baseline; }
+        .ws-line.ko, .ws-answer.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
+        .ws-tok { display: inline-flex; align-items: baseline; white-space: nowrap; margin-right: 8px; }
+        .ws-pill { font-weight: 800; padding: 2px 8px; border-radius: 6px; }
+        .ws-pill.correct { background: #e6fbea; color: #22543d; }
+        .ws-pill.typo { background: #fef3c7; color: #7a5b00; }
+        .ws-pill.missing { background: #fee2e2; color: #742a2a; }
+        .ws-strike { text-decoration: line-through; font-weight: 600; }
+        .ws-strike.amber { color: #b7791f; }
+        .ws-strike.red { color: #c53030; }
+        .ws-arrow { color: #cbd5e0; margin: 0 5px; font-weight: 600; }
+        .ws-answer-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 14px 18px; }
+        .ws-answer-card .ws-label { color: #2f855a; }
+        .ws-answer { font-size: 18px; font-weight: 700; color: #22543d; line-height: 1.5; }
+        .ws-grammar { background: #f4f0ff; border: 1px solid rgba(97,76,255,0.18); border-radius: var(--radius-sm); padding: 14px 16px; }
+        .ws-grammar .gh { font-size: 12px; font-weight: 800; color: var(--point-color); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+        .ws-vocab-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ws-vchip { background: #fff; border-radius: 999px; padding: 6px 12px; font-size: 12.5px; font-weight: 700; color: var(--text-color); box-shadow: var(--neu-convex); }
+        .ws-vchip .k { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; color: var(--point-color); }
+        .ws-dots { display: flex; gap: 5px; flex-wrap: wrap; }
+        .ws-dot { width: 9px; height: 9px; border-radius: 999px; background: #e2e8f0; display: inline-block; }
+        .ws-dot.cur { background: var(--point-color); }
+        .ws-dot.ok { background: #48bb78; }
+        .ws-dot.bad { background: #f56565; }
+        .ws-empty { text-align: center; color: var(--sub-text); padding: 24px 12px; font-weight: 600; }
+        .ws-new-badge { display: inline-block; margin-left: 6px; background: #f6c944; color: #7a5b00; font-size: 9px; font-weight: 800; padding: 1px 6px; border-radius: 999px; vertical-align: middle; }
+
         .toggle-mode { font-size: 12px; color: var(--point-color); background: var(--card-color); border: none; cursor: pointer; font-weight: 700; padding: 8px 18px; border-radius: 20px; box-shadow: var(--neu-convex); margin-bottom: 24px; display: inline-block; outline: none; transition: all 0.2s ease; }
 
         /* LISTEN */
@@ -1062,6 +1123,7 @@
                         <button id="sub-btn-visual" class="quiz-subtab-btn" onclick="switchTab('visual')">Nhìn hình chọn từ</button>
                         <button id="sub-btn-guess" class="quiz-subtab-btn" onclick="switchTab('guess')">Nghe &amp; tìm nghĩa</button>
                         <button id="sub-btn-typing" class="quiz-subtab-btn" onclick="switchTab('typing')">Viết từ</button>
+                        <button id="sub-btn-writesentence" class="quiz-subtab-btn" onclick="switchTab('writesentence')">Viết câu<span class="ws-new-badge" id="ws-new-badge" style="display:none;">Mới</span></button>
                     </div>
 
                     <!-- Thanh công cụ quiz: thanh chọn dạng (pills) bên trái, nút Làm lại + Ngẫu nhiên bên phải -->
@@ -1269,6 +1331,11 @@
                             </table>
                         </div>
                     </div>
+                </div>
+
+                <!-- 5b. VIẾT CÂU -->
+                <div id="writesentence-tab" class="tab-render-view">
+                    <div class="ws-panel" id="ws-panel"></div>
                 </div>
 
                 <!-- 6. ĐIỀN TỪ -->
@@ -1557,7 +1624,7 @@
                 </div>
                 <div class="ur-info">
                     <div class="ur-cap">Tiến độ hoàn thành</div>
-                    <div class="ur-big" id="unit-report-summary">0/5 bài đã hoàn thành</div>
+                    <div class="ur-big" id="unit-report-summary">0/6 bài đã hoàn thành</div>
                     <div class="ur-pbar"><div id="unit-report-bar" style="width:0%"></div></div>
                 </div>
             </div>
@@ -1812,7 +1879,7 @@
             'wrongWords_' + key, 'unitQuiz_' + key, 'unitSecs_' + key,
             'completed_units_' + key, 'today_secs_' + key, 'total_secs_' + key,
             'study_date_' + key, 'starred_' + key + '_QuyenClass', 'notes_' + key + '_QuyenClass',
-            'quizState_' + key
+            'quizState_' + key, 'writeSentenceState_' + key
         ];
     }
     function snapshotProgress(sess) {
@@ -1951,6 +2018,7 @@
         flashcard: { indices: [], current: 0, isShuffleMode: false },
         quiz: { indices: [], current: 0, answered: false },
         typing: { indices: [], current: 0, direction: "vi-to-ko" },
+        writesentence: { indices: [], current: 0, mode: 'vi2ko', seen: [], right: 0, wrong: 0, results: {}, checked: false, match: null, inputValue: '', showAnswer: false, showGrammar: false },
         listen: { indices: [], current: 0, answered: false },
         guess: { indices: [], current: 0, answered: false },
         visual: { indices: [], current: 0, answered: false }
@@ -1961,7 +2029,7 @@
        ============================================================ */
 
     const TAB_DONE_LABELS = {
-        flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ",
+        flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ", writesentence: "Viết câu",
         listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ"
     };
 
@@ -1989,6 +2057,8 @@
         if (tabName === 'flashcard') return state.current >= state.indices.length - 1;
         // Viết từ có luồng riêng: xong khi mọi hàng đều đã trả lời đúng
         if (tabName === 'typing') return countTypingCorrect() >= state.indices.length;
+        // Viết câu: xong khi mọi câu trong bộ đều đã được kiểm tra
+        if (tabName === 'writesentence') return (state.seen || []).length >= state.indices.length;
         return (state.seen || []).length >= state.indices.length;
     }
 
@@ -2027,6 +2097,7 @@
     function restartTab(tab) {
         let state = tabState[tab];
         if (!state) return;
+        if (tab === 'writesentence') { wsPrepare(currentModeOf('writesentence'), true); wsRender(); updateDashboardStats(); return; }
         prepareTabForMode(tab, currentModeOf(tab), { forceFresh: true });
         if (tab === 'typing') renderTypingSheet(true);
         else if (tabRenderMap[tab]) tabRenderMap[tab]();
@@ -2610,7 +2681,7 @@
     }
 
     // 5 chức năng nằm trong nhóm "4. Quiz"
-    const QUIZ_SUBTABS = ['quiz', 'typing', 'listen', 'guess', 'visual'];
+    const QUIZ_SUBTABS = ['quiz', 'typing', 'writesentence', 'listen', 'guess', 'visual'];
     function mainGroupOf(tab) { return QUIZ_SUBTABS.includes(tab) ? 'quizgroup' : tab; }
 
     function switchTab(tabName) {
@@ -2655,7 +2726,7 @@
         const footerCtrls = document.getElementById('footer-controls');
         if (footerCtrls) footerCtrls.style.display = (tabName === 'vocabTable' || tabName === 'lecture') ? 'none' : 'flex';
 
-        document.getElementById('ctrl-prev-btn').style.visibility = (tabName === 'flashcard' || tabName === 'typing') ? 'visible' : 'hidden';
+        document.getElementById('ctrl-prev-btn').style.visibility = (tabName === 'flashcard' || tabName === 'typing' || tabName === 'writesentence') ? 'visible' : 'hidden';
 
         // Nhóm quiz: nút Trộn bài chuyển lên góc phải khu quiz (Hình 4), ẩn nút Trộn bài dưới footer
         const inQuizGroup = QUIZ_SUBTABS.includes(tabName);
@@ -2671,23 +2742,25 @@
         // Tab Viết từ dùng thanh tiến độ thay cho nút "Tiếp theo"
         const typingProgressWrap = document.getElementById('typing-progress-wrap');
         if (typingProgressWrap) typingProgressWrap.style.display = (tabName === 'typing') ? 'flex' : 'none';
-        document.getElementById('ctrl-next-btn').style.display = (tabName === 'typing') ? 'none' : 'inline-block';
+        // Viết từ & Viết câu có nút điều hướng riêng trong khung -> ẩn nút "Tiếp theo" ở footer
+        document.getElementById('ctrl-next-btn').style.display = (tabName === 'typing' || tabName === 'writesentence') ? 'none' : 'inline-block';
 
         if (vocabData.length === 0 && tabName !== 'lecture') return;
 
         // Khôi phục tiến độ đã lưu của dạng đang mở (làm tiếp thay vì làm mới).
         // Chỉ nạp lại khi chưa nạp cho đúng unit+mode này trong phiên hiện tại.
-        if (QUIZ_SUBTABS.includes(tabName)) {
+        if (QUIZ_SUBTABS.includes(tabName) && tabName !== 'writesentence') {
             const _mode = currentModeOf(tabName);
             const _st = tabState[tabName];
             if (!_st._loadedFor || _st._loadedFor !== (currentUnit + ':' + _mode)) prepareTabForMode(tabName, _mode);
         }
 
         if (tabName === 'lecture') renderLectureTab();
-        else if (tabName === 'vocabTable') renderVocabTableIndex();    
+        else if (tabName === 'vocabTable') renderVocabTableIndex();
         else if (tabName === 'flashcard') renderFlashcard();
         else if (tabName === 'quiz') generateQuizQuestion();
         else if (tabName === 'typing') renderTypingSheet(true);
+        else if (tabName === 'writesentence') { wsEnsurePrepared(); wsRender(); }
         else if (tabName === 'listen') generateListenQuestion();
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
@@ -2701,12 +2774,14 @@
         flashcard: renderFlashcard,
         quiz: generateQuizQuestion,
         typing: () => renderTypingSheet(true),
+        writesentence: () => wsRender(),
         listen: generateListenQuestion,
         guess: generateGuessQuestion,
         visual: generateVisualQuestion
     };
 
     function handleNextAction() {
+        if (currentTab === 'writesentence') { wsNext(); return; }
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
 
@@ -2720,6 +2795,7 @@
     }
 
     function handlePrevAction() {
+        if (currentTab === 'writesentence') { wsPrev(); return; }
         // Bảng Viết từ hiển thị cả danh sách nên không có "từ trước đó" — nút này quay lại màn hình trước
         if (currentTab === 'typing') {
             if (hasTypingProgress() && !confirm("Bạn đang làm dở phiếu Viết từ. Rời khỏi màn hình này chứ?")) return;
@@ -2938,19 +3014,32 @@
         guess: {
             get: () => tabState.guess.mode || 'word',
             opts: [['word', 'Nghe từ', '◆ Cơ bản', false], ['sentence', 'Nghe câu tìm nghĩa', '🔥 Thử thách', true]]
+        },
+        writesentence: {
+            get: () => tabState.writesentence.mode || 'vi2ko',
+            opts: [['vi2ko', 'Việt → Hàn', '', false], ['ko2vi', 'Hàn → Việt', '', false]]
         }
     };
     // Nhãn mode dùng cho báo cáo (học sinh) & dashboard (giáo viên)
     const QUIZ_MODE_LABELS = {
         listen: { word: 'Nghe từ', sentence: 'Nghe câu điền từ' },
         guess:  { word: 'Nghe từ', sentence: 'Nghe câu tìm nghĩa' },
-        quiz:   { vi: 'Đáp án Việt', ko: 'Đáp án Hàn', mix: 'Đáp án Trộn' }
+        quiz:   { vi: 'Đáp án Việt', ko: 'Đáp án Hàn', mix: 'Đáp án Trộn' },
+        writesentence: { vi2ko: 'Việt → Hàn', ko2vi: 'Hàn → Việt' }
+    };
+    // Nhãn NGẮN cho chip mode (để không bị cắt chữ trong sidebar)
+    const QUIZ_MODE_SHORT = {
+        listen: { word: 'Từ', sentence: 'Câu' },
+        guess:  { word: 'Từ', sentence: 'Câu' },
+        quiz:   { vi: 'Việt', ko: 'Hàn', mix: 'Trộn' },
+        writesentence: { vi2ko: 'V→H', ko2vi: 'H→V' }
     };
     // Mode hiện tại của 1 tab ('_' cho tab không có mode: visual/typing)
     function currentModeOf(tab) {
         if (tab === 'quiz') return tabState.quiz.replyLang || 'mix';
         if (tab === 'listen') return tabState.listen.mode || 'word';
         if (tab === 'guess') return tabState.guess.mode || 'word';
+        if (tab === 'writesentence') return tabState.writesentence.mode || 'vi2ko';
         return '_';
     }
 
@@ -2979,6 +3068,7 @@
         if (tab === 'quiz') setQuizReplyLang(value);
         else if (tab === 'listen') setListenMode(value);
         else if (tab === 'guess') setGuessMode(value);
+        else if (tab === 'writesentence') setWriteSentenceMode(value);
         renderQuizModeSelect(tab);
     }
 
@@ -3336,6 +3426,305 @@
         let state = tabState.typing;
         return (state.status || []).some(s => s !== 'none');
     }
+
+    /* ============================================================
+       VIẾT CÂU (write-sentence) — gõ cả câu, chấm theo từng từ.
+       Kho câu = 2 câu ví dụ (ex/exVi + ex2/ex2Vi) của mỗi từ vựng.
+       Mã câu (composite id) = wordIndex*2 + which (0: câu 1, 1: câu 2).
+       ============================================================ */
+    const WS_LAUNCH_DATE = new Date('2026-08-19T00:00:00').getTime();
+
+    function wsEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+    function wsNormTok(t) { return (t || '').toLowerCase().replace(/[.,!?~…"“”'`。？！:;]/g, ''); }
+    const WS_OPTIONAL_WORDS = new Set(['저는', '제가', '나는', '내가', '너는', '당신은', '우리는', '저희는', '그는', '그녀는'].map(wsNormTok));
+    function wsLevenshtein(a, b) {
+        const n = a.length, m = b.length;
+        const dp = Array.from({ length: n + 1 }, (_, i) => [i, ...new Array(m).fill(0)]);
+        for (let j = 0; j <= m; j++) dp[0][j] = j;
+        for (let i = 1; i <= n; i++) for (let j = 1; j <= m; j++) {
+            dp[i][j] = a[i - 1] === b[j - 1] ? dp[i - 1][j - 1] : 1 + Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]);
+        }
+        return dp[n][m];
+    }
+    // Chấm theo "túi từ" (không xét thứ tự): tiếng Hàn cho phép đảo trạng ngữ & lược chủ ngữ.
+    function wsMatchBag(userToks, correctToks) {
+        const used = new Array(userToks.length).fill(false);
+        const correctStatus = correctToks.map(c => ({ token: c, status: 'missing', userIdx: -1 }));
+        correctStatus.forEach(cs => {
+            const idx = userToks.findIndex((u, ui) => !used[ui] && wsNormTok(u) === wsNormTok(cs.token));
+            if (idx !== -1) { used[idx] = true; cs.status = 'match'; cs.userIdx = idx; }
+        });
+        correctStatus.forEach(cs => {
+            if (cs.status !== 'missing') return;
+            let bestIdx = -1, bestDist = Infinity;
+            userToks.forEach((u, ui) => {
+                if (used[ui]) return;
+                const d = wsLevenshtein(wsNormTok(u), wsNormTok(cs.token));
+                if (d <= 1 && d < bestDist) { bestDist = d; bestIdx = ui; }
+            });
+            if (bestIdx !== -1) { used[bestIdx] = true; cs.status = 'typo'; cs.userIdx = bestIdx; }
+        });
+        correctStatus.forEach(cs => {
+            if (cs.status === 'missing' && WS_OPTIONAL_WORDS.has(wsNormTok(cs.token))) cs.status = 'optional-missing';
+        });
+        const extraToks = userToks.filter((u, ui) => !used[ui]);
+        return { correctStatus, extraToks, userToks };
+    }
+
+    function wsSentenceAt(id) {
+        const wi = Math.floor(id / 2), which = id % 2;
+        const item = vocabData[wi] || {};
+        const ko = which ? (item.ex2 || '') : (item.ex || '');
+        const vi = which ? (item.ex2Vi || '') : (item.exVi || '');
+        return { item, wi, which, ko, vi };
+    }
+    // Kho câu của Unit hiện tại (câu nào có đủ cả Hàn + Việt mới đưa vào), đã xáo.
+    function wsBuildBank() {
+        const bank = [];
+        for (let i = 0; i < vocabData.length; i++) {
+            const it = vocabData[i];
+            if ((it.ex || '').trim() && (it.exVi || '').trim()) bank.push(i * 2);
+            if ((it.ex2 || '').trim() && (it.ex2Vi || '').trim()) bank.push(i * 2 + 1);
+        }
+        return shuffleArray(bank);
+    }
+
+    function wsStoreKey() { return `writeSentenceState_${getStudentKey()}`; }
+    function wsLoadStore() { try { return JSON.parse(localStorage.getItem(wsStoreKey())) || {}; } catch (e) { return {}; } }
+    function wsSaveStore(store) { try { localStorage.setItem(wsStoreKey(), JSON.stringify(store)); } catch (e) {} }
+    function wsLoadSession(unit, mode) { const store = wsLoadStore(); return (store[unit] && store[unit][mode]) ? store[unit][mode] : null; }
+    function wsClearSession(unit, mode) {
+        if (!unit || unit === 'SUM') return;
+        const store = wsLoadStore();
+        if (store[unit] && store[unit][mode] != null) { delete store[unit][mode]; wsSaveStore(store); scheduleProgressPush(); }
+    }
+    function wsSaveSession() {
+        const ws = tabState.writesentence;
+        if (!currentUnit || currentUnit === 'SUM') return;
+        const store = wsLoadStore();
+        if (!store[currentUnit]) store[currentUnit] = {};
+        store[currentUnit][ws.mode] = {
+            order: ws.indices.slice(), current: ws.current,
+            seen: (ws.seen || []).slice(), results: Object.assign({}, ws.results)
+        };
+        wsSaveStore(store);
+        scheduleProgressPush();
+    }
+
+    // Cập nhật điểm (đúng/sai) từ results -> tabState rồi ghi nhận sao/tiến độ theo Unit.
+    function wsSyncScore() {
+        const ws = tabState.writesentence;
+        let right = 0, wrong = 0;
+        (ws.seen || []).forEach(id => { if (ws.results[id] === true) right++; else if (ws.results[id] === false) wrong++; });
+        ws.right = right; ws.wrong = wrong;
+        saveUnitQuizFor('writesentence');
+    }
+
+    // Dựng/khôi phục bộ câu cho 1 chiều (mode). forceFresh = làm lại từ đầu.
+    function wsPrepare(mode, forceFresh) {
+        const ws = tabState.writesentence;
+        ws.mode = mode || 'vi2ko';
+        let sess = null;
+        if (!forceFresh && currentUnit && currentUnit !== 'SUM') sess = wsLoadSession(currentUnit, ws.mode);
+        const valid = sess && Array.isArray(sess.order) && sess.order.length &&
+            sess.order.every(id => { const wi = Math.floor(id / 2); return wi >= 0 && wi < vocabData.length; }) &&
+            (sess.seen || []).length < sess.order.length;
+        if (valid) {
+            ws.indices = sess.order.slice();
+            ws.current = Math.min(sess.current || 0, ws.indices.length - 1);
+            ws.seen = (sess.seen || []).slice();
+            ws.results = Object.assign({}, sess.results || {});
+        } else {
+            ws.indices = wsBuildBank();
+            ws.current = 0;
+            ws.seen = [];
+            ws.results = {};
+            if (forceFresh) wsClearSession(currentUnit, ws.mode);
+        }
+        ws.checked = false; ws.match = null; ws.inputValue = '';
+        ws._loadedFor = currentUnit + ':' + ws.mode;
+        wsSyncScore();
+    }
+    function wsEnsurePrepared() {
+        const ws = tabState.writesentence;
+        const mode = ws.mode || 'vi2ko';
+        if (ws._loadedFor !== (currentUnit + ':' + mode)) wsPrepare(mode);
+    }
+    function setWriteSentenceMode(mode) {
+        tabState.writesentence.mode = mode;
+        if (currentTab === 'writesentence') { wsPrepare(mode); wsRender(); updateDashboardStats(); }
+    }
+
+    function wsOnInput(v) {
+        const ws = tabState.writesentence; ws.inputValue = v;
+        const b = document.getElementById('ws-check-btn'); if (b) b.disabled = !v.trim();
+    }
+    function wsKeyDown(e) {
+        if (e.key === 'Enter') { const ws = tabState.writesentence; if (!ws.checked && (ws.inputValue || '').trim()) wsCheck(); }
+    }
+    function wsToggleAnswer() { tabState.writesentence.showAnswer = !tabState.writesentence.showAnswer; wsRender(); }
+    function wsToggleGrammar() { tabState.writesentence.showGrammar = !tabState.writesentence.showGrammar; wsRender(); }
+    function wsSpeak() {
+        const ws = tabState.writesentence;
+        const s = wsSentenceAt(ws.indices[ws.current]);
+        triggerKoreanVoice(s.ko, false);
+    }
+
+    function wsCheck() {
+        const ws = tabState.writesentence;
+        if (ws.checked) return;
+        const val = (ws.inputValue || '').trim();
+        if (!val) return;
+        const id = ws.indices[ws.current];
+        const s = wsSentenceAt(id);
+        const targetText = ws.mode === 'vi2ko' ? s.ko : s.vi;
+        const userToks = val.split(/\s+/).filter(Boolean);
+        const correctToks = targetText.trim().split(/\s+/).filter(Boolean);
+        const m = wsMatchBag(userToks, correctToks);
+        const perfect = m.correctStatus.every(cs => cs.status === 'match' || cs.status === 'optional-missing') && m.extraToks.length === 0;
+        ws.match = m; ws.checked = true;
+        if (!ws.seen.includes(id)) ws.seen.push(id);
+        ws.results[id] = perfect;
+        playFeedbackSound(perfect);
+        wsSyncScore();
+        wsSaveSession();
+        wsRender();
+    }
+    function wsNext() {
+        const ws = tabState.writesentence;
+        if (!ws.indices || ws.indices.length === 0) return;
+        if (isTabFinished('writesentence')) { showTabDonePopup('writesentence'); return; }
+        ws.current = (ws.current + 1) % ws.indices.length;
+        ws.checked = false; ws.match = null; ws.inputValue = '';
+        wsSaveSession(); wsRender(); updateDashboardStats();
+    }
+    function wsPrev() {
+        const ws = tabState.writesentence;
+        if (!ws.indices || ws.indices.length === 0) return;
+        ws.current = (ws.current - 1 + ws.indices.length) % ws.indices.length;
+        ws.checked = false; ws.match = null; ws.inputValue = '';
+        wsSaveSession(); wsRender(); updateDashboardStats();
+    }
+
+    // Vẽ câu đã chấm: pill xanh (đúng), vàng (gõ nhầm → sửa), đỏ (thiếu/thừa).
+    function wsRenderMatch(m) {
+        let html = '';
+        m.correctStatus.filter(cs => cs.status !== 'optional-missing').forEach(cs => {
+            if (cs.status === 'typo') {
+                html += `<span class="ws-tok"><span class="ws-strike amber">${wsEsc(m.userToks[cs.userIdx])}</span><span class="ws-arrow">→</span><span class="ws-pill typo">${wsEsc(cs.token)}</span></span>`;
+            } else if (cs.status === 'missing') {
+                html += `<span class="ws-tok"><span class="ws-pill missing">+${wsEsc(cs.token)}</span></span>`;
+            } else {
+                html += `<span class="ws-tok"><span class="ws-pill correct">${wsEsc(cs.token)}</span></span>`;
+            }
+        });
+        m.extraToks.forEach(w => { html += `<span class="ws-tok"><span class="ws-strike red">${wsEsc(w)}</span></span>`; });
+        return html;
+    }
+
+    function wsRender() {
+        const ws = tabState.writesentence;
+        const panel = document.getElementById('ws-panel');
+        if (!panel) return;
+        clearFeedback();
+
+        if (!ws.indices || ws.indices.length === 0) {
+            panel.innerHTML = '<div class="ws-card"><div class="ws-empty">Unit này chưa có câu ví dụ để luyện phần "Viết câu".</div></div>';
+            document.getElementById('global-counter').innerText = '0 / 0';
+            return;
+        }
+
+        const total = ws.indices.length;
+        const pos = ws.current;
+        const id = ws.indices[pos];
+        const s = wsSentenceAt(id);
+        const isVi2Ko = ws.mode === 'vi2ko';
+        const sourceText = isVi2Ko ? s.vi : s.ko;
+        const targetText = isVi2Ko ? s.ko : s.vi;
+        const sourceIsKo = !isVi2Ko;
+        const targetIsKo = isVi2Ko;
+        const checked = ws.checked;
+        document.getElementById('global-counter').innerText = (pos + 1) + ' / ' + total;
+
+        const speakBtn = sourceIsKo ? `<button class="ws-speak" onclick="wsSpeak()" title="Nghe phát âm">${SVG.speaker}</button>` : '';
+        const koFont = "'Chiron Sung HK','Chiron GoRound TC',serif";
+
+        const inputHtml = `<input type="text" class="ws-input${targetIsKo ? ' ko' : ''}" id="ws-input" value="${wsEsc(ws.inputValue || '')}" oninput="wsOnInput(this.value)" onkeydown="wsKeyDown(event)" ${checked ? 'disabled' : ''} placeholder="${targetIsKo ? 'Nhập câu tiếng Hàn...' : 'Nhập câu tiếng Việt...'}" autocomplete="off">`;
+        const btnHtml = checked
+            ? `<button class="ws-btn" onclick="wsNext()">Câu tiếp →</button>`
+            : `<button class="ws-btn" id="ws-check-btn" onclick="wsCheck()" ${(ws.inputValue || '').trim() ? '' : 'disabled'}>Kiểm tra</button>`;
+
+        let hintHtml = '';
+        if (ws.showAnswer && !checked) {
+            hintHtml = `<div class="ws-hintbox">💡 Gợi ý: <b style="font-family:${targetIsKo ? koFont : 'inherit'}">${wsEsc(targetText)}</b></div>`;
+        }
+
+        let fbHtml = '';
+        if (checked && ws.match) {
+            const m = ws.match;
+            const matches = m.correctStatus.filter(cs => cs.status === 'match').length;
+            const totalT = m.correctStatus.filter(cs => cs.status !== 'optional-missing').length;
+            const perfect = m.correctStatus.every(cs => cs.status === 'match' || cs.status === 'optional-missing') && m.extraToks.length === 0;
+            const verdict = perfect ? '🎉 Chính xác hoàn toàn!' : '📝 Có lỗi cần sửa';
+            const vColor = perfect ? '#2f855a' : '#c05621';
+            const koCls = targetIsKo ? ' ko' : '';
+            fbHtml = `
+              <div class="ws-fb">
+                <div class="ws-verdict"><span class="v" style="color:${vColor};">${verdict}</span><span class="s">${matches}/${totalT} từ đúng</span></div>
+                <div class="ws-corrected">
+                  <div class="ws-label">Bài của bạn, đã sửa</div>
+                  <div class="ws-line${koCls}">${wsRenderMatch(m)}</div>
+                </div>
+                <div class="ws-answer-card">
+                  <div class="ws-label">✅ Câu đúng hoàn chỉnh</div>
+                  <div class="ws-answer${koCls}">${wsEsc(targetText)}</div>
+                </div>
+              </div>`;
+        }
+
+        let graHtml = '';
+        if (ws.showGrammar) {
+            graHtml = `
+              <div class="ws-grammar">
+                <div class="gh">🔑 Từ vựng của câu này</div>
+                <div class="ws-vocab-chips"><span class="ws-vchip"><span class="k">${wsEsc(s.item.ko || '')}</span> · ${wsEsc(s.item.vi || '')}</span></div>
+              </div>`;
+        }
+
+        const dots = ws.indices.map((qid, i) => {
+            let cls = 'ws-dot';
+            if (Object.prototype.hasOwnProperty.call(ws.results, qid)) cls += ws.results[qid] ? ' ok' : ' bad';
+            if (i === pos) cls += ' cur';
+            return `<span class="${cls}"></span>`;
+        }).join('');
+
+        panel.innerHTML = `
+          <div class="ws-card">
+            <div class="ws-top">
+              <span class="ws-counter">Câu ${pos + 1}/${total}</span>
+              <div class="ws-toggles">
+                <label class="ws-toggle" onclick="wsToggleAnswer()"><span class="ws-switch${ws.showAnswer ? ' on' : ''}"><span class="knob"></span></span>Gợi ý câu đúng</label>
+                <label class="ws-toggle" onclick="wsToggleGrammar()"><span class="ws-switch${ws.showGrammar ? ' on' : ''}"><span class="knob"></span></span>Gợi ý ngữ pháp/từ</label>
+              </div>
+            </div>
+            <div class="ws-src">${speakBtn}<p class="ws-src-txt ${sourceIsKo ? 'ko' : 'vi'}">${wsEsc(sourceText)}</p></div>
+            <div class="ws-inputrow">${inputHtml}${btnHtml}</div>
+            ${hintHtml}
+            ${fbHtml}
+            ${graHtml}
+            <div class="ws-dots">${dots}</div>
+          </div>`;
+
+        if (!checked) setTimeout(() => { const el = document.getElementById('ws-input'); if (el) el.focus(); }, 30);
+    }
+
+    // Huy hiệu "Mới" tự tắt sau 30 ngày kể từ ngày ra mắt.
+    function wsUpdateNewBadge() {
+        const b = document.getElementById('ws-new-badge');
+        if (!b) return;
+        b.style.display = (Date.now() - WS_LAUNCH_DATE) < 30 * 24 * 60 * 60 * 1000 ? 'inline-block' : 'none';
+    }
+    wsUpdateNewBadge();
 
     function generateListenQuestion() {
         clearFeedback();
@@ -4162,7 +4551,8 @@
         { key: 'quiz',   no: 4, label: 'Trắc nghiệm' },
         { key: 'visual', no: 5, label: 'Nhìn hình chọn từ' },
         { key: 'guess',  no: 6, label: 'Nghe & tìm nghĩa' },
-        { key: 'typing', no: 7, label: 'Viết từ' }
+        { key: 'typing', no: 7, label: 'Viết từ' },
+        { key: 'writesentence', no: 8, label: 'Viết câu' }
     ];
 
     function getStudentKey() {
@@ -4203,6 +4593,7 @@
     }
     // Ghi lại tiến độ hiện tại của 1 tab vào store (theo unit + mode đang mở).
     function saveQuizSession(tab) {
+        if (tab === 'writesentence') return; // Viết câu tự lưu qua writeSentenceState_
         if (!currentUnit || currentUnit === 'SUM') return;
         const st = tabState[tab];
         if (!st || !st.indices || st.indices.length === 0) return;
@@ -4321,7 +4712,7 @@
     function starIconsHtml(count, size) {
         size = size || 15;
         let html = '';
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < UNIT_QUIZ_TABS.length; i++) {
             const gold = i < count;
             html += `<span style="font-size:${size}px; color:${gold ? '#f6b73c' : '#d7dee8'}; line-height:1;">★</span>`;
         }
@@ -4334,22 +4725,24 @@
         quiz:   '<circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line>',
         visual: '<rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path>',
         guess:  '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"></path>',
-        typing: '<path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"></path>'
+        typing: '<path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"></path>',
+        writesentence: '<path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path><path d="M12 4v16"></path>'
     };
     const UR_CHECK = '<polyline points="20 6 9 17 4 12"></polyline>';
 
-    // Chip mode đã làm — chỉ chữ, các chip bằng nhau (không icon).
+    // Chip mode đã làm — nhãn ngắn + thanh pin (tiến độ). Số chi tiết ở tooltip.
     function renderReportModeChips(tabKey, modesObj) {
         const labels = QUIZ_MODE_LABELS[tabKey];
+        const shorts = QUIZ_MODE_SHORT[tabKey];
         if (!labels || !modesObj) return '';
         const parts = [];
         Object.keys(labels).forEach(mk => {
             const m = modesObj[mk];
             if (!m || (!m.started && !m.done)) return;
-            const nm = labels[mk];
-            const cls = m.done ? ' cdone' : '';
-            const tick = m.done ? '✓ ' : '';
-            parts.push(`<span class="ur-chip${cls}">${nm} ${tick}${m.right}/${m.total}</span>`);
+            const pct = m.done ? 100 : (m.total > 0 ? Math.round((m.right / m.total) * 100) : 0);
+            const nm = (shorts && shorts[mk]) || labels[mk];
+            const title = `${labels[mk]}: ${m.done ? 'hoàn thành ' : ''}${m.right}/${m.total}`;
+            parts.push(`<span class="ur-chip${m.done ? ' cdone' : ''}" title="${title}"><span class="lbl">${nm}</span><span class="bar"><i style="width:${pct}%"></i></span></span>`);
         });
         if (!parts.length) return '';
         return `<div class="ur-chips">${parts.join('')}</div>`;
@@ -4452,9 +4845,9 @@
             listEl.appendChild(row);
         });
 
-        const pct = Math.round((doneCount / 5) * 100);
+        const pct = Math.round((doneCount / UNIT_QUIZ_TABS.length) * 100);
         document.getElementById('unit-report-bar').style.width = pct + '%';
-        document.getElementById('unit-report-summary').innerHTML = `<b>${doneCount}/5</b> bài đã hoàn thành`;
+        document.getElementById('unit-report-summary').innerHTML = `<b>${doneCount}/${UNIT_QUIZ_TABS.length}</b> bài đã hoàn thành`;
         if (pctEl) pctEl.innerText = pct + '%';
         if (ringEl) ringEl.setAttribute('stroke-dashoffset', String(Math.round(170 * (1 - pct / 100))));
         document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(doneCount);
