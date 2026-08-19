@@ -3435,8 +3435,11 @@
     const WS_LAUNCH_DATE = new Date('2026-08-19T00:00:00').getTime();
 
     function wsEsc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-    function wsNormTok(t) { return (t || '').toLowerCase().replace(/[.,!?~…"“”'`。？！:;]/g, ''); }
-    const WS_OPTIONAL_WORDS = new Set(['저는', '제가', '나는', '내가', '너는', '당신은', '우리는', '저희는', '그는', '그녀는'].map(wsNormTok));
+    function wsNorm(t) { return (t || '').toLowerCase().replace(/[.,!?~…"“”'`。？！:;()\[\]{}·]/g, '').trim(); }
+    function wsBare(t) { return stripVietTones(wsNorm(t)).toLowerCase(); } // bỏ dấu tiếng Việt -> khoan dung
+    function wsEqTok(a, b) { const na = wsNorm(a), nb = wsNorm(b); if (!na && !nb) return true; return na === nb || wsBare(a) === wsBare(b); }
+    // Chủ ngữ tiếng Hàn hay được lược + vài hư từ tiếng Việt: thiếu cũng không bị tính sai.
+    const WS_OPTIONAL_WORDS = new Set(['저는', '제가', '나는', '내가', '너는', '당신은', '우리는', '저희는', '그는', '그녀는'].map(wsNorm));
     function wsLevenshtein(a, b) {
         const n = a.length, m = b.length;
         const dp = Array.from({ length: n + 1 }, (_, i) => [i, ...new Array(m).fill(0)]);
@@ -3446,29 +3449,62 @@
         }
         return dp[n][m];
     }
-    // Chấm theo "túi từ" (không xét thứ tự): tiếng Hàn cho phép đảo trạng ngữ & lược chủ ngữ.
-    function wsMatchBag(userToks, correctToks) {
-        const used = new Array(userToks.length).fill(false);
-        const correctStatus = correctToks.map(c => ({ token: c, status: 'missing', userIdx: -1 }));
-        correctStatus.forEach(cs => {
-            const idx = userToks.findIndex((u, ui) => !used[ui] && wsNormTok(u) === wsNormTok(cs.token));
-            if (idx !== -1) { used[idx] = true; cs.status = 'match'; cs.userIdx = idx; }
-        });
-        correctStatus.forEach(cs => {
-            if (cs.status !== 'missing') return;
-            let bestIdx = -1, bestDist = Infinity;
-            userToks.forEach((u, ui) => {
-                if (used[ui]) return;
-                const d = wsLevenshtein(wsNormTok(u), wsNormTok(cs.token));
-                if (d <= 1 && d < bestDist) { bestDist = d; bestIdx = ui; }
+    function wsTypoTok(a, b) { return wsLevenshtein(wsNorm(a), wsNorm(b)) <= 1 || wsLevenshtein(wsBare(a), wsBare(b)) <= 1; }
+
+    // Căn chỉnh câu theo THỨ TỰ (LCS diff) để gạch/sửa từ ngay tại vị trí học viên gõ,
+    // không đảo lộn về thứ tự câu đúng. Trả về danh sách đoạn đọc từ trái sang phải.
+    function wsAlign(userToks, correctToks) {
+        const n = userToks.length, m = correctToks.length;
+        const dp = Array.from({ length: n + 1 }, () => new Array(m + 1).fill(0));
+        for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--) {
+            dp[i][j] = wsEqTok(userToks[i], correctToks[j]) ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+        }
+        const ops = []; let i = 0, j = 0;
+        while (i < n && j < m) {
+            if (wsEqTok(userToks[i], correctToks[j])) { ops.push({ op: 'eq', c: correctToks[j] }); i++; j++; }
+            else if (dp[i + 1][j] >= dp[i][j + 1]) { ops.push({ op: 'del', u: userToks[i] }); i++; }
+            else { ops.push({ op: 'ins', c: correctToks[j] }); j++; }
+        }
+        while (i < n) ops.push({ op: 'del', u: userToks[i++] });
+        while (j < m) ops.push({ op: 'ins', c: correctToks[j++] });
+
+        const segments = []; let matched = 0, typoN = 0, extraN = 0, missN = 0, total = 0;
+        let block = [];
+        const flush = () => {
+            if (!block.length) { return; }
+            const dels = block.filter(o => o.op === 'del');
+            const inss = block.filter(o => o.op === 'ins');
+            const usedIns = new Array(inss.length).fill(false);
+            dels.forEach(d => {
+                const k = inss.findIndex((o, idx) => !usedIns[idx] && wsTypoTok(d.u, o.c));
+                if (k !== -1) { usedIns[k] = true; segments.push({ type: 'typo', user: d.u, correct: inss[k].c }); typoN++; total++; }
+                else { segments.push({ type: 'extra', user: d.u }); extraN++; }
             });
-            if (bestIdx !== -1) { used[bestIdx] = true; cs.status = 'typo'; cs.userIdx = bestIdx; }
+            inss.forEach((o, idx) => {
+                if (usedIns[idx]) return;
+                if (WS_OPTIONAL_WORDS.has(wsNorm(o.c))) return; // thiếu chủ ngữ tùy chọn -> bỏ qua
+                segments.push({ type: 'missing', correct: o.c }); missN++; total++;
+            });
+            block = [];
+        };
+        ops.forEach(o => {
+            if (o.op === 'eq') { flush(); segments.push({ type: 'match', text: o.c }); matched++; total++; }
+            else block.push(o);
         });
-        correctStatus.forEach(cs => {
-            if (cs.status === 'missing' && WS_OPTIONAL_WORDS.has(wsNormTok(cs.token))) cs.status = 'optional-missing';
-        });
-        const extraToks = userToks.filter((u, ui) => !used[ui]);
-        return { correctStatus, extraToks, userToks };
+        flush();
+
+        const ok = (missN === 0);                    // khoan dung: thừa/gõ nhầm nhỏ không tính là sai
+        const clean = ok && typoN === 0 && extraN === 0;
+        return { segments, matched, typoN, extraN, missN, total, ok, clean };
+    }
+
+    // Gợi ý chữ cái đầu (cho chiều Hàn -> Việt): "Chủ nhà hàng" -> "C.. n.. h..."
+    function wsMaskHint(text) {
+        return String(text || '').trim().split(/\s+/).map(w => {
+            const chars = [...w];
+            if (!chars.length) return w;
+            return chars[0] + '.'.repeat(Math.max(1, chars.length - 1));
+        }).join('  ');
     }
 
     function wsSentenceAt(id) {
@@ -3580,12 +3616,11 @@
         const targetText = ws.mode === 'vi2ko' ? s.ko : s.vi;
         const userToks = val.split(/\s+/).filter(Boolean);
         const correctToks = targetText.trim().split(/\s+/).filter(Boolean);
-        const m = wsMatchBag(userToks, correctToks);
-        const perfect = m.correctStatus.every(cs => cs.status === 'match' || cs.status === 'optional-missing') && m.extraToks.length === 0;
+        const m = wsAlign(userToks, correctToks);
         ws.match = m; ws.checked = true;
         if (!ws.seen.includes(id)) ws.seen.push(id);
-        ws.results[id] = perfect;
-        playFeedbackSound(perfect);
+        ws.results[id] = m.ok; // khoan dung: chỉ tính SAI khi thiếu từ mang nghĩa
+        playFeedbackSound(m.ok);
         wsSyncScore();
         wsSaveSession();
         wsRender();
@@ -3606,19 +3641,21 @@
         wsSaveSession(); wsRender(); updateDashboardStats();
     }
 
-    // Vẽ câu đã chấm: pill xanh (đúng), vàng (gõ nhầm → sửa), đỏ (thiếu/thừa).
+    // Vẽ câu đã chấm THEO THỨ TỰ học viên gõ: xanh (đúng), vàng (gõ nhầm → sửa),
+    // đỏ gạch (thừa) ngay tại chỗ, đỏ "+từ" (thiếu) chèn đúng vị trí.
     function wsRenderMatch(m) {
         let html = '';
-        m.correctStatus.filter(cs => cs.status !== 'optional-missing').forEach(cs => {
-            if (cs.status === 'typo') {
-                html += `<span class="ws-tok"><span class="ws-strike amber">${wsEsc(m.userToks[cs.userIdx])}</span><span class="ws-arrow">→</span><span class="ws-pill typo">${wsEsc(cs.token)}</span></span>`;
-            } else if (cs.status === 'missing') {
-                html += `<span class="ws-tok"><span class="ws-pill missing">+${wsEsc(cs.token)}</span></span>`;
-            } else {
-                html += `<span class="ws-tok"><span class="ws-pill correct">${wsEsc(cs.token)}</span></span>`;
+        m.segments.forEach(seg => {
+            if (seg.type === 'match') {
+                html += `<span class="ws-tok"><span class="ws-pill correct">${wsEsc(seg.text)}</span></span>`;
+            } else if (seg.type === 'typo') {
+                html += `<span class="ws-tok"><span class="ws-strike amber">${wsEsc(seg.user)}</span><span class="ws-arrow">→</span><span class="ws-pill typo">${wsEsc(seg.correct)}</span></span>`;
+            } else if (seg.type === 'extra') {
+                html += `<span class="ws-tok"><span class="ws-strike red">${wsEsc(seg.user)}</span></span>`;
+            } else if (seg.type === 'missing') {
+                html += `<span class="ws-tok"><span class="ws-pill missing">+${wsEsc(seg.correct)}</span></span>`;
             }
         });
-        m.extraToks.forEach(w => { html += `<span class="ws-tok"><span class="ws-strike red">${wsEsc(w)}</span></span>`; });
         return html;
     }
 
@@ -3656,17 +3693,24 @@
 
         let hintHtml = '';
         if (ws.showAnswer && !checked) {
-            hintHtml = `<div class="ws-hintbox">💡 Gợi ý: <b style="font-family:${targetIsKo ? koFont : 'inherit'}">${wsEsc(targetText)}</b></div>`;
+            if (targetIsKo) {
+                // Việt -> Hàn: hiện luôn câu Hàn để đối chiếu
+                hintHtml = `<div class="ws-hintbox">💡 Gợi ý: <b style="font-family:${koFont}">${wsEsc(targetText)}</b></div>`;
+            } else {
+                // Hàn -> Việt: chỉ gợi ý chữ cái đầu mỗi từ (C.. n.. h.. ...)
+                hintHtml = `<div class="ws-hintbox">💡 Gợi ý (chữ cái đầu): <b style="letter-spacing:1px; font-weight:800;">${wsEsc(wsMaskHint(targetText))}</b></div>`;
+            }
         }
 
         let fbHtml = '';
         if (checked && ws.match) {
             const m = ws.match;
-            const matches = m.correctStatus.filter(cs => cs.status === 'match').length;
-            const totalT = m.correctStatus.filter(cs => cs.status !== 'optional-missing').length;
-            const perfect = m.correctStatus.every(cs => cs.status === 'match' || cs.status === 'optional-missing') && m.extraToks.length === 0;
-            const verdict = perfect ? '🎉 Chính xác hoàn toàn!' : '📝 Có lỗi cần sửa';
-            const vColor = perfect ? '#2f855a' : '#c05621';
+            const matches = m.matched + m.typoN;
+            const totalT = m.total;
+            const perfect = m.clean;
+            const verdict = perfect ? '🎉 Chính xác hoàn toàn!'
+                : (m.ok ? '✅ Đúng rồi! (chấp nhận cách diễn đạt)' : '📝 Có lỗi cần sửa');
+            const vColor = m.ok ? '#2f855a' : '#c05621';
             const koCls = targetIsKo ? ' ko' : '';
             fbHtml = `
               <div class="ws-fb">
