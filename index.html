@@ -267,11 +267,13 @@
         .ur{ --rok:#22C55E; --rwarn:#ed8936; }
         .ur-sum{ background:var(--bg-color); border-radius:var(--radius-sm); box-shadow:var(--neu-concave); padding:9px 11px; margin-bottom:7px; }
         .ur-sum-top{ display:flex; align-items:center; gap:14px; }
-        .ur-ring{ position:relative; width:64px; height:64px; flex:0 0 64px; }
-        .ur-ring svg{ transform:rotate(-90deg); }
-        .ur-ring .rc{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
-        .ur-ring .rp{ font-size:15px; font-weight:800; color:var(--point-color); line-height:1; }
-        .ur-ring .rl{ font-size:7px; color:var(--sub-text); font-weight:600; margin-top:1px; text-align:center; line-height:1.1; }
+        /* Vòng % neumorphism mềm 3D: đế nổi + rãnh lõm (concave) + cung màu, lõi trắng lõm nhẹ */
+        .ur-ring{ position:relative; width:66px; height:66px; flex:0 0 66px; border-radius:50%; background:var(--bg-color); box-shadow:5px 5px 10px #d1d9e6,-5px -5px 10px #ffffff; display:grid; place-items:center; }
+        .ur-ring::before{ content:''; position:absolute; inset:4px; border-radius:50%; box-shadow:inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff; }
+        .ur-ring .arc{ position:absolute; inset:4px; border-radius:50%; background:conic-gradient(var(--c,var(--point-color)) calc(var(--p,0)*1%), transparent 0); -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 7px),#000 calc(100% - 7px)); mask:radial-gradient(farthest-side,#0000 calc(100% - 7px),#000 calc(100% - 7px)); transition:background .45s ease; }
+        .ur-ring .rc{ position:relative; z-index:2; width:44px; height:44px; border-radius:50%; background:var(--card-color); box-shadow:inset 1px 1px 3px rgba(209,217,230,.55), -1px -1px 2px rgba(255,255,255,.7); display:flex; flex-direction:column; align-items:center; justify-content:center; }
+        .ur-ring .rp{ font-size:14px; font-weight:800; color:var(--point-color); line-height:1; }
+        .ur-ring .rl{ font-size:6.5px; color:var(--sub-text); font-weight:600; margin-top:1px; text-align:center; line-height:1.1; }
         .ur-info{ flex:1; min-width:0; }
         .ur-cap{ font-size:11px; color:var(--sub-text); font-weight:600; }
         .ur-big{ font-size:12px; font-weight:700; color:var(--point-color); margin:2px 0 8px; line-height:1.25; }
@@ -287,33 +289,34 @@
         .ur-legend span{ display:flex; align-items:center; gap:4px; font-size:8.5px; color:var(--sub-text); font-weight:700; }
         .ur-legend .dot{ width:7px; height:7px; border-radius:50%; }
         .ur-sec{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-        .ur-sec .sic{ width:26px; height:26px; border-radius:8px; background:var(--point-light); display:flex; align-items:center; justify-content:center; }
-        .ur-sec .sic svg{ width:14px; height:14px; color:var(--point-color); }
+        .ur-sec .sic{ width:26px; height:26px; border-radius:8px; background:var(--card-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; display:flex; align-items:center; justify-content:center; }
+        .ur-sec .sic svg{ width:14px; height:14px; color:#1a202c; }
         .ur-sec b{ font-size:13px; font-weight:800; color:#1a202c; }
         .ur-lessons{ display:flex; flex-direction:column; gap:5px; }
         .ur-lc{ display:flex; align-items:center; gap:10px; background:var(--card-color); border-radius:13px; box-shadow:var(--neu-convex); padding:6px 9px; }
-        .ur-lc-ic{ width:32px; height:32px; flex:0 0 32px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:var(--point-light); }
-        .ur-lc-ic svg{ width:16px; height:16px; color:var(--point-color); }
-        .ur-lc-ic.done{ background:var(--rok); }
-        .ur-lc-ic.done svg{ color:#fff; }
+        .ur-lc-ic{ width:38px; height:38px; flex:0 0 38px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:var(--card-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; }
+        .ur-lc-ic svg{ width:17px; height:17px; color:#1a202c; }
+        .ur-lc-ic.done{ background:var(--card-color); }
+        .ur-lc-ic.done svg{ color:#1a202c; }
         .ur-lc-body{ flex:1; min-width:0; }
         .ur-lc-title{ font-size:12px; font-weight:800; color:#1a202c; margin-bottom:2px; }
         .ur-lc-status{ display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
         .ur-badge{ font-size:9.5px; font-weight:800; padding:2px 8px; border-radius:999px; }
-        .ur-badge.doing{ background:#fff1e0; color:#c2620a; }
+        .ur-badge.doing{ background:rgba(97,76,255,0.1); color:#614CFF; }
         .ur-badge.done{ background:#e4f8ec; color:#158240; }
         .ur-badge.none{ background:#eef1f7; color:#94a3b8; }
         .ur-frac{ font-size:10.5px; font-weight:800; }
-        .ur-frac.doing{ color:var(--rwarn); } .ur-frac.done{ color:var(--rok); } .ur-frac.none{ color:#94a3b8; }
+        .ur-frac.doing{ color:var(--point-color); } .ur-frac.done{ color:var(--rok); } .ur-frac.none{ color:#94a3b8; }
         .ur-chips{ display:flex; gap:6px; margin-top:6px; }
         .ur-chip{ flex:1 1 0; min-width:0; display:flex; align-items:center; gap:5px; background:var(--bg-color); box-shadow:var(--neu-concave); border-radius:8px; padding:4px 7px; }
         .ur-chip .lbl{ font-size:9px; font-weight:800; color:var(--sub-text); white-space:nowrap; flex:0 0 auto; }
         .ur-chip .bar{ flex:1; min-width:14px; height:6px; border-radius:999px; background:#dfe4ee; overflow:hidden; box-shadow:inset 0 1px 2px rgba(163,177,198,.4); }
         .ur-chip .bar>i{ display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#c6ccda,#8b95a9); transition:width .35s ease; }
         .ur-chip.cdone .bar>i{ background:linear-gradient(90deg,#aab2c2,#6f7a90); }
-        .ur-lc-ring{ position:relative; width:34px; height:34px; flex:0 0 34px; }
-        .ur-lc-ring svg{ transform:rotate(-90deg); }
-        .ur-lc-ring .v{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:800; }
+        .ur-lc-ring{ position:relative; width:40px; height:40px; flex:0 0 40px; border-radius:50%; background:var(--bg-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; display:grid; place-items:center; }
+        .ur-lc-ring::before{ content:''; position:absolute; inset:3px; border-radius:50%; box-shadow:inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #ffffff; }
+        .ur-lc-ring .arc{ position:absolute; inset:3px; border-radius:50%; background:conic-gradient(var(--c) calc(var(--p,0)*1%), transparent 0); -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 5px),#000 calc(100% - 5px)); mask:radial-gradient(farthest-side,#0000 calc(100% - 5px),#000 calc(100% - 5px)); transition:background .45s ease; }
+        .ur-lc-ring .v{ position:relative; z-index:2; font-size:8.5px; font-weight:800; }
         .ur-starbox{ display:flex; align-items:center; gap:11px; background:#fff9ee; border-radius:14px; box-shadow:var(--neu-concave); padding:7px 11px; margin-top:7px; }
         .ur-starbox .big{ width:44px; height:44px; flex:0 0 44px; border-radius:12px; background:#ffefc9; display:flex; align-items:center; justify-content:center; box-shadow:var(--neu-convex); overflow:hidden; }
         .ur-starbox .big img{ width:30px; height:30px; object-fit:contain; }
@@ -1648,8 +1651,8 @@
     <!-- 🌟 KHỐI BÁO CÁO UNIT (thiết kế lại — vừa sidebar 324px) -->
     <div class="ur" style="background: #ffffff; padding: 11px 12px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 8px; text-align: left;">
         <div style="display: flex; align-items: center; gap: 9px; margin-bottom: 10px;">
-            <div style="background: var(--point-light); width: 30px; height: 30px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex);">
-                <svg style="width: 16px; height: 16px; color: #614CFF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+            <div style="background: var(--card-color); width: 30px; height: 30px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex);">
+                <svg style="width: 16px; height: 16px; color: #1a202c;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
             </div>
             <h4 id="unit-report-title" style="font-size: 15px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0; flex:1;">Báo cáo Unit</h4>
         </div>
@@ -1657,8 +1660,8 @@
         <!-- Card tổng tiến độ: vòng % + text -->
         <div class="ur-sum">
             <div class="ur-sum-top">
-                <div class="ur-ring">
-                    <svg width="64" height="64"><circle cx="32" cy="32" r="27" fill="none" stroke="#e7ebf3" stroke-width="7"></circle><circle id="unit-report-ring" cx="32" cy="32" r="27" fill="none" stroke="#614CFF" stroke-width="7" stroke-linecap="round" stroke-dasharray="170" stroke-dashoffset="170"></circle></svg>
+                <div class="ur-ring" id="unit-report-ring" style="--p:0; --c:var(--point-color);">
+                    <span class="arc"></span>
                     <div class="rc"><div class="rp" id="unit-report-pct">0%</div><div class="rl">Tiến độ<br>hoàn thành</div></div>
                 </div>
                 <div class="ur-info">
@@ -1672,7 +1675,7 @@
         <!-- Chú thích màu (dòng nhỏ) -->
         <div class="ur-legend">
             <span><span class="dot" style="background:#22C55E"></span>Hoàn thành</span>
-            <span><span class="dot" style="background:#ed8936"></span>Đang làm</span>
+            <span><span class="dot" style="background:#614CFF"></span>Đang làm</span>
             <span><span class="dot" style="background:#cbd5e1"></span>Chưa bắt đầu</span>
         </div>
 
@@ -4806,9 +4809,8 @@
 
     // Vòng tròn % nhỏ bên phải mỗi bài
     function ringSvgHtml(pct, color) {
-        const C = 88; // chu vi ~ 2πr với r=14
-        const off = Math.round(C * (1 - Math.max(0, Math.min(100, pct)) / 100));
-        return `<div class="ur-lc-ring"><svg width="34" height="34"><circle cx="17" cy="17" r="14" fill="none" stroke="#eef1f7" stroke-width="4.5"></circle><circle cx="17" cy="17" r="14" fill="none" stroke="${color}" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="88" stroke-dashoffset="${off}"></circle></svg><span class="v" style="color:${color}">${pct}%</span></div>`;
+        const p = Math.max(0, Math.min(100, pct));
+        return `<div class="ur-lc-ring" style="--p:${p}; --c:${color};"><span class="arc"></span><span class="v" style="color:${color}">${pct}%</span></div>`;
     }
 
     // Vẽ khối "Báo cáo Unit" từ dữ liệu đã lưu, ưu tiên số liệu live của tab đang mở
@@ -4826,7 +4828,7 @@
             document.getElementById('unit-report-summary').innerText = 'Đang trộn từ vựng nhiều Unit';
             document.getElementById('unit-report-bar').style.width = '0%';
             if (pctEl) pctEl.innerText = '0%';
-            if (ringEl) ringEl.setAttribute('stroke-dashoffset', '170');
+            if (ringEl) ringEl.style.setProperty('--p', 0);
             if (secEl) secEl.style.display = 'none';
             listEl.innerHTML = '<div style="font-size:11px; color:var(--sub-text); padding:8px 4px;">Sao & tiến độ chỉ ghi nhận khi ôn theo từng Unit riêng.</div>';
             document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(0);
@@ -4877,7 +4879,7 @@
                 ringPct = total > 0 ? Math.round((right / total) * 100) : 0;
                 badge = '<span class="ur-badge doing">Đang làm</span>';
                 frac = `<span class="ur-frac doing">${right}/${total}</span>`;
-                ringColor = '#ed8936';
+                ringColor = '#614CFF';
             } else {
                 badge = '<span class="ur-badge none">Chưa bắt đầu</span>';
                 frac = '';
@@ -4905,7 +4907,7 @@
         document.getElementById('unit-report-bar').style.width = pct + '%';
         document.getElementById('unit-report-summary').innerHTML = `<b>${doneCount}/${UNIT_QUIZ_TABS.length}</b> bài đã hoàn thành`;
         if (pctEl) pctEl.innerText = pct + '%';
-        if (ringEl) ringEl.setAttribute('stroke-dashoffset', String(Math.round(170 * (1 - pct / 100))));
+        if (ringEl) ringEl.style.setProperty('--p', pct);
         document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(doneCount);
     }
 
