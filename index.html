@@ -2,14 +2,15 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <!-- Cho phép zoom 2 ngón (giữ zoom). Không tự phóng to khi bấm ô nhập nhờ mọi input đã ép font 16px. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NQ Korean 2</title>
     <!-- PWA / màn hình chính điện thoại -->
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#614CFF">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="NQ Korean 2">
     <link rel="apple-touch-icon" href="assets/icon-180.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
@@ -66,13 +67,6 @@
         /* Khoá cuộn nền khi mở ngăn kéo thống kê trên mobile (tránh cuộn xuyên nền trên iOS) */
         body.dash-open { overflow: hidden; }
 
-        /* Thanh vùng an toàn (notch) — tô màu thương hiệu để mép trên không còn là mảng xám mặc định.
-           Trên máy không có notch (env = 0) thì cao 0px nên vô hình; desktop cũng vô hình. */
-        .safe-top-bar {
-            position: fixed; top: 0; left: 0; right: 0;
-            height: env(safe-area-inset-top, 0px);
-            background: var(--point-color); z-index: 3000; pointer-events: none;
-        }
 
         /* LOGIN SCREEN CHIA ĐÔI */
         .login-page-container {
@@ -627,6 +621,8 @@
         .review-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
         .review-table th { padding: 14px; background: var(--bg-color); color: var(--text-color); font-weight: 800; border-bottom: 2px solid #edf2f7; text-transform: uppercase; font-size: 11px; }
         .review-table td { padding: 14px; border-bottom: 1px solid #edf2f7; color: var(--text-color); font-weight: 500; }
+        /* Từ vựng tiếng Hàn trong List từ vựng: font serif Hàn + to hơn ví dụ vài px cho nổi bật */
+        .vocab-ko-word { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; font-size: 18px; }
         /* Sổ Tay trên màn rộng: thu cột "Tiếng Việt" & "Ngày" lại, nhường chỗ cho Ví dụ + Dịch ví dụ.
            (≤1279px bảng đã chuyển sang dạng thẻ dọc nên chỉ áp cho màn rộng.) */
         @media (min-width: 1280px) {
@@ -706,8 +702,8 @@
 
             body.app-active .dashboard-layout {
                 display: flex !important; flex-direction: column !important; width: 100% !important; max-width: 100% !important;
-                height: auto !important; min-height: 100vh;
-                padding: calc(8px + env(safe-area-inset-top, 0px)) 8px 8px !important; gap: 8px; overflow-x: hidden !important;
+                height: auto !important; min-height: 100vh; min-height: 100dvh;
+                padding: calc(8px + env(safe-area-inset-top, 0px)) 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important; gap: 8px; overflow-x: hidden !important;
             }
             .sidebar-left { display: flex !important; flex-direction: column !important; align-items: flex-start !important; padding: 12px !important; height: auto !important; border-radius: var(--radius-md); gap: 8px; }
             .brand-logo-area { margin-bottom: 4px !important; padding-left: 4px !important; width: 100%; justify-content: flex-start; gap: 5px; flex-direction: row; flex-wrap: nowrap; align-items: center; }
@@ -963,11 +959,12 @@
             #typing-tab .ts-input { font-size: 16px !important; }
             #typing-tab .ts-col-mark { width: auto !important; text-align: left !important; margin-top: 8px; }
 
-            /* Làm quiz vừa 1 màn hình: nút điều khiển DÍNH đáy màn hình, luôn với tới được */
+            /* Nút điều khiển nằm ngay sau đáp án (in-flow) — KHÔNG dùng sticky vì trên iOS,
+               các ancestor có overflow-x:hidden + 100vh khiến sticky bị đẩy khuất, không kéo tới được. */
             #mode-vocab-section .bottom-controls-bar {
-                position: sticky; bottom: 0; z-index: 30; background: #ffffff;
-                margin: 0 -14px -14px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)) !important;
-                border-top: 1px solid #edf2f7; box-shadow: 0 -6px 16px rgba(45,55,72,0.06);
+                position: static; background: #ffffff;
+                margin: 12px -14px 0; padding: 12px 14px calc(12px + env(safe-area-inset-bottom)) !important;
+                border-top: 1px solid #edf2f7;
             }
             /* Quiz gọn theo chiều dọc để bớt phải kéo */
             .quiz-question { font-size: 15px !important; margin-bottom: 12px !important; }
@@ -1095,9 +1092,6 @@
     </style>
 </head>
 <body>
-
-<!-- Thanh vùng an toàn (notch) tô màu thương hiệu — xoá "mảng xám" mặc định của iOS ở mép trên -->
-<div class="safe-top-bar" aria-hidden="true"></div>
 
 <!-- MÀN HÌNH ĐĂNG NHẬP -->
 <div class="login-page-container" id="login-panel-screen">
@@ -1968,6 +1962,14 @@
     function snapshotProgress(sess) {
         var key = String(sess || '').toLowerCase(), obj = {};
         progressKeysForStudent(key).forEach(function (k) { var v = localStorage.getItem(k); if (v != null) obj[k] = v; });
+        // Tiến độ theo từ vựng (vocabMastered_<key>_u<unit>) — số khoá đổi theo unit nên quét prefix
+        try {
+            var pref = 'vocabMastered_' + key + '_u';
+            for (var i = 0; i < localStorage.length; i++) {
+                var lk = localStorage.key(i);
+                if (lk && lk.indexOf(pref) === 0) { var lv = localStorage.getItem(lk); if (lv != null) obj[lk] = lv; }
+            }
+        } catch (e) {}
         return obj;
     }
     // Nạp tiến độ từ server về máy khi đăng nhập (server là bản gốc lúc đăng nhập).
@@ -1977,8 +1979,9 @@
         try { obj = JSON.parse(blob); } catch (e) { return; }
         if (!obj || typeof obj !== 'object') return;
         var allow = progressKeysForStudent(key);
+        var vmPref = 'vocabMastered_' + key + '_u';
         Object.keys(obj).forEach(function (k) {
-            if (allow.indexOf(k) > -1 && obj[k] != null) { try { localStorage.setItem(k, obj[k]); } catch (e) {} }
+            if ((allow.indexOf(k) > -1 || k.indexOf(vmPref) === 0) && obj[k] != null) { try { localStorage.setItem(k, obj[k]); } catch (e) {} }
         });
     }
     function buildProgressPayload() {
@@ -3384,6 +3387,14 @@
                     setTimeout(() => submitTypingRow(rowIdx), 0);
                 }
             });
+            // 📱 iOS: phím "return" thường chỉ đóng bàn phím mà KHÔNG bắn keydown Enter -> không chấm.
+            // Chấm luôn khi rời ô (blur) nếu ô có chữ & chưa đúng, để luôn được chấm trên điện thoại.
+            input.addEventListener('blur', () => {
+                state.values[rowIdx] = input.value;
+                if (state.status[rowIdx] !== 'ok' && input.value.trim()) {
+                    setTimeout(() => submitTypingRow(rowIdx), 0);
+                }
+            });
             tdInput.appendChild(input);
 
             const tdMark = document.createElement('td');
@@ -4230,7 +4241,7 @@
 
             const tr = document.createElement('tr');
 
-            let koDisplay = state.showKo ? `<span>${item.ko}</span>` : `<span class="cell-toggle-blur" onclick="this.classList.remove('cell-toggle-blur')">${item.ko}</span>`;
+            let koDisplay = state.showKo ? `<span class="vocab-ko-word">${item.ko}</span>` : `<span class="vocab-ko-word cell-toggle-blur" onclick="this.classList.remove('cell-toggle-blur')">${item.ko}</span>`;
             let viDisplay = state.showVi ? `<span>${item.vi}</span>` : `<span class="cell-toggle-blur" onclick="this.classList.remove('cell-toggle-blur')">${item.vi}</span>`;
             
             let starColor = isStarred ? '#dd6b20' : '#cbd5e0';
