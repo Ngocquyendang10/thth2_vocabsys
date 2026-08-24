@@ -2,14 +2,14 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>NQ Korean 2</title>
     <!-- PWA / màn hình chính điện thoại -->
     <link rel="manifest" href="manifest.webmanifest">
     <meta name="theme-color" content="#614CFF">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="NQ Korean 2">
     <link rel="apple-touch-icon" href="assets/icon-180.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
@@ -65,6 +65,14 @@
         }
         /* Khoá cuộn nền khi mở ngăn kéo thống kê trên mobile (tránh cuộn xuyên nền trên iOS) */
         body.dash-open { overflow: hidden; }
+
+        /* Thanh vùng an toàn (notch) — tô màu thương hiệu để mép trên không còn là mảng xám mặc định.
+           Trên máy không có notch (env = 0) thì cao 0px nên vô hình; desktop cũng vô hình. */
+        .safe-top-bar {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: env(safe-area-inset-top, 0px);
+            background: var(--point-color); z-index: 3000; pointer-events: none;
+        }
 
         /* LOGIN SCREEN CHIA ĐÔI */
         .login-page-container {
@@ -192,7 +200,11 @@
         }
         .workspace-header h1 { font-size: 18px; font-weight: 800; color: #1a202c; }
         .workspace-header p { font-size: 11px; color: var(--sub-text); margin-top: 2px; margin-bottom: 14px; }
+        /* Ẩn hẳn dòng phụ đề khi rỗng để không chừa khoảng trống thừa */
+        .workspace-header p:empty { display: none; margin: 0; }
 
+        /* Tiêu đề "Unit X" cách thanh chức năng bên dưới 1 chút cho thoáng (bù phần phụ đề đã ẩn) */
+        #main-tabs-nav { margin-top: 12px; }
         .workspace-tabs { display: flex; background: var(--bg-color); padding: 4px; border-radius: var(--radius-md); box-shadow: var(--neu-concave); margin-bottom: 20px; gap: 2px; overflow-x: auto; flex-shrink: 0; }
         /* Thanh 4 tab chính dàn đều hết chiều ngang (khi tràn màn hẹp thì tự cuộn) */
         #main-tabs-nav { justify-content: space-between; }
@@ -243,10 +255,11 @@
         /* Nút xổ chọn dạng/ngôn ngữ quiz (góc trái, ngang nút Ngẫu nhiên) */
         /* Cùng cỡ với nút "Ngẫu nhiên": font 13px, padding dọc 9px, bo 22px, cao ngang nhau */
         .quiz-mode-select { font-family: inherit; font-size: 13px; font-weight: 700; line-height: 1.35; color: var(--point-color); background: var(--card-color); border: none; border-radius: 22px; padding: 9px 36px 9px 18px; box-shadow: var(--neu-convex); cursor: pointer; outline: none; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23614CFF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; }
-        .quiz-shuffle-btn { display: inline-flex; align-items: center; gap: 7px; background: var(--card-color); border: none; border-radius: 22px; padding: 9px 18px; font-size: 13px; font-weight: 700; color: var(--text-color); cursor: pointer; box-shadow: var(--neu-convex); outline: none; transition: all 0.18s ease; }
-        .quiz-shuffle-btn:hover { color: var(--point-color); }
-        .quiz-shuffle-btn svg { width: 16px; height: 16px; }
-        /* Nút "Làm lại" — cùng dáng nút Ngẫu nhiên, chữ tím nhạt để phân biệt */
+        /* Nút phụ (Làm lại / Ngẫu nhiên): nhẹ, nhỏ hơn để nhường vai chính cho "Dạng luyện" */
+        .quiz-shuffle-btn { display: inline-flex; align-items: center; gap: 6px; background: transparent; border: 1px solid rgba(148,163,184,0.35); border-radius: 18px; padding: 6px 12px; font-size: 12px; font-weight: 700; color: var(--sub-text); cursor: pointer; box-shadow: none; outline: none; transition: all 0.18s ease; }
+        .quiz-shuffle-btn:hover { color: var(--point-color); border-color: rgba(97,76,255,0.4); background: var(--point-light); }
+        .quiz-shuffle-btn svg { width: 14px; height: 14px; }
+        /* Nút "Làm lại" — chữ tím nhạt để phân biệt */
         .quiz-restart-btn { color: var(--point-color); }
         .quiz-restart-btn:hover { color: #4a37c9; }
 
@@ -254,7 +267,7 @@
         .quiz-mode-wrap { display: inline-flex; align-items: center; gap: 9px; flex-wrap: wrap; }
         .quiz-mode-lead { font-size: 12px; font-weight: 800; color: var(--sub-text); white-space: nowrap; }
         .quiz-mode-pills { display: inline-flex; gap: 5px; background: var(--bg-color); padding: 5px; border-radius: 999px; box-shadow: var(--neu-concave); flex-wrap: wrap; }
-        .qm-pill { border: none; background: transparent; font-family: inherit; cursor: pointer; padding: 7px 15px; border-radius: 999px; display: inline-flex; flex-direction: column; align-items: center; gap: 2px; line-height: 1.18; outline: none; transition: all 0.18s ease; }
+        .qm-pill { border: none; background: transparent; font-family: inherit; cursor: pointer; padding: 6px 14px; border-radius: 999px; display: inline-flex; flex-direction: column; align-items: center; gap: 1px; line-height: 1.15; outline: none; transition: all 0.18s ease; }
         .qm-pill .qm-t { font-size: 12.5px; font-weight: 800; color: var(--sub-text); white-space: nowrap; }
         .qm-pill .qm-lvl { font-size: 9.5px; font-weight: 800; color: #a0aec0; white-space: nowrap; letter-spacing: .2px; }
         .qm-pill:hover .qm-t { color: var(--point-color); }
@@ -265,7 +278,7 @@
 
         /* ====== BÁO CÁO UNIT (thiết kế lại — vừa sidebar 324px) ====== */
         .ur{ --rok:#22C55E; --rwarn:#ed8936; }
-        .ur-sum{ background:var(--bg-color); border-radius:var(--radius-sm); box-shadow:var(--neu-concave); padding:9px 11px; margin-bottom:7px; }
+        .ur-sum{ background:var(--bg-color); border-radius:var(--radius-sm); box-shadow:var(--neu-concave); padding:8px 10px; margin-bottom:6px; }
         .ur-sum-top{ display:flex; align-items:center; gap:14px; }
         /* Vòng % neumorphism mềm 3D: đế nổi + rãnh lõm (concave) + cung màu, lõi trắng lõm nhẹ */
         .ur-ring{ position:relative; width:66px; height:66px; flex:0 0 66px; border-radius:50%; background:var(--bg-color); box-shadow:5px 5px 10px #d1d9e6,-5px -5px 10px #ffffff; display:grid; place-items:center; }
@@ -275,8 +288,9 @@
         .ur-ring .rp{ font-size:14px; font-weight:800; color:var(--point-color); line-height:1; }
         .ur-ring .rl{ font-size:6.5px; color:var(--sub-text); font-weight:600; margin-top:1px; text-align:center; line-height:1.1; }
         .ur-info{ flex:1; min-width:0; }
+        .ur-caprow{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:7px; }
         .ur-cap{ font-size:11px; color:var(--sub-text); font-weight:600; }
-        .ur-big{ font-size:12px; font-weight:700; color:var(--point-color); margin:2px 0 8px; line-height:1.25; }
+        .ur-big{ font-size:15px; font-weight:800; color:var(--point-color); line-height:1; white-space:nowrap; }
         .ur-pbar{ height:8px; background:#e7ebf3; border-radius:5px; box-shadow:var(--neu-concave); overflow:hidden; }
         .ur-pbar>div{ height:100%; background:var(--point-color); border-radius:5px; transition:width .4s ease; }
         .ur-minis{ display:flex; gap:9px; margin-top:11px; }
@@ -285,17 +299,17 @@
         .ur-mini .mic svg{ width:14px; height:14px; color:var(--point-color); }
         .ur-mini .ml{ font-size:9px; color:var(--sub-text); font-weight:600; }
         .ur-mini .mv{ font-size:11.5px; font-weight:800; color:#1a202c; }
-        .ur-legend{ display:flex; align-items:center; gap:12px; padding:0 2px; margin:0 0 6px; }
+        .ur-legend{ display:flex; align-items:center; gap:12px; padding:0 2px; margin:0 0 5px; }
         .ur-legend span{ display:flex; align-items:center; gap:4px; font-size:8.5px; color:var(--sub-text); font-weight:700; }
         .ur-legend .dot{ width:7px; height:7px; border-radius:50%; }
-        .ur-sec{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+        .ur-sec{ display:flex; align-items:center; gap:8px; margin-top:11px; margin-bottom:8px; }
         .ur-sec .sic{ width:26px; height:26px; border-radius:8px; background:var(--card-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; display:flex; align-items:center; justify-content:center; }
         .ur-sec .sic svg{ width:14px; height:14px; color:#1a202c; }
         .ur-sec b{ font-size:13px; font-weight:800; color:#1a202c; }
-        .ur-lessons{ display:flex; flex-direction:column; gap:5px; }
-        .ur-lc{ display:flex; align-items:center; gap:10px; background:var(--card-color); border-radius:13px; box-shadow:var(--neu-convex); padding:6px 9px; }
-        .ur-lc-ic{ width:38px; height:38px; flex:0 0 38px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:var(--card-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; }
-        .ur-lc-ic svg{ width:17px; height:17px; color:#1a202c; }
+        .ur-lessons{ display:flex; flex-direction:column; gap:6px; }
+        .ur-lc{ display:flex; align-items:center; gap:10px; background:var(--card-color); border-radius:12px; box-shadow:var(--neu-convex); padding:7px 10px; }
+        .ur-lc-ic{ width:32px; height:32px; flex:0 0 32px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--card-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; }
+        .ur-lc-ic svg{ width:16px; height:16px; color:#1a202c; }
         .ur-lc-ic.done{ background:var(--card-color); }
         .ur-lc-ic.done svg{ color:#1a202c; }
         .ur-lc-body{ flex:1; min-width:0; }
@@ -307,18 +321,18 @@
         .ur-badge.none{ background:#eef1f7; color:#94a3b8; }
         .ur-frac{ font-size:10.5px; font-weight:800; }
         .ur-frac.doing{ color:var(--point-color); } .ur-frac.done{ color:var(--rok); } .ur-frac.none{ color:#94a3b8; }
-        .ur-chips{ display:flex; gap:6px; margin-top:6px; }
+        .ur-chips{ display:flex; gap:6px; margin-top:4px; }
         .ur-chip{ flex:1 1 0; min-width:0; display:flex; align-items:center; gap:5px; background:var(--bg-color); box-shadow:var(--neu-concave); border-radius:8px; padding:4px 7px; }
         .ur-chip .lbl{ font-size:9px; font-weight:800; color:var(--sub-text); white-space:nowrap; flex:0 0 auto; }
         .ur-chip .bar{ flex:1; min-width:14px; height:6px; border-radius:999px; background:#dfe4ee; overflow:hidden; box-shadow:inset 0 1px 2px rgba(163,177,198,.4); }
         .ur-chip .bar>i{ display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#c6ccda,#8b95a9); transition:width .35s ease; }
         .ur-chip.cdone .bar>i{ background:linear-gradient(90deg,#aab2c2,#6f7a90); }
-        .ur-lc-ring{ position:relative; width:40px; height:40px; flex:0 0 40px; border-radius:50%; background:var(--bg-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; display:grid; place-items:center; }
+        .ur-lc-ring{ position:relative; width:33px; height:33px; flex:0 0 33px; border-radius:50%; background:var(--bg-color); box-shadow:3px 3px 6px #d1d9e6,-3px -3px 6px #ffffff; display:grid; place-items:center; }
         .ur-lc-ring::before{ content:''; position:absolute; inset:3px; border-radius:50%; box-shadow:inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #ffffff; }
         .ur-lc-ring .arc{ position:absolute; inset:3px; border-radius:50%; background:conic-gradient(var(--c) calc(var(--p,0)*1%), transparent 0); -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 5px),#000 calc(100% - 5px)); mask:radial-gradient(farthest-side,#0000 calc(100% - 5px),#000 calc(100% - 5px)); transition:background .45s ease; }
         .ur-lc-ring .v{ position:relative; z-index:2; font-size:8.5px; font-weight:800; }
-        .ur-starbox{ display:flex; align-items:center; gap:11px; background:#fff9ee; border-radius:14px; box-shadow:var(--neu-concave); padding:7px 11px; margin-top:7px; }
-        .ur-starbox .big{ width:44px; height:44px; flex:0 0 44px; border-radius:12px; background:#ffefc9; display:flex; align-items:center; justify-content:center; box-shadow:var(--neu-convex); overflow:hidden; }
+        .ur-starbox{ display:flex; align-items:center; gap:10px; background:#fff9ee; border-radius:12px; box-shadow:var(--neu-concave); padding:6px 10px; margin-top:6px; }
+        .ur-starbox .big{ width:38px; height:38px; flex:0 0 38px; border-radius:11px; background:#ffefc9; display:flex; align-items:center; justify-content:center; box-shadow:var(--neu-convex); overflow:hidden; }
         .ur-starbox .big img{ width:30px; height:30px; object-fit:contain; }
         .ur-starbox .big .fallback{ font-size:24px; color:#f6b73c; }
         .ur-starbox .st-title{ font-size:11px; font-weight:800; color:#1a202c; }
@@ -328,6 +342,25 @@
         .ur-stars .s{ font-size:15px; color:#f6b73c; line-height:1; }
         .ur-stars .s.off{ color:#d7dee8; }
         .ur-starbox .cap{ font-size:9px; color:var(--sub-text); margin-top:3px; }
+
+        /* ⚡ ÔN NHANH TỰ CHẠY — luôn hiển thị, cao ~88px (min-height để không cắt chữ) */
+        .qr-pop{ position:relative; min-height:88px; background:#ffffff; border:1px solid rgba(245,101,101,0.28); border-radius:var(--radius-md); box-shadow:var(--neu-convex); padding:10px 12px; margin-top:9px; display:flex; flex-direction:column; gap:6px; }
+        .qr-head{ display:flex; align-items:center; gap:8px; flex:0 0 auto; }
+        .qr-title{ font-size:11.5px; font-weight:800; color:#f56565; flex:1; }
+        .qr-pausemark{ font-size:10px; font-weight:800; color:var(--point-color); background:var(--point-light); padding:1px 7px; border-radius:999px; }
+        .qr-count{ font-size:11px; font-weight:800; color:var(--sub-text); }
+        .qr-wordrow{ flex:1; display:flex; align-items:center; gap:8px; min-width:0; }
+        .qr-word{ flex:1; min-width:0; font-family:"Chiron Sung HK","Chiron GoRound TC",serif; font-size:20px; font-weight:800; color:#1a202c; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .qr-eye{ flex:0 0 auto; width:28px; height:28px; border:none; border-radius:8px; background:var(--bg-color); color:#f56565; cursor:pointer; box-shadow:var(--neu-convex); display:flex; align-items:center; justify-content:center; outline:none; }
+        .qr-eye svg{ width:15px; height:15px; }
+        .qr-eye:hover{ background:#fff5f5; }
+        /* Thanh chạy kín đáo: mảnh, màu nhạt, không rực để đỡ mất tập trung */
+        .qr-progress{ height:3px; flex:0 0 auto; background:rgba(0,0,0,0.05); border-radius:999px; overflow:hidden; }
+        .qr-progress>div{ height:100%; width:100%; background:rgba(148,163,184,0.55); border-radius:999px; transition:width .12s linear; }
+        /* Popup nghĩa đè lên (không đổi chiều cao khối) */
+        .qr-meanpop{ position:absolute; inset:6px; background:rgba(26,32,44,0.96); color:#fff; border-radius:10px; display:flex; align-items:center; gap:10px; padding:9px 12px; z-index:5; }
+        .qr-meanpop span{ flex:1; font-size:14px; font-weight:700; line-height:1.35; overflow:auto; max-height:100%; }
+        .qr-meanpop-x{ flex:0 0 auto; width:24px; height:24px; border:none; border-radius:7px; background:rgba(255,255,255,0.18); color:#fff; cursor:pointer; font-size:12px; line-height:1; outline:none; }
 
         /* Dòng trạng thái đúng/sai gọn (Hình 4) — thay cho box kết quả to */
         .feedback.compact { background: transparent !important; border: none !important; padding: 6px 2px !important; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
@@ -391,7 +424,7 @@
         .ur-info-tip { position: relative; width: 18px; height: 18px; flex: 0 0 auto; border-radius: 50%; border: 1.5px solid var(--point-light); color: var(--point-color); font-size: 11px; font-style: italic; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; outline: none; user-select: none; }
         .ur-info-tip:hover, .ur-info-tip:focus { border-color: var(--point-color); }
         .ur-tip-bubble { position: absolute; top: 24px; right: 0; width: 196px; background: #1a202c; color: #fff; font-size: 10.5px; font-style: normal; font-weight: 600; line-height: 1.45; padding: 8px 10px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.18); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: opacity .15s ease, transform .15s ease, visibility .15s; z-index: 30; text-align: left; }
-        .ur-info-tip:hover .ur-tip-bubble, .ur-info-tip:focus .ur-tip-bubble { opacity: 1; visibility: visible; transform: translateY(0); }
+        .ur-info-tip:hover .ur-tip-bubble, .ur-info-tip.open .ur-tip-bubble { opacity: 1; visibility: visible; transform: translateY(0); }
         .avatar-circle-wrapper { width: 38px; height: 38px; border-radius: 50%; background: var(--bg-color); box-shadow: var(--neu-convex); padding: 3px; margin-bottom: 0; flex: 0 0 auto; }
         .avatar-circle-wrapper .avatar-core { width: 100%; height: 100%; border-radius: 50%; background: var(--point-color); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 14px; }
         .profile-meta { flex: 1; min-width: 0; }
@@ -493,10 +526,10 @@
         .ws-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
         .ws-counter { font-size: 12px; font-weight: 800; color: var(--sub-text); }
         .ws-toggles { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-        .ws-toggle { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; color: var(--text-color); cursor: pointer; user-select: none; }
-        .ws-switch { position: relative; width: 34px; height: 20px; border-radius: 999px; background: #cbd5e0; transition: background .2s; flex: 0 0 auto; }
+        .ws-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--sub-text); cursor: pointer; user-select: none; }
+        .ws-switch { position: relative; width: 32px; height: 18px; border-radius: 999px; background: #cbd5e0; transition: background .2s; flex: 0 0 auto; }
         .ws-switch.on { background: var(--point-color); }
-        .ws-switch .knob { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25); transition: left .2s; }
+        .ws-switch .knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 999px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.25); transition: left .2s; }
         .ws-switch.on .knob { left: 16px; }
         .ws-src { background: #fff; border-radius: var(--radius-sm); padding: 18px 20px; display: flex; align-items: center; gap: 14px; }
         .ws-src-txt { margin: 0; color: #1a202c; line-height: 1.5; }
@@ -518,9 +551,15 @@
         .ws-verdict .s { font-size: 12.5px; font-weight: 700; color: var(--sub-text); }
         .ws-corrected { background: #fff; border-radius: var(--radius-sm); padding: 16px 18px; }
         .ws-label { font-size: 11px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
-        .ws-line { font-size: 18px; line-height: 2.3; display: flex; flex-wrap: wrap; align-items: baseline; }
+        .ws-line { font-size: 18px; line-height: 1.35; display: flex; flex-wrap: wrap; align-items: flex-end; row-gap: 14px; }
         .ws-line.ko, .ws-answer.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
-        .ws-tok { display: inline-flex; align-items: baseline; white-space: nowrap; margin-right: 8px; }
+        /* Token xếp DỌC: chú thích nhỏ nằm trên, từ chính nằm dưới (kiểu ruby) */
+        .ws-tok { display: inline-flex; flex-direction: column; align-items: center; white-space: nowrap; margin-right: 10px; line-height: 1.15; }
+        .ws-anno { font-size: 11px; font-weight: 800; line-height: 1.2; min-height: 13px; margin-bottom: 2px; text-align: center; }
+        .ws-anno.amber { color: #b7791f; }
+        .ws-anno.red { color: #c53030; }
+        .ws-anno.green { color: #2f855a; }
+        .ws-main { display: inline-flex; align-items: baseline; }
         .ws-pill { font-weight: 800; padding: 2px 8px; border-radius: 6px; }
         .ws-pill.correct { background: #e6fbea; color: #22543d; }
         .ws-pill.typo { background: #fef3c7; color: #7a5b00; }
@@ -529,7 +568,10 @@
         .ws-strike { text-decoration: line-through; text-decoration-color: rgba(100,110,130,0.45); text-decoration-thickness: 1px; font-weight: 600; opacity: 0.62; }
         .ws-strike.amber { color: #b7791f; }
         .ws-strike.red { color: #c53030; }
-        .ws-answerbox { flex: 1; min-width: 0; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); background: #fff; box-shadow: var(--neu-concave); line-height: 2.1; }
+        .ws-answerbox { width: 100%; min-width: 0; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); background: #fff; box-shadow: var(--neu-concave); line-height: 2.1; }
+        /* "Câu của bạn": ô chấm full chiều ngang, nút "Câu tiếp" xuống dòng riêng canh phải -> không bị ép hẹp */
+        .ws-nextrow { display: flex; justify-content: flex-end; margin-top: 12px; }
+        .ws-nextrow .ws-btn { padding: 12px 26px; }
         .ws-arrow { color: #cbd5e0; margin: 0 5px; font-weight: 600; }
         .ws-answer-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 14px 18px; }
         .ws-answer-card .ws-label { color: #2f855a; }
@@ -585,6 +627,18 @@
         .review-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
         .review-table th { padding: 14px; background: var(--bg-color); color: var(--text-color); font-weight: 800; border-bottom: 2px solid #edf2f7; text-transform: uppercase; font-size: 11px; }
         .review-table td { padding: 14px; border-bottom: 1px solid #edf2f7; color: var(--text-color); font-weight: 500; }
+        /* Sổ Tay trên màn rộng: thu cột "Tiếng Việt" & "Ngày" lại, nhường chỗ cho Ví dụ + Dịch ví dụ.
+           (≤1279px bảng đã chuyển sang dạng thẻ dọc nên chỉ áp cho màn rộng.) */
+        @media (min-width: 1280px) {
+            #mode-review-section .review-table { table-layout: fixed; }
+            #mode-review-section .review-table th, #mode-review-section .review-table td { word-break: break-word; }
+            #mode-review-section .review-table th:nth-child(1), #mode-review-section .review-table td:nth-child(1) { width: 11%; }
+            #mode-review-section .review-table th:nth-child(2), #mode-review-section .review-table td:nth-child(2) { width: 13%; }
+            #mode-review-section .review-table th:nth-child(3), #mode-review-section .review-table td:nth-child(3) { width: 27%; }
+            #mode-review-section .review-table th:nth-child(4), #mode-review-section .review-table td:nth-child(4) { width: 27%; }
+            #mode-review-section .review-table th:nth-child(5), #mode-review-section .review-table td:nth-child(5) { width: 13%; }
+            #mode-review-section .review-table th:nth-child(6), #mode-review-section .review-table td:nth-child(6) { width: 9%; }
+        }
         .cell-toggle-blur { filter: blur(5px); background: #cbd5e0; border-radius: 4px; color: transparent; user-select: none; }
         .action-eye-btn { background: none; border: none; cursor: pointer; color: var(--point-color); display: inline-flex; align-items: center; vertical-align: middle; margin-left: 6px; outline: none; }
         .action-eye-btn svg { width: 16px; height: 16px; fill: currentColor; }
@@ -652,7 +706,8 @@
 
             body.app-active .dashboard-layout {
                 display: flex !important; flex-direction: column !important; width: 100% !important; max-width: 100% !important;
-                height: auto !important; min-height: 100vh; padding: 8px !important; gap: 8px; overflow-x: hidden !important;
+                height: auto !important; min-height: 100vh;
+                padding: calc(8px + env(safe-area-inset-top, 0px)) 8px 8px !important; gap: 8px; overflow-x: hidden !important;
             }
             .sidebar-left { display: flex !important; flex-direction: column !important; align-items: flex-start !important; padding: 12px !important; height: auto !important; border-radius: var(--radius-md); gap: 8px; }
             .brand-logo-area { margin-bottom: 4px !important; padding-left: 4px !important; width: 100%; justify-content: flex-start; gap: 5px; flex-direction: row; flex-wrap: nowrap; align-items: center; }
@@ -830,9 +885,26 @@
             #quiz-tab, #guess-tab, #visual-tab, #listen-tab { min-height: 0 !important; }
             .opt-badge { width: 26px; height: 26px; font-size: 13px; }
             .option-btn { gap: 10px; }
-            .quiz-shuffle-btn { padding: 8px 14px; font-size: 12px; }
+            .quiz-shuffle-btn { padding: 7px 12px; font-size: 11.5px; }
+            .quiz-shuffle-btn svg { width: 14px; height: 14px; }
             .quiz-mode-select { padding: 8px 32px 8px 14px; font-size: 12px; background-position: right 12px center; }
-            .quiz-tools { margin-bottom: 10px; }
+            /* Cụm nút quiz xuống dòng gọn khi hẹp: pills 1 hàng, nút phụ rớt xuống dưới nếu thiếu chỗ */
+            .quiz-tools { margin-bottom: 10px; gap: 8px 10px; flex-wrap: wrap; }
+            /* Cụm "Dạng luyện" + Làm lại + Ngẫu nhiên: thu gọn cho vừa màn hình điện thoại */
+            .quiz-mode-wrap { gap: 6px; }
+            .quiz-mode-lead { font-size: 11px; }
+            .quiz-mode-pills { padding: 4px; gap: 4px; }
+            .qm-pill { padding: 5px 11px; }
+            .qm-pill .qm-t { font-size: 12px; }
+            .quiz-subtab-btn { font-size: 12px !important; }
+
+            /* Viết câu: nút "Câu tiếp" full chiều ngang cho dễ chạm */
+            .ws-nextrow { justify-content: stretch; }
+            .ws-nextrow .ws-btn { flex: 1; width: 100%; padding: 13px 26px; }
+
+            /* Ôn nhanh: tăng vùng chạm nút xem nghĩa & đóng cho ngón tay */
+            .qr-eye { width: 34px; height: 34px; }
+            .qr-meanpop-x { width: 30px; height: 30px; }
 
             /* Overlay bài kiểm tra tổng hợp */
             .ct-topbar { padding: 12px 14px; }
@@ -911,7 +983,7 @@
         #mobile-dash-toggle, #mobile-dash-close, #mobile-dash-backdrop { display: none; }
         @media (max-width: 1024px) {
             #mobile-dash-toggle {
-                display: flex; position: fixed; top: 12px; right: 12px; z-index: 1500;
+                display: flex; position: fixed; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 1500;
                 width: 42px; height: 42px; border-radius: 12px; border: none;
                 background: var(--point-color); color: #fff; align-items: center; justify-content: center;
                 box-shadow: 0 6px 16px rgba(97,76,255,0.35); cursor: pointer; outline: none;
@@ -929,13 +1001,13 @@
                 width: 88% !important; max-width: 380px; z-index: 2000; transform: translateX(105%);
                 transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
                 overflow-y: auto !important; border-radius: 0 !important; margin: 0 !important;
-                box-shadow: -10px 0 30px rgba(0,0,0,0.18); padding: 20px 16px 40px !important;
+                box-shadow: -10px 0 30px rgba(0,0,0,0.18); padding: calc(20px + env(safe-area-inset-top, 0px)) 16px 40px !important;
                 order: unset !important; max-height: none !important; grid-column: unset !important; grid-row: unset !important;
             }
             body.dash-open .widget-right-profile { transform: translateX(0); }
 
             #mobile-dash-close {
-                display: flex; position: absolute; top: 12px; right: 12px; z-index: 5;
+                display: flex; position: absolute; top: calc(12px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 5;
                 width: 34px; height: 34px; border-radius: 10px; border: none;
                 background: var(--bg-color); color: var(--sub-text); align-items: center; justify-content: center;
                 box-shadow: var(--neu-convex); cursor: pointer; outline: none;
@@ -1023,6 +1095,9 @@
     </style>
 </head>
 <body>
+
+<!-- Thanh vùng an toàn (notch) tô màu thương hiệu — xoá "mảng xám" mặc định của iOS ở mép trên -->
+<div class="safe-top-bar" aria-hidden="true"></div>
 
 <!-- MÀN HÌNH ĐĂNG NHẬP -->
 <div class="login-page-container" id="login-panel-screen">
@@ -1119,7 +1194,7 @@
                     <div class="workspace-header">
                         <!-- Thêm id="vocab-main-title" vào thẻ h1 này nha Pen -->
                         <h1 id="vocab-main-title">Ngoc Quyen's Classroom</h1>
-                        <p id="main-subtitle">Vui lòng chọn bài học phía trên để tải tài liệu</p>
+                        <p id="main-subtitle"></p>
                     </div>
 
                     <!-- SUBTAB LỚN: gộp còn 4 nhóm chính -->
@@ -1272,9 +1347,9 @@
             <thead>
                 <tr>
                     <th style="width: 50px; text-align: center;">★</th>
-                    <th style="width: 23%;">Tiếng Hàn <button id="th-eye-ko" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('ko')"></button></th>
-                    <th style="width: 23%;">Tiếng Việt <button id="th-eye-vi" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('vi')"></button></th>
-                    <th id="th-vocab-ex" style="width: 34%;">Ví dụ <button id="th-eye-ex" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('ex')"></button></th>
+                    <th style="width: 20%;">Tiếng Hàn <button id="th-eye-ko" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('ko')"></button></th>
+                    <th style="width: 17%;">Tiếng Việt <button id="th-eye-vi" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('vi')"></button></th>
+                    <th id="th-vocab-ex" style="width: 43%;">Ví dụ <button id="th-eye-ex" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('ex')"></button></th>
                     <th style="width: 160px;">Ghi chú của bạn</th>
                 </tr>
             </thead>
@@ -1598,54 +1673,64 @@
         </button>
     </div>
 
-    <!-- 🌟 KHỐI 1: KHUNG THÀNH TỰU (THỜI GIAN & TRẠNG THÁI REALTIME) -->
-    <div style="background: #ffffff; padding: 9px 12px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8);">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 7px;">
-            <div style="background: var(--point-light); width: 28px; height: 28px; border-radius: 9px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex);">
-    <svg style="width: 15px; height: 15px; color: #614CFF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"></path><path d="M12 2a6 6 0 0 1 6 6v3.5a6 6 0 0 1-12 0V8a6 6 0 0 1 6-6z"/></svg>
+    <!-- 🌟 KHỐI 1: KHUNG THÀNH TỰU (THỜI GIAN & TRẠNG THÁI REALTIME) — gọn 1 hàng -->
+    <div style="background: #ffffff; padding: 8px 10px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: center; gap: 8px;">
+        <div style="background: var(--point-light); width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex); flex: 0 0 auto;">
+    <svg style="width: 14px; height: 14px; color: #614CFF;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"></path><path d="M12 2a6 6 0 0 1 6 6v3.5a6 6 0 0 1-12 0V8a6 6 0 0 1 6-6z"/></svg>
 </div>
-            <div>
-                <h4 style="font-size: 13.5px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0;">Thời gian hoạt động</h4>
+        <h4 style="font-size: 12.5px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0; flex: 1;">Thời gian hoạt động</h4>
+        <div style="display: flex; gap: 8px; flex: 0 0 auto;">
+            <div style="padding: 4px 9px; background: var(--bg-color); border-radius: 9px; box-shadow: var(--neu-concave); text-align: center; min-width: 52px;">
+                <div id="dash-today-time" style="font-size: 13px; font-weight: 800; color: #1a202c; line-height:1.1;">00:00</div>
+                <span style="font-size: 8px; color: var(--sub-text); font-weight: 600;">Hôm nay</span>
             </div>
-        </div>
-
-        <!-- Thời gian hôm nay & Tổng cộng -->
-        <div style="display: flex; gap: 10px;">
-            <div style="flex: 1; padding: 8px; background: var(--bg-color); border-radius: var(--radius-sm); box-shadow: var(--neu-concave); text-align: center;">
-                <div id="dash-today-time" style="font-size: 15px; font-weight: 800; color: #1a202c;">00:00</div>
-                <span style="font-size: 9px; color: var(--sub-text); font-weight: 600;">Hôm nay</span>
-            </div>
-            <div style="flex: 1; padding: 8px; background: var(--bg-color); border-radius: var(--radius-sm); box-shadow: var(--neu-concave); text-align: center;">
-                <div id="dash-total-time" style="font-size: 15px; font-weight: 800; color: #1a202c;">0 phút</div>
-                <span style="font-size: 9px; color: var(--sub-text); font-weight: 600;">Tổng tích lũy</span>
+            <div style="padding: 4px 9px; background: var(--bg-color); border-radius: 9px; box-shadow: var(--neu-concave); text-align: center; min-width: 52px;">
+                <div id="dash-total-time" style="font-size: 13px; font-weight: 800; color: #1a202c; line-height:1.1;">0 phút</div>
+                <span style="font-size: 8px; color: var(--sub-text); font-weight: 600;">Tổng</span>
             </div>
         </div>
     </div>
 
-    <!-- 🌟 KHỐI TỪ VỰNG CẦN ÔN — đưa lên trên báo cáo để laptop thấy được ngay -->
-    <div style="background: #ffffff; padding: 11px 13px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 9px; text-align: left;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-            <div style="background: #fff5f5; width: 28px; height: 28px; border-radius: 9px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex); flex: 0 0 auto;">
-    <svg style="width: 15px; height: 15px; color: #f56565;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+    <!-- ⚡ ÔN NHANH TỰ CHẠY — luôn hiển thị, cao cố định 88px -->
+    <div id="quick-review-pop" class="qr-pop" onmouseenter="qrPause(true)" onmouseleave="qrPause(false)" onclick="qrToggleManualPause()" title="Chạm để tạm dừng / tiếp tục">
+        <div class="qr-head">
+            <span class="qr-title">⚡ Ôn nhanh</span>
+            <span class="qr-pausemark" id="qr-pausemark" style="display:none;">⏸ đã dừng</span>
+            <span class="qr-count" id="qr-count">0/0</span>
+        </div>
+        <div class="qr-wordrow">
+            <span class="qr-word" id="qr-word">—</span>
+            <button class="qr-eye" onclick="qrReveal(event)" title="Xem nghĩa" aria-label="Xem nghĩa">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+        </div>
+        <div class="qr-progress"><div id="qr-progress-bar"></div></div>
+        <!-- Popup nghĩa: đè lên, không làm đổi chiều cao khối -->
+        <div class="qr-meanpop" id="qr-meanpop" style="display:none;" onclick="event.stopPropagation()">
+            <span id="qr-mean"></span>
+            <button class="qr-meanpop-x" onclick="qrHideMean(event)" aria-label="Đóng">✕</button>
+        </div>
+    </div>
+
+    <!-- 🌟 KHỐI TỪ VỰNG CẦN ÔN — gọn 2 dòng (~80px) -->
+    <div style="background: #ffffff; padding: 9px 12px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 9px; text-align: left;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <div style="background: #fff5f5; width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex); flex: 0 0 auto;">
+    <svg style="width: 14px; height: 14px; color: #f56565;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
 </div>
-            <h4 style="font-size: 14px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0; flex: 1;">Từ vựng cần ôn</h4>
-            <span class="ur-info-tip" tabindex="0" role="button" aria-label="Giải thích">i<span class="ur-tip-bubble">Tổng hợp những từ làm chưa đúng và từ đánh dấu ⭐️</span></span>
+            <h4 style="font-size: 13px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0; flex: 1;">Từ vựng cần ôn</h4>
+            <span style="font-size: 18px; font-weight: 800; color: #f56565; line-height:1;"><span id="dash-total-unlearned">0</span></span>
+            <span class="ur-info-tip" tabindex="0" role="button" aria-label="Giải thích" onclick="toggleInfoTip(event, this)">i<span class="ur-tip-bubble">Tổng hợp những từ làm chưa đúng và từ đánh dấu ⭐️</span></span>
         </div>
 
-        <div style="font-size: 19px; font-weight: 800; color: #f56565; margin-bottom: 7px;">
-            <span id="dash-total-unlearned">0</span> <span style="font-size: 12px; color: var(--text-color); font-weight: 600;">từ cần ôn lại</span>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+            <div style="flex: 1; font-size: 10px; color: var(--sub-text); font-weight: 600;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#f56565" stroke-width="3" stroke-linecap="round" style="width:1em;height:1em;vertical-align:-0.12em;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Sổ tay: <b id="dash-count-wrong" style="color:#1a202c;">0</b>
+                &nbsp;·&nbsp;
+                <svg viewBox="0 0 24 24" fill="#f6b73c" style="width:1em;height:1em;vertical-align:-0.12em;"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg> Đã dấu: <b id="dash-count-starred" style="color:#1a202c;">0</b>
+            </div>
+            <button onclick="handleReviewNowAction()" style="flex:0 0 auto; padding: 7px 13px; background: #f56565; color: white; border: none; border-radius: var(--radius-sm); font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245, 101, 101, 0.2); transition: all 0.2s;" onmouseover="this.style.background='#e53e3e'" onmouseout="this.style.background='#f56565'">Ôn tập ngay ➔</button>
         </div>
-
-        <!-- Chi tiết phân loại -->
-        <div style="display: flex; gap: 8px; margin-bottom: 9px;">
-            <div style="flex: 1; font-size: 10px; color: var(--sub-text); font-weight: 500;"><svg viewBox="0 0 24 24" fill="none" stroke="#f56565" stroke-width="3" stroke-linecap="round" style="width:1em;height:1em;vertical-align:-0.12em;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Sổ tay: <b id="dash-count-wrong" style="color:#1a202c;">0</b></div>
-            <div style="flex: 1; font-size: 10px; color: var(--sub-text); font-weight: 500;"><svg viewBox="0 0 24 24" fill="#f6b73c" style="width:1em;height:1em;vertical-align:-0.12em;"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg> Đã dấu: <b id="dash-count-starred" style="color:#1a202c;">0</b></div>
-        </div>
-
-        <!-- Nút hành động phản hồi nhanh -->
-        <button onclick="handleReviewNowAction()" style="width: 100%; padding: 8px; background: #f56565; color: white; border: none; border-radius: var(--radius-sm); font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245, 101, 101, 0.2); transition: all 0.2s;" onmouseover="this.style.background='#e53e3e'" onmouseout="this.style.background='#f56565'">
-            Ôn tập ngay ➔
-        </button>
     </div>
 
     <!-- 🌟 KHỐI BÁO CÁO UNIT (thiết kế lại — vừa sidebar 324px) -->
@@ -1662,11 +1747,13 @@
             <div class="ur-sum-top">
                 <div class="ur-ring" id="unit-report-ring" style="--p:0; --c:var(--point-color);">
                     <span class="arc"></span>
-                    <div class="rc"><div class="rp" id="unit-report-pct">0%</div><div class="rl">Tiến độ<br>hoàn thành</div></div>
+                    <div class="rc"><div class="rp" id="unit-report-pct">0%</div><div class="rl">Tiến độ</div></div>
                 </div>
                 <div class="ur-info">
-                    <div class="ur-cap">Tiến độ hoàn thành</div>
-                    <div class="ur-big" id="unit-report-summary">0/6 bài đã hoàn thành</div>
+                    <div class="ur-caprow">
+                        <span class="ur-cap">Từ đã đúng</span>
+                        <span class="ur-big" id="unit-report-summary">0/0</span>
+                    </div>
                     <div class="ur-pbar"><div id="unit-report-bar" style="width:0%"></div></div>
                 </div>
             </div>
@@ -1722,26 +1809,8 @@
         </div>
     </div>
 
-    <!-- 🌟 KHỐI 4: BOX RANDOM 3 TỪ VỰNG HÔM NAY -->
-    <div style="background: #ffffff; padding: 16px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); margin-top: 14px; text-align: left;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-            <div style="background: #fffaf0; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex);">
-    <svg style="width: 16px; height: 16px; color: #ed8936;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-</div>
-            <div>
-                <h4 style="font-size: 14px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0;">Ôn nhanh 3 từ</h4>
-            </div>
-        </div>
+    <!-- (Đã chuyển "Ôn nhanh" thành popup tự chạy nằm trên khối "Từ vựng cần ôn") -->
 
-        <!-- Khung danh sách từ random -->
-        <div id="dash-random-vocab-box" style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px;">
-            <!-- Đổ từ JS -->
-        </div>
-
-        <button onclick="refreshDashRandomVocab()" style="width: 100%; padding: 8px; background: none; border: 1px solid rgba(237, 137, 54, 0.3); border-radius: var(--radius-sm); font-size: 11px; font-weight: 700; color: #ed8936; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(237, 137, 54, 0.05)'" onmouseout="this.style.background='none'">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;vertical-align:-0.14em;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> Đổi 3 từ khác
-        </button>
-    </div>
     <!-- Mobile: Chính sách + Rời phòng học ở cuối ngăn kéo Dashboard -->
     <div class="dash-mobile-actions">
         <a href="#" class="dash-action-link" onclick="event.preventDefault(); toggleMobileDash(); openChangePwModal();"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Đổi mật khẩu</a>
@@ -2061,7 +2130,12 @@
         if (!state.seen) resetTabScore(tabName);
         if (state.seen.includes(state.current)) return;
         state.seen.push(state.current);
-        if (isRight) state.right++; else state.wrong++;
+        if (isRight) {
+            state.right++;
+            // Ghi nhận từ vựng đã luyện ĐÚNG (cho thanh tiến độ theo từ vựng)
+            const w = (state.indices && vocabData) ? vocabData[state.indices[state.current]] : null;
+            if (w && w.ko) recordVocabMastered(w.ko);
+        } else state.wrong++;
         saveUnitQuizFor(tabName); // ghi nhận tiến độ/sao theo Unit
     }
 
@@ -2880,6 +2954,18 @@
     }
 
     function toggleBlurReviewColumn(type) { blurColumns[type] = !blurColumns[type]; renderReviewTable(); }
+
+    // Nút chú thích (i): bấm để bật/tắt bong bóng — hoạt động cả trên điện thoại lẫn máy tính.
+    function toggleInfoTip(e, el) {
+        e.stopPropagation();
+        const willOpen = !el.classList.contains('open');
+        document.querySelectorAll('.ur-info-tip.open').forEach(x => x.classList.remove('open'));
+        if (willOpen) el.classList.add('open');
+    }
+    // Bấm ra ngoài -> đóng mọi bong bóng đang mở.
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.ur-info-tip.open').forEach(x => x.classList.remove('open'));
+    });
     
     function toggleWordRemembered(index, isChecked) {
         wrongWordsList[index].remembered = isChecked;
@@ -3023,11 +3109,11 @@
         },
         listen: {
             get: () => tabState.listen.mode || 'word',
-            opts: [['word', 'Nghe từ', '◆ Cơ bản', false], ['sentence', 'Nghe câu điền từ', '🔥 Thử thách', true]]
+            opts: [['word', 'Nghe từ', '', false], ['sentence', 'Nghe câu điền từ', '', true]]
         },
         guess: {
             get: () => tabState.guess.mode || 'word',
-            opts: [['word', 'Nghe từ', '◆ Cơ bản', false], ['sentence', 'Nghe câu tìm nghĩa', '🔥 Thử thách', true]]
+            opts: [['word', 'Nghe từ', '', false], ['sentence', 'Nghe câu tìm nghĩa', '', true]]
         },
         writesentence: {
             get: () => tabState.writesentence.mode || 'vi2ko',
@@ -3367,6 +3453,7 @@
         if (isTypingAnswerCorrect(userInput, item, state.direction)) {
             state.status[rowIdx] = 'ok';
             paintTypingRow(rowIdx, 'ok', true);
+            if (item.ko) recordVocabMastered(item.ko); // tiến độ theo từ vựng
             clearFeedback();
             updateTypingProgress();
             const nextRow = findNextUnansweredTypingRow(rowIdx);
@@ -3634,6 +3721,7 @@
         ws.match = m; ws.checked = true;
         if (!ws.seen.includes(id)) ws.seen.push(id);
         ws.results[id] = m.ok; // khoan dung: chỉ tính SAI khi thiếu từ mang nghĩa
+        if (m.ok && s.item && s.item.ko) recordVocabMastered(s.item.ko); // tiến độ theo từ vựng
         playFeedbackSound(m.ok);
         wsSyncScore();
         wsSaveSession();
@@ -3658,16 +3746,23 @@
     // Vẽ câu đã chấm THEO THỨ TỰ học viên gõ: xanh (đúng), vàng (gõ nhầm → sửa),
     // đỏ gạch (thừa) ngay tại chỗ, đỏ "+từ" (thiếu) chèn đúng vị trí.
     function wsRenderMatch(m) {
+        // Mỗi từ là 1 khối XẾP DỌC: chú thích nhỏ nằm NGAY TRÊN từ chính (kiểu ruby)
+        //  - match  : chỉ từ đúng (xanh), không có chú thích
+        //  - typo   : từ user bị gạch, phía trên là từ đúng (nhỏ, vàng nâu)
+        //  - extra  : từ user thừa bị gạch (đỏ), phía trên ghi "thừa"
+        //  - missing: từ user bỏ sót -> hiện từ đúng, phía trên ghi "thiếu"
         let html = '';
         m.segments.forEach(seg => {
             if (seg.type === 'match') {
-                html += `<span class="ws-tok"><span class="ws-pill correct">${wsEsc(seg.text)}</span></span>`;
+                html += `<span class="ws-tok"><span class="ws-anno"></span><span class="ws-main"><span class="ws-pill correct">${wsEsc(seg.text)}</span></span></span>`;
             } else if (seg.type === 'typo') {
-                html += `<span class="ws-tok"><span class="ws-strike amber">${wsEsc(seg.user)}</span><span class="ws-arrow">→</span><span class="ws-pill typo">${wsEsc(seg.correct)}</span></span>`;
+                html += `<span class="ws-tok"><span class="ws-anno amber">${wsEsc(seg.correct)}</span><span class="ws-main"><span class="ws-strike amber">${wsEsc(seg.user)}</span></span></span>`;
             } else if (seg.type === 'extra') {
-                html += `<span class="ws-tok"><span class="ws-strike red">${wsEsc(seg.user)}</span></span>`;
+                // Thừa: chỉ gạch đi, không ghi chú
+                html += `<span class="ws-tok"><span class="ws-anno"></span><span class="ws-main"><span class="ws-strike red">${wsEsc(seg.user)}</span></span></span>`;
             } else if (seg.type === 'missing') {
-                html += `<span class="ws-tok"><span class="ws-pill missing">+${wsEsc(seg.correct)}</span></span>`;
+                // Thiếu: hiện từ đúng với dấu +
+                html += `<span class="ws-tok"><span class="ws-anno"></span><span class="ws-main"><span class="ws-pill missing">+${wsEsc(seg.correct)}</span></span></span>`;
             }
         });
         return html;
@@ -3717,10 +3812,10 @@
         } else {
             const m = ws.match;
             workHtml = `
-              <div>
+              <div class="ws-yourbox">
                 <div class="ws-label" style="margin-bottom:7px;">Câu của bạn</div>
-                <div class="ws-inputrow">
-                  <div class="ws-answerbox ws-line${koCls}">${wsRenderMatch(m)}</div>
+                <div class="ws-answerbox ws-line${koCls}">${wsRenderMatch(m)}</div>
+                <div class="ws-nextrow">
                   <button class="ws-btn" onclick="wsNext()">Câu tiếp →</button>
                 </div>
               </div>`;
@@ -4156,13 +4251,13 @@
                 <td class="col-vocab-ex-cell" style="vertical-align:middle;">
                     <div style="display:flex; flex-direction:column; gap:8px;" ${state.showEx ? '' : 'class="cell-toggle-blur" onclick="this.classList.remove(\'cell-toggle-blur\')"'}>
                         <div style="display:flex; flex-direction:column; gap:2px;">
-                            <span style="color:#1a202c; font-weight:700; font-size:13px;">${item.ex || '...'}</span>
-                            <span style="color:var(--sub-text); font-style:italic; font-size:11px;">${item.exVi || '...'}</span>
+                            <span style="color:#1a202c; font-weight:700; font-size:15px;">${item.ex || '...'}</span>
+                            <span style="color:var(--sub-text); font-style:italic; font-size:13px;">${item.exVi || '...'}</span>
                         </div>
                         ${(item.ex2 && item.ex2.trim() !== '') ? `
                         <div style="display:flex; flex-direction:column; gap:2px; padding-top:6px; border-top:1px dashed rgba(160,174,192,0.45);">
-                            <span style="color:#1a202c; font-weight:700; font-size:13px;">${item.ex2}</span>
-                            <span style="color:var(--sub-text); font-style:italic; font-size:11px;">${item.ex2Vi || '...'}</span>
+                            <span style="color:#1a202c; font-weight:700; font-size:15px;">${item.ex2}</span>
+                            <span style="color:var(--sub-text); font-style:italic; font-size:13px;">${item.ex2Vi || '...'}</span>
                         </div>` : ''}
                     </div>
                 </td>
@@ -4617,6 +4712,28 @@
     function getStudentKey() {
         return (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase();
     }
+
+    // ===== TIẾN ĐỘ THEO TỪ VỰNG =====
+    // Đếm % số từ của Unit mà học viên đã trả lời ĐÚNG ít nhất 1 lần (ở bất kỳ dạng quiz nào).
+    // Lưu theo từng Unit + học viên. Không tính chế độ Tổng hợp (SUM).
+    function masteredKeyFor(unit) { return `vocabMastered_${getStudentKey()}_u${unit}`; }
+    function getMasteredKos(unit) {
+        if (unit == null || unit === 'SUM') return [];
+        try { return JSON.parse(localStorage.getItem(masteredKeyFor(unit))) || []; } catch (e) { return []; }
+    }
+    function recordVocabMastered(ko) {
+        if (!ko || currentUnit == null || currentUnit === 'SUM') return;
+        const key = masteredKeyFor(currentUnit);
+        let arr; try { arr = JSON.parse(localStorage.getItem(key)) || []; } catch (e) { arr = []; }
+        if (!arr.includes(ko)) { arr.push(ko); try { localStorage.setItem(key, JSON.stringify(arr)); } catch (e) {} }
+    }
+    // Số từ (thuộc vocabData Unit hiện tại) đã luyện đúng
+    function masteredCountForCurrentUnit() {
+        if (!vocabData || !vocabData.length) return 0;
+        const set = new Set(getMasteredKos(currentUnit));
+        let n = 0; vocabData.forEach(v => { if (set.has(v.ko)) n++; });
+        return n;
+    }
     function unitQuizStoreKey() { return `unitQuiz_${getStudentKey()}`; }
     function loadUnitQuizStore() {
         try { return JSON.parse(localStorage.getItem(unitQuizStoreKey())) || {}; } catch (e) { return {}; }
@@ -4903,11 +5020,18 @@
             listEl.appendChild(row);
         });
 
-        const pct = Math.round((doneCount / UNIT_QUIZ_TABS.length) * 100);
+        // 🌟 THANH TIẾN ĐỘ = % TỪ VỰNG của Unit đã luyện ĐÚNG ít nhất 1 lần (mọi dạng quiz)
+        const vocabTotal = (vocabData && vocabData.length) ? vocabData.length : 0;
+        const vocabDone = masteredCountForCurrentUnit();
+        const pct = vocabTotal > 0 ? Math.round((vocabDone / vocabTotal) * 100) : 0;
         document.getElementById('unit-report-bar').style.width = pct + '%';
-        document.getElementById('unit-report-summary').innerHTML = `<b>${doneCount}/${UNIT_QUIZ_TABS.length}</b> bài đã hoàn thành`;
+        document.getElementById('unit-report-summary').innerHTML = `${vocabDone}/${vocabTotal}`;
         if (pctEl) pctEl.innerText = pct + '%';
-        if (ringEl) ringEl.style.setProperty('--p', pct);
+        if (ringEl) {
+            ringEl.style.setProperty('--p', pct);
+            ringEl.style.setProperty('--c', pct >= 100 ? '#22C55E' : 'var(--point-color)');
+        }
+        // Ngôi sao tích luỹ vẫn theo số DẠNG bài đã hoàn thành
         document.getElementById('unit-report-stars-icons').innerHTML = starIconsHtml(doneCount);
     }
 
@@ -4982,6 +5106,9 @@
 
         // Khối "Báo cáo Unit" (thay cho status + thanh tiến độ cũ)
         renderUnitReport();
+
+        // ⚡ Ôn nhanh tự chạy: khởi động nếu chưa chạy (lúc mới vào, hoặc vừa có từ cần ôn)
+        if (!qrState.timer) qrStartAuto();
     }
 
     function refreshDashRandomVocab() {
@@ -5010,6 +5137,97 @@
             item.onclick = () => { item.querySelector('.dash-rand-vi-hide').innerText = word.vi; item.querySelector('.dash-rand-vi-hide').style.filter = 'none'; };
             container.appendChild(item);
         });
+    }
+
+    /* ============================================================
+       ⚡ ÔN NHANH TỰ CHẠY (popup): chạy từ vựng cần ôn của học viên,
+          20 giây/từ, ẩn nghĩa (chạm để xem), di chuột vào để tạm dừng.
+       ============================================================ */
+    const QR_PER_MS = 20000, QR_TICK_MS = 120;
+    let qrState = { list: [], idx: 0, remaining: QR_PER_MS, paused: false, manualPause: false, timer: null };
+
+    // Danh sách "từ cần ôn" = Sổ tay (làm sai) + các từ đã đánh dấu ⭐
+    function buildQuickReviewList() {
+        const out = [], seen = new Set();
+        (wrongWordsList || []).forEach(w => {
+            if (w && w.ko && !seen.has(w.ko)) { seen.add(w.ko); out.push({ ko: w.ko, vi: w.vi || '' }); }
+        });
+        let starList = [];
+        try { starList = JSON.parse(localStorage.getItem(`starred_${getStudentKey()}_QuyenClass`)) || []; } catch (e) { starList = []; }
+        if (starList.length) {
+            const all = getAllVocabGlobal();
+            starList.forEach(ko => {
+                if (ko && !seen.has(ko)) {
+                    seen.add(ko);
+                    const hit = all.find(v => v.ko === ko);
+                    out.push({ ko: ko, vi: hit ? hit.vi : '' });
+                }
+            });
+        }
+        return shuffleArray(out);
+    }
+
+    // Khởi động / làm mới danh sách rồi tự chạy (gọi khi mở lớp & khi có từ mới)
+    function qrStartAuto() {
+        const pop = document.getElementById('quick-review-pop');
+        if (!pop) return;
+        qrState.list = buildQuickReviewList();
+        qrState.idx = 0;
+        qrState.paused = false;
+        qrHideMean();
+        if (!qrState.list.length) { qrStopTimer(); qrRenderEmpty(); return; }
+        qrShowWord();
+        qrStartTimer();
+    }
+
+    function qrRenderEmpty() {
+        const w = document.getElementById('qr-word'); if (w) w.textContent = 'Chưa có từ cần ôn 🎉';
+        const c = document.getElementById('qr-count'); if (c) c.textContent = '0/0';
+        const bar = document.getElementById('qr-progress-bar'); if (bar) bar.style.width = '0%';
+    }
+
+    function qrStartTimer() {
+        qrStopTimer();
+        qrState.remaining = QR_PER_MS;
+        qrState.timer = setInterval(qrTick, QR_TICK_MS);
+    }
+    function qrStopTimer() { if (qrState.timer) { clearInterval(qrState.timer); qrState.timer = null; } }
+
+    function qrTick() {
+        if (qrState.paused || qrState.manualPause) return;
+        qrState.remaining -= QR_TICK_MS;
+        const bar = document.getElementById('qr-progress-bar');
+        if (bar) bar.style.width = Math.max(0, qrState.remaining) / QR_PER_MS * 100 + '%';
+        if (qrState.remaining <= 0) {
+            qrState.idx += 1;
+            // Hết 1 vòng -> làm mới danh sách để bắt kịp từ mới thêm/đã thuộc
+            if (qrState.idx >= qrState.list.length) { qrState.list = buildQuickReviewList(); qrState.idx = 0; }
+            if (!qrState.list.length) { qrStopTimer(); qrRenderEmpty(); return; }
+            qrHideMean();
+            qrShowWord();
+            qrState.remaining = QR_PER_MS;
+        }
+    }
+
+    function qrShowWord() {
+        const w = qrState.list[qrState.idx];
+        if (!w) return;
+        document.getElementById('qr-word').textContent = w.ko;
+        document.getElementById('qr-mean').textContent = w.vi || '(chưa có nghĩa)';
+        document.getElementById('qr-count').textContent = (qrState.idx + 1) + '/' + qrState.list.length;
+        const bar = document.getElementById('qr-progress-bar');
+        if (bar) bar.style.width = '100%';
+    }
+
+    // Mở/đóng popup nghĩa (đè lên, không đổi chiều cao khối)
+    function qrReveal(e) { if (e) e.stopPropagation(); const p = document.getElementById('qr-meanpop'); if (p) p.style.display = 'flex'; }
+    function qrHideMean(e) { if (e) e.stopPropagation(); const p = document.getElementById('qr-meanpop'); if (p) p.style.display = 'none'; }
+    function qrPause(on) { qrState.paused = !!on; }
+    // Chạm vào khối để tạm dừng / tiếp tục (dùng được cả trên điện thoại vì không có hover)
+    function qrToggleManualPause() {
+        qrState.manualPause = !qrState.manualPause;
+        const mk = document.getElementById('qr-pausemark');
+        if (mk) mk.style.display = qrState.manualPause ? 'inline' : 'none';
     }
 
     /* ============================================================
