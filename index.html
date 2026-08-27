@@ -436,21 +436,21 @@
         .ct-card-head { display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:800; color:var(--sub-text); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px; }
         .ct-type-badge { background:var(--point-light); color:var(--point-color); padding:3px 10px; border-radius:10px; }
         .ct-prompt { font-size:24px; font-weight:800; color:#1a202c; margin-bottom:8px; line-height:1.48; }
-        .ct-prompt.ct-quoted { position:relative; display:block; width:fit-content; max-width:100%; margin:2px auto 10px; padding:10px 34px; border-left:4px solid var(--point-color); border-radius:8px; background:rgba(97,76,255,.055); font-size:25px; text-align:center; }
+        .ct-prompt.ct-quoted { position:relative; display:block; width:fit-content; max-width:100%; margin:2px auto 10px; padding:10px 34px; border-left:4px solid #2d3748; border-radius:8px; background:rgba(45,55,72,.05); font-size:25px; text-align:center; }
         /* Ngoặc kép đứng cố định hai phía, không tham gia xuống dòng cùng nội dung */
-        .ct-prompt.ct-quoted::before { content:'“'; position:absolute; left:14px; top:8px; color:var(--point-color); line-height:1; }
-        .ct-prompt.ct-quoted::after { content:'”'; position:absolute; right:14px; bottom:5px; color:var(--point-color); line-height:1; }
+        .ct-prompt.ct-quoted::before { content:'“'; position:absolute; left:14px; top:8px; color:#a0aec0; line-height:1; }
+        .ct-prompt.ct-quoted::after { content:'”'; position:absolute; right:14px; bottom:5px; color:#a0aec0; line-height:1; }
         .ct-prompt.ct-long { font-size:20px; width:100%; }
         /* Câu Hàn và bản dịch Việt là hai khối riêng — không bao giờ ghép chung một dòng */
         .ct-prompt.ct-bilingual { display:flex; width:100%; flex-direction:column; align-items:stretch; gap:9px; margin:2px 0 12px; padding:0; border:0; background:transparent; }
         .ct-prompt.ct-bilingual::before, .ct-prompt.ct-bilingual::after { content:none; }
-        .ct-prompt.ct-bilingual .cloze-sentence { display:block; width:100%; margin:0; padding:8px 14px; border-left:4px solid var(--point-color); border-radius:8px; background:rgba(97,76,255,.055); font-size:20px; font-weight:800; line-height:1.5; }
-        .ct-prompt.ct-bilingual .cloze-sentence::before { content:'“'; color:var(--point-color); }
-        .ct-prompt.ct-bilingual .cloze-sentence::after { content:'”'; color:var(--point-color); }
+        .ct-prompt.ct-bilingual .cloze-sentence { display:block; width:100%; margin:0; padding:8px 14px; border-left:4px solid #2d3748; border-radius:8px; background:rgba(45,55,72,.05); font-size:20px; font-weight:800; line-height:1.5; }
+        .ct-prompt.ct-bilingual .cloze-sentence::before { content:'“'; color:#a0aec0; }
+        .ct-prompt.ct-bilingual .cloze-sentence::after { content:'”'; color:#a0aec0; }
         .ct-prompt.ct-bilingual .cloze-vi { display:block; width:100%; margin:0; padding:7px 14px; border-radius:8px; background:#f8fafc; color:#64748b; font-size:15px; font-weight:700; font-style:italic; text-align:left; line-height:1.5; }
         /* Chính tả là câu chỉ dẫn bình thường — chỉ nghĩa mục tiêu được tô màu */
         .ct-spell-prompt { margin:4px 0 12px; color:#1a202c; font-size:23px; font-weight:800; line-height:1.5; }
-        .ct-spell-target { color:var(--point-color); font-weight:900; }
+        .ct-spell-target { color:#1a202c; font-weight:900; background:#edf0f5; padding:1px 8px; border-radius:7px; }
         .ct-prompt-sub { font-size:14px; font-weight:650; color:#64748b; margin-bottom:16px; line-height:1.45; }
         .ct-opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
         .ct-opt { padding:15px 17px; text-align:left; background:var(--card-color); border:1.5px solid rgba(226,232,240,0.9); border-radius:var(--radius-sm); font-size:17px; font-weight:650; line-height:1.5; color:var(--text-color); cursor:pointer; outline:none; transition:all .15s; }
@@ -6496,6 +6496,37 @@
     }
 
     /* ---------- QUIZ TỔNG HỢP (đề dọc, chấm sau cùng) ---------- */
+    // Rải dạng quiz cho cả đề: "Trắc nghiệm" luôn là phần chính.
+    //   + 1 dạng khác  -> Trắc nghiệm ~75%
+    //   + 2 dạng khác  -> ~60%
+    //   + từ 3 dạng khác trở lên -> 50%
+    // Không chọn Trắc nghiệm thì chia đều các dạng còn lại.
+    function buildCombinedTypePlan(types, n) {
+        const hasQuiz = types.indexOf('quiz') >= 0;
+        const others = types.filter(t => t !== 'quiz');
+        let quota = [];
+        if (!hasQuiz || others.length === 0) {
+            quota = types.map(t => ({ t: t, exact: n / types.length }));
+        } else {
+            const share = (others.length === 1) ? 0.75 : (others.length === 2 ? 0.6 : 0.5);
+            quota.push({ t: 'quiz', exact: n * share });
+            others.forEach(t => quota.push({ t: t, exact: n * (1 - share) / others.length }));
+        }
+        // Chia suất nguyên trước, phần lẻ bốc ngẫu nhiên theo đúng phần dư
+        quota.forEach(q => { q.n = Math.floor(q.exact); q.frac = q.exact - q.n; });
+        const left = n - quota.reduce((a, q) => a + q.n, 0);
+        const fracSum = quota.reduce((a, q) => a + q.frac, 0);
+        for (let k = 0; k < left; k++) {
+            let r = Math.random() * (fracSum || 1), pick = quota[quota.length - 1];
+            for (const q of quota) { r -= q.frac; if (r <= 0) { pick = q; break; } }
+            pick.n++;
+        }
+        let bag = [];
+        quota.forEach(q => { for (let i = 0; i < q.n; i++) bag.push(q.t); });
+        while (bag.length < n) bag.push(hasQuiz ? 'quiz' : types[0]);
+        return shuffleArray(bag).slice(0, n);
+    }
+
     function startCombinedTest() {
         const units = [...sumSelUnits].sort((a,b) => parseInt(a) - parseInt(b));
         if (units.length === 0) { alert('Hãy chọn ít nhất 1 Unit.'); return; }
@@ -6507,9 +6538,9 @@
         const n = Math.max(1, Math.min(nInput, pool.length));
         const picked = shuffleArray([...pool]).slice(0, n);
         sumTest = { answerLang: sumAnswerLang, units: units, questions: [], graded: false };
-        picked.forEach(item => {
-            const type = types[Math.floor(Math.random() * types.length)];
-            sumTest.questions.push(buildCombinedQuestion(item, type, pool));
+        const typePlan = buildCombinedTypePlan(types, picked.length);
+        picked.forEach((item, i) => {
+            sumTest.questions.push(buildCombinedQuestion(item, typePlan[i] || types[0], pool));
         });
         renderCombinedTest();
         syncTeacherUI();
@@ -6648,7 +6679,7 @@
                     inner += `<div class="ct-prompt-sub">Chọn từ bạn nghe được:</div>`;
                 }
             } else if (q.sub === 'match') {
-                inner += `<div class="ct-prompt-sub">Bấm 1 từ tiếng Hàn rồi bấm nghĩa tương ứng để nối (bấm lại để gỡ). Bài chấm sau khi nộp.</div><div id="ct-body-${i}"></div>`;
+                inner += `<div class="ct-prompt-sub">Bấm 1 từ tiếng Hàn rồi bấm nghĩa tương ứng để nối (bấm lại để gỡ).</div><div id="ct-body-${i}"></div>`;
             } else if (q.sub === 'order') {
                 const orderPrompt = q.dirLang === 'vi' ? q.srcKo : q.srcVi;
                 inner += `<div class="${ctPromptClass(orderPrompt)}">${orderPrompt}</div>`
@@ -6836,7 +6867,7 @@
     const EXAM_FONT_LINK = '<link rel="preconnect" href="https://fonts.googleapis.com">'
         + '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
-        + 'family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+KR:wght@400;500;700&display=swap">';
+        + 'family=Nunito+Sans:wght@400;600;700&family=Noto+Serif+KR:wght@400;500;700&display=swap">';
 
     function examEsc(x) {
         return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -6861,15 +6892,28 @@
         t = t.replace(/([^\s])[ \t]*((?:A|B|가|나)\s*:)/g, '$1\n$2');   // chèn xuống dòng trước vế sau
         return t.split('\n').map(p => p.trim()).filter(Boolean);
     }
-    // Đáp án có hội thoại: vế đầu nằm ngay sau "A.", các vế sau xuống dòng và thụt vào cho thẳng hàng.
+    // 1 lượt lời -> "<b>가:</b> nội dung"
+    function examDialogueLine(p) {
+        const m = p.match(/^((?:A|B|가|나)\s*:)\s*([\s\S]*)$/);
+        return m ? '<b>' + examEsc(m[1]) + '</b> ' + examEsc(m[2]) : examEsc(p);
+    }
+    // Một đáp án hoàn chỉnh (kèm chữ cái A/B/C/D)
+    function examOptionHtml(letter, x) {
+        const parts = examSplitDialogue(x);
+        if (parts.length < 2) {
+            return '<div class="e-opt"><b>' + letter + '.</b> ' + examEsc(String(x == null ? '' : x).trim()) + '</div>';
+        }
+        return '<table class="e-opt-tb" cellspacing="0" cellpadding="0"><tr>'
+            + '<td class="e-otd-l" width="35"><b>' + letter + '.</b></td>'
+            + '<td class="e-otd-b">' + parts.map(p => '<div class="e-dline">' + examDialogueLine(p) + '</div>').join('') + '</td>'
+            + '</tr></table>';
+    }
+    // Bản rút gọn dùng cho trang đáp án (nằm trong 1 ô hẹp)
     function examFormatOption(x) {
         const parts = examSplitDialogue(x);
-        const one = p => {
-            const m = p.match(/^((?:A|B|가|나)\s*:)\s*([\s\S]*)$/);
-            return m ? '<b>' + examEsc(m[1]) + '</b> ' + examEsc(m[2]) : examEsc(p);
-        };
         if (parts.length < 2) return examEsc(String(x == null ? '' : x).trim());
-        return one(parts[0]) + parts.slice(1).map(p => '<div class="e-dline">' + one(p) + '</div>').join('');
+        return examDialogueLine(parts[0])
+            + parts.slice(1).map(p => '<div class="e-dline e-dline-key">' + examDialogueLine(p) + '</div>').join('');
     }
     function examAbsUrl(u) { try { return new URL(u, location.href).href; } catch (e) { return u; } }
 
@@ -6949,10 +6993,8 @@
                  + '<div class="eq-sub">' + examEsc(q.promptLabel || 'Chọn đáp án đúng:') + '</div>';
         }
         // Không dùng <ol>/<li>: Microsoft Word tự thêm 1,2,3,4 dù CSS đã tắt list-style.
-        const opts = '<div class="e-opts">' + (q.options || []).map((o, i) => {
-            const dialogue = /^\s*A:\s*[\s\S]*?\s+B:\s*[\s\S]*$/.test(String(o || ''));
-            return '<div class="e-opt' + (dialogue ? ' e-dialogue-opt' : '') + '"><b>' + L[i] + '.</b> ' + examFormatOption(o) + '</div>';
-        }).join('') + '</div>';
+        const opts = '<div class="e-opts">'
+            + (q.options || []).map((o, i) => examOptionHtml(L[i], o)).join('') + '</div>';
         const pos = (q.options || []).indexOf(q.answer);
         return { body: head + opts, answer: (pos >= 0 ? L[pos] + '. ' : '') + q.answer };
     }
@@ -6970,25 +7012,32 @@
 
         const css = ''
             + '@page { size: A4; margin: 1.8cm 1.6cm; }'
-            + 'body { font-family: ' + EXAM_FONT + '; font-size: 13pt; color:#000; line-height:1.5; }'
+            + 'body { font-family: ' + EXAM_FONT + '; font-size: 13pt; font-style: normal; font-weight: normal; color:#000; line-height:1.5; }'
             + '.e-head { text-align:center; margin-bottom:14pt; }'
             + '.e-title { font-size:16pt; font-weight:bold; text-transform:uppercase; }'
             + '.e-sub { font-size:11pt; margin-top:3pt; }'
             + '.e-info { margin:12pt 0 14pt; font-size:12pt; border-top:1px solid #000; border-bottom:1px solid #000; padding:7pt 0; }'
-            + '.eq { margin-bottom:17pt; page-break-inside:avoid; }'
-            + '.eq-no { font-weight:bold; margin-bottom:4pt; }'
-            + '.eq-stem { font-size:14pt; margin:4pt 0 5pt; line-height:1.45; font-family:' + EXAM_FONT + ' !important; }'
+            // Phân cấp: nhãn câu (nhỏ, xám) < chỉ dẫn (nhỏ, nghiêng) < ĐỀ BÀI (to, đậm, đen) < đáp án (thường)
+            + '.eq { margin:0 0 20pt; padding-top:9pt; border-top:0.75pt solid #d9d9d9; page-break-inside:avoid; }'
+            + '.eq-no { font-size:10.5pt; font-weight:bold; letter-spacing:0.6pt; text-transform:uppercase; color:#7a7a7a; margin-bottom:3pt; }'
+            + '.eq-stem { font-size:15pt; font-weight:bold; font-style:normal; color:#000; margin:0 0 6pt; line-height:1.45; font-family:' + EXAM_FONT + ' !important; }'
             + '.eq-stem .cloze-sentence { display:inline; }'
             + '.eq-bilingual { margin:4pt 0 6pt; }'
             + '.eq-bilingual .cloze-sentence { display:block; margin:0 0 3pt; font-size:14pt; font-weight:bold; }'
             + '.eq-bilingual .cloze-vi { display:block; margin:0; font-size:11pt; font-style:italic; color:#555; }'
-            + '.eq-sub { font-size:11pt; font-style:italic; font-weight:600; color:#555; margin-bottom:5pt; }'
+            + '.eq-sub { font-size:10.5pt; font-style:italic; font-weight:normal; color:#767676; margin:0 0 7pt; }'
             + '.e-opts { margin:0; padding:0; }'
             // Mỗi đáp án chiếm trọn 1 dòng; dòng tràn thụt vào thẳng hàng với chữ sau "A."
             // Dùng pt thay vì em: Word nhập HTML hay bỏ qua đơn vị em khi quy ra thụt lề đoạn văn
-            + '.e-opt { display:block; width:auto; margin:0 0 8pt 26pt; text-indent:-26pt; line-height:1.45; }'
-            + '.e-opt b { margin-right:4pt; }'
-            + '.e-dline { display:block; margin:2pt 0 0 18pt; text-indent:0; }'
+            + '.e-opt { display:block; width:auto; margin:0 0 7pt 26pt; text-indent:-26pt; line-height:1.45; font-size:12.5pt; font-weight:normal; font-style:normal; }'
+            + '.e-opt b { font-weight:bold; color:#000; margin-right:4pt; }'
+            // Đáp án hội thoại: bảng 2 cột nên mọi lượt lời thẳng hàng tuyệt đối
+            + '.e-opt-tb { width:100%; border-collapse:collapse; margin:0 0 7pt; }'
+            + '.e-opt-tb td { padding:0; vertical-align:top; font-size:12.5pt; line-height:1.45; font-weight:normal; font-style:normal; }'
+            + '.e-otd-l { width:26pt; }'
+            + '.e-otd-l b { font-weight:bold; color:#000; }'
+            + '.e-dline { display:block; margin:0 0 2pt; text-indent:0; }'
+            + '.e-dline-key { margin-left:0; }'
             + '.e-line { margin-top:5pt; letter-spacing:1px; }'
             + '.e-words span.e-w { display:inline-block; border:1px solid #666; border-radius:4pt; padding:2pt 8pt; margin:2pt 4pt 2pt 0; font-weight:500; }'
             + '.e-match { width:100%; border-collapse:collapse; }'
@@ -6998,6 +7047,7 @@
             + '.e-img-table td { width:100%; text-align:center; vertical-align:middle; }'
             + '.e-img-table img { width:6cm !important; height:6cm !important; }'
             + '.e-pagebreak { page-break-before:always; }'
+            + '.eq:first-of-type { border-top:0; padding-top:0; }'
             + '.e-akey { margin-top:6pt; }'
             + '.ea { display:inline-block; width:48%; vertical-align:top; padding:2pt 0; font-size:12pt; }'
             + '.e-note { font-size:10.5pt; font-style:italic; color:#a00; margin-bottom:8pt; }'
