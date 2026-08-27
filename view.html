@@ -5,6 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <title>Ngọc Quyên Classroom — Bài giảng</title>
+
+  <!-- 🌸 Logo/icon dùng chung với web chính -->
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/icon-180.png">
+  <meta name="theme-color" content="#614CFF">
+  <meta name="apple-mobile-web-app-title" content="NQ Korean 2">
+  <!-- Ảnh xem trước khi gửi link qua Zalo / Messenger / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Ngọc Quyên Classroom">
+  <meta property="og:title" content="Ngọc Quyên Classroom — Bài giảng">
+  <meta property="og:description" content="Slide bài giảng tiếng Hàn Sơ cấp 2 — Ngọc Quyên Classroom">
+  <meta property="og:image" content="https://ngocquyendang10.github.io/thth2_vocabsys/assets/icon-512.png">
+  <meta name="twitter:card" content="summary">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -15,7 +29,9 @@
       --text-color: #2d3748;
       --sub-text: #718096;
       --point-color: #614CFF;
+      --guide-bg: #9FD356;      /* nền dòng hướng dẫn xem slide */
       --neu-convex: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
+      --neu-concave: inset 4px 4px 8px #d1d9e6, inset -4px -4px 8px #ffffff;
       --radius-lg: 24px;
       --radius-md: 16px;
     }
@@ -24,71 +40,112 @@
     body {
       background: var(--bg-color);
       color: var(--text-color);
-      display: flex;
-      flex-direction: column;
+      display: flex; flex-direction: column;
       overflow: hidden;
       -webkit-user-select: none; user-select: none;
     }
 
-    /* ---------- HEADER ---------- */
+    /* ---------------- HEADER ---------------- */
     .view-header {
       flex: 0 0 auto;
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      padding: 12px 20px;
+      padding: 12px 20px 8px;
       padding-top: calc(12px + env(safe-area-inset-top));
-      background: var(--bg-color);
     }
-    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
-    .brand-dot {
-      width: 30px; height: 30px; flex: 0 0 auto; border-radius: 50%;
-      background: var(--card-color); box-shadow: var(--neu-convex);
-      display: flex; align-items: center; justify-content: center; font-size: 15px;
-    }
-    .brand-title { font-weight: 800; font-size: 15px; letter-spacing: .3px; color: var(--point-color); white-space: nowrap; }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 0 1 auto; overflow: hidden; }
+    .brand-logo-img { width: 32px; height: 32px; flex: 0 0 auto; object-fit: contain; }
+    .brand-title { font-weight: 700; font-size: 12.5px; letter-spacing: .4px; color: var(--text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .class-info {
       font-size: 12.5px; font-weight: 700; color: var(--sub-text);
       background: var(--card-color); box-shadow: var(--neu-convex);
       padding: 7px 14px; border-radius: 999px;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55vw;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 52vw;
+      flex: 0 0 auto;
     }
     .class-info:empty { display: none; }
 
-    /* ---------- VIEWER ---------- */
+    /* ------------- DÒNG HƯỚNG DẪN ------------- */
+    .howto {
+      flex: 0 0 auto;
+      margin: 0 20px 8px;
+      padding: 8px 15px;
+      display: flex; align-items: center; gap: 9px;
+      background: var(--guide-bg);
+      border: none;
+      border-radius: 999px;
+      font-size: 12.5px; font-weight: 600; line-height: 1.45;
+      color: #1a202c;
+      box-shadow: 0 2px 6px rgba(159, 211, 86, .35);
+    }
+    .howto.hidden { display: none; }
+    .howto-icon { flex: 0 0 auto; font-size: 14px; line-height: 1; }
+    .howto b { font-weight: 800; }
+    .howto .ic { width: 13px; height: 13px; vertical-align: -0.16em; margin: 0 1px; }
+    .howto kbd {
+      font-family: inherit; font-size: 11.5px; font-weight: 800;
+      background: #fff; color: #1a202c;
+      border-radius: 6px; padding: 1px 6px; margin: 0 1px;
+      box-shadow: 0 1px 2px rgba(45,55,72,.2);
+    }
+
+    /* ---------------- VIEWER ---------------- */
     .viewer-container {
       flex: 1 1 auto; min-height: 0;
-      padding: 4px 16px 16px;
+      padding: 0 16px 16px;
       padding-bottom: calc(16px + env(safe-area-inset-bottom));
       display: flex; align-items: center; justify-content: center;
+      background: var(--bg-color);
     }
+    /* Khi bật toàn màn hình: nền tối để slide 16:9 nổi bật */
+    .viewer-container:fullscreen { padding: 0; background: #12141a; }
+    .viewer-container:-webkit-full-screen { padding: 0; background: #12141a; }
+
+    /* Khung slide LUÔN đúng tỉ lệ 16:9 — JS tính kích thước để không bao giờ có viền đen */
     .slide-card {
-      width: 100%; height: 100%; max-width: 1280px;
-      border-radius: var(--radius-lg);
-      background: var(--card-color);
+      position: relative;
+      flex: 0 0 auto;
+      border-radius: var(--radius-md);
+      background: #e2e8f0;
       box-shadow: var(--neu-convex);
-      overflow: hidden; position: relative;
+      overflow: hidden;
     }
+    .viewer-container:fullscreen .slide-card,
+    .viewer-container:-webkit-full-screen .slide-card { border-radius: 0; box-shadow: none; }
     .slide-card iframe { width: 100%; height: 100%; border: none; display: block; }
 
-    /* Lớp phủ trong suốt chặn chuột phải / kéo thả tải file trên slide */
-    .slide-guard { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+    /* Nút toàn màn hình nổi góc trên phải khung slide */
+    .fs-btn {
+      position: absolute; top: 10px; right: 10px; z-index: 4;
+      width: 36px; height: 36px; border: none; border-radius: 50%;
+      background: rgba(255,255,255,.92); color: var(--point-color);
+      box-shadow: 0 3px 10px rgba(45,55,72,.22);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; outline: none; opacity: .45;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    .slide-card:hover .fs-btn { opacity: 1; }
+    .fs-btn:hover { transform: scale(1.08); }
+    .fs-btn:active { transform: scale(.94); }
+    .fs-btn svg { width: 17px; height: 17px; }
+    @media (hover: none) { .fs-btn { opacity: .95; } }
 
-    /* ---------- SKELETON ---------- */
+    /* ---------------- SKELETON ---------------- */
     .skeleton {
-      position: absolute; inset: 0; z-index: 3;
+      position: absolute; inset: 0; z-index: 5;
       display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
-      background: var(--card-color);
+      background: #e2e8f0;
       transition: opacity .35s ease;
     }
     .skeleton.hide { opacity: 0; pointer-events: none; }
     .spinner {
       width: 34px; height: 34px; border-radius: 50%;
-      border: 3px solid #e2e8f0; border-top-color: var(--point-color);
-      animation: spin .8s linear infinite;
+      border: 3.5px solid rgba(97,76,255,.12); border-left-color: var(--point-color);
+      animation: spin .9s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .skeleton p { font-size: 13.5px; font-weight: 700; color: var(--sub-text); }
+    .skeleton p { font-size: 13px; font-weight: 700; color: var(--sub-text); }
 
-    /* ---------- NOTICE ---------- */
+    /* ---------------- NOTICE ---------------- */
     .notice-box {
       text-align: center; padding: 40px 32px; max-width: 440px; width: 100%;
       border-radius: var(--radius-lg);
@@ -99,24 +156,35 @@
     .notice-box p { font-size: 14px; font-weight: 500; color: var(--sub-text); line-height: 1.65; }
 
     @media (max-width: 640px) {
-      .view-header { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top)); }
-      .brand-title { font-size: 13.5px; }
+      .view-header { padding: 10px 14px 6px; padding-top: calc(10px + env(safe-area-inset-top)); }
+      .brand-logo-img { width: 27px; height: 27px; }
+      .brand-title { font-size: 11.5px; }
+      .class-info { max-width: 60vw; }
       .class-info { font-size: 11.5px; padding: 6px 11px; }
-      .viewer-container { padding: 2px 10px 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
-      .slide-card { border-radius: var(--radius-md); }
+      .howto { margin: 0 14px 7px; padding: 7px 12px; font-size: 11.5px; border-radius: 14px; }
+      .viewer-container { padding: 0 10px 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+    }
+    @media (max-width: 480px) {
+      .brand-title { display: none; }     /* màn hẹp: chỉ giữ logo, nhường chỗ cho tên lớp */
+      .class-info { max-width: 74vw; }
     }
   </style>
 </head>
 <body>
   <header class="view-header">
     <div class="brand">
-      <span class="brand-dot">🌸</span>
+      <img src="assets/logo-web.png" alt="Ngọc Quyên Classroom" class="brand-logo-img">
       <span class="brand-title">NGỌC QUYÊN CLASSROOM</span>
     </div>
     <span class="class-info" id="classInfo"></span>
   </header>
 
-  <main class="viewer-container" id="mainContainer">
+  <div class="howto hidden" id="howtoBar">
+    <span class="howto-icon" id="howtoIcon">💡</span>
+    <span id="howtoText"></span>
+  </div>
+
+  <main class="viewer-container" id="viewerBox">
     <div class="notice-box">
       <div class="spinner" style="margin: 0 auto 14px;"></div>
       <p>Đang tải bài giảng...</p>
@@ -136,9 +204,13 @@
       ERROR:      { icon: "📡", title: "Không kết nối được", text: "Có lỗi khi tải dữ liệu bài giảng.<br>Bạn kiểm tra mạng rồi thử tải lại trang nhé!" }
     };
 
+    // Máy cảm ứng (điện thoại/tablet) hay laptop -> hiện hướng dẫn phù hợp
+    const IS_TOUCH = window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
     function showNotice(key) {
+      document.getElementById('howtoBar').classList.add('hidden');
       const m = MESSAGES[key] || MESSAGES.ERROR;
-      document.getElementById('mainContainer').innerHTML =
+      document.getElementById('viewerBox').innerHTML =
         '<div class="notice-box">' +
           '<div class="notice-icon">' + m.icon + '</div>' +
           '<h2>' + m.title + '</h2>' +
@@ -146,25 +218,82 @@
         '</div>';
     }
 
-    function renderSlide(link, label) {
-      const info = document.getElementById('classInfo');
-      if (label) info.textContent = label;
+    function showHowTo() {
+      const bar  = document.getElementById('howtoBar');
+      const icon = document.getElementById('howtoIcon');
+      const txt  = document.getElementById('howtoText');
 
-      const container = document.getElementById('mainContainer');
-      container.innerHTML =
-        '<div class="slide-card">' +
+      if (IS_TOUCH) {
+        icon.textContent = '📱';
+        txt.innerHTML = '<b>Điện thoại:</b> vuốt ngang trên slide hoặc chạm <b>&lsaquo;&nbsp;&rsaquo;</b> ở đáy slide để qua trang · bấm <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg> để xem <b>toàn màn hình</b> · <b>xoay ngang máy</b> sẽ rõ hơn nhiều nhé!';
+      } else {
+        icon.textContent = '💻';
+        txt.innerHTML = '<b>Dùng laptop:</b> bấm vào slide một cái rồi dùng phím <kbd>&larr;</kbd> <kbd>&rarr;</kbd> để chuyển trang · hoặc bấm nút <b>&lsaquo;&nbsp;&rsaquo;</b> ở đáy slide · bấm <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg> (hoặc phím <kbd>F</kbd>) để xem <b>toàn màn hình</b>, <kbd>Esc</kbd> để thoát.';
+      }
+      bar.classList.remove('hidden');
+      fitSlide();
+    }
+
+    // 📐 Ép khung slide đúng tỉ lệ 16:9, vừa khít chỗ trống -> không còn viền đen trên/dưới
+    function fitSlide() {
+      const box  = document.getElementById('viewerBox');
+      const card = document.getElementById('slideCard');
+      if (!box || !card) return;
+
+      // clientWidth/Height có TÍNH CẢ padding -> phải trừ ra mới đúng vùng chứa thật
+      const cs = getComputedStyle(box);
+      const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      const padY = parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom);
+
+      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const availW = box.clientWidth  - padX;
+      const availH = box.clientHeight - padY;
+      const maxW = isFs ? availW : Math.min(availW, 1280);
+      const maxH = availH;
+
+      let w = maxW, h = w * 9 / 16;
+      if (h > maxH) { h = maxH; w = h * 16 / 9; }
+
+      card.style.width  = Math.round(w) + 'px';
+      card.style.height = Math.round(h) + 'px';
+    }
+
+    function toggleFullscreen() {
+      const box = document.getElementById('viewerBox');
+      const active = document.fullscreenElement || document.webkitFullscreenElement;
+      if (active) {
+        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      } else {
+        const req = box.requestFullscreen || box.webkitRequestFullscreen;
+        if (req) { try { const r = req.call(box); if (r && r.catch) r.catch(function () {}); } catch (e) {} }
+      }
+    }
+
+    function renderSlide(link, label) {
+      if (label) document.getElementById('classInfo').textContent = label;
+
+      document.getElementById('viewerBox').innerHTML =
+        '<div class="slide-card" id="slideCard">' +
           '<div class="skeleton" id="skeleton"><div class="spinner"></div><p>Đang mở slide bài giảng...</p></div>' +
           '<iframe id="slideFrame" allowfullscreen="allowfullscreen" allow="fullscreen"' +
           ' referrerpolicy="no-referrer" loading="eager"></iframe>' +
-          '<div class="slide-guard"></div>' +
+          '<button class="fs-btn" id="fsBtn" type="button" title="Xem toàn màn hình" aria-label="Xem toàn màn hình">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+            '<path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>' +
+          '</button>' +
         '</div>';
+
+      document.getElementById('fsBtn').addEventListener('click', toggleFullscreen);
 
       const frame = document.getElementById('slideFrame');
       frame.addEventListener('load', function () {
         const sk = document.getElementById('skeleton');
         if (sk) { sk.classList.add('hide'); setTimeout(function () { sk.remove(); }, 400); }
       });
-      frame.src = link;   // gán src SAU khi đã gắn listener để không lỡ sự kiện load
+      frame.src = link;   // gán src SAU khi gắn listener để không lỡ sự kiện load
+
+      showHowTo();
+      fitSlide();
     }
 
     async function initViewer() {
@@ -176,7 +305,6 @@
         const data = await res.json();
 
         if (!data || data.success === false) { showNotice('ERROR'); return; }
-
         if (data.state === 'OK') {
           renderSlide(data.lectureLink, data.classNote || ("Unit " + data.unit));
           return;
@@ -186,6 +314,19 @@
         showNotice('ERROR');
       }
     }
+
+    // Tính lại khung mỗi khi đổi kích thước / xoay máy / bật-tắt toàn màn hình
+    window.addEventListener('resize', fitSlide);
+    window.addEventListener('orientationchange', function () { setTimeout(fitSlide, 250); });
+    document.addEventListener('fullscreenchange', function () { setTimeout(fitSlide, 60); });
+    document.addEventListener('webkitfullscreenchange', function () { setTimeout(fitSlide, 60); });
+
+    // F / F11-thay thế: phím F bật tắt toàn màn hình cho nhanh trên laptop
+    document.addEventListener('keydown', function (e) {
+      if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        if (document.getElementById('slideCard')) { e.preventDefault(); toggleFullscreen(); }
+      }
+    });
 
     // Hạn chế thao tác tải/sao chép slide (chỉ để xem)
     document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
