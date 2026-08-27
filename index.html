@@ -1973,6 +1973,9 @@
         proto.getItem = function (k) { return _get.call(this, this === window.localStorage ? NS + k : k); };
         proto.setItem = function (k, v) { return _set.call(this, this === window.localStorage ? NS + k : k, v); };
         proto.removeItem = function (k) { return _rem.call(this, this === window.localStorage ? NS + k : k); };
+        // localStorage.key(i) KHÔNG bị patch -> trả về khoá THÔ (đã kèm tiền tố).
+        // Dùng hàm này để bóc tiền tố về khoá logic trước khi so prefix / gọi getItem.
+        window.__lsUnprefix = function (k) { return (k && k.indexOf(NS) === 0) ? k.slice(NS.length) : k; };
     })();
 
     // ⚠️ THTH2: DÁN ĐƯỜNG LINK WEB APP (.../exec) CỦA BACKEND THTH2 MỚI VÀO ĐÂY
@@ -2001,7 +2004,7 @@
         try {
             var pref = 'vocabMastered_' + key + '_u';
             for (var i = 0; i < localStorage.length; i++) {
-                var lk = localStorage.key(i);
+                var lk = window.__lsUnprefix(localStorage.key(i)); // bóc tiền tố "T2::" khỏi khoá thô
                 if (lk && lk.indexOf(pref) === 0) { var lv = localStorage.getItem(lk); if (lv != null) obj[lk] = lv; }
             }
         } catch (e) {}
