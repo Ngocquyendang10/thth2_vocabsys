@@ -6841,15 +6841,35 @@
     function examEsc(x) {
         return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
-    // Hội thoại trong đáp án phải tách A/B thành 2 dòng và treo dòng B ngang với chữ A.
+    // HTML của web -> chữ thuần (mỗi <div>/<br> = 1 dòng).
+    // Cần thiết vì Word BỎ QUA display:inline trên <div>: để nguyên div lồng div là bị bẻ dòng bậy
+    // (dấu “ ” văng ra 2 dòng riêng như cô thấy).
+    function examPlainFromHtml(h) {
+        return String(h == null ? '' : h)
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/(?:div|p|li)>/gi, '\n')
+            .replace(/<[^>]+>/g, '')
+            .replace(/[ \t]+/g, ' ')
+            .replace(/\n{2,}/g, '\n')
+            .trim();
+    }
+
+    // Tách hội thoại thành từng lượt lời: nhận "A:/B:" (Việt) lẫn "가:/나:" (Hàn),
+    // kể cả khi trong ô dữ liệu 2 vế dính liền nhau.
+    function examSplitDialogue(x) {
+        let t = String(x == null ? '' : x).replace(/\r/g, '').trim();
+        t = t.replace(/([^\s])[ \t]*((?:A|B|가|나)\s*:)/g, '$1\n$2');   // chèn xuống dòng trước vế sau
+        return t.split('\n').map(p => p.trim()).filter(Boolean);
+    }
+    // Đáp án có hội thoại: vế đầu nằm ngay sau "A.", các vế sau xuống dòng và thụt vào cho thẳng hàng.
     function examFormatOption(x) {
-        const raw = String(x == null ? '' : x).trim();
-        const m = raw.match(/^A:\s*([\s\S]*?)\s+B:\s*([\s\S]*)$/);
-        if (!m) return examEsc(raw);
-        return '<span class="e-dialogue">'
-            + '<span class="e-dline"><b class="e-speaker">A:</b><span>' + examEsc(m[1]) + '</span></span>'
-            + '<span class="e-dline"><b class="e-speaker">B:</b><span>' + examEsc(m[2]) + '</span></span>'
-            + '</span>';
+        const parts = examSplitDialogue(x);
+        const one = p => {
+            const m = p.match(/^((?:A|B|가|나)\s*:)\s*([\s\S]*)$/);
+            return m ? '<b>' + examEsc(m[1]) + '</b> ' + examEsc(m[2]) : examEsc(p);
+        };
+        if (parts.length < 2) return examEsc(String(x == null ? '' : x).trim());
+        return one(parts[0]) + parts.slice(1).map(p => '<div class="e-dline">' + one(p) + '</div>').join('');
     }
     function examAbsUrl(u) { try { return new URL(u, location.href).href; } catch (e) { return u; } }
 
@@ -6922,9 +6942,10 @@
                     : '<div class="eq-sub">(Thiếu hình minh hoạ) Chọn đáp án đúng:</div>');
         } else {
             const bilingual = String(q.prompt || '').indexOf('cloze-vi') >= 0;
+            const stemPlain = examPlainFromHtml(q.prompt);
             head = (q.prompt ? (bilingual
                     ? '<div class="eq-bilingual">' + q.prompt + '</div>'
-                    : '<div class="eq-stem"><b>“' + q.prompt + '”</b></div>') : '')
+                    : '<div class="eq-stem"><b>“' + examEsc(stemPlain) + '”</b></div>') : '')
                  + '<div class="eq-sub">' + examEsc(q.promptLabel || 'Chọn đáp án đúng:') + '</div>';
         }
         // Không dùng <ol>/<li>: Microsoft Word tự thêm 1,2,3,4 dù CSS đã tắt list-style.
@@ -6944,7 +6965,7 @@
             const p = examQuestionParts(q);
             qHtml += '<div class="eq"><div class="eq-no">Câu ' + (i + 1) + '.</div>'
                   + p.body + '</div>';
-            aHtml += '<div class="ea"><b>Câu ' + (i + 1) + ':</b> ' + examEsc(p.answer) + '</div>';
+            aHtml += '<div class="ea"><b>Câu ' + (i + 1) + ':</b> ' + examFormatOption(p.answer) + '</div>';
         });
 
         const css = ''
@@ -6954,8 +6975,8 @@
             + '.e-title { font-size:16pt; font-weight:bold; text-transform:uppercase; }'
             + '.e-sub { font-size:11pt; margin-top:3pt; }'
             + '.e-info { margin:12pt 0 14pt; font-size:12pt; border-top:1px solid #000; border-bottom:1px solid #000; padding:7pt 0; }'
-            + '.eq { margin-bottom:13pt; page-break-inside:avoid; }'
-            + '.eq-no { font-weight:bold; margin-bottom:3pt; }'
+            + '.eq { margin-bottom:17pt; page-break-inside:avoid; }'
+            + '.eq-no { font-weight:bold; margin-bottom:4pt; }'
             + '.eq-stem { font-size:14pt; margin:4pt 0 5pt; line-height:1.45; font-family:' + EXAM_FONT + ' !important; }'
             + '.eq-stem .cloze-sentence { display:inline; }'
             + '.eq-bilingual { margin:4pt 0 6pt; }'
@@ -6963,11 +6984,11 @@
             + '.eq-bilingual .cloze-vi { display:block; margin:0; font-size:11pt; font-style:italic; color:#555; }'
             + '.eq-sub { font-size:11pt; font-style:italic; font-weight:600; color:#555; margin-bottom:5pt; }'
             + '.e-opts { margin:0; padding:0; }'
-            + '.e-opt { display:inline-block; width:48%; vertical-align:top; padding:3pt 0; line-height:1.45; }'
-            + '.e-opt.e-dialogue-opt { display:block; width:100%; }'
-            + '.e-dialogue { display:inline-block; vertical-align:top; }'
-            + '.e-dline { display:block; padding-left:20pt; text-indent:-20pt; }'
-            + '.e-speaker { display:inline-block; width:20pt; text-indent:0; }'
+            // Mỗi đáp án chiếm trọn 1 dòng; dòng tràn thụt vào thẳng hàng với chữ sau "A."
+            // Dùng pt thay vì em: Word nhập HTML hay bỏ qua đơn vị em khi quy ra thụt lề đoạn văn
+            + '.e-opt { display:block; width:auto; margin:0 0 8pt 26pt; text-indent:-26pt; line-height:1.45; }'
+            + '.e-opt b { margin-right:4pt; }'
+            + '.e-dline { display:block; margin:2pt 0 0 18pt; text-indent:0; }'
             + '.e-line { margin-top:5pt; letter-spacing:1px; }'
             + '.e-words span.e-w { display:inline-block; border:1px solid #666; border-radius:4pt; padding:2pt 8pt; margin:2pt 4pt 2pt 0; font-weight:500; }'
             + '.e-match { width:100%; border-collapse:collapse; }'
