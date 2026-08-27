@@ -73,11 +73,19 @@
       background: var(--guide-bg);
       border: none;
       border-radius: 999px;
-      font-size: 12.5px; font-weight: 600; line-height: 1.45;
+      font-size: 12.5px; font-weight: 600; line-height: 1.4;
       color: #1a202c;
       box-shadow: 0 2px 6px rgba(159, 211, 86, .35);
     }
     .howto.hidden { display: none; }
+    .howto-text { flex: 1 1 auto; min-width: 0; }
+    .howto-close {
+      flex: 0 0 auto; width: 20px; height: 20px; border: none; border-radius: 50%;
+      background: rgba(0,0,0,.12); color: #1a202c; font-size: 13px; font-weight: 800;
+      line-height: 1; cursor: pointer; outline: none; padding: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .howto-close:active { transform: scale(.9); }
     .howto-icon { flex: 0 0 auto; font-size: 14px; line-height: 1; }
     .howto b { font-weight: 800; }
     .howto .ic { width: 13px; height: 13px; vertical-align: -0.16em; margin: 0 1px; }
@@ -99,6 +107,23 @@
     /* Khi bật toàn màn hình: nền tối để slide 16:9 nổi bật */
     .viewer-container:fullscreen { padding: 0; background: #12141a; }
     .viewer-container:-webkit-full-screen { padding: 0; background: #12141a; }
+
+    /* 📱 Toàn màn hình GIẢ: iPhone/Safari không cho phóng to phần tử HTML thật,
+       nên mình tự ẩn header + dòng hướng dẫn để slide chiếm trọn màn hình. */
+    body.immersive { background: #12141a; }
+    body.immersive .view-header,
+    body.immersive .howto { display: none; }
+    body.immersive .viewer-container { padding: 0; background: #12141a; }
+    body.immersive .slide-card { border-radius: 0; box-shadow: none; }
+    body.immersive .fs-btn { opacity: .95; background: rgba(20,22,30,.72); color: #fff; }
+
+    /* Điện thoại cầm DỌC mà bật toàn màn hình: xoay slide nằm ngang cho to gấp đôi
+       (giống YouTube). Chỉ xoay phần khung, thao tác vuốt/chạm vẫn bình thường. */
+    .slide-card.rotated {
+      position: fixed; left: 50%; top: 50%;
+      transform: translate(-50%, -50%) rotate(90deg);
+      z-index: 50;
+    }
 
     /* Khung slide LUÔN đúng tỉ lệ 16:9 — JS tính kích thước để không bao giờ có viền đen */
     .slide-card {
@@ -155,6 +180,19 @@
     .notice-box h2 { font-size: 19px; font-weight: 800; color: var(--point-color); margin-bottom: 10px; }
     .notice-box p { font-size: 14px; font-weight: 500; color: var(--sub-text); line-height: 1.65; }
 
+    /* Màn hình thấp (điện thoại xoay ngang): nhường tối đa chiều cao cho slide */
+    @media (max-height: 520px) {
+      .view-header { padding: 5px 14px 3px; padding-top: calc(5px + env(safe-area-inset-top)); }
+      .brand-logo-img { width: 20px; height: 20px; }
+      .brand-title { font-size: 10.5px; }
+      .class-info { font-size: 10.5px; padding: 4px 10px; }
+      .howto { margin: 0 12px 4px; padding: 4px 11px; font-size: 10.5px; gap: 6px; }
+      .howto .ic { width: 11px; height: 11px; }
+      .howto kbd { font-size: 10px; padding: 0 4px; }
+      .howto-icon { font-size: 11px; }
+      .viewer-container { padding: 0 8px 6px; padding-bottom: calc(6px + env(safe-area-inset-bottom)); }
+    }
+
     @media (max-width: 640px) {
       .view-header { padding: 10px 14px 6px; padding-top: calc(10px + env(safe-area-inset-top)); }
       .brand-logo-img { width: 27px; height: 27px; }
@@ -181,7 +219,8 @@
 
   <div class="howto hidden" id="howtoBar">
     <span class="howto-icon" id="howtoIcon">💡</span>
-    <span id="howtoText"></span>
+    <span class="howto-text" id="howtoText"></span>
+    <button class="howto-close" id="howtoClose" type="button" title="Ẩn hướng dẫn" aria-label="Ẩn hướng dẫn">✕</button>
   </div>
 
   <main class="viewer-container" id="viewerBox">
@@ -231,6 +270,10 @@
         txt.innerHTML = '<b>Dùng laptop:</b> bấm vào slide một cái rồi dùng phím <kbd>&larr;</kbd> <kbd>&rarr;</kbd> để chuyển trang · hoặc bấm nút <b>&lsaquo;&nbsp;&rsaquo;</b> ở đáy slide · bấm <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg> (hoặc phím <kbd>F</kbd>) để xem <b>toàn màn hình</b>, <kbd>Esc</kbd> để thoát.';
       }
       bar.classList.remove('hidden');
+      document.getElementById('howtoClose').onclick = function () {
+        bar.classList.add('hidden');
+        fitSlide();
+      };
       fitSlide();
     }
 
@@ -245,28 +288,80 @@
       const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
       const padY = parseFloat(cs.paddingTop)  + parseFloat(cs.paddingBottom);
 
-      const isFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      const isFs   = isFullscreenNow();
       const availW = box.clientWidth  - padX;
       const availH = box.clientHeight - padY;
-      const maxW = isFs ? availW : Math.min(availW, 1280);
-      const maxH = availH;
 
-      let w = maxW, h = w * 9 / 16;
-      if (h > maxH) { h = maxH; w = h * 16 / 9; }
+      // Máy cảm ứng cầm dọc + đang toàn màn hình -> xoay slide nằm ngang cho to hẳn
+      const rotate = IS_TOUCH && isFs && availH > availW;
+      const boxW = rotate ? availH : availW;      // sau khi xoay thì 2 chiều đổi vai trò
+      const boxH = rotate ? availW : availH;
 
+      let w = isFs ? boxW : Math.min(boxW, 1280);
+      let h = w * 9 / 16;
+      if (h > boxH) { h = boxH; w = h * 16 / 9; }
+
+      card.classList.toggle('rotated', rotate);
       card.style.width  = Math.round(w) + 'px';
       card.style.height = Math.round(h) + 'px';
     }
 
+    // Safari trên iPhone KHÔNG cho phóng to phần tử HTML (requestFullscreen chỉ chạy với <video>),
+    // nên phải có phương án dự phòng: tự ẩn header + hướng dẫn cho slide chiếm trọn màn hình.
+    function nativeFsAvailable() {
+      const box = document.getElementById('viewerBox');
+      if (!box) return false;
+      const supported = document.fullscreenEnabled || document.webkitFullscreenEnabled;
+      return !!supported && !!(box.requestFullscreen || box.webkitRequestFullscreen);
+    }
+
+    function enterImmersive() {
+      document.body.classList.add('immersive');
+      updateFsIcon(true);
+      setTimeout(fitSlide, 60);
+    }
+    function exitImmersive() {
+      document.body.classList.remove('immersive');
+      updateFsIcon(false);
+      setTimeout(fitSlide, 60);
+    }
+
+    function isFullscreenNow() {
+      return !!(document.fullscreenElement || document.webkitFullscreenElement)
+          || document.body.classList.contains('immersive');
+    }
+
+    // Đổi icon nút: khung mở rộng <-> khung thu nhỏ
+    function updateFsIcon(on) {
+      const btn = document.getElementById('fsBtn');
+      if (!btn) return;
+      btn.innerHTML = on
+        ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4v4a1 1 0 0 1-1 1H4M20 9h-4a1 1 0 0 1-1-1V4M15 20v-4a1 1 0 0 1 1-1h4M4 15h4a1 1 0 0 1 1 1v4"/></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg>';
+      btn.title = on ? 'Thoát toàn màn hình' : 'Xem toàn màn hình';
+      btn.setAttribute('aria-label', btn.title);
+    }
+
     function toggleFullscreen() {
       const box = document.getElementById('viewerBox');
-      const active = document.fullscreenElement || document.webkitFullscreenElement;
-      if (active) {
-        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
-      } else {
-        const req = box.requestFullscreen || box.webkitRequestFullscreen;
-        if (req) { try { const r = req.call(box); if (r && r.catch) r.catch(function () {}); } catch (e) {} }
+
+      // Đang ở chế độ toàn màn hình giả -> thoát
+      if (document.body.classList.contains('immersive')) { exitImmersive(); return; }
+
+      // Đang ở toàn màn hình thật -> thoát
+      if (document.fullscreenElement || document.webkitFullscreenElement) {
+        const ex = document.exitFullscreen || document.webkitExitFullscreen;
+        if (ex) { try { const r = ex.call(document); if (r && r.catch) r.catch(function () {}); } catch (e) {} }
+        return;
       }
+
+      // Chưa bật: ưu tiên toàn màn hình thật, không được thì dùng bản giả
+      if (!nativeFsAvailable()) { enterImmersive(); return; }
+      const req = box.requestFullscreen || box.webkitRequestFullscreen;
+      try {
+        const r = req.call(box);
+        if (r && r.catch) r.catch(function () { enterImmersive(); });   // bị trình duyệt từ chối -> vẫn có bản giả
+      } catch (e) { enterImmersive(); }
     }
 
     function renderSlide(link, label) {
@@ -284,6 +379,7 @@
         '</div>';
 
       document.getElementById('fsBtn').addEventListener('click', toggleFullscreen);
+      updateFsIcon(isFullscreenNow());
 
       const frame = document.getElementById('slideFrame');
       frame.addEventListener('load', function () {
@@ -315,17 +411,32 @@
       }
     }
 
-    // Tính lại khung mỗi khi đổi kích thước / xoay máy / bật-tắt toàn màn hình
+    // Tính lại khung mỗi khi đổi kích thước / xoay máy / bật-tắt toàn màn hình.
+    // ResizeObserver bám đúng ô chứa nên chính xác cả khi thanh địa chỉ Safari
+    // thu vào - nhả ra (lúc đó window.resize KHÔNG phải lúc nào cũng bắn).
+    if (window.ResizeObserver) {
+      new ResizeObserver(function () { fitSlide(); }).observe(document.getElementById('viewerBox'));
+    }
     window.addEventListener('resize', fitSlide);
-    window.addEventListener('orientationchange', function () { setTimeout(fitSlide, 250); });
-    document.addEventListener('fullscreenchange', function () { setTimeout(fitSlide, 60); });
-    document.addEventListener('webkitfullscreenchange', function () { setTimeout(fitSlide, 60); });
+    window.addEventListener('orientationchange', function () {
+      setTimeout(fitSlide, 120); setTimeout(fitSlide, 400); setTimeout(fitSlide, 800);
+    });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', fitSlide);
+      window.visualViewport.addEventListener('scroll', fitSlide);
+    }
+    window.addEventListener('pageshow', function () { setTimeout(fitSlide, 60); });
+    document.addEventListener('fullscreenchange', function () { updateFsIcon(isFullscreenNow()); setTimeout(fitSlide, 60); });
+    document.addEventListener('webkitfullscreenchange', function () { updateFsIcon(isFullscreenNow()); setTimeout(fitSlide, 60); });
 
-    // F / F11-thay thế: phím F bật tắt toàn màn hình cho nhanh trên laptop
     document.addEventListener('keydown', function (e) {
+      if (!document.getElementById('slideCard')) return;
+      // Phím F: bật/tắt toàn màn hình cho nhanh trên laptop
       if ((e.key === 'f' || e.key === 'F') && !e.ctrlKey && !e.metaKey && !e.altKey) {
-        if (document.getElementById('slideCard')) { e.preventDefault(); toggleFullscreen(); }
+        e.preventDefault(); toggleFullscreen();
       }
+      // Esc: thoát toàn màn hình giả (toàn màn hình thật thì trình duyệt tự lo)
+      if (e.key === 'Escape' && document.body.classList.contains('immersive')) exitImmersive();
     });
 
     // Hạn chế thao tác tải/sao chép slide (chỉ để xem)
