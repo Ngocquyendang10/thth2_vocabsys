@@ -272,6 +272,45 @@
         .qm-pill.active .qm-lvl { color: #e3ddff; }
         .qm-pill.qm-hard.active { background: #7a3cff; }
 
+        /* Dạng chính tả: đáp án tiếng Hàn to hơn để nhìn rõ khác biệt từng chữ */
+        .option-btn.opt-ko-big .opt-text { font-family:"Chiron Sung HK","Chiron GoRound TC",serif; font-size:19px; font-weight:700; letter-spacing:.5px; }
+        /* Nhãn nhỏ cho biết câu hỏi đang thuộc dạng nào */
+        .qtype-badge { display:inline-block; font-size:10.5px; font-weight:800; letter-spacing:.6px; text-transform:uppercase; color:#fff; background:var(--point-color); padding:3px 10px; border-radius:999px; margin-bottom:10px; }
+        .qtype-badge.hard { background:#7a3cff; }
+
+        /* --- Dạng GHÉP CẶP --- */
+        .qmatch { display:flex; gap:10px; align-items:flex-start; width:100%; }
+        .qmatch-col { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:8px; }
+        .qmatch-hd { font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:.6px; color:var(--sub-text); text-align:center; }
+        .qmatch-chip { width:100%; min-height:50px; display:flex; align-items:center; justify-content:center; padding:10px 8px; border:none; border-radius:14px; background:var(--card-color); box-shadow:var(--neu-convex); font-family:inherit; font-size:14px; font-weight:700; color:var(--text-color); cursor:pointer; outline:none; text-align:center; line-height:1.35; word-break:break-word; transition:background .15s, color .15s, box-shadow .15s; }
+        .qmatch-chip.ko { font-family:"Chiron Sung HK","Chiron GoRound TC",serif; font-size:15.5px; }
+        .qmatch-chip.sel { background:var(--point-color); color:#fff; box-shadow:0 3px 10px rgba(97,76,255,.3); }
+        .qmatch-chip.done { background:#e6fffa; color:#234e52; box-shadow:none; cursor:default; opacity:.7; }
+        .qmatch-chip.bad { background:#fff5f5; color:#742a2a; animation:qmShake .3s; }
+        @keyframes qmShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+        /* --- Dạng SẮP XẾP CÂU --- */
+        .qorder-slot { min-height:58px; display:flex; flex-wrap:wrap; gap:8px; align-content:flex-start; padding:12px; border-radius:16px; background:var(--bg-color); box-shadow:var(--neu-concave); }
+        .qorder-slot.empty { align-items:center; justify-content:center; font-size:13px; font-weight:600; color:#a0aec0; }
+        .qorder-pool { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; min-height:40px; }
+        .qorder-w { padding:9px 15px; border:none; border-radius:12px; background:var(--card-color); box-shadow:var(--neu-convex); font-family:"Chiron Sung HK","Chiron GoRound TC",serif; font-size:15.5px; font-weight:700; color:var(--text-color); cursor:pointer; outline:none; transition:opacity .15s, background .15s; }
+        .qorder-w.vi { font-family:inherit; font-size:14.5px; }
+        .qorder-w.used { opacity:.22; pointer-events:none; }
+        .qorder-w.inslot { background:var(--point-color); color:#fff; box-shadow:0 3px 8px rgba(97,76,255,.25); }
+        .qorder-actions { display:flex; gap:10px; justify-content:center; align-items:center; flex-wrap:wrap; }
+        .qorder-btn { display:inline-flex; align-items:center; gap:6px; border:none; border-radius:999px; padding:9px 18px; font-family:inherit; font-size:13px; font-weight:800; cursor:pointer; outline:none; background:var(--card-color); color:var(--sub-text); box-shadow:var(--neu-convex); transition:all .15s; }
+        .qorder-btn.primary { background:var(--point-color); color:#fff; box-shadow:0 4px 12px rgba(97,76,255,.28); }
+        .qorder-btn:disabled { opacity:.45; cursor:default; }
+        .qorder-btn.is-on { color:#d69e2e; background:#fffaf0; }
+        .qorder-hint { font-size:13.5px; font-weight:600; color:#7a5b00; background:#fdfaf1; border:1px dashed #ecc94b; border-radius:12px; padding:10px 14px; text-align:center; line-height:1.55; }
+        .qorder-hint b { font-weight:800; }
+
+        /* Khung hiện lại câu đầy đủ + bản dịch sau khi trả lời (dạng câu / điền từ) */
+        .quiz-reveal { font-size: 14px; font-weight: 600; color: var(--sub-text); background: var(--bg-color); box-shadow: var(--neu-concave); border-radius: 14px; padding: 10px 16px; text-align: center; line-height: 1.55; margin-bottom: 12px; }
+        /* Nội dung nạp sẵn ngay khi ra câu hỏi, chỉ đổi visibility -> KHÔNG nhảy layout khi chọn đáp án */
+        .quiz-reveal[style*="hidden"] { box-shadow: none; background: transparent; }
+        .quiz-reveal b { color: var(--text-color); font-weight: 800; }
+
         /* ====== BÁO CÁO UNIT (thiết kế lại — vừa sidebar 324px) ====== */
         .ur{ --rok:#22C55E; --rwarn:#ed8936; }
         .ur-sum{ background:var(--bg-color); border-radius:var(--radius-sm); box-shadow:var(--neu-concave); padding:8px 10px; margin-bottom:6px; }
@@ -411,6 +450,32 @@
         .ct-img-frame { width:100%; max-width:420px; height:220px; margin:0 auto 14px; background:var(--bg-color); border-radius:var(--radius-md); box-shadow:var(--neu-concave); overflow:hidden; display:flex; align-items:center; justify-content:center; }
         .ct-img-frame img { max-width:100%; max-height:100%; object-fit:contain; }
         .ct-correct-hint { font-size:12px; color:var(--success-color); font-weight:700; margin-top:10px; }
+        /* Ghép cặp & Sắp xếp câu trong ĐỀ DỌC (chấm sau cùng) */
+        .ct-match { display:flex; gap:12px; }
+        .ct-mcol { flex:1 1 0; min-width:0; display:flex; flex-direction:column; gap:10px; }
+        .ct-mchip { display:flex; align-items:center; gap:9px; min-height:50px; padding:10px 12px; text-align:left; background:var(--card-color); border:1.5px solid rgba(226,232,240,0.9); border-radius:var(--radius-sm); font-size:15px; font-weight:600; color:var(--text-color); cursor:pointer; outline:none; transition:all .15s; }
+        .ct-mchip.ko { font-family:"Chiron Sung HK","Chiron GoRound TC",serif; font-weight:700; }
+        .ct-mchip:hover { border-color:var(--point-color); }
+        .ct-mchip.sel { border-color:var(--point-color); background:var(--point-light); }
+        .ct-mchip.linked { border-color:var(--point-color); }
+        .ct-mchip.correct { background:#e6fffa; border-color:var(--success-color); color:#234e52; }
+        .ct-mchip.wrong { background:#fff5f5; border-color:var(--error-color); color:#742a2a; }
+        .ct-mnum { flex:0 0 auto; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; background:var(--bg-color); color:var(--sub-text); font-family:inherit; }
+        .ct-mchip.linked .ct-mnum, .ct-mchip.sel .ct-mnum { background:var(--point-color); color:#fff; }
+        .ct-oslot { min-height:56px; display:flex; flex-wrap:wrap; gap:8px; align-content:flex-start; align-items:center; padding:12px; border-radius:var(--radius-sm); background:var(--bg-color); box-shadow:var(--neu-concave); margin-bottom:12px; font-size:13px; font-weight:600; color:#a0aec0; }
+        .ct-oslot.correct { background:#e6fffa; box-shadow:inset 0 0 0 1.5px var(--success-color); }
+        .ct-oslot.wrong { background:#fff5f5; box-shadow:inset 0 0 0 1.5px var(--error-color); }
+        .ct-opool { display:flex; flex-wrap:wrap; gap:8px; }
+        .ct-ow { padding:9px 15px; border:1.5px solid rgba(226,232,240,0.9); border-radius:12px; background:var(--card-color); font-family:"Chiron Sung HK","Chiron GoRound TC",serif; font-size:15.5px; font-weight:700; color:var(--text-color); cursor:pointer; outline:none; transition:all .15s; }
+        .ct-ow.vi { font-family:inherit; font-size:14.5px; }
+        .ct-ow.used { opacity:.22; pointer-events:none; }
+        .ct-ow.inslot { background:var(--point-light); border-color:var(--point-color); color:var(--point-color); }
+        @media (max-width:600px){ .ct-match { gap:8px; } .ct-mchip { font-size:13px; padding:8px; min-height:44px; } .ct-mnum { width:20px;height:20px;font-size:11px; } .ct-ow { padding:7px 11px; font-size:14px; } }
+
+        .ct-export-btn { background:var(--point-light); color:var(--point-color); border:none; font-family:inherit; font-size:12.5px; font-weight:800; padding:9px 14px; border-radius:12px; cursor:pointer; outline:none; box-shadow:var(--neu-convex); margin-left:8px; }
+        .ct-export-btn:hover { background:var(--point-color); color:#fff; }
+        @media (max-width:600px){ .ct-export-btn { font-size:11px; padding:7px 10px; margin-left:5px; } }
+
         .ct-result-banner { background:#fff; border-radius:var(--radius-lg); box-shadow:var(--neu-card-shadow); padding:24px; margin-bottom:22px; text-align:center; border-top:5px solid var(--point-color); }
         @media (max-width:600px){ .ct-opts { grid-template-columns:1fr; } .ct-prompt { font-size:19px; } .ct-inner { padding:16px 12px; } }
 
@@ -987,6 +1052,15 @@
             .visual-scene-wrap .hint-btn-bottom-right { top: -8px !important; right: 2px !important; bottom: auto !important; transform: translateY(-100%) !important; }
             .quiz-question { font-size: 14px !important; margin-bottom: 8px !important; }
             .quiz-options { gap: 8px !important; margin-bottom: 8px !important; }
+            .qmatch { gap: 7px !important; }
+            .qmatch-chip { min-height: 42px !important; padding: 7px 6px !important; font-size: 12.5px !important; border-radius: 11px !important; }
+            .qmatch-chip.ko { font-size: 14px !important; }
+            .qorder-slot { min-height: 48px !important; padding: 9px !important; gap: 6px !important; }
+            .qorder-w { padding: 7px 11px !important; font-size: 14px !important; }
+            .qorder-w.vi { font-size: 13px !important; }
+            .qorder-btn { padding: 7px 14px !important; font-size: 12px !important; }
+            .qorder-hint { font-size: 12.5px !important; padding: 8px 11px !important; }
+            .qtype-badge { font-size: 9.5px !important; margin-bottom: 6px !important; }
             .option-btn { padding: 10px 14px !important; font-size: 14px !important; }
             .opt-badge { width: 22px; height: 22px; font-size: 12px; }
             .quiz-tools { margin-bottom: 8px !important; }
@@ -1071,6 +1145,9 @@
             .listen-circle-btn { width: 56px; height: 56px; }
             .quiz-question { font-size: 14px; margin-bottom: 6px; }
             .quiz-options { gap: 7px; margin-bottom: 6px; }
+            .qmatch-chip { min-height: 40px; padding: 6px; font-size: 12.5px; }
+            .qorder-slot { min-height: 46px; padding: 8px; }
+            .qorder-w { padding: 6px 11px; font-size: 14px; }
             .option-btn { padding: 7px 16px; font-size: 13.5px; }
             .opt-badge { width: 23px; height: 23px; font-size: 12px; }
             .mode-toggle { margin-bottom: 8px; }
@@ -1415,6 +1492,7 @@
                 <div id="quiz-tab" class="tab-render-view">
                     <div class="quiz-question" id="quiz-q">Đang tạo câu hỏi trắc nghiệm...</div>
                     <div class="quiz-options" id="quiz-opts"></div>
+                    <div class="quiz-reveal" id="quiz-extra" style="visibility:hidden;"></div>
                 </div>
 
                 <!-- 5. GÕ TỪ -->
@@ -1944,7 +2022,13 @@
             <div id="ct-counter" style="font-weight:800; color:#1a202c;">0 / 0</div>
             <div id="ct-subtitle" style="font-size:11px; color:var(--sub-text);">Ôn tập kết hợp nhiều Unit</div>
         </div>
-        <div class="ct-topbar-right"><button class="ct-close-btn" onclick="closeCombinedTest()" aria-label="Thoát">&times;</button></div>
+        <div class="ct-topbar-right">
+            <span id="ct-export-zone" style="display:none; gap:8px; margin-right:10px;">
+                <button class="ct-export-btn" onclick="printCombinedExam()" title="Mở cửa sổ in để lưu thành PDF">📄 In / PDF</button>
+                <button class="ct-export-btn" onclick="downloadCombinedExamDoc()" title="Tải file Word (.doc) để chỉnh sửa">📝 Word</button>
+            </span>
+            <button class="ct-close-btn" onclick="closeCombinedTest()" aria-label="Thoát">&times;</button>
+        </div>
     </div>
     <div class="ct-scroll">
         <div class="ct-inner">
@@ -2089,6 +2173,26 @@
     let lessonGatingActive = false;
     // Lưu / nạp theo từng tài khoản (để đăng nhập offline vẫn khoá đúng).
     function lessonUnitsKey(user) { return 'lessonUnits_' + String(user || '').toLowerCase(); }
+    // 👩‍🏫 Quyền giáo viên (tải đề) — do cột G "Role" trong sheet Students quyết định.
+    //    Lưu lại theo tài khoản để lần sau mất mạng vẫn nhớ.
+    function teacherRoleKey(user) { return 'teacherRole_' + String(user || '').toLowerCase(); }
+    function setTeacherRole(flag, user) {
+        isTeacherAccount = (flag === true || flag === 'true');
+        try {
+            if (isTeacherAccount) localStorage.setItem(teacherRoleKey(user), '1');
+            else localStorage.removeItem(teacherRoleKey(user));
+        } catch (e) {}
+        syncTeacherUI();
+    }
+    function loadTeacherRole(user) {
+        try { isTeacherAccount = localStorage.getItem(teacherRoleKey(user)) === '1'; } catch (e) { isTeacherAccount = false; }
+        syncTeacherUI();
+    }
+    function syncTeacherUI() {
+        const zone = document.getElementById('ct-export-zone');
+        if (zone) zone.style.display = isTeacherAccount ? 'inline-flex' : 'none';
+    }
+
     function setLessonUnits(raw, user) {
         if (raw == null) {                       // backend chưa nâng cấp -> tắt khoá
             lessonGatingActive = false;
@@ -2119,6 +2223,7 @@
     let currentUnit = null;
     let currentTab = "lecture";
     let summaryActive = false;   // đang ở chế độ "Tổng hợp" (ôn trộn nhiều Unit)
+    let isTeacherAccount = false; // 👩‍🏫 tài khoản có cột G (Role) = GV/TEACHER/ADMIN trong sheet Students
     let summaryKind = 'vocab';   // 'vocab' | 'grammar' — Tổng hợp thuộc phân hệ nào
     
     // Sổ tay "Nhắc lại từ vựng" — LƯU RIÊNG THEO TỪNG TÀI KHOẢN (trước đây dùng chung
@@ -2504,6 +2609,7 @@
                 localStorage.setItem('studentSession_QuyenClass', user);
                 applyServerProgress(user, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
                 setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
+                setTeacherRole(data.isTeacher, user);    // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
                 await parseAndInitApp(data.allowedUnits);
             } else if (data.disabled) {
@@ -2806,6 +2912,7 @@
         tabState.listen.mode = 'word';
         tabState.guess.mode = 'word';
         tabState.quiz.replyLang = 'mix';
+        tabState.quiz.plan = buildQuizPlan(tabState.quiz.indices, 'mix');
         syncQuizModeToggles();
     }
 
@@ -3141,6 +3248,235 @@
         return ex; // không chèn được thì để nguyên câu
     }
 
+    /* ============================================================
+       KHO DỮ LIỆU + BỘ SINH CÂU HỎI CHO 7 DẠNG TRẮC NGHIỆM
+       (tất cả sinh bằng code từ data có sẵn, KHÔNG cần AI)
+       ============================================================ */
+
+    const QUIZ_KO_FONT = "'Chiron Sung HK','Chiron GoRound TC',serif";
+
+    // Rút gọn nghĩa tiếng Việt để hiển thị trên chip/đáp án ngắn (bỏ phần trong ngoặc, lấy nghĩa đầu)
+    function viShort(raw) {
+        let t = String(raw == null ? '' : raw).split(/[;/,\n]/)[0].trim();
+        t = t.replace(/\s*\([^)]*\)/g, ' ').replace(/\s{2,}/g, ' ').trim();
+        return t || String(raw == null ? '' : raw).trim();
+    }
+
+    // Hai cặp ví dụ của 1 từ: (ex/exVi) và (ex2/ex2Vi) — chỉ lấy cặp có đủ cả 2 vế.
+    function quizSentencePairsOf(item) {
+        if (!item) return [];
+        return [[item.ex, item.exVi], [item.ex2, item.ex2Vi]]
+            .map(p => ({ ko: String(p[0] || '').trim(), vi: String(p[1] || '').trim() }))
+            .filter(p => p.ko !== '' && p.vi !== '');
+    }
+
+    // Kho câu của TẤT CẢ Unit (để lấy câu nhiễu ngoài Unit đang học) — dedupe theo câu Hàn.
+    let _quizSentBank = null;
+    function getSentenceBankGlobal() {
+        const nUnits = Object.keys(allVocabCache).length;
+        if (_quizSentBank && _quizSentBank.n === nUnits) return _quizSentBank.list;
+        let seen = {}, list = [];
+        getAllVocabGlobal().forEach(it => {
+            quizSentencePairsOf(it).forEach(p => {
+                if (seen[p.ko]) return;
+                seen[p.ko] = true; list.push(p);
+            });
+        });
+        _quizSentBank = { n: nUnits, list: list };
+        return list;
+    }
+
+    // Tách token tiếng Hàn (bỏ dấu câu); chỉ so 2 âm tiết đầu để bỏ qua trợ từ/đuôi chia.
+    function _koWords(s) {
+        return String(s || '').replace(/[^가-힣\s]/g, ' ').split(/\s+/)
+            .filter(w => w.length >= 2).map(w => w.slice(0, 2));
+    }
+
+    // Chọn n câu nhiễu HAO HAO câu đúng (ưu tiên câu chia sẻ nhiều từ nhất).
+    // lang = 'vi' -> nhiễu là câu tiếng Việt; 'ko' -> nhiễu là câu tiếng Hàn.
+    function pickSimilarSentences(correct, lang, n) {
+        const words = new Set(lang === 'ko' ? _koWords(correct) : _viWords(correct));
+        let seen = {}, cands = [];
+        getSentenceBankGlobal().forEach(p => {
+            const t = lang === 'ko' ? p.ko : p.vi;
+            if (!t || t === correct || seen[t]) return;
+            seen[t] = true;
+            let sim = 0;
+            (lang === 'ko' ? _koWords(t) : _viWords(t)).forEach(w => { if (words.has(w)) sim++; });
+            cands.push({ s: t, sim: sim });
+        });
+        const similar = cands.filter(c => c.sim > 0).sort((a, b) => b.sim - a.sim);
+        const top = shuffleArray(similar.slice(0, Math.max(n * 3, 8))); // trộn trong nhóm giống nhất
+        const rest = shuffleArray(cands.filter(c => c.sim === 0));
+        return top.concat(rest).slice(0, n).map(c => c.s);
+    }
+
+    /* ---------- ĐIỀN TỪ VÀO CÂU TIẾNG HÀN ---------- */
+
+    // Các cặp ví dụ ĐỤC LỖ ĐƯỢC của 1 từ (câu Hàn phải chứa từ đó hoặc dạng chia của nó).
+    function quizClozePairsOf(item) {
+        if (!item || !item.ko) return [];
+        let out = [];
+        [[item.ex, item.exVi], [item.ex2, item.ex2Vi]].forEach(p => {
+            const ko = String(p[0] || '').trim();
+            if (!ko) return;
+            const cloze = makeClozeSentence(ko, item.ko);
+            if (cloze.indexOf('cloze-blank') < 0) return; // không chèn được chỗ trống -> bỏ câu này
+            out.push({ ko: ko, vi: String(p[1] || '').trim(), cloze: cloze });
+        });
+        return out;
+    }
+
+    // Từ Hàn nhiễu: ưu tiên CÙNG LOẠI (động/tính từ đuôi 다 vs danh từ),
+    // và không được xuất hiện sẵn trong câu (tránh gây hiểu nhầm là đáp án).
+    function pickKoWordDistractors(correctKo, sentenceKo, n) {
+        const isVerb = /다$/.test(correctKo);
+        let seen = {}; seen[correctKo] = true;
+        let same = [], other = [];
+        getAllVocabGlobal().forEach(it => {
+            const w = String(it.ko || '').trim();
+            if (!w || seen[w]) return;
+            seen[w] = true;
+            if (sentenceKo && sentenceKo.indexOf(w) >= 0) return;
+            (/다$/.test(w) === isVerb ? same : other).push(w);
+        });
+        return shuffleArray(same).concat(shuffleArray(other)).slice(0, n);
+    }
+
+    /* ---------- ĐỤC LỖ CÂU TIẾNG VIỆT ---------- */
+
+    // Bỏ dấu NHƯNG GIỮ NGUYÊN ĐỘ DÀI chuỗi (để index tìm được vẫn khớp chuỗi gốc)
+    function viFold(str) {
+        let out = '';
+        for (const ch of String(str == null ? '' : str)) {
+            let b = ch.normalize('NFD').replace(/[̀-ͯ]/g, '');
+            out += (b.length >= 1 ? b[0] : ch);
+        }
+        return out.toLowerCase().replace(/đ/g, 'd');
+    }
+
+    // Mọi cách viết nghĩa tiếng Việt của 1 từ (dài trước, để khớp cụm dài nhất)
+    function viTargetsOf(item) {
+        let list = splitAcceptedAnswers(item.vi);
+        if (item.viAlt) list = list.concat(splitAcceptedAnswers(item.viAlt));
+        list = list.map(x => String(x).replace(/\s*\([^)]*\)/g, ' ').replace(/\s{2,}/g, ' ').trim())
+                   .filter(x => x.length >= 2);
+        return Array.from(new Set(list)).sort((a, b) => b.length - a.length);
+    }
+
+    // Tìm vị trí 1 trong các nghĩa xuất hiện trong câu tiếng Việt (bỏ dấu, phải đứng thành từ riêng)
+    function findViTargetIn(sentence, targets) {
+        const f = viFold(sentence);
+        for (const t of targets) {
+            const ft = viFold(t);
+            if (!ft) continue;
+            let pos = f.indexOf(ft);
+            while (pos >= 0) {
+                const before = pos === 0 ? ' ' : f[pos - 1];
+                const after = (pos + ft.length >= f.length) ? ' ' : f[pos + ft.length];
+                if (!/[a-z0-9]/.test(before) && !/[a-z0-9]/.test(after)) return { start: pos, len: ft.length };
+                pos = f.indexOf(ft, pos + 1);
+            }
+        }
+        return null;
+    }
+
+    function quizViClozePairsOf(item) {
+        if (!item) return [];
+        const targets = viTargetsOf(item);
+        if (!targets.length) return [];
+        let out = [];
+        [[item.exVi, item.ex], [item.ex2Vi, item.ex2]].forEach(p => {
+            const vi = String(p[0] || '').trim();
+            if (!vi) return;
+            const hit = findViTargetIn(vi, targets);
+            if (!hit) return;
+            out.push({
+                vi: vi, ko: String(p[1] || '').trim(),
+                answer: vi.substr(hit.start, hit.len),
+                atStart: hit.start === 0,
+                cloze: vi.slice(0, hit.start) + '<span class="cloze-blank">______</span>' + vi.slice(hit.start + hit.len)
+            });
+        });
+        return out;
+    }
+
+    // Nghĩa tiếng Việt nhiễu: không được xuất hiện sẵn trong câu, không trùng đáp án.
+    function pickViWordDistractors(correctVi, sentenceVi, n, item) {
+        const fSen = viFold(sentenceVi || ''), fCor = viFold(correctVi);
+        const isVerb = /다$/.test(String((item && item.ko) || ''));
+        let seen = {}; seen[fCor] = true;
+        let same = [], other = [];
+        getAllVocabGlobal().forEach(it => {
+            const w = viShort(it.vi);
+            const fw = viFold(w);
+            if (!w || w.length < 2 || seen[fw]) return;
+            seen[fw] = true;
+            if (fSen && fSen.indexOf(fw) >= 0) return;
+            (/다$/.test(String(it.ko || '')) === isVerb ? same : other).push(w);
+        });
+        return shuffleArray(same).concat(shuffleArray(other)).slice(0, n);
+    }
+
+    /* ---------- CHÍNH TẢ: SINH CÁC CÁCH VIẾT SAI ---------- */
+
+    function _hangulDecompose(ch) {
+        const c = ch.codePointAt(0);
+        if (c < 0xAC00 || c > 0xD7A3) return null;
+        const x = c - 0xAC00;
+        return { l: Math.floor(x / 588), v: Math.floor(x / 28) % 21, t: x % 28 };
+    }
+    function _hangulCompose(l, v, t) { return String.fromCodePoint(0xAC00 + (l * 21 + v) * 28 + t); }
+    // Các nhóm dễ nhầm (theo chỉ số phụ âm đầu / nguyên âm / 받침 của Unicode Hangul)
+    const _SPELL_L_GROUPS = [[0, 15, 1], [3, 16, 4], [7, 17, 8], [9, 10], [12, 14, 13], [2, 5], [6, 7], [11, 18]];
+    const _SPELL_V_GROUPS = [[0, 4], [1, 5], [2, 6], [3, 7], [8, 13], [9, 14], [10, 15], [11, 16], [12, 17], [18, 20], [19, 20]];
+    const _SPELL_T_GROUPS = [[0, 4], [0, 21], [4, 21], [16, 4], [16, 21], [1, 21], [8, 4], [19, 20], [17, 16]];
+
+    // Sinh danh sách "từ viết sai" của 1 từ Hàn: đổi 1 nguyên âm / phụ âm đầu / 받침.
+    function makeMisspellings(word) {
+        const chars = Array.from(String(word || ''));
+        if (!chars.some(c => /[가-힣]/.test(c))) return [];
+        let real = {};
+        getAllVocabGlobal().forEach(it => { const w = String(it.ko || '').trim(); if (w) real[w] = true; });
+        let buckets = {}, seenW = {};
+        chars.forEach((ch, i) => {
+            const d = _hangulDecompose(ch);
+            if (!d) return;
+            const push = (kind, l, v, t) => {
+                const nc = _hangulCompose(l, v, t);
+                if (nc === ch) return;
+                const w = chars.slice(0, i).join('') + nc + chars.slice(i + 1).join('');
+                if (w === word || real[w] || seenW[w]) return;
+                seenW[w] = true;
+                const k = i + ':' + kind;
+                (buckets[k] = buckets[k] || []).push(w);
+            };
+            _SPELL_V_GROUPS.forEach(g => { if (g.indexOf(d.v) >= 0) g.forEach(v => push('v', d.l, v, d.t)); });
+            _SPELL_L_GROUPS.forEach(g => { if (g.indexOf(d.l) >= 0) g.forEach(l => push('l', l, d.v, d.t)); });
+            _SPELL_T_GROUPS.forEach(g => { if (g.indexOf(d.t) >= 0) g.forEach(t => push('t', d.l, d.v, t)); });
+        });
+        // Rải đều: mỗi vòng lấy 1 từ ở mỗi nhóm (vị trí + kiểu lỗi) để 3 đáp án sai khác kiểu nhau
+        const keys = shuffleArray(Object.keys(buckets));
+        keys.forEach(k => shuffleArray(buckets[k]));
+        let out = [], round = 0, added = true;
+        while (added) {
+            added = false;
+            keys.forEach(k => { if (buckets[k][round] != null) { out.push(buckets[k][round]); added = true; } });
+            round++;
+        }
+        return out;
+    }
+
+    /* ---------- SẮP XẾP TỪ THÀNH CÂU ---------- */
+
+    // Các câu đủ ngắn để sắp xếp (3–9 từ với tiếng Hàn, 4–11 tiếng với tiếng Việt)
+    function quizOrderPairsOf(item, dir) {
+        return quizSentencePairsOf(item).filter(p => {
+            const n = String(dir === 'vi' ? p.vi : p.ko).trim().split(/\s+/).filter(Boolean).length;
+            return dir === 'vi' ? (n >= 4 && n <= 11) : (n >= 3 && n <= 9);
+        });
+    }
+
     // Định nghĩa các dạng (mode) cho từng tab quiz có lựa chọn.
     // opt = [value, nhãn, nhãn-độ-khó (rỗng nếu không có), làKhó]
     const QUIZ_MODE_DEFS = {
@@ -3235,43 +3571,414 @@
         generateGuessQuestion(); updateDashboardStats();
     }
 
+    /* ============================================================
+       7 DẠNG CÂU HỎI TRẮC NGHIỆM — mỗi câu hỏi 1 dạng, trộn ngẫu nhiên
+       theo tỉ lệ. Pill (Việt / Hàn / Cả hai) = NGÔN NGỮ ĐÁP ÁN, áp cho
+       mọi dạng: 'vi' -> trả lời bằng tiếng Việt, 'ko' -> tiếng Hàn.
+       ============================================================ */
+
+    // Tỉ lệ xuất hiện của từng dạng (tổng 100)
+    const QUIZ_TYPE_WEIGHTS = { word: 25, sent: 20, cloze: 20, order: 13, match: 12, spell: 10 };
+    // Dạng nào hỗ trợ chiều trả lời nào
+    const QUIZ_TYPE_LANGS = {
+        word:  ['vi', 'ko'],
+        sent:  ['vi', 'ko'],
+        cloze: ['vi', 'ko'],   // ko = điền từ Hàn vào câu Hàn; vi = đục lỗ câu tiếng Việt
+        order: ['vi', 'ko'],
+        match: ['vi', 'ko'],
+        spell: ['ko']          // chính tả chỉ có nghĩa khi đáp án là tiếng Hàn
+    };
+    const QUIZ_TYPE_BADGE = {
+        word: 'Từ vựng', sent: 'Nghĩa cả câu', clozeKo: 'Điền từ',
+        clozeVi: 'Đục lỗ câu Việt', order: 'Sắp xếp câu', match: 'Ghép cặp', spell: 'Chính tả'
+    };
+    const QUIZ_TYPE_HARD = { sent: 1, order: 1, spell: 1 };
+
+    // Dạng này có làm được với TỪ NÀY theo chiều d không?
+    function quizTypeFeasible(type, vocabIdx, d) {
+        if ((QUIZ_TYPE_LANGS[type] || []).indexOf(d) < 0) return false;
+        const item = vocabData[vocabIdx];
+        if (!item) return false;
+        if (type === 'word')  return vocabData.length >= 4;
+        if (type === 'match') return vocabData.length >= 4;
+        if (type === 'sent')  return quizSentencePairsOf(item).length > 0 && getSentenceBankGlobal().length >= 4;
+        if (type === 'cloze') return (d === 'vi') ? quizViClozePairsOf(item).length > 0 : quizClozePairsOf(item).length > 0;
+        if (type === 'order') return quizOrderPairsOf(item, d).length > 0;
+        if (type === 'spell') return makeMisspellings(item.ko).length >= 3;
+        return false;
+    }
+
+    // Lên "kế hoạch" dạng câu hỏi cho cả vòng: rải đúng tỉ lệ rồi xáo ngẫu nhiên,
+    // từ nào thiếu dữ liệu cho dạng đó thì tự đổi sang dạng khác làm được.
+    function buildQuizPlan(indices, lang) {
+        const N = (indices || []).length;
+        if (!N) return [];
+        const types = Object.keys(QUIZ_TYPE_WEIGHTS)
+            .filter(t => lang === 'mix' || QUIZ_TYPE_LANGS[t].indexOf(lang) >= 0);
+        const totalW = types.reduce((a, t) => a + QUIZ_TYPE_WEIGHTS[t], 0);
+        // Chia suất theo tỉ lệ, phần lẻ ưu tiên dạng có phần dư lớn nhất -> tổng luôn = N
+        let quota = types.map(t => {
+            const exact = N * QUIZ_TYPE_WEIGHTS[t] / totalW;
+            return { t: t, n: Math.floor(exact), frac: exact - Math.floor(exact) };
+        });
+        // Phần lẻ bốc ngẫu nhiên theo đúng phần dư -> nhiều vòng chơi thì tỉ lệ về đúng thiết kế
+        let left = N - quota.reduce((a, q) => a + q.n, 0);
+        const fracSum = quota.reduce((a, q) => a + q.frac, 0);
+        for (let k = 0; k < left; k++) {
+            let r = Math.random() * (fracSum || 1), pick = quota[quota.length - 1];
+            for (const q of quota) { r -= q.frac; if (r <= 0) { pick = q; break; } }
+            pick.n++;
+        }
+        let bag = [];
+        quota.forEach(q => { for (let i = 0; i < q.n; i++) bag.push(q.t); });
+        bag = shuffleArray(bag).slice(0, N);
+        while (bag.length < N) bag.push('word');
+
+        let plan = [];
+        for (let i = 0; i < N; i++) {
+            let d = (lang === 'mix') ? (Math.random() < 0.5 ? 'vi' : 'ko') : lang;
+            let t = bag[i];
+            if (!quizTypeFeasible(t, indices[i], d)) {
+                const other = (d === 'vi') ? 'ko' : 'vi';
+                if (lang === 'mix' && quizTypeFeasible(t, indices[i], other)) d = other;
+                else {
+                    const alt = shuffleArray(types.slice()).find(x => quizTypeFeasible(x, indices[i], d));
+                    if (alt) t = alt;
+                    else if (lang === 'mix' && shuffleArray(types.slice()).some(x => quizTypeFeasible(x, indices[i], other))) {
+                        d = other; t = shuffleArray(types.slice()).find(x => quizTypeFeasible(x, indices[i], d));
+                    } else t = 'word';
+                }
+            }
+            plan.push({ t: t, d: d });
+        }
+        return plan;
+    }
+
+    // Nạp sẵn nội dung "đáp án chi tiết" (ẩn) để ô này chiếm chỗ từ đầu -> chọn đáp án không bị nhảy UI
+    function primeQuizReveal(html) {
+        tabState.quiz._reveal = html || '';
+        const el = document.getElementById('quiz-extra');
+        if (!el) return;
+        el.innerHTML = html || '';
+        el.style.visibility = 'hidden';
+    }
+    function showQuizReveal() {
+        const el = document.getElementById('quiz-extra');
+        if (el && tabState.quiz._reveal) el.style.visibility = 'visible';
+    }
+
+    function quizBadgeHtml(key) {
+        return `<span class="qtype-badge${QUIZ_TYPE_HARD[key] ? ' hard' : ''}">${QUIZ_TYPE_BADGE[key] || ''}</span>`;
+    }
+
+    /* ---------- CÁC BỘ SINH CÂU HỎI ABCD ----------
+       Trả về { key, label, promptHtml, correct, wrongs, reveal } */
+
+    // 1. TỪ VỰNG (dạng vốn có)
+    function buildQuizWordQuestion(item, actualIndex, d) {
+        const reveal = `<b style="font-family:${QUIZ_KO_FONT}">${item.ko}</b><br>${item.vi}`;
+        if (d === 'vi') {
+            return {
+                key: 'word',
+                label: `Nghĩa của từ <span class="ko-emph">${item.ko}</span> là gì?`,
+                promptHtml: '', reveal: reveal,
+                correct: item.vi,
+                wrongs: shuffleArray(vocabData.filter((_, i) => i !== actualIndex).map(x => x.vi)).slice(0, 3)
+            };
+        }
+        return {
+            key: 'word',
+            label: `Từ nào mang nghĩa: "${item.vi}"?`,
+            promptHtml: '', reveal: reveal,
+            correct: item.ko,
+            wrongs: shuffleArray(vocabData.filter((_, i) => i !== actualIndex).map(x => x.ko)).slice(0, 3)
+        };
+    }
+
+    // 2. NGHĨA CẢ CÂU (2 chiều)
+    function buildQuizSentenceQuestion(item, d) {
+        const pairs = quizSentencePairsOf(item);
+        if (!pairs.length) return null;
+        const p = pairs[Math.floor(Math.random() * pairs.length)];
+        const wrongs = pickSimilarSentences(d === 'vi' ? p.vi : p.ko, d === 'vi' ? 'vi' : 'ko', 3);
+        if (wrongs.length < 3) return null;
+        const reveal = `<b style="font-family:${QUIZ_KO_FONT}">${p.ko}</b><br>${p.vi}`;
+        if (d === 'vi') {
+            return {
+                key: 'sent', label: 'Câu sau có nghĩa là gì?',
+                promptHtml: `<div class="cloze-sentence" style="font-family:${QUIZ_KO_FONT}; margin:10px 0 0;">${p.ko}</div>`,
+                correct: p.vi, wrongs: wrongs, reveal: reveal
+            };
+        }
+        return {
+            key: 'sent', label: 'Câu tiếng Hàn nào mang nghĩa sau?',
+            promptHtml: `<div class="cloze-sentence" style="margin:10px 0 0;">${p.vi}</div>`,
+            correct: p.ko, wrongs: wrongs, reveal: reveal
+        };
+    }
+
+    // 3a. ĐIỀN TỪ vào câu tiếng Hàn (đáp án tiếng Hàn)
+    function buildQuizClozeQuestion(item) {
+        const pairs = quizClozePairsOf(item);
+        if (!pairs.length) return null;
+        const p = pairs[Math.floor(Math.random() * pairs.length)];
+        const wrongs = pickKoWordDistractors(item.ko, p.ko, 3);
+        if (wrongs.length < 3) return null;
+        return {
+            key: 'clozeKo', label: 'Chọn từ đúng để hoàn thành câu:',
+            promptHtml: `<div class="cloze-sentence" style="font-family:${QUIZ_KO_FONT}; margin:10px 0 2px;">${p.cloze}</div>`
+                + (p.vi ? `<div class="cloze-vi" style="margin-top:0;">(${p.vi})</div>` : ''),
+            correct: item.ko, wrongs: wrongs,
+            reveal: `<b style="font-family:${QUIZ_KO_FONT}">${p.ko}</b>` + (p.vi ? `<br>${p.vi}` : '')
+        };
+    }
+
+    // 3b. ĐỤC LỖ CÂU TIẾNG VIỆT (đáp án tiếng Việt)
+    function buildQuizViClozeQuestion(item) {
+        const pairs = quizViClozePairsOf(item);
+        if (!pairs.length) return null;
+        const p = pairs[Math.floor(Math.random() * pairs.length)];
+        let wrongs = pickViWordDistractors(p.answer, p.vi, 3, item);
+        if (wrongs.length < 3) return null;
+        // Chỗ trống đứng đầu câu -> viết hoa hết đáp án để không lộ đáp án đúng
+        const capFirst = x => x.charAt(0).toUpperCase() + x.slice(1);
+        const answer = p.atStart ? capFirst(p.answer) : p.answer;
+        if (p.atStart) wrongs = wrongs.map(capFirst);
+        return {
+            key: 'clozeVi', label: 'Chọn từ đúng để hoàn thành bản dịch:',
+            promptHtml: (p.ko ? `<div class="cloze-sentence" style="font-family:${QUIZ_KO_FONT}; margin:10px 0 2px;">${p.ko}</div>` : '')
+                + `<div class="cloze-sentence" style="margin:${p.ko ? '0' : '10px'} 0 0; font-weight:700;">${p.cloze}</div>`,
+            correct: answer, wrongs: wrongs,
+            reveal: (p.ko ? `<b style="font-family:${QUIZ_KO_FONT}">${p.ko}</b><br>` : '') + p.vi
+        };
+    }
+
+    // 4. CHÍNH TẢ — chọn cách viết ĐÚNG (3 đáp án sai sinh bằng cách đổi 1 nguyên âm/phụ âm/받침)
+    function buildQuizSpellQuestion(item) {
+        const wrongs = shuffleArray(makeMisspellings(item.ko)).slice(0, 3);
+        if (wrongs.length < 3) return null;
+        return {
+            key: 'spell', label: `Từ nào viết ĐÚNG cho nghĩa: "${viShort(item.vi)}"?`,
+            promptHtml: '',
+            correct: item.ko, wrongs: wrongs, optClass: 'opt-ko-big',
+            reveal: `<b style="font-family:${QUIZ_KO_FONT}">${item.ko}</b><br>${item.vi}`
+        };
+    }
+
+    /* ---------- BỘ ĐIỀU PHỐI ---------- */
+
     function generateQuizQuestion() {
         clearFeedback();
-        let state = tabState.quiz; state.answered = false;
+        const state = tabState.quiz;
+        state.answered = false;
+        state._match = null;
+        state._order = null;
         document.getElementById('ctrl-next-btn').style.display = 'none';
-        
-        let actualIndex = state.indices[state.current];
+        primeQuizReveal('');
+
+        const actualIndex = state.indices[state.current];
         const currentItem = vocabData[actualIndex];
+        if (!currentItem) return;
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
-        
-        // Ngôn ngữ ĐÁP ÁN theo lựa chọn: isKoQuestion=true -> hỏi từ Hàn, đáp án tiếng VIỆT;
-        // false -> hỏi nghĩa Việt, đáp án tiếng HÀN.
-        let replyLang = tabState.quiz.replyLang || 'mix';
-        let isKoQuestion;
-        if (replyLang === 'vi') isKoQuestion = true;         // đáp án Việt
-        else if (replyLang === 'ko') isKoQuestion = false;   // đáp án Hàn
-        else isKoQuestion = Math.random() > 0.5;             // trộn
-        let questionText = "", correctAnswer = "", wrongAnswers = [];
 
-        if (isKoQuestion) {
-            questionText = `Nghĩa của từ <span class="ko-emph">${currentItem.ko}</span> là gì?`; correctAnswer = currentItem.vi;
-            let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi);
-            wrongAnswers = shuffleArray(pool).slice(0, 3);
-        } else {
-            questionText = `Từ nào mang nghĩa: "${currentItem.vi}"?`; correctAnswer = currentItem.ko;
-            let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
-            wrongAnswers = shuffleArray(pool).slice(0, 3);
-        }
+        const lang = state.replyLang || 'mix';
+        if (!state.plan || state.plan.length !== state.indices.length) state.plan = buildQuizPlan(state.indices, lang);
+        const p = state.plan[state.current] || { t: 'word', d: (lang === 'mix' ? (Math.random() < 0.5 ? 'vi' : 'ko') : lang) };
 
-        document.getElementById('quiz-q').innerHTML = questionText;
-        let allOptions = shuffleArray([correctAnswer, ...wrongAnswers]);
-        const optsContainer = document.getElementById('quiz-opts'); optsContainer.innerHTML = "";
-        
-        allOptions.forEach((opt, idx) => {
+        const optsContainer = document.getElementById('quiz-opts');
+        optsContainer.innerHTML = '';
+
+        // 2 dạng có giao diện riêng
+        if (p.t === 'match') { renderQuizMatch(actualIndex); return; }
+        if (p.t === 'order') { renderQuizOrder(currentItem, p.d); return; }
+
+        let q = null;
+        if (p.t === 'sent') q = buildQuizSentenceQuestion(currentItem, p.d);
+        else if (p.t === 'cloze') q = (p.d === 'vi') ? buildQuizViClozeQuestion(currentItem) : buildQuizClozeQuestion(currentItem);
+        else if (p.t === 'spell') q = buildQuizSpellQuestion(currentItem);
+        // Thiếu dữ liệu -> quay về dạng hỏi từ để không bị kẹt câu hỏi
+        if (!q) q = buildQuizWordQuestion(currentItem, actualIndex, p.d);
+        primeQuizReveal(q.reveal || '');
+
+        document.getElementById('quiz-q').innerHTML = quizBadgeHtml(q.key) + `<div>${q.label}</div>` + (q.promptHtml || '');
+        shuffleArray([q.correct, ...q.wrongs]).forEach((opt, idx) => {
             const btn = makeOptionBtn(opt, 'ABCD'[idx] || '•');
-            btn.onclick = function() { handleQuizAnswer(btn, opt, correctAnswer); };
+            if (q.optClass) btn.classList.add(q.optClass);
+            btn.onclick = function () { handleQuizAnswer(btn, opt, q.correct); };
             optsContainer.appendChild(btn);
         });
+    }
+
+    // Kết thúc 1 câu (dùng chung cho ghép cặp / sắp xếp câu)
+    function finishQuizQuestion(isCorrect, wrongHtml) {
+        const state = tabState.quiz;
+        state.answered = true;
+        showQuizReveal();
+        playFeedbackSound(isCorrect);
+        const fb = document.getElementById('global-feedback');
+        if (fb) {
+            if (isCorrect) {
+                fb.className = 'feedback success compact';
+                fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác! Bạn nhớ bài tốt lắm.';
+            } else {
+                fb.className = 'feedback error compact';
+                fb.innerHTML = '<span style="color:var(--error-color);font-size:17px;line-height:1;">✗</span> ' + (wrongHtml || 'Chưa đúng rồi!');
+            }
+        }
+        markTabAnswered('quiz', isCorrect);
+        document.getElementById('ctrl-next-btn').style.display = 'inline-block';
+    }
+
+    /* ---------- 5. GHÉP CẶP ---------- */
+
+    function renderQuizMatch(mainIdx) {
+        const state = tabState.quiz;
+        const n = Math.min(5, vocabData.length);
+        const others = shuffleArray(vocabData.map((_, i) => i).filter(i => i !== mainIdx)).slice(0, n - 1);
+        const ids = [mainIdx].concat(others);
+        state._match = { ids: ids, remain: ids.length, wrong: 0, sel: null };
+        primeQuizReveal(ids.map(i => `<b style="font-family:${QUIZ_KO_FONT}">${vocabData[i].ko}</b> — ${viShort(vocabData[i].vi)}`).join(' · '));
+
+        document.getElementById('quiz-q').innerHTML = quizBadgeHtml('match')
+            + '<div>Ghép từ tiếng Hàn với nghĩa tiếng Việt tương ứng:</div>';
+
+        const left = shuffleArray(ids.slice()), right = shuffleArray(ids.slice());
+        const col = (arr, side) => arr.map(i =>
+            `<button type="button" class="qmatch-chip ${side}" id="qm-${side}-${i}" onclick="quizMatchPick('${side}',${i},this)">`
+            + (side === 'ko' ? vocabData[i].ko : viShort(vocabData[i].vi)) + '</button>').join('');
+        const box = document.createElement('div');
+        box.innerHTML = `<div class="qmatch">
+            <div class="qmatch-col"><div class="qmatch-hd">Tiếng Hàn</div>${col(left, 'ko')}</div>
+            <div class="qmatch-col"><div class="qmatch-hd">Tiếng Việt</div>${col(right, 'vi')}</div>
+        </div>`;
+        document.getElementById('quiz-opts').appendChild(box);
+    }
+
+    function quizMatchPick(side, idx, btn) {
+        const state = tabState.quiz, m = state._match;
+        if (!m || state.answered || btn.classList.contains('done')) return;
+        // Bấm lại chính nó -> bỏ chọn
+        if (m.sel && m.sel.side === side && m.sel.idx === idx) {
+            btn.classList.remove('sel'); m.sel = null; return;
+        }
+        // Chọn lại cùng cột -> đổi lựa chọn
+        if (!m.sel || m.sel.side === side) {
+            if (m.sel) { const old = document.getElementById('qm-' + m.sel.side + '-' + m.sel.idx); if (old) old.classList.remove('sel'); }
+            btn.classList.add('sel'); m.sel = { side: side, idx: idx }; return;
+        }
+        // Đủ 1 cặp -> chấm
+        const other = document.getElementById('qm-' + m.sel.side + '-' + m.sel.idx);
+        if (m.sel.idx === idx) {
+            [btn, other].forEach(b => { if (b) { b.classList.remove('sel', 'bad'); b.classList.add('done'); } });
+            m.sel = null; m.remain--;
+            if (m.remain <= 0) {
+                const ok = m.wrong === 0;
+                if (!ok) recordWrongWord();
+                finishQuizQuestion(ok, ok ? '' : `Bạn ghép sai <b>${m.wrong}</b> lần. Xem lại các cặp bên dưới nhé!`);
+            }
+        } else {
+            m.wrong++;
+            recordWrongWord(idx);
+            [btn, other].forEach(b => { if (b) { b.classList.remove('sel'); b.classList.add('bad'); setTimeout(() => b.classList.remove('bad'), 450); } });
+            m.sel = null;
+        }
+    }
+
+    /* ---------- 6. SẮP XẾP TỪ THÀNH CÂU ---------- */
+
+    function renderQuizOrder(item, d) {
+        const state = tabState.quiz;
+        const pairs = quizOrderPairsOf(item, d);
+        if (!pairs.length) { // hụt dữ liệu -> đổi sang dạng hỏi từ
+            const q = buildQuizWordQuestion(item, state.indices[state.current], d);
+            primeQuizReveal(q.reveal || '');
+            document.getElementById('quiz-q').innerHTML = quizBadgeHtml('word') + `<div>${q.label}</div>`;
+            const cont = document.getElementById('quiz-opts');
+            shuffleArray([q.correct, ...q.wrongs]).forEach((opt, i) => {
+                const b = makeOptionBtn(opt, 'ABCD'[i] || '•');
+                b.onclick = function () { handleQuizAnswer(b, opt, q.correct); };
+                cont.appendChild(b);
+            });
+            return;
+        }
+        const p = pairs[Math.floor(Math.random() * pairs.length)];
+        // Bỏ dấu câu ở cuối để từ cuối cùng không bị lộ vị trí
+        const target = String(d === 'vi' ? p.vi : p.ko).trim().replace(/[.?!。？！]+$/, '');
+        let tokens = target.split(/\s+/).filter(Boolean);
+        // Câu tiếng Việt: viết thường chữ đầu để không lộ từ đứng đầu câu
+        if (d === 'vi' && tokens.length) tokens[0] = tokens[0].charAt(0).toLowerCase() + tokens[0].slice(1);
+        state._order = { tokens: tokens, pool: shuffleArray(tokens.slice()), placed: [], d: d, pair: p, item: item };
+        primeQuizReveal(`<b style="font-family:${QUIZ_KO_FONT}">${p.ko}</b><br>${p.vi}`);
+
+        document.getElementById('quiz-q').innerHTML = quizBadgeHtml('order')
+            + '<div>Sắp xếp các từ sau thành câu hoàn chỉnh:</div>'
+            + (d === 'vi' ? `<div class="cloze-sentence" style="font-family:${QUIZ_KO_FONT}; margin:10px 0 0;">${p.ko}</div>` : '');
+
+        const box = document.createElement('div');
+        box.style.cssText = 'display:flex; flex-direction:column; gap:12px; width:100%;';
+        box.innerHTML = `<div class="qorder-slot empty" id="qorder-slot"></div>
+            <div class="qorder-pool" id="qorder-pool"></div>
+            <div class="qorder-actions">
+                <button type="button" class="qorder-btn" id="qorder-hint-btn" onclick="toggleQuizOrderHint()">💡 Gợi ý</button>
+                <button type="button" class="qorder-btn" onclick="resetQuizOrder()">↺ Xoá hết</button>
+                <button type="button" class="qorder-btn primary" id="qorder-check" onclick="checkQuizOrder()" disabled>Kiểm tra</button>
+            </div>
+            <div class="qorder-hint" id="qorder-hint" style="display:none;"></div>`;
+        document.getElementById('quiz-opts').appendChild(box);
+        renderQuizOrderBoard();
+    }
+
+    function renderQuizOrderBoard() {
+        const o = tabState.quiz._order; if (!o) return;
+        const cls = o.d === 'vi' ? 'qorder-w vi' : 'qorder-w';
+        const slot = document.getElementById('qorder-slot');
+        const pool = document.getElementById('qorder-pool');
+        slot.classList.toggle('empty', o.placed.length === 0);
+        slot.innerHTML = o.placed.length === 0
+            ? 'Bấm các từ bên dưới để xếp thành câu...'
+            : o.placed.map((k, i) => `<button type="button" class="${cls} inslot" onclick="quizOrderUnplace(${i})">${o.pool[k]}</button>`).join('');
+        pool.innerHTML = o.pool.map((w, k) =>
+            `<button type="button" class="${cls}${o.placed.indexOf(k) >= 0 ? ' used' : ''}" onclick="quizOrderPlace(${k})">${w}</button>`).join('');
+        const chk = document.getElementById('qorder-check');
+        if (chk) chk.disabled = (o.placed.length !== o.tokens.length) || tabState.quiz.answered;
+    }
+
+    function quizOrderPlace(k) {
+        const o = tabState.quiz._order;
+        if (!o || tabState.quiz.answered || o.placed.indexOf(k) >= 0) return;
+        o.placed.push(k); renderQuizOrderBoard();
+    }
+    function quizOrderUnplace(pos) {
+        const o = tabState.quiz._order;
+        if (!o || tabState.quiz.answered) return;
+        o.placed.splice(pos, 1); renderQuizOrderBoard();
+    }
+    function resetQuizOrder() {
+        const o = tabState.quiz._order;
+        if (!o || tabState.quiz.answered) return;
+        o.placed = []; renderQuizOrderBoard();
+    }
+    // Bóng đèn: câu tiếng Việt hoàn chỉnh + từ vựng xuất hiện trong câu (kèm nghĩa)
+    function toggleQuizOrderHint() {
+        const o = tabState.quiz._order; if (!o) return;
+        const box = document.getElementById('qorder-hint'), btn = document.getElementById('qorder-hint-btn');
+        const on = box.style.display === 'none';
+        if (on) {
+            box.innerHTML = (o.d === 'vi' ? '' : `<div>Nghĩa của câu: <b>${o.pair.vi}</b></div>`)
+                + `<div style="margin-top:4px;">Từ vựng: <b style="font-family:${QUIZ_KO_FONT}">${o.item.ko}</b> — <b>${o.item.vi}</b></div>`;
+        }
+        box.style.display = on ? 'block' : 'none';
+        if (btn) btn.classList.toggle('is-on', on);
+    }
+    function checkQuizOrder() {
+        const state = tabState.quiz, o = state._order;
+        if (!o || state.answered || o.placed.length !== o.tokens.length) return;
+        const answer = o.placed.map(k => o.pool[k]).join(' ');
+        const ok = answer === o.tokens.join(' ');
+        if (!ok) recordWrongWord();
+        document.getElementById('qorder-check').disabled = true;
+        document.querySelectorAll('#qorder-slot .qorder-w, #qorder-pool .qorder-w').forEach(b => b.style.pointerEvents = 'none');
+        finishQuizQuestion(ok, ok ? '' : `Câu đúng: <b style="font-family:${QUIZ_KO_FONT}">${o.tokens.join(' ')}</b>`);
     }
 
     function handleQuizAnswer(selectedBtn, selectedOpt, correctOpt) {
@@ -3281,6 +3988,7 @@
             if (btn.dataset.opt === correctOpt) btn.classList.add('correct');
             else if (btn === selectedBtn) btn.classList.add('wrong');
         });
+        showQuizReveal();
         if(selectedOpt === correctOpt) { setQuizResultLine(true); markTabAnswered('quiz', true); }
         else { setQuizResultLine(false, correctOpt); recordWrongWord(); markTabAnswered('quiz', false); }
         document.getElementById('ctrl-next-btn').style.display = 'inline-block';
@@ -4752,6 +5460,7 @@
                 if(data.success) {
                     applyServerProgress(savedUser, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
                     setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
+                    setTeacherRole(data.isTeacher, savedUser);    // 👩‍🏫 quyền tải đề
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
                     await parseAndInitApp(data.allowedUnits);
                 } else if (data.disabled) {
@@ -4762,6 +5471,7 @@
             } catch(e) {
                 // Mất mạng: dùng lại danh sách unit đã lưu của chính tài khoản này (khoá riêng), có fallback khoá chung cũ.
                 loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
+                loadTeacherRole(sessionUser); // 👩‍🏫 khôi phục quyền tải đề đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
                               || localStorage.getItem('historyUnits_QuyenClass');
                 if(oldHistory) {
@@ -4908,6 +5618,7 @@
             wrong: st.wrong || 0
         };
         if (tab === 'typing') { sess.status = (st.status || []).slice(); sess.values = (st.values || []).slice(); }
+        if (tab === 'quiz' && Array.isArray(st.plan)) sess.plan = st.plan.slice();
         store[currentUnit][tab][mode] = sess;
         saveQuizStateStore(store);
         scheduleProgressPush();
@@ -4955,6 +5666,11 @@
                 st.values = st.indices.map(() => '');
             }
             if (forceFresh) clearQuizSession(tab, mode);
+        }
+        // Trắc nghiệm: kế hoạch dạng câu hỏi (rải tỉ lệ) đi kèm bộ chỉ số của vòng này
+        if (tab === 'quiz') {
+            const savedPlan = (sess && Array.isArray(sess.plan) && sess.plan.length === st.indices.length) ? sess.plan : null;
+            st.plan = savedPlan ? savedPlan.slice() : buildQuizPlan(st.indices, mode);
         }
         // Phiếu Viết từ mới/khôi phục dở -> cho phép popup "Hoàn thành" bật lại khi làm xong
         if (tab === 'typing') st.donePopupShown = false;
@@ -5778,6 +6494,7 @@
             sumTest.questions.push(buildCombinedQuestion(item, type, pool));
         });
         renderCombinedTest();
+        syncTeacherUI();
         document.getElementById('combined-test-overlay').classList.add('active');
     }
 
@@ -5797,9 +6514,56 @@
             return shuffleArray([answer, ...uniq.slice(0, 3)]);
         }
         if (type === 'quiz') {
-            // trộn 2 chiều dịch: Hàn (đáp án Hàn) / Việt (đáp án Việt) theo "Trả lời bằng"
+            // trộn 2 chiều dịch: Hàn (đáp án Hàn) / Việt (đáp án Việt) theo "Trả lời bằng",
+            // đồng thời trộn các dạng câu hỏi nâng cao (nghĩa cả câu / điền từ / đục lỗ Việt / chính tả).
             const lang = resolveSumLang();
-            if (lang === 'ko') { q.prompt = item.vi; q.promptLabel = 'Từ nào mang nghĩa trên?'; q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Trắc nghiệm · Hàn'; }
+            // Bốc dạng con theo trọng số, chỉ lấy dạng có đủ dữ liệu cho từ này
+            let cands = [{ t: 'word', w: 25 }];
+            if (quizSentencePairsOf(item).length) cands.push({ t: 'sent', w: 20 });
+            if (((lang === 'vi') ? quizViClozePairsOf(item) : quizClozePairsOf(item)).length) cands.push({ t: 'cloze', w: 20 });
+            if (lang === 'ko' && makeMisspellings(item.ko).length >= 3) cands.push({ t: 'spell', w: 10 });
+            if (pool.length >= 5) cands.push({ t: 'match', w: 12 });
+            if (quizOrderPairsOf(item, lang).length) cands.push({ t: 'order', w: 13 });
+            let rw = Math.random() * cands.reduce((a, c) => a + c.w, 0), sub = 'word';
+            for (const c of cands) { rw -= c.w; if (rw <= 0) { sub = c.t; break; } }
+
+            if (sub === 'match') {
+                const others = shuffleArray(pool.filter(w => w.ko !== item.ko)).slice(0, 4);
+                const picked = shuffleArray([item].concat(others));
+                q.sub = 'match';
+                q.pairs = picked.map(x => ({ ko: x.ko, vi: viShort(x.vi) }));
+                q.left = shuffleArray(q.pairs.map((_, k) => k));
+                q.right = shuffleArray(q.pairs.map((_, k) => k));
+                q.links = {}; q.sel = null;
+                q.badge = 'Ghép cặp';
+                q.answer = q.pairs.map(p => p.ko + ' = ' + p.vi).join(' · ');
+                return q;
+            }
+            if (sub === 'order') {
+                const prs = quizOrderPairsOf(item, lang);
+                const pr = prs[Math.floor(Math.random() * prs.length)];
+                let toks = String(lang === 'vi' ? pr.vi : pr.ko).trim().replace(/[.?!。？！]+$/, '').split(/\s+/).filter(Boolean);
+                if (lang === 'vi' && toks.length) toks[0] = toks[0].charAt(0).toLowerCase() + toks[0].slice(1);
+                q.sub = 'order'; q.dirLang = lang;
+                q.tokens = toks; q.wordPool = shuffleArray(toks.slice()); q.placed = [];
+                q.srcKo = pr.ko; q.srcVi = pr.vi;
+                q.answer = toks.join(' ');
+                q.badge = 'Sắp xếp câu · ' + (lang === 'ko' ? 'Hàn' : 'Việt');
+                return q;
+            }
+
+            let built = null;
+            if (sub === 'sent') built = buildQuizSentenceQuestion(item, lang);
+            else if (sub === 'cloze') built = (lang === 'vi') ? buildQuizViClozeQuestion(item) : buildQuizClozeQuestion(item);
+            else if (sub === 'spell') built = buildQuizSpellQuestion(item);
+            if (built) {
+                if (built.promptHtml) { q.prompt = built.promptHtml; q.promptLabel = built.label; }
+                else { q.prompt = built.label; q.promptLabel = 'Chọn đáp án đúng'; }
+                q.answer = built.correct;
+                q.options = shuffleArray([built.correct, ...built.wrongs]);
+                q.badge = (QUIZ_TYPE_BADGE[built.key] || 'Trắc nghiệm') + ' · ' + (lang === 'ko' ? 'Hàn' : 'Việt');
+            }
+            else if (lang === 'ko') { q.prompt = item.vi; q.promptLabel = 'Từ nào mang nghĩa trên?'; q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Trắc nghiệm · Hàn'; }
             else { q.prompt = item.ko; q.promptLabel = 'Nghĩa của từ trên là gì?'; q.answer = item.vi; q.options = optsFrom('vi', item.vi); q.badge = 'Trắc nghiệm · Việt'; }
         } else if (type === 'typing') {
             const lang = resolveSumLang();
@@ -5840,6 +6604,11 @@
                 } else {
                     inner += `<div class="ct-prompt-sub">Chọn từ bạn nghe được:</div>`;
                 }
+            } else if (q.sub === 'match') {
+                inner += `<div class="ct-prompt-sub">Bấm 1 từ tiếng Hàn rồi bấm nghĩa tương ứng để nối (bấm lại để gỡ). Bài chấm sau khi nộp.</div><div id="ct-body-${i}"></div>`;
+            } else if (q.sub === 'order') {
+                inner += `<div class="ct-prompt">${q.dirLang === 'vi' ? q.srcKo : q.srcVi}</div>`
+                    + `<div class="ct-prompt-sub">Bấm các từ theo thứ tự để tạo thành câu ${q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn'} hoàn chỉnh:</div><div id="ct-body-${i}"></div>`;
             } else if (q.type === 'visual') {
                 let ctFallback = `https://loremflickr.com/500/300/${encodeURIComponent((q.item.vi || 'word').split('/')[0])}/all?random=${i}`;
                 let src = (q.img && q.img.trim() !== '') ? q.img : ctFallback;
@@ -5847,7 +6616,9 @@
             } else {
                 inner += `<div class="ct-prompt">${q.prompt}</div><div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
             }
-            if (q.type === 'typing') {
+            if (q.sub === 'match' || q.sub === 'order') {
+                // nội dung đổ sau khi gắn thẻ vào DOM
+            } else if (q.type === 'typing') {
                 inner += `<input type="text" class="ct-input" id="ct-input-${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Nhập đáp án..." oninput="sumTest.questions[${i}].userAnswer=this.value; updateCtCounter();">`;
             } else {
                 inner += `<div class="ct-opts" id="ct-opts-${i}">`;
@@ -5857,8 +6628,85 @@
             inner += `<div class="ct-correct-hint" id="ct-hint-${i}" style="display:none;"></div>`;
             card.innerHTML = inner;
             wrap.appendChild(card);
+            if (q.sub === 'match') renderCtMatch(i);
+            else if (q.sub === 'order') renderCtOrder(i);
         });
         const sc = document.querySelector('.ct-scroll'); if (sc) sc.scrollTop = 0;
+    }
+
+    /* ---------- GHÉP CẶP trong đề dọc (không báo đúng/sai, chấm khi nộp) ---------- */
+    function renderCtMatch(i) {
+        const q = sumTest.questions[i];
+        const box = document.getElementById('ct-body-' + i);
+        if (!box) return;
+        const numOf = k => q.left.indexOf(k) + 1;
+        const graded = sumTest.graded;
+        const stateCls = k => {
+            if (!graded) return (q.links[k] != null ? ' linked' : '') + (q.sel === k ? ' sel' : '');
+            return q.links[k] === k ? ' correct' : ' wrong';
+        };
+        const leftHtml = q.left.map(k =>
+            `<button type="button" class="ct-mchip ko${stateCls(k)}" onclick="ctMatchPick(${i},'ko',${k})">`
+            + `<span class="ct-mnum">${numOf(k)}</span><span>${q.pairs[k].ko}</span></button>`).join('');
+        const rightHtml = q.right.map(k => {
+            const owner = Object.keys(q.links).find(kk => q.links[kk] === k);
+            let cls = '', num = '·';
+            if (owner != null) {
+                num = numOf(parseInt(owner));
+                cls = graded ? (parseInt(owner) === k ? ' correct' : ' wrong') : ' linked';
+            } else if (graded) cls = ' wrong';
+            return `<button type="button" class="ct-mchip${cls}" onclick="ctMatchPick(${i},'vi',${k})">`
+                + `<span class="ct-mnum">${num}</span><span>${q.pairs[k].vi}</span></button>`;
+        }).join('');
+        box.innerHTML = `<div class="ct-match"><div class="ct-mcol">${leftHtml}</div><div class="ct-mcol">${rightHtml}</div></div>`;
+    }
+
+    function ctMatchPick(i, side, k) {
+        if (!sumTest || sumTest.graded) return;
+        const q = sumTest.questions[i];
+        if (side === 'ko') {
+            if (q.links[k] != null) { delete q.links[k]; q.sel = null; }
+            else q.sel = (q.sel === k) ? null : k;
+        } else {
+            const owner = Object.keys(q.links).find(kk => q.links[kk] === k);
+            if (owner != null) delete q.links[owner];
+            if (q.sel != null) { q.links[q.sel] = k; q.sel = null; }
+        }
+        q.userAnswer = (Object.keys(q.links).length === q.pairs.length)
+            ? Object.keys(q.links).map(kk => kk + '-' + q.links[kk]).join(',') : null;
+        renderCtMatch(i); updateCtCounter();
+    }
+
+    /* ---------- SẮP XẾP CÂU trong đề dọc ---------- */
+    function renderCtOrder(i) {
+        const q = sumTest.questions[i];
+        const box = document.getElementById('ct-body-' + i);
+        if (!box) return;
+        const cls = (q.dirLang === 'vi' ? 'ct-ow vi' : 'ct-ow');
+        const slot = q.placed.length === 0
+            ? 'Bấm các từ bên dưới để xếp thành câu...'
+            : q.placed.map((k, pos) => `<button type="button" class="${cls} inslot" onclick="ctOrderUnplace(${i},${pos})">${q.wordPool[k]}</button>`).join('');
+        const pool = q.wordPool.map((w, k) =>
+            `<button type="button" class="${cls}${q.placed.indexOf(k) >= 0 ? ' used' : ''}" onclick="ctOrderPlace(${i},${k})">${w}</button>`).join('');
+        let slotCls = 'ct-oslot';
+        if (sumTest.graded) slotCls += (q.placed.map(x => q.wordPool[x]).join(' ') === q.tokens.join(' ')) ? ' correct' : ' wrong';
+        box.innerHTML = `<div class="${slotCls}">${slot}</div><div class="ct-opool">${pool}</div>`;
+        if (sumTest.graded) box.querySelectorAll('.ct-ow').forEach(b => b.style.pointerEvents = 'none');
+    }
+    function ctOrderPlace(i, k) {
+        if (!sumTest || sumTest.graded) return;
+        const q = sumTest.questions[i];
+        if (q.placed.indexOf(k) >= 0) return;
+        q.placed.push(k);
+        q.userAnswer = (q.placed.length === q.tokens.length) ? q.placed.map(x => q.wordPool[x]).join(' ') : null;
+        renderCtOrder(i); updateCtCounter();
+    }
+    function ctOrderUnplace(i, pos) {
+        if (!sumTest || sumTest.graded) return;
+        const q = sumTest.questions[i];
+        q.placed.splice(pos, 1);
+        q.userAnswer = null;
+        renderCtOrder(i); updateCtCounter();
     }
 
     function selectCombinedOption(i, btn) {
@@ -5882,9 +6730,15 @@
         sumTest.graded = true;
         let correct = 0;
         sumTest.questions.forEach((q, i) => {
-            let ok = (q.type === 'typing') ? isTypingAnswerCorrect(q.userAnswer || '', q.item, q.dir) : (q.userAnswer === q.answer);
+            let ok;
+            if (q.type === 'typing') ok = isTypingAnswerCorrect(q.userAnswer || '', q.item, q.dir);
+            else if (q.sub === 'match') ok = q.pairs.every((_, k) => q.links[k] === k);
+            else if (q.sub === 'order') ok = (q.placed.map(x => q.wordPool[x]).join(' ') === q.tokens.join(' '));
+            else ok = (q.userAnswer === q.answer);
             q.correct = ok; if (ok) correct++;
-            if (q.type === 'typing') {
+            if (q.sub === 'match') { renderCtMatch(i); }
+            else if (q.sub === 'order') { renderCtOrder(i); }
+            else if (q.type === 'typing') {
                 const inp = document.getElementById('ct-input-' + i);
                 if (inp) { inp.classList.add(ok ? 'correct' : 'wrong'); inp.disabled = true; }
             } else {
@@ -5921,6 +6775,190 @@
             saveWrongWords();
         }
     }
+    /* ============================================================
+       📄 TẢI ĐỀ KIỂM TRA TỔNG HỢP RA PDF / WORD — chỉ tài khoản giáo viên
+       • Bỏ các câu NGHE (không làm được trên giấy) rồi ĐÁNH SỐ LẠI từ 1.
+       • ĐÁP ÁN nằm ở TRANG CUỐI riêng -> gửi học sinh thì xoá trang cuối.
+       ============================================================ */
+
+    // Bộ font của đề: Nunito Sans lo tiếng Việt, Noto Serif KR lo chữ Hàn
+    // (Nunito Sans không có chữ Hàn nên trình duyệt tự rơi xuống font kế tiếp cho từng chữ)
+    const EXAM_FONT = "'Nunito Sans','Noto Serif KR','Apple SD Gothic Neo','Malgun Gothic',sans-serif";
+    const EXAM_FONT_LINK = '<link rel="preconnect" href="https://fonts.googleapis.com">'
+        + '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
+        + 'family=Nunito+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Serif+KR:wght@400;500;700&display=swap">';
+
+    function examEsc(x) {
+        return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+    function examAbsUrl(u) { try { return new URL(u, location.href).href; } catch (e) { return u; } }
+
+    // Lọc bỏ câu Nghe + hỏi ý giáo viên trước khi tải
+    function collectExamQuestions() {
+        if (!sumTest || !sumTest.questions || !sumTest.questions.length) { alert('Chưa có đề nào để tải nhé!'); return null; }
+        const keep = sumTest.questions.filter(q => q.type !== 'listen' && q.type !== 'guess');
+        if (!keep.length) {
+            alert('Đề này toàn câu Nghe nên không in ra giấy được.\nHãy bỏ chọn 2 dạng "Nghe & chọn từ" / "Nghe & tìm nghĩa" khi tạo đề nhé!');
+            return null;
+        }
+        const dropped = sumTest.questions.length - keep.length;
+        if (dropped > 0 && !confirm('Đề có ' + dropped + ' câu Nghe — không làm được trên giấy nên sẽ bị bỏ khỏi bản in '
+            + '(các câu còn lại được đánh số lại từ 1).\n\nTải ' + keep.length + ' câu còn lại chứ?')) return null;
+        return keep;
+    }
+
+    function examBadgeOf(q) {
+        if (q.type === 'typing') return q.badge || 'Viết từ';
+        if (q.type === 'visual') return 'Nhìn hình chọn từ';
+        return q.badge || 'Trắc nghiệm';
+    }
+
+    // Trả về { body: html đề, answer: chuỗi đáp án } cho 1 câu
+    function examQuestionParts(q) {
+        const L = 'ABCDE';
+        // Ghép cặp: 2 cột, học sinh ghi chữ cái vào chỗ trống
+        if (q.sub === 'match') {
+            const rows = q.left.map((k, i) =>
+                '<tr><td class="e-ml">' + (i + 1) + '. ' + examEsc(q.pairs[k].ko) + '</td>'
+                + '<td class="e-mb">&hellip;&hellip;&hellip;</td>'
+                + '<td class="e-mr">' + L[i] + '. ' + examEsc(q.pairs[q.right[i]].vi) + '</td></tr>').join('');
+            return {
+                body: '<div class="eq-sub">Nối từ tiếng Hàn với nghĩa tiếng Việt (ghi chữ cái vào chỗ trống):</div>'
+                    + '<table class="e-match">' + rows + '</table>',
+                answer: q.left.map((k, i) => (i + 1) + '–' + L[q.right.indexOf(k)]).join(', ')
+            };
+        }
+        // Sắp xếp câu: cho sẵn các từ + dòng kẻ để viết lại
+        if (q.sub === 'order') {
+            return {
+                body: '<div class="eq-stem">' + examEsc(q.dirLang === 'vi' ? q.srcKo : q.srcVi) + '</div>'
+                    + '<div class="eq-sub">Sắp xếp các từ sau thành câu ' + (q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn') + ' hoàn chỉnh:</div>'
+                    + '<div class="e-words">' + q.wordPool.map(w => '<span class="e-w">' + examEsc(w) + '</span>').join('') + '</div>'
+                    + '<div class="e-line">&rarr; ..........................................................................</div>',
+                answer: q.tokens.join(' ')
+            };
+        }
+        // Viết từ: dòng kẻ trống
+        if (q.type === 'typing') {
+            return {
+                body: '<div class="eq-stem">' + examEsc(q.prompt) + '</div>'
+                    + '<div class="eq-sub">Viết đáp án:</div>'
+                    + '<div class="e-line">&rarr; ..........................................................................</div>',
+                answer: q.answer
+            };
+        }
+        // Còn lại đều là trắc nghiệm ABCD (kèm hình nếu là dạng nhìn hình)
+        let head = '';
+        if (q.type === 'visual') {
+            head = (q.img && q.img.trim() !== '')
+                ? '<div class="e-img"><img src="' + examAbsUrl(q.img) + '" alt=""></div><div class="eq-sub">Nhìn hình và chọn từ đúng:</div>'
+                : '<div class="eq-sub">(Thiếu hình minh hoạ) Chọn đáp án đúng:</div>';
+        } else {
+            head = (q.prompt ? '<div class="eq-stem">' + q.prompt + '</div>' : '')
+                 + '<div class="eq-sub">' + examEsc(q.promptLabel || 'Chọn đáp án đúng:') + '</div>';
+        }
+        const opts = '<ol class="e-opts">' + (q.options || []).map((o, i) =>
+            '<li><b>' + L[i] + '.</b> ' + examEsc(o) + '</li>').join('') + '</ol>';
+        const pos = (q.options || []).indexOf(q.answer);
+        return { body: head + opts, answer: (pos >= 0 ? L[pos] + '. ' : '') + q.answer };
+    }
+
+    function buildExamHtml(list, forWord) {
+        const units = (sumTest.units || []).join(', ');
+        const today = new Date().toLocaleDateString('vi-VN');
+        let qHtml = '', aHtml = '';
+        list.forEach((q, i) => {
+            const p = examQuestionParts(q);
+            qHtml += '<div class="eq"><div class="eq-no">Câu ' + (i + 1) + '.'
+                  + '<span class="eq-badge">' + examEsc(examBadgeOf(q)) + '</span></div>'
+                  + p.body + '</div>';
+            aHtml += '<div class="ea"><b>Câu ' + (i + 1) + ':</b> ' + examEsc(p.answer) + '</div>';
+        });
+
+        const css = ''
+            + '@page { size: A4; margin: 1.8cm 1.6cm; }'
+            + 'body { font-family: ' + EXAM_FONT + '; font-size: 13pt; color:#000; line-height:1.5; }'
+            + '.e-head { text-align:center; margin-bottom:14pt; }'
+            + '.e-title { font-size:16pt; font-weight:bold; text-transform:uppercase; }'
+            + '.e-sub { font-size:11pt; margin-top:3pt; }'
+            + '.e-info { margin:12pt 0 14pt; font-size:12pt; border-top:1px solid #000; border-bottom:1px solid #000; padding:7pt 0; }'
+            + '.eq { margin-bottom:13pt; page-break-inside:avoid; }'
+            + '.eq-no { font-weight:bold; margin-bottom:3pt; }'
+            + '.eq-badge { font-size:9pt; font-weight:normal; font-style:italic; color:#555; margin-left:8pt; }'
+            + '.eq-stem { font-size:14pt; margin:3pt 0; font-family:' + EXAM_FONT + ' !important; }'
+            + '.eq-sub { font-size:11pt; font-style:italic; color:#333; margin-bottom:4pt; }'
+            + '.e-opts { list-style:none; margin:0; padding:0; }'
+            + '.e-opts li { display:inline-block; width:48%; vertical-align:top; padding:2pt 0; }'
+            + '.e-line { margin-top:5pt; letter-spacing:1px; }'
+            + '.e-words span.e-w { display:inline-block; border:1px solid #666; border-radius:4pt; padding:2pt 8pt; margin:2pt 4pt 2pt 0; font-weight:500; }'
+            + '.e-match { width:100%; border-collapse:collapse; }'
+            + '.e-match td { padding:3pt 4pt; vertical-align:top; }'
+            + '.e-ml { width:38%; } .e-mb { width:12%; text-align:center; } .e-mr { width:50%; }'
+            + '.e-img { text-align:center; margin:5pt 0; } .e-img img { max-width:8cm; max-height:5cm; }'
+            + '.e-pagebreak { page-break-before:always; }'
+            + '.e-akey { margin-top:6pt; }'
+            + '.ea { display:inline-block; width:48%; vertical-align:top; padding:2pt 0; font-size:12pt; }'
+            + '.e-note { font-size:10.5pt; font-style:italic; color:#a00; margin-bottom:8pt; }'
+            // Ép mọi đoạn lấy từ web dùng font của đề (không dùng font Chiron của web)
+            + '.cloze-sentence, .cloze-vi, .ko-emph, .cloze-blank { font-family:' + EXAM_FONT + ' !important; }'
+            + '.cloze-sentence { font-size:14pt; margin:3pt 0; text-align:left; }'
+            + '.cloze-vi { font-size:11pt; font-style:italic; color:#333; }'
+            + '.cloze-blank { font-weight:bold; letter-spacing:1px; }'
+            + '.ko-emph { font-weight:bold; font-size:15pt; }';
+
+        const bodyHtml = ''
+            + '<div class="e-head"><div class="e-title">Bài kiểm tra từ vựng — Tiếng Hàn tổng hợp 2</div>'
+            + '<div class="e-sub">Unit ' + examEsc(units) + ' &nbsp;·&nbsp; ' + list.length + ' câu</div></div>'
+            + '<div class="e-info">Họ và tên: ................................................ &nbsp;&nbsp; Lớp: ................. '
+            + '&nbsp;&nbsp; Ngày: ' + today + ' &nbsp;&nbsp; Điểm: ............</div>'
+            + qHtml
+            + '<div class="e-pagebreak"></div>'
+            + '<div class="e-head"><div class="e-title">Đáp án</div></div>'
+            + '<div class="e-note">⚠️ Trang này dành cho giáo viên — hãy XOÁ TRANG CUỐI trước khi gửi cho học sinh.</div>'
+            + '<div class="e-akey">' + aHtml + '</div>';
+
+        if (forWord) {
+            // Word không tải được font trên mạng -> muốn đúng font thì cài sẵn Nunito Sans + Noto Serif KR trong máy
+            return '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+                + '<head><meta charset="utf-8"><title>Bài kiểm tra THTH2</title>'
+                + '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->'
+                + EXAM_FONT_LINK + '<style>' + css + '</style></head><body>' + bodyHtml + '</body></html>';
+        }
+        // Bản in: chờ font Google tải xong mới bật hộp thoại in (tối đa 3 giây)
+        return '<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Bài kiểm tra THTH2</title>'
+            + EXAM_FONT_LINK + '<style>' + css + '</style></head><body>' + bodyHtml
+            + '<scr' + 'ipt>(function(){var done=false;function go(){if(done)return;done=true;setTimeout(function(){window.print();},250);}'
+            + 'if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go);}setTimeout(go,3000);})();</scr' + 'ipt>'
+            + '</body></html>';
+    }
+
+    // Mở cửa sổ in (chọn "Lưu thành PDF" trong hộp thoại in)
+    function printCombinedExam() {
+        const list = collectExamQuestions();
+        if (!list) return;
+        const w = window.open('', '_blank');
+        if (!w) { alert('Trình duyệt đang chặn cửa sổ bật lên. Hãy cho phép pop-up rồi bấm lại nhé!'); return; }
+        w.document.open();
+        w.document.write(buildExamHtml(list, false));
+        w.document.close();
+        w.focus();
+    }
+
+    // Tải file .doc (mở bằng Word / Google Docs để chỉnh sửa)
+    function downloadCombinedExamDoc() {
+        const list = collectExamQuestions();
+        if (!list) return;
+        const html = buildExamHtml(list, true);
+        const blob = new Blob(['﻿', html], { type: 'application/msword' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'De_kiem_tra_THTH2_Unit_' + (sumTest.units || []).join('-') + '.doc';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    }
+
     function closeCombinedTest() {
         document.getElementById('combined-test-overlay').classList.remove('active');
         sumTest = null;
