@@ -271,6 +271,12 @@
         .qm-pill.active .qm-t, .qm-pill.active:hover .qm-t { color: #fff; }
         .qm-pill.active .qm-lvl { color: #e3ddff; }
         .qm-pill.qm-hard.active { background: #7a3cff; }
+        /* Tích "Khó" — 90% câu hỏi rơi vào các dạng nâng cao */
+        .qm-hard-toggle { display:inline-flex; align-items:center; gap:7px; border:none; background:var(--card-color); box-shadow:var(--neu-convex); color:var(--sub-text); font-family:inherit; font-size:12.5px; font-weight:800; padding:7px 14px; border-radius:999px; cursor:pointer; outline:none; transition:all .18s; white-space:nowrap; }
+        .qm-hard-toggle:hover { color:#2d3748; }
+        .qm-hard-box { width:16px; height:16px; border-radius:5px; background:var(--bg-color); box-shadow:var(--neu-concave); color:transparent; font-size:11px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+        .qm-hard-toggle.on { background:#2d3748; color:#fff; box-shadow:0 3px 8px rgba(45,55,72,.28); }
+        .qm-hard-toggle.on .qm-hard-box { background:#fff; color:#2d3748; box-shadow:none; }
 
         /* Dạng chính tả: đáp án tiếng Hàn to hơn để nhìn rõ khác biệt từng chữ */
         .option-btn.opt-ko-big .opt-text { font-family:"Chiron Sung HK","Chiron GoRound TC",serif; font-size:19px; font-weight:700; letter-spacing:.5px; }
@@ -415,11 +421,19 @@
         .sum-setting-label { font-size:12px; font-weight:800; color:#1a202c; margin-bottom:8px; display:flex; align-items:center; gap:6px; }
         .sum-chips-row { display:flex; flex-wrap:wrap; gap:8px; }
         .sum-num-input { width:100px; padding:10px 12px; border:1px solid #cbd5e0; border-radius:var(--radius-sm); font-size:14px; outline:none; font-family:inherit; box-shadow:var(--neu-concave); background:var(--card-color); }
-        .sum-radio-row, .sum-type-row { display:flex; flex-wrap:wrap; gap:8px; }
-        .sum-toggle { padding:9px 16px; border-radius:var(--radius-sm); border:1.5px solid #e2e8f0; background:#ffffff; color:var(--sub-text); font-size:12px; font-weight:700; cursor:pointer; box-shadow:var(--neu-convex); outline:none; transition:all .15s; }
+        .sum-radio-row, .sum-type-row { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+        .sum-toggle { display:inline-flex; align-items:center; gap:9px; padding:9px 16px; border-radius:var(--radius-sm); border:1.5px solid #e2e8f0; background:#ffffff; color:var(--sub-text); font-size:12px; font-weight:700; cursor:pointer; box-shadow:var(--neu-convex); outline:none; transition:all .15s; }
+        /* Ô tích "Khó" gắn LIỀN trong nút Trắc nghiệm — chỉ hiện khi nút đang được chọn */
+        .sum-hardbit { display:none; align-items:center; gap:5px; margin:-3px -9px -3px 0; padding:4px 10px; border-radius:999px; background:rgba(255,255,255,.16); font-size:11px; font-weight:800; letter-spacing:.2px; transition:all .15s; }
+        .sum-toggle.sel .sum-hardbit { display:inline-flex; }
+        .sum-hardbit:hover { background:rgba(255,255,255,.3); }
+        .sum-hardbit-box { width:13px; height:13px; border-radius:4px; background:rgba(255,255,255,.3); color:transparent; font-size:9px; font-weight:900; display:inline-flex; align-items:center; justify-content:center; line-height:1; }
+        .sum-hardbit.on { background:#ffffff; color:#2d3748; }
+        .sum-hardbit.on .sum-hardbit-box { background:#2d3748; color:#fff; }
         .sum-toggle:hover { border-color: rgba(97,76,255,0.4); color: var(--point-color); }
         /* Nút ĐÃ CHỌN: tô tím đậm + dấu check để phân biệt rõ với nút chưa chọn */
         .sum-toggle.sel { background:#2d3748; color:#fff; border-color:transparent; box-shadow:0 2px 6px rgba(45,55,72,0.25); }
+
 
         /* ===== OVERLAY BÀI KIỂM TRA TỔNG HỢP ===== */
         #combined-test-overlay { display:none; position:fixed; inset:0; z-index:1200; background:var(--bg-color); }
@@ -987,6 +1001,8 @@
             .quiz-mode-pills { padding: 4px; gap: 4px; }
             .qm-pill { padding: 5px 11px; }
             .qm-pill .qm-t { font-size: 12px; }
+            .qm-hard-toggle { padding: 6px 11px; font-size: 12px; gap: 5px; }
+            .qm-hard-box { width: 14px; height: 14px; font-size: 10px; }
             .quiz-subtab-btn { font-size: 12px !important; }
 
             /* Viết câu: nút "Câu tiếp" full chiều ngang cho dễ chạm */
@@ -2096,7 +2112,7 @@
             'wrongWords_' + key, 'unitQuiz_' + key, 'unitSecs_' + key,
             'completed_units_' + key, 'today_secs_' + key, 'total_secs_' + key,
             'study_date_' + key, 'starred_' + key + '_QuyenClass', 'notes_' + key + '_QuyenClass',
-            'quizState_' + key, 'writeSentenceState_' + key
+            'quizState_' + key, 'writeSentenceState_' + key, 'quizHard_' + key
         ];
     }
     function snapshotProgress(sess) {
@@ -2241,6 +2257,7 @@
     let currentUnit = null;
     let currentTab = "lecture";
     let summaryActive = false;   // đang ở chế độ "Tổng hợp" (ôn trộn nhiều Unit)
+    let sumHardQuiz = false;     // đề Tổng hợp: phần Trắc nghiệm ở mức KHÓ (90% dạng nâng cao)
     let isTeacherAccount = false; // 👩‍🏫 tài khoản có cột G (Role) = GV/TEACHER/ADMIN trong sheet Students
     let summaryKind = 'vocab';   // 'vocab' | 'grammar' — Tổng hợp thuộc phân hệ nào
     
@@ -2930,6 +2947,7 @@
         tabState.listen.mode = 'word';
         tabState.guess.mode = 'word';
         tabState.quiz.replyLang = 'mix';
+        tabState.quiz.hard = loadQuizHardPref();
         tabState.quiz.plan = buildQuizPlan(tabState.quiz.indices, 'mix');
         syncQuizModeToggles();
     }
@@ -3538,6 +3556,27 @@
         return '_';
     }
 
+    // Lựa chọn "Khó" của tab Trắc nghiệm — nhớ theo tài khoản, dùng chung mọi Unit
+    function quizHardKey() { return 'quizHard_' + getStudentKey(); }
+    function loadQuizHardPref() { try { return localStorage.getItem(quizHardKey()) === '1'; } catch (e) { return false; } }
+    function saveQuizHardPref(flag) {
+        try { flag ? localStorage.setItem(quizHardKey(), '1') : localStorage.removeItem(quizHardKey()); } catch (e) {}
+        if (typeof scheduleProgressPush === 'function') scheduleProgressPush();
+    }
+    // Bật/tắt độ khó: GIỮ nguyên các câu đã làm, chỉ đổi dạng cho những câu còn lại
+    function toggleQuizHard() {
+        const st = tabState.quiz;
+        st.hard = !st.hard;
+        saveQuizHardPref(st.hard);
+        if (st.indices && st.indices.length) {
+            const fresh = buildQuizPlan(st.indices, st.replyLang || 'mix', st.hard);
+            if (!st.plan || st.plan.length !== st.indices.length) st.plan = fresh;
+            else for (let i = st.current || 0; i < st.plan.length; i++) st.plan[i] = fresh[i];
+        }
+        renderQuizModeSelect('quiz');
+        if (currentTab === 'quiz') { generateQuizQuestion(); saveQuizSession('quiz'); }
+    }
+
     // Đồng bộ trạng thái thanh chọn dạng về mặc định (gọi khi đổi Unit)
     function syncQuizModeToggles() { renderQuizModeSelect(currentTab); }
 
@@ -3557,6 +3596,22 @@
             const lvl = o[2] ? `<span class="qm-lvl">${o[2]}</span>` : '';
             return `<button type="button" class="qm-pill${hard}${active}" onclick="selectQuizMode('${tab}','${o[0]}')"><span class="qm-t">${o[1]}</span>${lvl}</button>`;
         }).join('');
+        // Tích "Khó" chỉ có ở tab Trắc nghiệm
+        let hardBtn = document.getElementById('quiz-hard-toggle');
+        if (tab === 'quiz') {
+            if (!hardBtn) {
+                hardBtn = document.createElement('button');
+                hardBtn.type = 'button';
+                hardBtn.id = 'quiz-hard-toggle';
+                hardBtn.className = 'qm-hard-toggle';
+                hardBtn.title = 'Bật: 90% câu hỏi là dạng nâng cao (nghĩa cả câu, điền từ, ghép cặp, sắp xếp câu, chính tả)';
+                hardBtn.innerHTML = '<span class="qm-hard-box">✓</span>Khó';
+                hardBtn.onclick = toggleQuizHard;
+                wrap.appendChild(hardBtn);
+            }
+            hardBtn.style.display = 'inline-flex';
+            hardBtn.classList.toggle('on', !!tabState.quiz.hard);
+        } else if (hardBtn) hardBtn.style.display = 'none';
         wrap.style.display = 'inline-flex';
     }
 
@@ -3597,6 +3652,8 @@
 
     // Tỉ lệ xuất hiện của từng dạng (tổng 100)
     const QUIZ_TYPE_WEIGHTS = { word: 25, sent: 20, cloze: 20, order: 13, match: 12, spell: 10 };
+    // Chế độ KHÓ: chỉ còn 10% câu hỏi từ đơn, 90% là các dạng nâng cao
+    const QUIZ_TYPE_WEIGHTS_HARD = { word: 10, sent: 24, cloze: 24, order: 16, match: 14, spell: 12 };
     // Dạng nào hỗ trợ chiều trả lời nào
     const QUIZ_TYPE_LANGS = {
         word:  ['vi', 'ko'],
@@ -3628,15 +3685,17 @@
 
     // Lên "kế hoạch" dạng câu hỏi cho cả vòng: rải đúng tỉ lệ rồi xáo ngẫu nhiên,
     // từ nào thiếu dữ liệu cho dạng đó thì tự đổi sang dạng khác làm được.
-    function buildQuizPlan(indices, lang) {
+    function buildQuizPlan(indices, lang, hard) {
         const N = (indices || []).length;
         if (!N) return [];
-        const types = Object.keys(QUIZ_TYPE_WEIGHTS)
+        const isHard = (hard == null) ? !!(tabState.quiz && tabState.quiz.hard) : !!hard;
+        const W = isHard ? QUIZ_TYPE_WEIGHTS_HARD : QUIZ_TYPE_WEIGHTS;
+        const types = Object.keys(W)
             .filter(t => lang === 'mix' || QUIZ_TYPE_LANGS[t].indexOf(lang) >= 0);
-        const totalW = types.reduce((a, t) => a + QUIZ_TYPE_WEIGHTS[t], 0);
+        const totalW = types.reduce((a, t) => a + W[t], 0);
         // Chia suất theo tỉ lệ, phần lẻ ưu tiên dạng có phần dư lớn nhất -> tổng luôn = N
         let quota = types.map(t => {
-            const exact = N * QUIZ_TYPE_WEIGHTS[t] / totalW;
+            const exact = N * W[t] / totalW;
             return { t: t, n: Math.floor(exact), frac: exact - Math.floor(exact) };
         });
         // Phần lẻ bốc ngẫu nhiên theo đúng phần dư -> nhiều vòng chơi thì tỉ lệ về đúng thiết kế
@@ -6426,7 +6485,7 @@
           <div class="sum-setting-block">
              <div class="sum-setting-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:1em;height:1em;vertical-align:-0.14em;"><rect x="4" y="4" width="16" height="16" rx="3"/><circle cx="9" cy="9" r="1.1" fill="currentColor"/><circle cx="15" cy="15" r="1.1" fill="currentColor"/><circle cx="12" cy="12" r="1.1" fill="currentColor"/></svg> Dạng quiz</div>
              <div class="sum-type-row" id="sum-type-row">
-                <button class="sum-toggle" data-type="quiz" onclick="toggleSumType('quiz')">Trắc nghiệm</button>
+                <button class="sum-toggle" data-type="quiz" onclick="toggleSumType('quiz')">Trắc nghiệm<span class="sum-hardbit" id="sum-hard-toggle" onclick="toggleSumHard(event)" title="Bật mức KHÓ: 90% câu Trắc nghiệm là dạng nâng cao (nghĩa cả câu, điền từ, ghép cặp, sắp xếp câu, chính tả)"><span class="sum-hardbit-box">✓</span>Khó</span></button>
                 <button class="sum-toggle" data-type="typing" onclick="toggleSumType('typing')">Viết từ</button>
                 <button class="sum-toggle" data-type="listen" onclick="toggleSumType('listen')">Nghe &amp; chọn từ</button>
                 <button class="sum-toggle" data-type="guess" onclick="toggleSumType('guess')">Nghe &amp; tìm nghĩa</button>
@@ -6464,6 +6523,12 @@
         if (lb) lb.classList.toggle('sel', sumAnswerLang === 'both');
         document.querySelectorAll('#sum-type-row [data-type]').forEach(b => b.classList.toggle('sel', sumTypes.has(b.dataset.type)));
         const allT = document.getElementById('sum-type-all'); if (allT) allT.classList.toggle('sel', sumTypes.size === 5);
+        // Ô tích "Khó" nằm trong nút Trắc nghiệm (CSS tự ẩn khi nút chưa được chọn)
+        const hardT = document.getElementById('sum-hard-toggle');
+        if (hardT) {
+            if (!sumTypes.has('quiz')) sumHardQuiz = false;
+            hardT.classList.toggle('on', sumHardQuiz);
+        }
         refreshSumMax();
     }
     function refreshSumMax() {
@@ -6473,6 +6538,12 @@
         const inp = document.getElementById('sum-num-q'); if (inp) { inp.max = n; if (parseInt(inp.value) > n) inp.value = n; }
     }
     function setSumLang(l) { sumAnswerLang = l; syncSummaryChips(); }
+    // Mức KHÓ cho phần Trắc nghiệm của đề Tổng hợp
+    function toggleSumHard(e) {
+        if (e) e.stopPropagation();          // bấm ô tích thì đừng bỏ chọn luôn nút Trắc nghiệm
+        sumHardQuiz = !sumHardQuiz;
+        syncSummaryChips();
+    }
     function toggleSumType(t) { if (sumTypes.has(t)) sumTypes.delete(t); else sumTypes.add(t); syncSummaryChips(); }
     function toggleSumAllTypes() { sumTypes = (sumTypes.size === 5) ? new Set() : new Set(['quiz','typing','listen','guess','visual']); syncSummaryChips(); }
 
@@ -6566,13 +6637,15 @@
             // trộn 2 chiều dịch: Hàn (đáp án Hàn) / Việt (đáp án Việt) theo "Trả lời bằng",
             // đồng thời trộn các dạng câu hỏi nâng cao (nghĩa cả câu / điền từ / đục lỗ Việt / chính tả).
             const lang = resolveSumLang();
-            // Bốc dạng con theo trọng số, chỉ lấy dạng có đủ dữ liệu cho từ này
-            let cands = [{ t: 'word', w: 25 }];
-            if (quizSentencePairsOf(item).length) cands.push({ t: 'sent', w: 20 });
-            if (((lang === 'vi') ? quizViClozePairsOf(item) : quizClozePairsOf(item)).length) cands.push({ t: 'cloze', w: 20 });
-            if (lang === 'ko' && makeMisspellings(item.ko).length >= 3) cands.push({ t: 'spell', w: 10 });
-            if (pool.length >= 5) cands.push({ t: 'match', w: 12 });
-            if (quizOrderPairsOf(item, lang).length) cands.push({ t: 'order', w: 13 });
+            // Bốc dạng con theo trọng số (mức KHÓ -> chỉ 10% là câu hỏi từ đơn),
+            // chỉ lấy dạng có đủ dữ liệu cho từ này
+            const CW = sumHardQuiz ? QUIZ_TYPE_WEIGHTS_HARD : QUIZ_TYPE_WEIGHTS;
+            let cands = [{ t: 'word', w: CW.word }];
+            if (quizSentencePairsOf(item).length) cands.push({ t: 'sent', w: CW.sent });
+            if (((lang === 'vi') ? quizViClozePairsOf(item) : quizClozePairsOf(item)).length) cands.push({ t: 'cloze', w: CW.cloze });
+            if (lang === 'ko' && makeMisspellings(item.ko).length >= 3) cands.push({ t: 'spell', w: CW.spell });
+            if (pool.length >= 5) cands.push({ t: 'match', w: CW.match });
+            if (quizOrderPairsOf(item, lang).length) cands.push({ t: 'order', w: CW.order });
             let rw = Math.random() * cands.reduce((a, c) => a + c.w, 0), sub = 'word';
             for (const c of cands) { rw -= c.w; if (rw <= 0) { sub = c.t; break; } }
 
