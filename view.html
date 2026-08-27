@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ngọc Quyên Classroom — Bài giảng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #f0f4f8;
+      --card-color: #ffffff;
+      --text-color: #2d3748;
+      --sub-text: #718096;
+      --point-color: #614CFF;
+      --neu-convex: 6px 6px 12px #d1d9e6, -6px -6px 12px #ffffff;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Chiron GoRound TC", -apple-system, BlinkMacSystemFont, sans-serif; }
+    html, body { height: 100%; }
+    body {
+      background: var(--bg-color);
+      color: var(--text-color);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      -webkit-user-select: none; user-select: none;
+    }
+
+    /* ---------- HEADER ---------- */
+    .view-header {
+      flex: 0 0 auto;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 12px 20px;
+      padding-top: calc(12px + env(safe-area-inset-top));
+      background: var(--bg-color);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .brand-dot {
+      width: 30px; height: 30px; flex: 0 0 auto; border-radius: 50%;
+      background: var(--card-color); box-shadow: var(--neu-convex);
+      display: flex; align-items: center; justify-content: center; font-size: 15px;
+    }
+    .brand-title { font-weight: 800; font-size: 15px; letter-spacing: .3px; color: var(--point-color); white-space: nowrap; }
+    .class-info {
+      font-size: 12.5px; font-weight: 700; color: var(--sub-text);
+      background: var(--card-color); box-shadow: var(--neu-convex);
+      padding: 7px 14px; border-radius: 999px;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55vw;
+    }
+    .class-info:empty { display: none; }
+
+    /* ---------- VIEWER ---------- */
+    .viewer-container {
+      flex: 1 1 auto; min-height: 0;
+      padding: 4px 16px 16px;
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+      display: flex; align-items: center; justify-content: center;
+    }
+    .slide-card {
+      width: 100%; height: 100%; max-width: 1280px;
+      border-radius: var(--radius-lg);
+      background: var(--card-color);
+      box-shadow: var(--neu-convex);
+      overflow: hidden; position: relative;
+    }
+    .slide-card iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    /* Lớp phủ trong suốt chặn chuột phải / kéo thả tải file trên slide */
+    .slide-guard { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+
+    /* ---------- SKELETON ---------- */
+    .skeleton {
+      position: absolute; inset: 0; z-index: 3;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+      background: var(--card-color);
+      transition: opacity .35s ease;
+    }
+    .skeleton.hide { opacity: 0; pointer-events: none; }
+    .spinner {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 3px solid #e2e8f0; border-top-color: var(--point-color);
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .skeleton p { font-size: 13.5px; font-weight: 700; color: var(--sub-text); }
+
+    /* ---------- NOTICE ---------- */
+    .notice-box {
+      text-align: center; padding: 40px 32px; max-width: 440px; width: 100%;
+      border-radius: var(--radius-lg);
+      background: var(--card-color); box-shadow: var(--neu-convex);
+    }
+    .notice-icon { font-size: 40px; line-height: 1; margin-bottom: 14px; }
+    .notice-box h2 { font-size: 19px; font-weight: 800; color: var(--point-color); margin-bottom: 10px; }
+    .notice-box p { font-size: 14px; font-weight: 500; color: var(--sub-text); line-height: 1.65; }
+
+    @media (max-width: 640px) {
+      .view-header { padding: 10px 14px; padding-top: calc(10px + env(safe-area-inset-top)); }
+      .brand-title { font-size: 13.5px; }
+      .class-info { font-size: 11.5px; padding: 6px 11px; }
+      .viewer-container { padding: 2px 10px 10px; padding-bottom: calc(10px + env(safe-area-inset-bottom)); }
+      .slide-card { border-radius: var(--radius-md); }
+    }
+  </style>
+</head>
+<body>
+  <header class="view-header">
+    <div class="brand">
+      <span class="brand-dot">🌸</span>
+      <span class="brand-title">NGỌC QUYÊN CLASSROOM</span>
+    </div>
+    <span class="class-info" id="classInfo"></span>
+  </header>
+
+  <main class="viewer-container" id="mainContainer">
+    <div class="notice-box">
+      <div class="spinner" style="margin: 0 auto 14px;"></div>
+      <p>Đang tải bài giảng...</p>
+    </div>
+  </main>
+
+  <script>
+    // ⚠️ Dùng CHUNG backend với web chính (index.html). Nếu deploy lại Apps Script
+    //    thì đổi cả 2 nơi cho khớp.
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKepdyG-ORWiL_qHy8VDArBIbGyIeNZapGfj6g-p566IuFnUTS1qZDQmEZsU8PLQqQ/exec";
+
+    const MESSAGES = {
+      NO_ID:      { icon: "🔎", title: "Thiếu mã bài giảng", text: "Đường dẫn chưa có mã bài giảng.<br>Bạn hãy mở lại đúng link cô Quyên đã gửi nhé!" },
+      NOT_FOUND:  { icon: "🔒", title: "Không tìm thấy bài giảng", text: "Liên kết này không tồn tại hoặc đã bị gỡ bỏ.<br>Vui lòng liên hệ cô Quyên để nhận link mới nhé!" },
+      EXPIRED:    { icon: "⏳", title: "Liên kết đã hết hạn", text: "Thời hạn xem lại bài giảng này đã kết thúc.<br>Vui lòng liên hệ cô Quyên để được hỗ trợ nhé!" },
+      NO_LECTURE: { icon: "📭", title: "Chưa có bài giảng", text: "Bài giảng cho unit này chưa được cập nhật.<br>Bạn quay lại sau ít phút nhé!" },
+      ERROR:      { icon: "📡", title: "Không kết nối được", text: "Có lỗi khi tải dữ liệu bài giảng.<br>Bạn kiểm tra mạng rồi thử tải lại trang nhé!" }
+    };
+
+    function showNotice(key) {
+      const m = MESSAGES[key] || MESSAGES.ERROR;
+      document.getElementById('mainContainer').innerHTML =
+        '<div class="notice-box">' +
+          '<div class="notice-icon">' + m.icon + '</div>' +
+          '<h2>' + m.title + '</h2>' +
+          '<p>' + m.text + '</p>' +
+        '</div>';
+    }
+
+    function renderSlide(link, label) {
+      const info = document.getElementById('classInfo');
+      if (label) info.textContent = label;
+
+      const container = document.getElementById('mainContainer');
+      container.innerHTML =
+        '<div class="slide-card">' +
+          '<div class="skeleton" id="skeleton"><div class="spinner"></div><p>Đang mở slide bài giảng...</p></div>' +
+          '<iframe id="slideFrame" allowfullscreen="allowfullscreen" allow="fullscreen"' +
+          ' referrerpolicy="no-referrer" loading="eager"></iframe>' +
+          '<div class="slide-guard"></div>' +
+        '</div>';
+
+      const frame = document.getElementById('slideFrame');
+      frame.addEventListener('load', function () {
+        const sk = document.getElementById('skeleton');
+        if (sk) { sk.classList.add('hide'); setTimeout(function () { sk.remove(); }, 400); }
+      });
+      frame.src = link;   // gán src SAU khi đã gắn listener để không lỡ sự kiện load
+    }
+
+    async function initViewer() {
+      const shareId = new URLSearchParams(window.location.search).get('id');
+      if (!shareId || !shareId.trim()) { showNotice('NO_ID'); return; }
+
+      try {
+        const res  = await fetch(SCRIPT_URL + "?action=publicShare&id=" + encodeURIComponent(shareId.trim()));
+        const data = await res.json();
+
+        if (!data || data.success === false) { showNotice('ERROR'); return; }
+
+        if (data.state === 'OK') {
+          renderSlide(data.lectureLink, data.classNote || ("Unit " + data.unit));
+          return;
+        }
+        showNotice(data.state);      // NOT_FOUND | EXPIRED | NO_LECTURE
+      } catch (err) {
+        showNotice('ERROR');
+      }
+    }
+
+    // Hạn chế thao tác tải/sao chép slide (chỉ để xem)
+    document.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    document.addEventListener('dragstart',  function (e) { e.preventDefault(); });
+
+    window.addEventListener('DOMContentLoaded', initViewer);
+  </script>
+</body>
+</html>
