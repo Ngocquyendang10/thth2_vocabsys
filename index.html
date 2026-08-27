@@ -435,14 +435,32 @@
         .ct-card { background:#fff; border-radius:var(--radius-md); box-shadow:var(--neu-card-shadow); border:1px solid rgba(255,255,255,0.8); padding:22px 24px; margin-bottom:20px; }
         .ct-card-head { display:flex; align-items:center; justify-content:space-between; font-size:11px; font-weight:800; color:var(--sub-text); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:12px; }
         .ct-type-badge { background:var(--point-light); color:var(--point-color); padding:3px 10px; border-radius:10px; }
-        .ct-prompt { font-size:22px; font-weight:800; color:#1a202c; margin-bottom:6px; }
-        .ct-prompt-sub { font-size:12px; color:var(--sub-text); margin-bottom:14px; }
+        .ct-prompt { font-size:24px; font-weight:800; color:#1a202c; margin-bottom:8px; line-height:1.48; }
+        .ct-prompt.ct-quoted { position:relative; display:block; width:fit-content; max-width:100%; margin:2px auto 10px; padding:10px 34px; border-left:4px solid var(--point-color); border-radius:8px; background:rgba(97,76,255,.055); font-size:25px; text-align:center; }
+        /* Ngoặc kép đứng cố định hai phía, không tham gia xuống dòng cùng nội dung */
+        .ct-prompt.ct-quoted::before { content:'“'; position:absolute; left:14px; top:8px; color:var(--point-color); line-height:1; }
+        .ct-prompt.ct-quoted::after { content:'”'; position:absolute; right:14px; bottom:5px; color:var(--point-color); line-height:1; }
+        .ct-prompt.ct-long { font-size:20px; width:100%; }
+        /* Câu Hàn và bản dịch Việt là hai khối riêng — không bao giờ ghép chung một dòng */
+        .ct-prompt.ct-bilingual { display:flex; width:100%; flex-direction:column; align-items:stretch; gap:9px; margin:2px 0 12px; padding:0; border:0; background:transparent; }
+        .ct-prompt.ct-bilingual::before, .ct-prompt.ct-bilingual::after { content:none; }
+        .ct-prompt.ct-bilingual .cloze-sentence { display:block; width:100%; margin:0; padding:8px 14px; border-left:4px solid var(--point-color); border-radius:8px; background:rgba(97,76,255,.055); font-size:20px; font-weight:800; line-height:1.5; }
+        .ct-prompt.ct-bilingual .cloze-sentence::before { content:'“'; color:var(--point-color); }
+        .ct-prompt.ct-bilingual .cloze-sentence::after { content:'”'; color:var(--point-color); }
+        .ct-prompt.ct-bilingual .cloze-vi { display:block; width:100%; margin:0; padding:7px 14px; border-radius:8px; background:#f8fafc; color:#64748b; font-size:15px; font-weight:700; font-style:italic; text-align:left; line-height:1.5; }
+        /* Chính tả là câu chỉ dẫn bình thường — chỉ nghĩa mục tiêu được tô màu */
+        .ct-spell-prompt { margin:4px 0 12px; color:#1a202c; font-size:23px; font-weight:800; line-height:1.5; }
+        .ct-spell-target { color:var(--point-color); font-weight:900; }
+        .ct-prompt-sub { font-size:14px; font-weight:650; color:#64748b; margin-bottom:16px; line-height:1.45; }
         .ct-opts { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-        .ct-opt { padding:14px 16px; text-align:left; background:var(--card-color); border:1.5px solid rgba(226,232,240,0.9); border-radius:var(--radius-sm); font-size:15px; font-weight:600; color:var(--text-color); cursor:pointer; outline:none; transition:all .15s; }
+        .ct-opt { padding:15px 17px; text-align:left; background:var(--card-color); border:1.5px solid rgba(226,232,240,0.9); border-radius:var(--radius-sm); font-size:17px; font-weight:650; line-height:1.5; color:var(--text-color); cursor:pointer; outline:none; transition:all .15s; }
         .ct-opt:hover { border-color:var(--point-color); }
         .ct-opt.sel { border-color:var(--point-color); background:var(--point-light); color:var(--point-color); font-weight:800; }
         .ct-opt.correct { background:#e6fffa; border-color:var(--success-color); color:#234e52; font-weight:800; }
         .ct-opt.wrong { background:#fff5f5; border-color:var(--error-color); color:#742a2a; font-weight:800; }
+        .ct-dialogue { display:inline-flex; flex-direction:column; gap:5px; vertical-align:top; }
+        .ct-dline { display:grid; grid-template-columns:28px minmax(0,1fr); align-items:start; }
+        .ct-speaker { font-weight:900; color:var(--point-color); }
         .ct-input { width:100%; padding:14px 16px; border:1.5px solid #cbd5e0; border-radius:var(--radius-sm); font-size:16px; outline:none; font-family:inherit; box-shadow:var(--neu-concave); background:#fff; }
         .ct-input.correct { border-color:var(--success-color); background:#f0fff4; }
         .ct-input.wrong { border-color:var(--error-color); background:#fff5f5; }
@@ -477,7 +495,7 @@
         @media (max-width:600px){ .ct-export-btn { font-size:11px; padding:7px 10px; margin-left:5px; } }
 
         .ct-result-banner { background:#fff; border-radius:var(--radius-lg); box-shadow:var(--neu-card-shadow); padding:24px; margin-bottom:22px; text-align:center; border-top:5px solid var(--point-color); }
-        @media (max-width:600px){ .ct-opts { grid-template-columns:1fr; } .ct-prompt { font-size:19px; } .ct-inner { padding:16px 12px; } }
+        @media (max-width:600px){ .ct-opts { grid-template-columns:1fr; } .ct-prompt, .ct-prompt.ct-quoted, .ct-prompt.ct-long { font-size:19px; } .ct-spell-prompt { font-size:19px; } .ct-prompt.ct-bilingual .cloze-sentence { font-size:18px; } .ct-prompt.ct-bilingual .cloze-vi { font-size:13px; } .ct-prompt-sub { font-size:12px; } .ct-opt { font-size:15px; padding:14px 16px; } .ct-inner { padding:16px 12px; } }
 
         .widget-right-profile { background: #ffffff; border-radius: var(--radius-lg); box-shadow: var(--neu-card-shadow); padding: 24px 16px; display: flex; flex-direction: column; gap: 20px; border: 1px solid rgba(255,255,255,0.7); height: 100%; position: relative; }
         .profile-card-box { display: flex; flex-direction: row; align-items: center; gap: 10px; text-align: left; padding-bottom: 9px; padding-left: 22px; border-bottom: 1px solid #edf2f7; }
@@ -6557,6 +6575,7 @@
             else if (sub === 'cloze') built = (lang === 'vi') ? buildQuizViClozeQuestion(item) : buildQuizClozeQuestion(item);
             else if (sub === 'spell') built = buildQuizSpellQuestion(item);
             if (built) {
+                q.quizKind = built.key;
                 if (built.promptHtml) { q.prompt = built.promptHtml; q.promptLabel = built.label; }
                 else { q.prompt = built.label; q.promptLabel = 'Chọn đáp án đúng'; }
                 q.answer = built.correct;
@@ -6585,6 +6604,30 @@
         return q;
     }
 
+    function ctPromptClass(raw) {
+        const html = String(raw || '');
+        if (html.indexOf('cloze-vi') >= 0) return 'ct-prompt ct-bilingual';
+        const plain = html.replace(/<[^>]*>/g, '').trim();
+        return 'ct-prompt ct-quoted' + (plain.length >= 34 ? ' ct-long' : '');
+    }
+
+    // Hội thoại trong đáp án trên WEB: A và B luôn là hai dòng riêng, thẳng cột.
+    function ctFormatOption(raw) {
+        const text = String(raw == null ? '' : raw).trim();
+        const m = text.match(/^A:\s*([\s\S]*?)\s+B:\s*([\s\S]*)$/);
+        if (!m) return examEsc(text);
+        return '<span class="ct-dialogue">'
+            + '<span class="ct-dline"><b class="ct-speaker">A:</b><span>' + examEsc(m[1]) + '</span></span>'
+            + '<span class="ct-dline"><b class="ct-speaker">B:</b><span>' + examEsc(m[2]) + '</span></span>'
+            + '</span>';
+    }
+
+    function ctFormatSpellPrompt(raw) {
+        const safe = examEsc(String(raw || ''));
+        return safe.replace(/&quot;([^&]+)&quot;|“([^”]+)”|"([^"]+)"/, (all, a, b, c) =>
+            '<span class="ct-spell-target">“' + (a || b || c || '') + '”</span>');
+    }
+
     function renderCombinedTest() {
         const wrap = document.getElementById('ct-questions'); wrap.innerHTML = '';
         document.getElementById('ct-result-banner').style.display = 'none';
@@ -6597,7 +6640,7 @@
             if (q.type === 'listen' || q.type === 'guess') {
                 inner += `<button class="ct-audio-btn" onclick="triggerKoreanVoice('${q.audio.replace(/'/g,"\\'")}',false)"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Nghe</button>`;
                 if (q.type === 'listen' && q.sub === 'sentence') {
-                    inner += `<div class="ct-prompt" style="font-size:17px;">${q.cloze}</div>`;
+                inner += `<div class="${ctPromptClass(q.cloze)}">${q.cloze}</div>`;
                     inner += `<div class="ct-prompt-sub">Nghe câu và chọn từ điền vào chỗ trống:</div>`;
                 } else if (q.type === 'guess') {
                     inner += `<div class="ct-prompt-sub">${q.sub === 'sentence' ? 'Cụm từ bạn nghe được mang nghĩa gì?' : 'Từ bạn nghe được mang nghĩa gì?'}</div>`;
@@ -6607,14 +6650,20 @@
             } else if (q.sub === 'match') {
                 inner += `<div class="ct-prompt-sub">Bấm 1 từ tiếng Hàn rồi bấm nghĩa tương ứng để nối (bấm lại để gỡ). Bài chấm sau khi nộp.</div><div id="ct-body-${i}"></div>`;
             } else if (q.sub === 'order') {
-                inner += `<div class="ct-prompt">${q.dirLang === 'vi' ? q.srcKo : q.srcVi}</div>`
+                const orderPrompt = q.dirLang === 'vi' ? q.srcKo : q.srcVi;
+                inner += `<div class="${ctPromptClass(orderPrompt)}">${orderPrompt}</div>`
                     + `<div class="ct-prompt-sub">Bấm các từ theo thứ tự để tạo thành câu ${q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn'} hoàn chỉnh:</div><div id="ct-body-${i}"></div>`;
             } else if (q.type === 'visual') {
                 let ctFallback = `https://loremflickr.com/500/300/${encodeURIComponent((q.item.vi || 'word').split('/')[0])}/all?random=${i}`;
                 let src = (q.img && q.img.trim() !== '') ? q.img : ctFallback;
                 inner += `<div class="ct-img-frame"><img src="${src}" alt="Hình minh họa" onerror="this.onerror=null;this.src='${ctFallback}';"></div><div class="ct-prompt-sub">Nhìn hình và chọn từ đúng:</div>`;
             } else {
-                inner += `<div class="ct-prompt">${q.prompt}</div><div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
+                if (q.quizKind === 'spell') {
+                    inner += `<div class="ct-spell-prompt">${ctFormatSpellPrompt(q.prompt)}</div>`;
+                } else {
+                    inner += `<div class="${ctPromptClass(q.prompt)}">${q.prompt}</div>`;
+                }
+                inner += `<div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
             }
             if (q.sub === 'match' || q.sub === 'order') {
                 // nội dung đổ sau khi gắn thẻ vào DOM
@@ -6622,7 +6671,7 @@
                 inner += `<input type="text" class="ct-input" id="ct-input-${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Nhập đáp án..." oninput="sumTest.questions[${i}].userAnswer=this.value; updateCtCounter();">`;
             } else {
                 inner += `<div class="ct-opts" id="ct-opts-${i}">`;
-                q.options.forEach(opt => { inner += `<button class="ct-opt" onclick="selectCombinedOption(${i}, this)">${opt}</button>`; });
+                q.options.forEach(opt => { inner += `<button class="ct-opt" onclick="selectCombinedOption(${i}, this)">${ctFormatOption(opt)}</button>`; });
                 inner += `</div>`;
             }
             inner += `<div class="ct-correct-hint" id="ct-hint-${i}" style="display:none;"></div>`;
@@ -6792,6 +6841,16 @@
     function examEsc(x) {
         return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
+    // Hội thoại trong đáp án phải tách A/B thành 2 dòng và treo dòng B ngang với chữ A.
+    function examFormatOption(x) {
+        const raw = String(x == null ? '' : x).trim();
+        const m = raw.match(/^A:\s*([\s\S]*?)\s+B:\s*([\s\S]*)$/);
+        if (!m) return examEsc(raw);
+        return '<span class="e-dialogue">'
+            + '<span class="e-dline"><b class="e-speaker">A:</b><span>' + examEsc(m[1]) + '</span></span>'
+            + '<span class="e-dline"><b class="e-speaker">B:</b><span>' + examEsc(m[2]) + '</span></span>'
+            + '</span>';
+    }
     function examAbsUrl(u) { try { return new URL(u, location.href).href; } catch (e) { return u; } }
 
     // Lọc bỏ câu Nghe + hỏi ý giáo viên trước khi tải
@@ -6832,9 +6891,10 @@
         // Sắp xếp câu: cho sẵn các từ + dòng kẻ để viết lại
         if (q.sub === 'order') {
             return {
-                body: '<div class="eq-stem">' + examEsc(q.dirLang === 'vi' ? q.srcKo : q.srcVi) + '</div>'
+                body: '<div class="eq-stem"><b>“' + examEsc(q.dirLang === 'vi' ? q.srcKo : q.srcVi) + '”</b></div>'
                     + '<div class="eq-sub">Sắp xếp các từ sau thành câu ' + (q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn') + ' hoàn chỉnh:</div>'
-                    + '<div class="e-words">' + q.wordPool.map(w => '<span class="e-w">' + examEsc(w) + '</span>').join('') + '</div>'
+                    // Có khoảng trắng thật giữa các từ vì Word thường bỏ qua margin của span.
+                    + '<div class="e-words">' + q.wordPool.map(w => '<span class="e-w">' + examEsc(w) + '</span>').join('&nbsp;&nbsp;') + '</div>'
                     + '<div class="e-line">&rarr; ..........................................................................</div>',
                 answer: q.tokens.join(' ')
             };
@@ -6842,7 +6902,7 @@
         // Viết từ: dòng kẻ trống
         if (q.type === 'typing') {
             return {
-                body: '<div class="eq-stem">' + examEsc(q.prompt) + '</div>'
+                body: '<div class="eq-stem"><b>“' + examEsc(q.prompt) + '”</b></div>'
                     + '<div class="eq-sub">Viết đáp án:</div>'
                     + '<div class="e-line">&rarr; ..........................................................................</div>',
                 answer: q.answer
@@ -6851,15 +6911,27 @@
         // Còn lại đều là trắc nghiệm ABCD (kèm hình nếu là dạng nhìn hình)
         let head = '';
         if (q.type === 'visual') {
-            head = (q.img && q.img.trim() !== '')
-                ? '<div class="e-img"><img src="' + examAbsUrl(q.img) + '" alt=""></div><div class="eq-sub">Nhìn hình và chọn từ đúng:</div>'
-                : '<div class="eq-sub">(Thiếu hình minh hoạ) Chọn đáp án đúng:</div>';
+            const imgSrc = q._wordImgSrc != null ? q._wordImgSrc : examAbsUrl(q.img || '');
+            head = (q.img && q.img.trim() !== '' && imgSrc)
+                // Tất cả ảnh bài học là 1:1: khóa cứng 6 × 6 cm. Word thường bỏ qua height:auto.
+                ? '<table class="e-img-table" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center">'
+                    + '<img src="' + imgSrc + '" width="227" height="227" style="width:6cm;height:6cm;" alt="">'
+                    + '</td></tr></table><div class="eq-sub">Nhìn hình và chọn từ đúng:</div>'
+                : (q.img && q.img.trim() !== ''
+                    ? '<div class="eq-sub">(Không thể đóng gói hình minh hoạ vào file Word) Chọn đáp án đúng:</div>'
+                    : '<div class="eq-sub">(Thiếu hình minh hoạ) Chọn đáp án đúng:</div>');
         } else {
-            head = (q.prompt ? '<div class="eq-stem">' + q.prompt + '</div>' : '')
+            const bilingual = String(q.prompt || '').indexOf('cloze-vi') >= 0;
+            head = (q.prompt ? (bilingual
+                    ? '<div class="eq-bilingual">' + q.prompt + '</div>'
+                    : '<div class="eq-stem"><b>“' + q.prompt + '”</b></div>') : '')
                  + '<div class="eq-sub">' + examEsc(q.promptLabel || 'Chọn đáp án đúng:') + '</div>';
         }
-        const opts = '<ol class="e-opts">' + (q.options || []).map((o, i) =>
-            '<li><b>' + L[i] + '.</b> ' + examEsc(o) + '</li>').join('') + '</ol>';
+        // Không dùng <ol>/<li>: Microsoft Word tự thêm 1,2,3,4 dù CSS đã tắt list-style.
+        const opts = '<div class="e-opts">' + (q.options || []).map((o, i) => {
+            const dialogue = /^\s*A:\s*[\s\S]*?\s+B:\s*[\s\S]*$/.test(String(o || ''));
+            return '<div class="e-opt' + (dialogue ? ' e-dialogue-opt' : '') + '"><b>' + L[i] + '.</b> ' + examFormatOption(o) + '</div>';
+        }).join('') + '</div>';
         const pos = (q.options || []).indexOf(q.answer);
         return { body: head + opts, answer: (pos >= 0 ? L[pos] + '. ' : '') + q.answer };
     }
@@ -6870,8 +6942,7 @@
         let qHtml = '', aHtml = '';
         list.forEach((q, i) => {
             const p = examQuestionParts(q);
-            qHtml += '<div class="eq"><div class="eq-no">Câu ' + (i + 1) + '.'
-                  + '<span class="eq-badge">' + examEsc(examBadgeOf(q)) + '</span></div>'
+            qHtml += '<div class="eq"><div class="eq-no">Câu ' + (i + 1) + '.</div>'
                   + p.body + '</div>';
             aHtml += '<div class="ea"><b>Câu ' + (i + 1) + ':</b> ' + examEsc(p.answer) + '</div>';
         });
@@ -6885,17 +6956,26 @@
             + '.e-info { margin:12pt 0 14pt; font-size:12pt; border-top:1px solid #000; border-bottom:1px solid #000; padding:7pt 0; }'
             + '.eq { margin-bottom:13pt; page-break-inside:avoid; }'
             + '.eq-no { font-weight:bold; margin-bottom:3pt; }'
-            + '.eq-badge { font-size:9pt; font-weight:normal; font-style:italic; color:#555; margin-left:8pt; }'
-            + '.eq-stem { font-size:14pt; margin:3pt 0; font-family:' + EXAM_FONT + ' !important; }'
-            + '.eq-sub { font-size:11pt; font-style:italic; color:#333; margin-bottom:4pt; }'
-            + '.e-opts { list-style:none; margin:0; padding:0; }'
-            + '.e-opts li { display:inline-block; width:48%; vertical-align:top; padding:2pt 0; }'
+            + '.eq-stem { font-size:14pt; margin:4pt 0 5pt; line-height:1.45; font-family:' + EXAM_FONT + ' !important; }'
+            + '.eq-stem .cloze-sentence { display:inline; }'
+            + '.eq-bilingual { margin:4pt 0 6pt; }'
+            + '.eq-bilingual .cloze-sentence { display:block; margin:0 0 3pt; font-size:14pt; font-weight:bold; }'
+            + '.eq-bilingual .cloze-vi { display:block; margin:0; font-size:11pt; font-style:italic; color:#555; }'
+            + '.eq-sub { font-size:11pt; font-style:italic; font-weight:600; color:#555; margin-bottom:5pt; }'
+            + '.e-opts { margin:0; padding:0; }'
+            + '.e-opt { display:inline-block; width:48%; vertical-align:top; padding:3pt 0; line-height:1.45; }'
+            + '.e-opt.e-dialogue-opt { display:block; width:100%; }'
+            + '.e-dialogue { display:inline-block; vertical-align:top; }'
+            + '.e-dline { display:block; padding-left:20pt; text-indent:-20pt; }'
+            + '.e-speaker { display:inline-block; width:20pt; text-indent:0; }'
             + '.e-line { margin-top:5pt; letter-spacing:1px; }'
             + '.e-words span.e-w { display:inline-block; border:1px solid #666; border-radius:4pt; padding:2pt 8pt; margin:2pt 4pt 2pt 0; font-weight:500; }'
             + '.e-match { width:100%; border-collapse:collapse; }'
             + '.e-match td { padding:3pt 4pt; vertical-align:top; }'
             + '.e-ml { width:38%; } .e-mb { width:12%; text-align:center; } .e-mr { width:50%; }'
-            + '.e-img { text-align:center; margin:5pt 0; } .e-img img { max-width:8cm; max-height:5cm; }'
+            + '.e-img-table { width:100%; margin:5pt auto 7pt; border-collapse:collapse; }'
+            + '.e-img-table td { width:100%; text-align:center; vertical-align:middle; }'
+            + '.e-img-table img { width:6cm !important; height:6cm !important; }'
             + '.e-pagebreak { page-break-before:always; }'
             + '.e-akey { margin-top:6pt; }'
             + '.ea { display:inline-block; width:48%; vertical-align:top; padding:2pt 0; font-size:12pt; }'
@@ -6945,12 +7025,154 @@
         w.focus();
     }
 
+    // Chuyển byte sang Base64 theo từng khúc để không tràn call stack với ảnh lớn.
+    function examBytesToBase64(bytes) {
+        let out = '';
+        const step = 0x8000;
+        for (let i = 0; i < bytes.length; i += step) {
+            out += String.fromCharCode.apply(null, bytes.subarray(i, Math.min(i + step, bytes.length)));
+        }
+        return btoa(out);
+    }
+    function examWrapBase64(s) { return String(s || '').match(/.{1,76}/g)?.join('\r\n') || ''; }
+
+    // Fallback cho lúc index.html được mở trực tiếp bằng file://: một số trình duyệt chặn fetch()
+    // nhưng vẫn cho tải ảnh local qua thẻ Image rồi chuyển ảnh sang PNG bằng canvas.
+    function examImageToBlob(url) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => {
+                try {
+                    const maxSide = 900;
+                    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth || 1, img.naturalHeight || 1));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+                    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+                    canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+                    canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error('Không chuyển được ảnh sang PNG')), 'image/png', .92);
+                } catch (e) { reject(e); }
+            };
+            img.onerror = () => reject(new Error('Không đọc được ảnh local'));
+            img.src = url;
+        });
+    }
+
+    let wordImagePackPromise = null;
+    function ensureWordImagePack() {
+        if (window.THTH2_WORD_IMAGES) return Promise.resolve(true);
+        if (wordImagePackPromise) return wordImagePackPromise;
+        // Chỉ tải gói 2.5 MB này lúc giáo viên bấm Word — học sinh dùng web không bị nặng thêm.
+        wordImagePackPromise = new Promise(resolve => {
+            const script = document.createElement('script');
+            script.src = 'assets/word_images.js';
+            script.onload = () => resolve(!!window.THTH2_WORD_IMAGES);
+            script.onerror = () => resolve(false);
+            document.head.appendChild(script);
+        });
+        return wordImagePackPromise;
+    }
+
+    function normalizeWordImageKey(raw) {
+        let s = String(raw || '').trim().replace(/\\/g, '/').split(/[?#]/)[0];
+        try { s = decodeURIComponent(s); } catch (e) {}
+        s = s.normalize('NFC').toLowerCase().replace(/^\.\//, '');
+        const at = s.lastIndexOf('assets/');
+        if (at >= 0) s = s.slice(at);
+        if (s && !/\.[a-z0-9]+$/i.test(s)) s += '.png';
+        return s;
+    }
+
+    function findPackedWordImage(raw) {
+        const pack = window.THTH2_WORD_IMAGES || {};
+        const wanted = normalizeWordImageKey(raw);
+        if (pack[wanted]) return pack[wanted];
+        const wantedFile = wanted.split('/').pop();
+        const wantedStem = String(wantedFile || '').replace(/\.[^.]+$/, '');
+        for (const originalKey of Object.keys(pack)) {
+            const normalized = normalizeWordImageKey(originalKey);
+            const file = normalized.split('/').pop();
+            const stem = String(file || '').replace(/\.[^.]+$/, '');
+            if (file === wantedFile || stem === wantedStem) return pack[originalKey];
+        }
+        return null;
+    }
+
+    // Tải từng ảnh từ assets rồi đóng gói vào chính file Word (MHTML multipart).
+    // Nếu chỉ để src="assets/...", Word sẽ mất ảnh ngay khi file rời khỏi website.
+    async function prepareWordImages(list) {
+        await ensureWordImagePack();
+        const attachments = [];
+        const visuals = list.filter(q => q.type === 'visual' && q.img && q.img.trim() !== '');
+        await Promise.all(visuals.map(async (q, i) => {
+            try {
+                const packed = findPackedWordImage(q.img);
+                const cid = 'exam-image-' + (i + 1) + '@thth2';
+                // Ưu tiên kho ảnh đã đóng gói sẵn: hoạt động chắc chắn cả khi mở bằng file://.
+                if (packed) {
+                    const comma = packed.indexOf(',');
+                    const mimeMatch = packed.slice(0, comma).match(/^data:([^;]+)/);
+                    q._wordImgSrc = 'cid:' + cid;
+                    attachments.push({
+                        cid: cid,
+                        name: 'exam-image-' + (i + 1) + '.jpg',
+                        mime: mimeMatch ? mimeMatch[1] : 'image/jpeg',
+                        base64: packed.slice(comma + 1)
+                    });
+                    return;
+                }
+                const imageUrl = examAbsUrl(q.img);
+                let blob;
+                try {
+                    const res = await fetch(imageUrl, { cache: 'force-cache' });
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    blob = await res.blob();
+                } catch (fetchError) {
+                    blob = await examImageToBlob(imageUrl);
+                }
+                const mime = blob.type || 'image/png';
+                const ext = mime.indexOf('jpeg') >= 0 ? 'jpg' : (mime.indexOf('webp') >= 0 ? 'webp' : 'png');
+                const bytes = new Uint8Array(await blob.arrayBuffer());
+                q._wordImgSrc = 'cid:' + cid;
+                attachments.push({ cid: cid, name: 'exam-image-' + (i + 1) + '.' + ext, mime: mime, base64: examBytesToBase64(bytes) });
+            } catch (e) {
+                q._wordImgSrc = '';
+                console.warn('Không thể đóng gói ảnh vào Word:', q.img, e);
+            }
+        }));
+        return attachments;
+    }
+
+    function buildWordMhtml(html, attachments) {
+        const boundary = '----=_NextPart_THTH2_' + Date.now();
+        const html64 = examBytesToBase64(new TextEncoder().encode(html));
+        let out = 'MIME-Version: 1.0\r\n'
+            + 'Content-Type: multipart/related; type="text/html"; boundary="' + boundary + '"\r\n\r\n'
+            + '--' + boundary + '\r\n'
+            + 'Content-Type: text/html; charset="utf-8"\r\n'
+            + 'Content-Transfer-Encoding: base64\r\n'
+            + 'Content-Location: exam.htm\r\n\r\n'
+            + examWrapBase64(html64) + '\r\n';
+        attachments.forEach(att => {
+            out += '--' + boundary + '\r\n'
+                + 'Content-Type: ' + att.mime + '\r\n'
+                + 'Content-Transfer-Encoding: base64\r\n'
+                + 'Content-Location: ' + att.name + '\r\n'
+                + 'Content-ID: <' + att.cid + '>\r\n\r\n'
+                + examWrapBase64(att.base64) + '\r\n';
+        });
+        return out + '--' + boundary + '--\r\n';
+    }
+
     // Tải file .doc (mở bằng Word / Google Docs để chỉnh sửa)
-    function downloadCombinedExamDoc() {
+    async function downloadCombinedExamDoc() {
         const list = collectExamQuestions();
         if (!list) return;
+        const attachments = await prepareWordImages(list);
         const html = buildExamHtml(list, true);
-        const blob = new Blob(['﻿', html], { type: 'application/msword' });
+        const mhtml = buildWordMhtml(html, attachments);
+        // Dọn thuộc tính tạm để lần In/PDF sau vẫn dùng URL ảnh bình thường.
+        list.forEach(q => { if (q._wordImgSrc != null) delete q._wordImgSrc; });
+        const blob = new Blob([mhtml], { type: 'application/msword' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
         a.download = 'De_kiem_tra_THTH2_Unit_' + (sumTest.units || []).join('-') + '.doc';
