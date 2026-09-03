@@ -122,9 +122,12 @@
   .tbadge.none{background:#eef1f7; color:#94a3b8;}
   .tfrac{font-size:10.5px; font-weight:800; margin-left:auto;}
   .tfrac.done{color:var(--ok);} .tfrac.doing{color:var(--warn);} .tfrac.none{color:#b6bdca;}
-  .mchips{display:flex; gap:6px; margin-top:6px;}
-  .mchip{flex:1 1 0; min-width:0; text-align:center; font-size:9px; font-weight:700; color:var(--sub); background:var(--card); box-shadow:var(--neu-concave); border-radius:7px; padding:4px 6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .mchip.done{color:var(--ok);}
+  .mchips{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
+  .mchip{flex:1 1 0; min-width:0; display:flex; align-items:center; gap:5px; background:var(--card); box-shadow:var(--neu-concave); border-radius:8px; padding:4px 7px;}
+  .mchip .lbl{font-size:9px; font-weight:800; color:var(--sub); white-space:nowrap; flex:0 0 auto;}
+  .mchip .bar{flex:1; min-width:14px; height:6px; border-radius:999px; background:#e3e7ef; overflow:hidden; box-shadow:inset 0 1px 2px rgba(163,177,198,.4);}
+  .mchip .bar>i{display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,#c6ccda,#8b95a9);}
+  .mchip.done .bar>i{background:linear-gradient(90deg,#aab2c2,#6f7a90);}
   .ucard.locked{display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:10px; border:2px dashed #d7dbe6; box-shadow:none; background:transparent; color:var(--sub); min-height:150px;}
   .ucard.locked .lk{width:44px; height:44px; border-radius:50%; background:#eceff5; display:flex; align-items:center; justify-content:center;}
   .ucard.locked .lk svg{width:20px; height:20px; color:#9aa2b1;}
@@ -193,7 +196,7 @@
       <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><input type="search" id="search" placeholder="Tìm học viên…" oninput="onFilterChange()"></div>
       <label class="row-check" style="margin:0;"><input type="checkbox" id="hide-empty" onchange="onFilterChange()"> Ẩn học viên chưa làm gì</label>
       <div class="legend">
-        <span><span class="dot" style="background:#16a34a;"></span>Đủ 5/5</span>
+        <span><span class="dot" style="background:#16a34a;"></span>Đủ 6/6</span>
         <span><span class="dot" style="background:#ed8936;"></span>Đang làm</span>
         <span><span class="dot" style="background:#c2c8d4;"></span>Chưa làm</span>
       </div>
@@ -221,13 +224,23 @@
     { key:'quiz',   label:'Trắc nghiệm' },
     { key:'visual', label:'Nhìn hình chọn từ' },
     { key:'guess',  label:'Nghe & tìm nghĩa' },
-    { key:'typing', label:'Viết từ' }
+    { key:'typing', label:'Viết từ' },
+    { key:'writesentence', label:'Viết câu' }
   ];
+  const MAX_STARS = QUIZ_TABS.length; // số sao tối đa mỗi Unit (đồng bộ với index.html)
   // Nhãn các mode (dạng) cho những quiz có lựa chọn — để hiện học sinh đã làm dạng nào.
   const QUIZ_MODE_LABELS = {
     listen: { word:'Nghe từ', sentence:'Nghe câu điền từ' },
     guess:  { word:'Nghe từ', sentence:'Nghe câu tìm nghĩa' },
-    quiz:   { vi:'Đáp án Việt', ko:'Đáp án Hàn', mix:'Đáp án Trộn' }
+    quiz:   { vi:'Việt', ko:'Hàn', mix:'Cả hai' },
+    writesentence: { vi2ko:'Việt → Hàn', ko2vi:'Hàn → Việt' }
+  };
+  // Nhãn NGẮN cho chip mode (khỏi bị cắt chữ)
+  const QUIZ_MODE_SHORT = {
+    listen: { word:'Từ', sentence:'Câu' },
+    guess:  { word:'Từ', sentence:'Câu' },
+    quiz:   { vi:'Việt', ko:'Hàn', mix:'Cả hai' },
+    writesentence: { vi2ko:'V→H', ko2vi:'H→V' }
   };
   // Icon từng dạng bài (trạng thái chưa xong)
   const TAB_ICONS = {
@@ -235,7 +248,8 @@
     quiz:   '<circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line>',
     visual: '<rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path>',
     guess:  '<path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"></path>',
-    typing: '<path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"></path>'
+    typing: '<path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"></path>',
+    writesentence: '<path d="M4 7V5a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2"></path><path d="M9 20h6"></path><path d="M12 4v16"></path>'
   };
   const CHECK = '<polyline points="20 6 9 17 4 12"></polyline>';
   const MAX_UNIT = 15;
@@ -331,7 +345,7 @@
       });
       units[u] = { stars, started, detail };
       if (started>0 || stars>0) unitsWithActivity++;
-      if (stars>=5) unitsFull++;
+      if (stars>=MAX_STARS) unitsFull++;
       totalStars += stars;
     }
 
@@ -419,10 +433,10 @@
     const allowed = p.allowedSet[u];
     const info = p.units[u];
     const num = (u<10?'0':'')+u;
-    let cls='zero', val='0<span style="font-weight:700">/5</span>';
+    let cls='zero', val=`0<span style="font-weight:700">/${MAX_STARS}</span>`;
     if (!allowed && !info){ cls='off'; val='—'; }
-    else if (info && info.stars>=5){ cls='full'; val=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${CHECK}</svg>`; }
-    else if (info && (info.stars>0 || info.started>0)){ cls='part'; val=`${info.stars}<span style="font-weight:700">/5</span>`; }
+    else if (info && info.stars>=MAX_STARS){ cls='full'; val=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">${CHECK}</svg>`; }
+    else if (info && (info.stars>0 || info.started>0)){ cls='part'; val=`${info.stars}<span style="font-weight:700">/${MAX_STARS}</span>`; }
     return `<div class="uchip ${cls}" title="Unit ${u}"><span class="un">${num}</span><span class="uv">${val}</span></div>`;
   }
 
@@ -452,14 +466,17 @@
   function renderModeSubLine(tabKey, d){
     const labels = QUIZ_MODE_LABELS[tabKey];
     if (!labels || !d || !d.modes) return '';
+    const shorts = QUIZ_MODE_SHORT[tabKey];
     const parts = [];
     Object.keys(labels).forEach(mk=>{
       const m = d.modes[mk];
       if (!m || (!m.started && !m.done)) return;
-      const nm = labels[mk];
-      const cls = m.done ? ' done' : '';
-      const val = m.done ? `✓${m.right}/${m.total}` : `${m.right}/${m.total}`;
-      parts.push(`<span class="mchip${cls}">${nm} ${val}</span>`);
+      // Đếm SỐ CÂU ĐÃ LÀM (đúng + sai), khớp với báo cáo bên học sinh
+      const attempted = (m.attempted!=null) ? m.attempted : ((m.right||0)+(m.wrong||0));
+      const pct = m.done ? 100 : (m.total>0 ? Math.round((attempted/m.total)*100) : 0);
+      const nm = (shorts && shorts[mk]) || labels[mk];
+      const title = `${labels[mk]}: ${m.done?'hoàn thành ':''}${attempted}/${m.total}`;
+      parts.push(`<span class="mchip${m.done?' done':''}" title="${title}"><span class="lbl">${nm}</span><span class="bar"><i style="width:${pct}%"></i></span></span>`);
     });
     if (!parts.length) return '';
     return `<div class="mchips">${parts.join('')}</div>`;
@@ -471,14 +488,18 @@
     for (let u=1; u<=MAX_UNIT; u++){
       const info = p.units[u];
       if (!info){ if (!p.allowedSet[u]) hasLocked = true; continue; } // chỉ hiện unit đã có hoạt động
-      const full = info.stars>=5;
+      const full = info.stars>=MAX_STARS;
       let lines = '';
       QUIZ_TABS.forEach(t=>{
         const d = info.detail[t.key];
         let badge, frac;
+        // Số câu ĐÃ LÀM (đúng + sai), khớp với báo cáo bên học sinh
+        const dTotal = d ? (d.total||0) : 0;
+        let dAtt = d ? (d.attempted!=null ? d.attempted : ((d.right||0)+(d.wrong||0))) : 0;
+        if (dAtt > dTotal) dAtt = dTotal;
         if (!d || (!d.started && !d.done)){ badge='<span class="tbadge none">Chưa bắt đầu</span>'; frac=''; }
-        else if (d.done){ badge='<span class="tbadge done">Hoàn thành</span>'; frac=`<span class="tfrac done">${d.right}/${d.total}</span>`; }
-        else { badge='<span class="tbadge doing">Đang làm</span>'; frac=`<span class="tfrac doing">${d.right}/${d.total}</span>`; }
+        else if (d.done){ badge='<span class="tbadge done">Hoàn thành</span>'; frac=`<span class="tfrac done">${dTotal}/${dTotal}</span>`; }
+        else { badge='<span class="tbadge doing">Đang làm</span>'; frac=`<span class="tfrac doing">${dAtt}/${dTotal}</span>`; }
         const done = d && d.done;
         const ic = done
           ? `<div class="tic done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${CHECK}</svg></div>`
@@ -488,7 +509,7 @@
       const headIc = full
         ? `<div class="uh-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${CHECK}</svg></div>`
         : `<div class="uh-ic part"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l2.5 2"></path></svg></div>`;
-      html += `<div class="ucard"><div class="ucard-head">${headIc}<span class="ut">Unit ${u}</span><span class="ustars">${'★'.repeat(info.stars)}${'☆'.repeat(5-info.stars)}</span></div>${lines}</div>`;
+      html += `<div class="ucard"><div class="ucard-head">${headIc}<span class="ut">Unit ${u}</span><span class="ustars">${'★'.repeat(info.stars)}${'☆'.repeat(Math.max(0, MAX_STARS-info.stars))}</span></div>${lines}</div>`;
     }
     if (!html) html = '<div style="padding:6px; color:var(--sub); font-size:13px;">Học viên chưa làm bài ở unit nào.</div>';
     if (hasLocked) html += `<div class="ucard locked"><div class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><p>Các unit tiếp theo sẽ mở khoá khi giáo viên mở cho học viên.</p></div>`;
