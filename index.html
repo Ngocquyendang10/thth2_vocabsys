@@ -6942,6 +6942,15 @@
         + '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?'
         + 'family=Nunito+Sans:wght@400;600;700&family=Noto+Serif+KR:wght@400;500;700&display=swap">';
 
+    // Font cho BẢN WORD: chỉ dùng font CÓ SẴN trong máy (Word không tải được font trên mạng).
+    // Muốn đổi font cả đề: sửa đúng 2 dòng dưới đây, hoặc mở Word > Home > Styles > Modify.
+    const EXAM_WORD_FONT = '"Times New Roman",serif';   // chữ Việt / La-tinh
+    const EXAM_WORD_FONT_KO = 'Malgun Gothic';           // chữ Hàn (Mac: đổi thành Apple SD Gothic Neo)
+    // Bật khi đang dựng HTML cho file Word: đổi cách xuất (bỏ bảng, dùng tab thật, <p> thay <div>).
+    let EXAM_FOR_WORD = false;
+    // Một dấu TAB THẬT của Word (không phải khoảng trắng) -> bấm Tab/kéo thước trong Word là chạy đúng.
+    const EXAM_TAB = '<span style=\'mso-tab-count:1\'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>';
+
     function examEsc(x) {
         return String(x == null ? '' : x).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
@@ -6973,6 +6982,16 @@
     // Một đáp án hoàn chỉnh (kèm chữ cái A/B/C/D)
     function examOptionHtml(letter, x) {
         const parts = examSplitDialogue(x);
+        if (EXAM_FOR_WORD) {
+            // Bản Word: KHÔNG dùng bảng. Chữ cái + 1 TAB THẬT, đoạn văn có thụt treo
+            // -> trong Word cô kéo thước / bấm nút thụt lề là cả đáp án chạy theo.
+            if (parts.length < 2) {
+                return '<p class=DeDapAn><b>' + letter + '.</b>' + EXAM_TAB
+                     + examEsc(String(x == null ? '' : x).trim()) + '</p>';
+            }
+            return '<p class=DeDapAn><b>' + letter + '.</b>' + EXAM_TAB + examDialogueLine(parts[0]) + '</p>'
+                 + parts.slice(1).map(p => '<p class=DeDapAnTiep>' + examDialogueLine(p) + '</p>').join('');
+        }
         if (parts.length < 2) {
             return '<div class="e-opt"><b>' + letter + '.</b> ' + examEsc(String(x == null ? '' : x).trim()) + '</div>';
         }
@@ -6985,6 +7004,7 @@
     function examFormatOption(x) {
         const parts = examSplitDialogue(x);
         if (parts.length < 2) return examEsc(String(x == null ? '' : x).trim());
+        if (EXAM_FOR_WORD) return parts.map(p => examDialogueLine(p)).join(' / ');
         return examDialogueLine(parts[0])
             + parts.slice(1).map(p => '<div class="e-dline e-dline-key">' + examDialogueLine(p) + '</div>').join('');
     }
@@ -7010,38 +7030,58 @@
         return q.badge || 'Trắc nghiệm';
     }
 
+    /* --- Mấy khuôn nhỏ: bản Word dùng <p class=...>, bản In dùng <div class="..."> --- */
+    function exStem(text)  { return EXAM_FOR_WORD ? '<p class=DeCauHoi>' + text + '</p>'
+                                                  : '<div class="eq-stem"><b>' + text + '</b></div>'; }
+    function exStemVi(text){ return EXAM_FOR_WORD ? '<p class=DeCauHoiVi>' + text + '</p>'
+                                                  : '<div class="cloze-vi">' + text + '</div>'; }
+    function exSub(text)   { return EXAM_FOR_WORD ? '<p class=DeChiDan>' + text + '</p>'
+                                                  : '<div class="eq-sub">' + text + '</div>'; }
+    // Dòng để học sinh viết: bản Word dùng TAB CÓ DẤU CHẤM (tab leader) -> gõ chữ vào là
+    // dấu chấm tự co lại, không bị lệch như khi gõ đè lên một chuỗi dấu chấm cứng.
+    function exWriteLine() {
+        return EXAM_FOR_WORD
+            ? '<p class=DeDongKe>&#8594;<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span></p>'
+            : '<div class="e-line">&rarr; ..........................................................................</div>';
+    }
+
     // Trả về { body: html đề, answer: chuỗi đáp án } cho 1 câu
     function examQuestionParts(q) {
         const L = 'ABCDE';
         // Ghép cặp: 2 cột, học sinh ghi chữ cái vào chỗ trống
         if (q.sub === 'match') {
+            // Đây là dữ liệu 2 cột thật nên vẫn dùng bảng; bản Word cho mỗi ô một đoạn văn
+            // Normal để gõ/xoá trong ô như bảng Word bình thường.
+            const td = EXAM_FOR_WORD ? '<p class=MsoNormal style=\'margin-bottom:0cm\'>' : '';
+            const tdEnd = EXAM_FOR_WORD ? '</p>' : '';
             const rows = q.left.map((k, i) =>
-                '<tr><td class="e-ml">' + (i + 1) + '. ' + examEsc(q.pairs[k].ko) + '</td>'
-                + '<td class="e-mb">&hellip;&hellip;&hellip;</td>'
-                + '<td class="e-mr">' + L[i] + '. ' + examEsc(q.pairs[q.right[i]].vi) + '</td></tr>').join('');
+                '<tr><td class="e-ml" width="38%">' + td + (i + 1) + '. ' + examEsc(q.pairs[k].ko) + tdEnd + '</td>'
+                + '<td class="e-mb" width="12%">' + td + '&hellip;&hellip;&hellip;' + tdEnd + '</td>'
+                + '<td class="e-mr" width="50%">' + td + L[i] + '. ' + examEsc(q.pairs[q.right[i]].vi) + tdEnd + '</td></tr>').join('');
             return {
-                body: '<div class="eq-sub">Nối từ tiếng Hàn với nghĩa tiếng Việt (ghi chữ cái vào chỗ trống):</div>'
-                    + '<table class="e-match">' + rows + '</table>',
+                body: exSub('Nối từ tiếng Hàn với nghĩa tiếng Việt (ghi chữ cái vào chỗ trống):')
+                    + '<table class="' + (EXAM_FOR_WORD ? 'DeBang' : 'e-match') + '" width="100%" cellspacing=0 cellpadding=0>'
+                    + rows + '</table>',
                 answer: q.left.map((k, i) => (i + 1) + '–' + L[q.right.indexOf(k)]).join(', ')
             };
         }
         // Sắp xếp câu: cho sẵn các từ + dòng kẻ để viết lại
         if (q.sub === 'order') {
+            // Bản Word: từ để trần trong ngoặc vuông (không viền span) -> xoá/sửa/thêm từ rất dễ.
+            const pool = EXAM_FOR_WORD
+                ? '<p class=DeTuGoi>' + q.wordPool.map(w => '[ ' + examEsc(w) + ' ]').join('&nbsp;&nbsp; ') + '</p>'
+                : '<div class="e-words">' + q.wordPool.map(w => '<span class="e-w">' + examEsc(w) + '</span>').join('&nbsp;&nbsp;') + '</div>';
             return {
-                body: '<div class="eq-stem"><b>“' + examEsc(q.dirLang === 'vi' ? q.srcKo : q.srcVi) + '”</b></div>'
-                    + '<div class="eq-sub">Sắp xếp các từ sau thành câu ' + (q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn') + ' hoàn chỉnh:</div>'
-                    // Có khoảng trắng thật giữa các từ vì Word thường bỏ qua margin của span.
-                    + '<div class="e-words">' + q.wordPool.map(w => '<span class="e-w">' + examEsc(w) + '</span>').join('&nbsp;&nbsp;') + '</div>'
-                    + '<div class="e-line">&rarr; ..........................................................................</div>',
+                body: exStem('&ldquo;' + examEsc(q.dirLang === 'vi' ? q.srcKo : q.srcVi) + '&rdquo;')
+                    + exSub('Sắp xếp các từ sau thành câu ' + (q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn') + ' hoàn chỉnh:')
+                    + pool + exWriteLine(),
                 answer: q.tokens.join(' ')
             };
         }
         // Viết từ: dòng kẻ trống
         if (q.type === 'typing') {
             return {
-                body: '<div class="eq-stem"><b>“' + examEsc(q.prompt) + '”</b></div>'
-                    + '<div class="eq-sub">Viết đáp án:</div>'
-                    + '<div class="e-line">&rarr; ..........................................................................</div>',
+                body: exStem('&ldquo;' + examEsc(q.prompt) + '&rdquo;') + exSub('Viết đáp án:') + exWriteLine(),
                 answer: q.answer
             };
         }
@@ -7049,37 +7089,57 @@
         let head = '';
         if (q.type === 'visual') {
             const imgSrc = q._wordImgSrc != null ? q._wordImgSrc : examAbsUrl(q.img || '');
-            head = (q.img && q.img.trim() !== '' && imgSrc)
-                // Tất cả ảnh bài học là 1:1: khóa cứng 6 × 6 cm. Word thường bỏ qua height:auto.
-                ? '<table class="e-img-table" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center">'
-                    + '<img src="' + imgSrc + '" width="227" height="227" style="width:6cm;height:6cm;" alt="">'
-                    + '</td></tr></table><div class="eq-sub">Nhìn hình và chọn từ đúng:</div>'
-                : (q.img && q.img.trim() !== ''
-                    ? '<div class="eq-sub">(Không thể đóng gói hình minh hoạ vào file Word) Chọn đáp án đúng:</div>'
-                    : '<div class="eq-sub">(Thiếu hình minh hoạ) Chọn đáp án đúng:</div>');
+            const hasImg = q.img && q.img.trim() !== '' && imgSrc;
+            if (hasImg) {
+                // Ảnh bài học đều 1:1 -> khoá 6 × 6 cm (Word hay bỏ qua height:auto).
+                head = EXAM_FOR_WORD
+                    // Ảnh nằm trong 1 đoạn văn căn giữa bình thường: bấm vào ảnh là kéo to/nhỏ được ngay.
+                    ? '<p class=DeAnh><img width=227 height=227 src="' + imgSrc + '" alt=""></p>'
+                    : '<table class="e-img-table" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center">'
+                        + '<img src="' + imgSrc + '" width="227" height="227" style="width:6cm;height:6cm;" alt="">'
+                        + '</td></tr></table>';
+                head += exSub('Nhìn hình và chọn từ đúng:');
+            } else {
+                head = exSub(q.img && q.img.trim() !== ''
+                    ? '(Không thể đóng gói hình minh hoạ vào file Word) Chọn đáp án đúng:'
+                    : '(Thiếu hình minh hoạ) Chọn đáp án đúng:');
+            }
         } else {
             const bilingual = String(q.prompt || '').indexOf('cloze-vi') >= 0;
-            const stemPlain = examPlainFromHtml(q.prompt);
-            head = (q.prompt ? (bilingual
-                    ? '<div class="eq-bilingual">' + q.prompt + '</div>'
-                    : '<div class="eq-stem"><b>“' + examEsc(stemPlain) + '”</b></div>') : '')
-                 + '<div class="eq-sub">' + examEsc(q.promptLabel || 'Chọn đáp án đúng:') + '</div>';
+            if (EXAM_FOR_WORD) {
+                // Word bỏ qua display:inline trên <div>, để nguyên HTML của web là bị bẻ dòng bậy.
+                // Nên ở đây bóc thành chữ thuần rồi tự dựng từng ĐOẠN VĂN riêng.
+                const lines = examPlainFromHtml(q.prompt).split('\n').filter(Boolean);
+                if (!lines.length) head = '';
+                else if (bilingual) head = exStem(examEsc(lines[0]))
+                        + lines.slice(1).map(t => exStemVi(examEsc(t))).join('');
+                else head = exStem('&ldquo;' + examEsc(lines.join(' ')) + '&rdquo;');
+            } else {
+                const stemPlain = examPlainFromHtml(q.prompt);
+                head = (q.prompt ? (bilingual
+                        ? '<div class="eq-bilingual">' + q.prompt + '</div>'
+                        : '<div class="eq-stem"><b>&ldquo;' + examEsc(stemPlain) + '&rdquo;</b></div>') : '');
+            }
+            head += exSub(examEsc(q.promptLabel || 'Chọn đáp án đúng:'));
         }
         // Không dùng <ol>/<li>: Microsoft Word tự thêm 1,2,3,4 dù CSS đã tắt list-style.
-        const opts = '<div class="e-opts">'
-            + (q.options || []).map((o, i) => examOptionHtml(L[i], o)).join('') + '</div>';
+        const optList = (q.options || []).map((o, i) => examOptionHtml(L[i], o)).join('');
+        const opts = EXAM_FOR_WORD ? optList : '<div class="e-opts">' + optList + '</div>';
         const pos = (q.options || []).indexOf(q.answer);
         return { body: head + opts, answer: (pos >= 0 ? L[pos] + '. ' : '') + q.answer };
     }
 
-    function buildExamHtml(list, forWord) {
+    /* ============================================================
+       BẢN IN / PDF  (mở cửa sổ in của trình duyệt)
+       ============================================================ */
+    function buildExamHtml(list) {
+        EXAM_FOR_WORD = false;
         const units = (sumTest.units || []).join(', ');
         const today = new Date().toLocaleDateString('vi-VN');
         let qHtml = '', aHtml = '';
         list.forEach((q, i) => {
             const p = examQuestionParts(q);
-            qHtml += '<div class="eq"><div class="eq-no">Câu ' + (i + 1) + '.</div>'
-                  + p.body + '</div>';
+            qHtml += '<div class="eq"><div class="eq-no">Câu ' + (i + 1) + '.</div>' + p.body + '</div>';
             aHtml += '<div class="ea"><b>Câu ' + (i + 1) + ':</b> ' + examFormatOption(p.answer) + '</div>';
         });
 
@@ -7090,21 +7150,17 @@
             + '.e-title { font-size:16pt; font-weight:bold; text-transform:uppercase; }'
             + '.e-sub { font-size:11pt; margin-top:3pt; }'
             + '.e-info { margin:12pt 0 14pt; font-size:12pt; border-top:1px solid #000; border-bottom:1px solid #000; padding:7pt 0; }'
-            // Phân cấp: nhãn câu (nhỏ, xám) < chỉ dẫn (nhỏ, nghiêng) < ĐỀ BÀI (to, đậm, đen) < đáp án (thường)
             + '.eq { margin:0 0 20pt; padding-top:9pt; border-top:0.75pt solid #d9d9d9; page-break-inside:avoid; }'
             + '.eq-no { font-size:10.5pt; font-weight:bold; letter-spacing:0.6pt; text-transform:uppercase; color:#7a7a7a; margin-bottom:3pt; }'
-            + '.eq-stem { font-size:15pt; font-weight:bold; font-style:normal; color:#000; margin:0 0 6pt; line-height:1.45; font-family:' + EXAM_FONT + ' !important; }'
+            + '.eq-stem { font-size:15pt; font-weight:bold; font-style:normal; color:#000; margin:0 0 6pt; line-height:1.45; }'
             + '.eq-stem .cloze-sentence { display:inline; }'
             + '.eq-bilingual { margin:4pt 0 6pt; }'
             + '.eq-bilingual .cloze-sentence { display:block; margin:0 0 3pt; font-size:14pt; font-weight:bold; }'
             + '.eq-bilingual .cloze-vi { display:block; margin:0; font-size:11pt; font-style:italic; color:#555; }'
             + '.eq-sub { font-size:10.5pt; font-style:italic; font-weight:normal; color:#767676; margin:0 0 7pt; }'
             + '.e-opts { margin:0; padding:0; }'
-            // Mỗi đáp án chiếm trọn 1 dòng; dòng tràn thụt vào thẳng hàng với chữ sau "A."
-            // Dùng pt thay vì em: Word nhập HTML hay bỏ qua đơn vị em khi quy ra thụt lề đoạn văn
             + '.e-opt { display:block; width:auto; margin:0 0 7pt 26pt; text-indent:-26pt; line-height:1.45; font-size:12.5pt; font-weight:normal; font-style:normal; }'
             + '.e-opt b { font-weight:bold; color:#000; margin-right:4pt; }'
-            // Đáp án hội thoại: bảng 2 cột nên mọi lượt lời thẳng hàng tuyệt đối
             + '.e-opt-tb { width:100%; border-collapse:collapse; margin:0 0 7pt; }'
             + '.e-opt-tb td { padding:0; vertical-align:top; font-size:12.5pt; line-height:1.45; font-weight:normal; font-style:normal; }'
             + '.e-otd-l { width:26pt; }'
@@ -7118,14 +7174,13 @@
             + '.e-ml { width:38%; } .e-mb { width:12%; text-align:center; } .e-mr { width:50%; }'
             + '.e-img-table { width:100%; margin:5pt auto 7pt; border-collapse:collapse; }'
             + '.e-img-table td { width:100%; text-align:center; vertical-align:middle; }'
-            + '.e-img-table img { width:6cm !important; height:6cm !important; }'
+            + '.e-img-table img { width:6cm; height:6cm; }'
             + '.e-pagebreak { page-break-before:always; }'
             + '.eq:first-of-type { border-top:0; padding-top:0; }'
             + '.e-akey { margin-top:6pt; }'
             + '.ea { display:inline-block; width:48%; vertical-align:top; padding:2pt 0; font-size:12pt; }'
             + '.e-note { font-size:10.5pt; font-style:italic; color:#a00; margin-bottom:8pt; }'
-            // Ép mọi đoạn lấy từ web dùng font của đề (không dùng font Chiron của web)
-            + '.cloze-sentence, .cloze-vi, .ko-emph, .cloze-blank { font-family:' + EXAM_FONT + ' !important; }'
+            + '.cloze-sentence, .cloze-vi, .ko-emph, .cloze-blank { font-family:' + EXAM_FONT + '; }'
             + '.cloze-sentence { font-size:14pt; margin:3pt 0; text-align:left; }'
             + '.cloze-vi { font-size:11pt; font-style:italic; color:#333; }'
             + '.cloze-blank { font-weight:bold; letter-spacing:1px; }'
@@ -7142,19 +7197,115 @@
             + '<div class="e-note">⚠️ Trang này dành cho giáo viên — hãy XOÁ TRANG CUỐI trước khi gửi cho học sinh.</div>'
             + '<div class="e-akey">' + aHtml + '</div>';
 
-        if (forWord) {
-            // Word không tải được font trên mạng -> muốn đúng font thì cài sẵn Nunito Sans + Noto Serif KR trong máy
-            return '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
-                + '<head><meta charset="utf-8"><title>Bài kiểm tra THTH2</title>'
-                + '<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml><![endif]-->'
-                + EXAM_FONT_LINK + '<style>' + css + '</style></head><body>' + bodyHtml + '</body></html>';
-        }
         // Bản in: chờ font Google tải xong mới bật hộp thoại in (tối đa 3 giây)
         return '<!doctype html><html lang="vi"><head><meta charset="utf-8"><title>Bài kiểm tra THTH2</title>'
             + EXAM_FONT_LINK + '<style>' + css + '</style></head><body>' + bodyHtml
             + '<scr' + 'ipt>(function(){var done=false;function go(){if(done)return;done=true;setTimeout(function(){window.print();},250);}'
             + 'if(document.fonts&&document.fonts.ready){document.fonts.ready.then(go);}setTimeout(go,3000);})();</scr' + 'ipt>'
             + '</body></html>';
+    }
+
+    /* ============================================================
+       BẢN WORD (.doc) — viết theo đúng "HTML kiểu Word" để CHỈNH SỬA DỄ:
+       • Mỗi dòng là một ĐOẠN VĂN <p> thật, không phải <div> lồng nhau.
+       • Mọi định dạng nằm trong STYLE CÓ TÊN (Đề Câu hỏi / Đề Đáp án / ...):
+         vào Home > Styles, bấm chuột phải > Modify là ĐỔI ĐƯỢC CẢ BÀI một lượt.
+       • Không dùng bảng cho đáp án, không dùng &nbsp; để căn — dùng TAB THẬT
+         + thụt treo, nên nút Tăng/Giảm thụt lề và thanh thước của Word chạy đúng.
+       • Font dùng font CÓ SẴN trong máy (Word không tải được font trên mạng).
+       ============================================================ */
+    function buildExamWordHtml(list) {
+        EXAM_FOR_WORD = true;
+        const units = (sumTest.units || []).join(', ');
+        const today = new Date().toLocaleDateString('vi-VN');
+        let qHtml = '', aHtml = '';
+        list.forEach((q, i) => {
+            const p = examQuestionParts(q);
+            qHtml += '<p class=DeNhanCau>Câu ' + (i + 1) + '.</p>' + p.body;
+            aHtml += '<p class=DeKey><b>Câu ' + (i + 1) + ':</b> ' + examFormatOption(p.answer) + '</p>';
+        });
+        EXAM_FOR_WORD = false;
+
+        // Khai báo font 1 chỗ duy nhất: đổi 2 hằng số EXAM_WORD_FONT / EXAM_WORD_FONT_KO là xong.
+        const FF = 'font-family:' + EXAM_WORD_FONT + ';'
+                 + 'mso-fareast-font-family:"' + EXAM_WORD_FONT_KO + '";'
+                 + 'mso-bidi-font-family:' + EXAM_WORD_FONT + ';';
+
+        const css = ''
+            /* Khổ giấy + lề: Word đọc được nên vào Layout > Margins sửa tiếp được */
+            + '@page WordSection1 {size:21.0cm 29.7cm; margin:1.8cm 1.6cm 1.8cm 1.6cm;'
+            + ' mso-header-margin:1.0cm; mso-footer-margin:1.0cm; mso-paper-source:0;}'
+            + 'div.WordSection1 {page:WordSection1;}'
+            /* --- Normal: nền tảng của cả bài --- */
+            + 'p.MsoNormal, li.MsoNormal, div.MsoNormal {mso-style-parent:""; margin:0cm; margin-bottom:6.0pt;'
+            + ' mso-pagination:widow-orphan; line-height:normal; font-size:13.0pt; ' + FF + '}'
+            /* --- Các style CÓ TÊN, hiện trong bảng Styles của Word --- */
+            + 'p.DeTieuDe {mso-style-name:"Đề Tiêu đề"; mso-style-qformat:yes; margin:0cm; margin-bottom:3.0pt;'
+            + ' text-align:center; line-height:normal; font-size:16.0pt; font-weight:bold; ' + FF + '}'
+            + 'p.DePhu {mso-style-name:"Đề Phụ đề"; mso-style-qformat:yes; margin:0cm; margin-bottom:12.0pt;'
+            + ' text-align:center; line-height:normal; font-size:11.0pt; ' + FF + '}'
+            + 'p.DeThongTin {mso-style-name:"Đề Thông tin"; mso-style-qformat:yes; margin:0cm; margin-bottom:14.0pt;'
+            + ' padding:6.0pt 0cm; border-top:solid windowtext 1.0pt; border-bottom:solid windowtext 1.0pt;'
+            + ' mso-border-top-alt:solid windowtext .5pt; mso-border-bottom-alt:solid windowtext .5pt;'
+            + ' tab-stops:8.0cm 13.0cm 17.5cm; line-height:normal; font-size:12.0pt; ' + FF + '}'
+            + 'p.DeNhanCau {mso-style-name:"Đề Nhãn câu"; mso-style-qformat:yes; margin:0cm; margin-top:14.0pt;'
+            + ' margin-bottom:3.0pt; padding-top:6.0pt; border-top:solid #D9D9D9 .75pt;'
+            + ' mso-pagination:widow-orphan lines-together; page-break-after:avoid;'
+            + ' line-height:normal; font-size:10.5pt; font-weight:bold; color:#7A7A7A; ' + FF + '}'
+            + 'p.DeCauHoi {mso-style-name:"Đề Câu hỏi"; mso-style-qformat:yes; margin:0cm; margin-bottom:5.0pt;'
+            + ' page-break-after:avoid; line-height:normal; font-size:15.0pt; font-weight:bold; ' + FF + '}'
+            + 'p.DeCauHoiVi {mso-style-name:"Đề Câu hỏi (Việt)"; mso-style-qformat:yes; margin:0cm; margin-bottom:5.0pt;'
+            + ' page-break-after:avoid; line-height:normal; font-size:11.0pt; font-style:italic; color:#555555; ' + FF + '}'
+            + 'p.DeChiDan {mso-style-name:"Đề Chỉ dẫn"; mso-style-qformat:yes; margin:0cm; margin-bottom:7.0pt;'
+            + ' page-break-after:avoid; line-height:normal; font-size:10.5pt; font-style:italic; color:#767676; ' + FF + '}'
+            /* Thụt treo 1cm + 1 tab stop 1cm: chữ cái A. rồi TAB, dòng tràn tự thẳng hàng */
+            + 'p.DeDapAn {mso-style-name:"Đề Đáp án"; mso-style-qformat:yes; margin:0cm; margin-bottom:6.0pt;'
+            + ' margin-left:1.0cm; text-indent:-1.0cm; mso-para-margin-left:1.0cm; mso-para-margin-right:0cm;'
+            + ' tab-stops:1.0cm; line-height:normal; font-size:12.5pt; ' + FF + '}'
+            + 'p.DeDapAnTiep {mso-style-name:"Đề Đáp án (dòng tiếp)"; mso-style-qformat:yes; margin:0cm;'
+            + ' margin-bottom:6.0pt; margin-left:1.0cm; mso-para-margin-left:1.0cm; text-indent:0cm;'
+            + ' line-height:normal; font-size:12.5pt; ' + FF + '}'
+            + 'p.DeTuGoi {mso-style-name:"Đề Từ gợi ý"; mso-style-qformat:yes; margin:0cm; margin-bottom:6.0pt;'
+            + ' line-height:normal; font-size:12.5pt; ' + FF + '}'
+            /* Tab có dấu chấm chạy tới 16cm: gõ chữ vào là dấu chấm tự ngắn lại */
+            + 'p.DeDongKe {mso-style-name:"Đề Dòng kẻ"; mso-style-qformat:yes; margin:0cm; margin-bottom:10.0pt;'
+            + ' tab-stops:16.0cm; line-height:normal; font-size:12.5pt; ' + FF + '}'
+            + 'p.DeAnh {mso-style-name:"Đề Hình"; mso-style-qformat:yes; margin:0cm; margin-bottom:6.0pt;'
+            + ' text-align:center; line-height:normal; font-size:12.0pt; ' + FF + '}'
+            + 'p.DeKey {mso-style-name:"Đề Đáp án chuẩn"; mso-style-qformat:yes; margin:0cm; margin-bottom:3.0pt;'
+            + ' line-height:normal; font-size:12.0pt; ' + FF + '}'
+            + 'p.DeGhiChu {mso-style-name:"Đề Ghi chú"; mso-style-qformat:yes; margin:0cm; margin-bottom:10.0pt;'
+            + ' line-height:normal; font-size:10.5pt; font-style:italic; color:#AA0000; ' + FF + '}'
+            + 'table.DeBang {border-collapse:collapse; mso-table-lspace:0cm; mso-table-rspace:0cm;'
+            + ' mso-padding-alt:2.0pt 3.0pt 2.0pt 3.0pt;}'
+            + 'table.DeBang td {padding:2.0pt 3.0pt; vertical-align:top;}';
+
+        const bodyHtml = '<div class=WordSection1>'
+            + '<p class=DeTieuDe>BÀI KIỂM TRA TỪ VỰNG — TIẾNG HÀN TỔNG HỢP 2</p>'
+            + '<p class=DePhu>Unit ' + examEsc(units) + ' &#183; ' + list.length + ' câu &#183; Ngày ' + today + '</p>'
+            + '<p class=DeThongTin>Họ và tên:<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span>'
+            + 'Lớp:<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span>'
+            + 'Điểm:<span style=\'mso-tab-count:1 dotted\'>&nbsp;</span></p>'
+            + qHtml
+            + '<br clear=all style=\'mso-special-character:line-break; page-break-before:always\'>'
+            + '<p class=DeTieuDe>ĐÁP ÁN</p>'
+            + '<p class=DeGhiChu>Trang này dành cho giáo viên — hãy XOÁ TRANG CUỐI trước khi gửi cho học sinh.</p>'
+            + aHtml
+            + '</div>';
+
+        // 2 thẻ meta ProgId/Generator: nhờ chúng Word mới nhận đây là tài liệu Word thật
+        // và nạp bảng Styles ở trên (thiếu chúng thì Word coi là trang web -> style biến mất).
+        return '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">'
+            + '<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">'
+            + '<meta name=ProgId content=Word.Document>'
+            + '<meta name=Generator content="Microsoft Word 15">'
+            + '<meta name=Originator content="Microsoft Word 15">'
+            + '<title>Bài kiểm tra THTH2</title>'
+            + '<!--[if gte mso 9]><xml><w:WordDocument>'
+            + '<w:View>Print</w:View><w:Zoom>100</w:Zoom>'
+            + '<w:DoNotOptimizeForBrowser/><w:DoNotHyphenateCaps/>'
+            + '</w:WordDocument></xml><![endif]-->'
+            + '<style><!--' + css + '--></style></head><body lang=VI>' + bodyHtml + '</body></html>';
     }
 
     // Mở cửa sổ in (chọn "Lưu thành PDF" trong hộp thoại in)
@@ -7164,7 +7315,7 @@
         const w = window.open('', '_blank');
         if (!w) { alert('Trình duyệt đang chặn cửa sổ bật lên. Hãy cho phép pop-up rồi bấm lại nhé!'); return; }
         w.document.open();
-        w.document.write(buildExamHtml(list, false));
+        w.document.write(buildExamHtml(list));
         w.document.close();
         w.focus();
     }
@@ -7312,7 +7463,7 @@
         const list = collectExamQuestions();
         if (!list) return;
         const attachments = await prepareWordImages(list);
-        const html = buildExamHtml(list, true);
+        const html = buildExamWordHtml(list);
         const mhtml = buildWordMhtml(html, attachments);
         // Dọn thuộc tính tạm để lần In/PDF sau vẫn dùng URL ảnh bình thường.
         list.forEach(q => { if (q._wordImgSrc != null) delete q._wordImgSrc; });
