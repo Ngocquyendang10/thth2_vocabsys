@@ -215,6 +215,18 @@
         .quiz-subtab-btn { flex: 1; padding: 7px 6px; background: var(--card-color); border: 1px solid rgba(97,76,255,0.12); font-size: 11px; font-weight: 700; color: var(--sub-text); cursor: pointer; border-radius: 20px; white-space: nowrap; outline: none; transition: all 0.2s ease; }
         .quiz-subtab-btn:hover { color: var(--point-color); border-color: rgba(97,76,255,0.35); }
         .quiz-subtab-btn.active { color: var(--point-color); background: var(--point-light); box-shadow: var(--neu-concave); border-color: transparent; font-weight: 800; }
+        /* 🔄 Thanh báo "đã có phiên bản mới" */
+        #app-update-bar { position: fixed; left: 50%; transform: translateX(-50%); bottom: 18px; z-index: 99999;
+            display: flex; align-items: center; gap: 10px; background: var(--point-color); color: #fff;
+            font-size: 13px; font-weight: 700; line-height: 1.35; padding: 10px 12px 10px 18px; border-radius: 999px;
+            box-shadow: 0 10px 26px rgba(97,76,255,.35); max-width: calc(100vw - 24px); }
+        #app-update-bar button { font-family: inherit; font-size: 12px; font-weight: 800; color: var(--point-color);
+            background: #fff; border: none; border-radius: 999px; padding: 8px 15px; cursor: pointer; white-space: nowrap; }
+        @media (max-width: 480px) { #app-update-bar { font-size: 12px; padding: 9px 10px 9px 15px; bottom: 12px; } }
+
+        /* Dạng quiz bị khoá vì Unit chưa có ảnh minh hoạ trong kho assets */
+        .quiz-subtab-btn.is-off, .sum-toggle.is-off { opacity: .42; cursor: not-allowed; }
+        .quiz-subtab-btn.is-off:hover { color: var(--sub-text); border-color: rgba(97,76,255,0.12); }
         /* Thanh chọn nhỏ (ngôn ngữ đáp án / dạng Từ·Câu) đặt trong từng tab quiz */
         .mode-toggle { display: inline-flex; gap: 4px; background: var(--bg-color); padding: 4px; border-radius: 999px; box-shadow: var(--neu-concave); margin: 0 auto 16px; }
         .mode-toggle-btn { border: none; background: transparent; color: var(--sub-text); font-family: inherit; font-size: 12px; font-weight: 700; padding: 7px 16px; border-radius: 999px; cursor: pointer; outline: none; white-space: nowrap; transition: all 0.18s ease; }
@@ -2076,6 +2088,82 @@
 </div>
 
 <script>
+    // ===================================================================
+    // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
+    // Vì sao bản cũ bị "kẹt": học viên để nguyên tab, tắt/mở máy không làm
+    // trang tải lại; thêm nữa GitHub Pages cho trình duyệt giữ cache
+    // index.html 10 phút. Cách xử lý: thỉnh thoảng hỏi máy chủ xem
+    // index.html sửa lần cuối lúc nào (fetch no-store, không qua cache).
+    // Mới hơn bản đang chạy -> tải lại trang kèm ?v= để lấy đúng file mới.
+    // ===================================================================
+    const VERSION_CHECK_EVERY = 10 * 60 * 1000;   // 10 phút hỏi lại 1 lần
+    const _docBuiltAt = Date.parse(document.lastModified) || 0;  // bản HTML đang chạy làm lúc nào
+    let _verLastCheck = 0;
+    let _verBannerShown = false;
+
+    async function fetchServerBuildTime() {
+        try {
+            const res = await fetch(location.pathname + '?_cv=' + Date.now(), { method: 'HEAD', cache: 'no-store' });
+            if (!res.ok) return 0;
+            const lm = res.headers.get('last-modified');
+            return lm ? (Date.parse(lm) || 0) : 0;
+        } catch (e) { return 0; }   // mất mạng -> bỏ qua, lát nữa hỏi lại
+    }
+
+    // Đang làm dở bài -> không tự tải lại, chỉ mời cập nhật
+    function updateWouldLoseWork() {
+        try {
+            const ov = document.getElementById('combined-test-overlay');
+            if (ov && ov.classList.contains('active')) return true;
+            if (typeof hasTypingProgress === 'function' && hasTypingProgress()) return true;
+        } catch (e) {}
+        return false;
+    }
+
+    // byUser = học viên tự bấm nút "Cập nhật ngay" -> luôn tải lại, không bị chặn
+    function applyAppUpdate(buildTime, byUser) {
+        try {
+            const last = parseInt(sessionStorage.getItem('cvReloadAt') || '0', 10);
+            if (!byUser && Date.now() - last < 60000) { showUpdateBanner(buildTime); return; }  // chặn tải lại liên tục
+            sessionStorage.setItem('cvReloadAt', String(Date.now()));
+        } catch (e) {}
+        try {
+            const u = new URL(location.href);
+            u.searchParams.set('v', String(buildTime || Date.now()));  // ép lấy file mới, không lấy bản cache
+            location.replace(u.toString());
+        } catch (e) { location.reload(); }
+    }
+
+    function showUpdateBanner(buildTime) {
+        if (_verBannerShown) return;
+        _verBannerShown = true;
+        const bar = document.createElement('div');
+        bar.id = 'app-update-bar';
+        bar.innerHTML = '<span>🎉 Đã có phiên bản mới của web!</span><button type="button">Cập nhật ngay</button>';
+        bar.querySelector('button').onclick = () => applyAppUpdate(buildTime, true);
+        document.body.appendChild(bar);
+    }
+
+    async function checkAppVersion(force) {
+        const now = Date.now();
+        if (!force && now - _verLastCheck < 60000) return;   // tối đa 1 lần/phút
+        _verLastCheck = now;
+        const srv = await fetchServerBuildTime();
+        if (!srv || !_docBuiltAt) return;                    // chạy file:// hoặc mất mạng -> thôi
+        if (srv <= _docBuiltAt + 2000) return;               // vẫn đang là bản mới nhất
+        if (updateWouldLoseWork()) showUpdateBanner(srv);
+        else applyAppUpdate(srv);
+    }
+
+    function startVersionWatch() {
+        checkAppVersion(true);                               // ngay khi mở web
+        setInterval(() => checkAppVersion(false), VERSION_CHECK_EVERY);
+        document.addEventListener('visibilitychange', () => { if (!document.hidden) checkAppVersion(false); });
+        window.addEventListener('focus', () => checkAppVersion(false));
+        window.addEventListener('pageshow', e => { if (e.persisted) checkAppVersion(true); });  // máy ngủ dậy / back-forward
+        window.addEventListener('online', () => checkAppVersion(true));
+    }
+
     // ============================================================================
     // 🔒 CÔ LẬP localStorage THEO TỪNG WEB (THTH1 vs THTH2)
     // ----------------------------------------------------------------------------
@@ -2930,14 +3018,104 @@
         initDashboardSystem();
     }
 
+    // ===== 🖼️ DÒ ẢNH THẬT TRONG KHO ASSETS =====
+    // Sheet luôn ghi sẵn tên file ảnh cho mọi từ, nhưng file .png có thể CHƯA được làm.
+    // Vì vậy phải tải thử từng ảnh: chỉ những từ có ảnh tồn tại thật mới được đưa vào
+    // dạng "Nhìn hình chọn từ" (cả trong Unit lẫn đề Tổng hợp).
+    function wordImgSrc(item) { return (item && item.img) ? String(item.img).trim() : ''; }
+
+    const imgExistCache = new Map();   // src -> true/false (hoặc Promise trong lúc đang dò)
+    function probeImageExists(src) {
+        const key = String(src || '').trim();
+        if (!key) return Promise.resolve(false);
+        if (imgExistCache.has(key)) {
+            const v = imgExistCache.get(key);
+            return (v && typeof v.then === 'function') ? v : Promise.resolve(v);
+        }
+        const p = new Promise(resolve => {
+            const im = new Image();
+            let done = false;
+            const finish = ok => { if (done) return; done = true; imgExistCache.set(key, ok); resolve(ok); };
+            im.onload = () => finish((im.naturalWidth || 0) > 0);
+            im.onerror = () => finish(false);
+            setTimeout(() => finish(false), 15000); // mạng treo -> coi như chưa có ảnh
+            im.src = key;
+        });
+        imgExistCache.set(key, p);
+        return p;
+    }
+    // Lọc danh sách TỪ (object) -> chỉ giữ từ có ảnh thật
+    async function itemsWithRealImage(items) {
+        const flags = await Promise.all((items || []).map(it => probeImageExists(wordImgSrc(it))));
+        return (items || []).filter((_, i) => flags[i]);
+    }
+
+    let visualPoolSet = new Set();   // chỉ số (trong vocabData) của các từ CÓ ảnh thật
+    let visualPoolReady = false;     // đã dò xong cho bộ từ hiện tại chưa
+    let visualPoolToken = 0;         // chống race khi học viên đổi Unit liên tục
+    function visualAvailable() { return visualPoolReady && visualPoolSet.size > 0; }
+    function visualHasImage(i) { return visualPoolSet.has(i); }
+    function visualIndicesOf(list) { return (list || []).filter(i => visualHasImage(i)); }
+
+    // Dò toàn bộ ảnh của bộ từ đang mở, rồi cập nhật lại dạng "Nhìn hình chọn từ"
+    async function ensureVisualPool() {
+        const myToken = ++visualPoolToken;
+        visualPoolReady = false;
+        visualPoolSet = new Set();
+        syncVisualTabAvailability();
+        const list = vocabData.slice();
+        const flags = await Promise.all(list.map(it => probeImageExists(wordImgSrc(it))));
+        if (myToken !== visualPoolToken) return;  // đã đổi Unit -> bỏ kết quả cũ
+        const pool = [];
+        list.forEach((_, i) => { if (flags[i]) pool.push(i); });
+        visualPoolSet = new Set(pool);
+        visualPoolReady = true;
+        applyVisualPool(pool);
+    }
+
+    // Áp danh sách từ có ảnh vào tabState + giao diện
+    function applyVisualPool(pool) {
+        const st = tabState.visual;
+        const invalid = !Array.isArray(st.indices) || st.indices.length !== pool.length
+                        || st.indices.some(i => !visualHasImage(i));
+        if (invalid) {
+            st.indices = shuffleArray(pool.slice());
+            st.current = 0;
+            st._loadedFor = null;
+            resetTabScore('visual');
+        }
+        syncVisualTabAvailability();
+        if (currentTab === 'visual') {
+            if (pool.length > 0) {
+                const m = currentModeOf('visual');
+                if (st._loadedFor !== (currentUnit + ':' + m)) prepareTabForMode('visual', m);
+            }
+            generateVisualQuestion();
+        }
+        updateDashboardStats();
+    }
+
+    // Unit không có ảnh nào -> khoá hẳn nút "Nhìn hình chọn từ"
+    function syncVisualTabAvailability() {
+        const btn = document.getElementById('sub-btn-visual');
+        if (!btn) return;
+        const off = visualPoolReady && visualPoolSet.size === 0;
+        btn.classList.toggle('is-off', off);
+        btn.title = off ? 'Phần này chưa có ảnh minh hoạ nên tạm khoá' : '';
+        if (off && currentTab === 'visual') switchTab('listen');
+    }
+
     function initTabIndices() {
         let fullIndices = Array.from({length: vocabData.length}, (_, i) => i);
         tabState.flashcard.indices = [...fullIndices];
         tabState.flashcard.current = 0;
-        ["quiz", "typing", "listen", "guess", "visual"].forEach(t => {
+        ["quiz", "typing", "listen", "guess"].forEach(t => {
             tabState[t].indices = shuffleArray([...fullIndices]);
             tabState[t].current = 0;
         });
+        tabState.visual.indices = [];   // chờ dò ảnh thật xong mới có danh sách
+        tabState.visual.current = 0;
+        tabState.visual._loadedFor = null;
         // Reset bảng Viết từ khi đổi Unit
         tabState.typing.status = tabState.typing.indices.map(() => 'none');
         tabState.typing.values = tabState.typing.indices.map(() => '');
@@ -2950,6 +3128,7 @@
         tabState.quiz.hard = loadQuizHardPref();
         tabState.quiz.plan = buildQuizPlan(tabState.quiz.indices, 'mix');
         syncQuizModeToggles();
+        ensureVisualPool();   // 🖼️ dò ảnh thật cho dạng "Nhìn hình chọn từ" (chạy ngầm)
     }
 
     // 5 chức năng nằm trong nhóm "4. Quiz"
@@ -2957,6 +3136,11 @@
     function mainGroupOf(tab) { return QUIZ_SUBTABS.includes(tab) ? 'quizgroup' : tab; }
 
     function switchTab(tabName) {
+        // 🖼️ Chưa có ảnh minh hoạ nào -> không mở dạng "Nhìn hình chọn từ"
+        if (tabName === 'visual' && visualPoolReady && visualPoolSet.size === 0) {
+            if (currentTab !== 'visual') { alert('Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa mở được dạng "Nhìn hình chọn từ" nhé!'); return; }
+            tabName = 'listen';   // đang đứng ở tab này mà Unit mới không có ảnh -> chuyển sang dạng khác
+        }
         currentTab = tabName;
         document.querySelectorAll('.tab-click-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.quiz-subtab-btn').forEach(btn => btn.classList.remove('active'));
@@ -4910,7 +5094,7 @@
         const box = document.getElementById('visual-hint-text');
         if (!box) return;
         const state = tabState.visual;
-        const item = (state.indices && vocabData) ? vocabData[state.indices[state.current]] : null;
+        const item = (state.indices && state.indices.length && vocabData) ? vocabData[state.indices[state.current]] : null;
         const ko = item ? ((item.ex2 || item.ex) || '').trim() : '';
         box.innerHTML = ko ? wsEsc(ko) : '<span class="vh-empty">Từ này chưa có câu ví dụ minh hoạ.</span>';
         box.style.visibility = 'hidden'; // luôn giữ chỗ, ẩn cho tới khi bấm bóng đèn
@@ -4930,21 +5114,33 @@
         // Nạp sẵn câu gợi ý (giữ chỗ) + ẩn; đèn tắt cho câu mới
         fillVisualHint();
         const vHintBtn = document.getElementById('visual-hint-btn'); if (vHintBtn) vHintBtn.classList.remove('is-on');
+        const optsContainerEl = document.getElementById('visual-opts');
+        const imgElement = document.getElementById('visual-native-img');
+        const hintBox = document.getElementById('visual-hint-text');
+
+        // Đang dò ảnh trong kho assets / hoặc không có từ nào kèm ảnh -> không hiện câu hỏi
+        if (!visualPoolReady || !state.indices || state.indices.length === 0) {
+            imgElement.removeAttribute('src');
+            imgElement.style.display = 'none';
+            if (hintBox) hintBox.style.visibility = 'hidden';
+            if (vHintBtn) vHintBtn.style.display = 'none';
+            optsContainerEl.innerHTML = '<div class="quiz-question" style="grid-column:1/-1;">'
+                + (visualPoolReady
+                    ? 'Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa luyện được dạng "Nhìn hình chọn từ".'
+                    : 'Đang kiểm tra ảnh minh hoạ...')
+                + '</div>';
+            document.getElementById('global-counter').innerText = "0 / 0";
+            return;
+        }
+        imgElement.style.display = '';
+        if (vHintBtn) vHintBtn.style.display = '';
+
         let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
-        
-        const imgElement = document.getElementById('visual-native-img');
 
-        // Nếu ảnh PNG chưa có (chưa upload) -> tự thay bằng ảnh minh hoạ tạm, không hiện icon vỡ.
-        let fallbackKeyword = encodeURIComponent(currentItem.vi.split('/')[0].split('(')[0].trim() + " objects");
-        let fallbackSrc = `https://loremflickr.com/600/400/${fallbackKeyword},korea/all?random=${actualIndex}`;
-        imgElement.onerror = function() { imgElement.onerror = null; imgElement.src = fallbackSrc; };
-
-        if (currentItem.img && currentItem.img.trim() !== "") {
-            imgElement.src = currentItem.img;
-        } else {
-            imgElement.src = fallbackSrc;
-        }
+        // Ảnh đã được dò tồn tại thật trong kho assets -> dùng thẳng, không cần ảnh minh hoạ tạm.
+        imgElement.onerror = null;
+        imgElement.src = wordImgSrc(currentItem);
 
         let correctAnswer = currentItem.ko; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
         let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
@@ -5511,6 +5707,7 @@
 
     // --- HÀM TỰ ĐỘNG CHẠY KHI TRANG LOAD ---
     window.onload = async function() {
+        startVersionWatch();       // 🔄 luôn dùng bản mới nhất cô đã deploy
         maybeShowDisabledBanner(); // 🔒 nếu vừa bị vô hiệu hoá thì hiện thông báo nhã nhặn
         // Bắt đầu tải giáo trình NGAY, song song với lúc học viên đang gõ mật khẩu.
         // Dữ liệu giáo trình không phụ thuộc tài khoản nên tải sớm được.
@@ -5669,6 +5866,7 @@
         let base = Array.from({ length: vocabData.length }, (_, i) => i);
         if (tab === 'listen' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '');
         else if (tab === 'guess' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '' && (vocabData[i].exVi || '').trim() !== '');
+        else if (tab === 'visual') base = visualIndicesOf(base); // chỉ từ có ảnh
         return shuffleArray(base);
     }
     // 1 session đã lưu có phải "đã làm xong" không (xong rồi thì lần sau bắt đầu vòng mới).
@@ -5721,7 +5919,8 @@
             const saved = store[currentUnit] && store[currentUnit][tab] ? store[currentUnit][tab][mode] : null;
             // An toàn: bỏ qua nếu order tham chiếu index vượt phạm vi vocabData hiện tại.
             const validOrder = saved && Array.isArray(saved.order) && saved.order.length &&
-                               saved.order.every(i => i >= 0 && i < vocabData.length);
+                               saved.order.every(i => i >= 0 && i < vocabData.length) &&
+                               (tab !== 'visual' || saved.order.every(i => visualHasImage(i)));
             if (validOrder && !isSessionFinished(tab, saved)) sess = saved;
         }
         if (sess) {
@@ -6530,6 +6729,25 @@
             hardT.classList.toggle('on', sumHardQuiz);
         }
         refreshSumMax();
+        syncSumVisualChip();
+    }
+    // 🖼️ Các Unit đang chọn có ảnh minh hoạ thật không? Không có -> khoá chip "Nhìn hình chọn từ"
+    let sumVisualToken = 0;
+    let sumVisualOff = false;
+    async function syncSumVisualChip() {
+        const chip = document.querySelector('#sum-type-row [data-type="visual"]');
+        if (!chip) return;
+        const myToken = ++sumVisualToken;
+        const withImg = await itemsWithRealImage(buildMixedVocab([...sumSelUnits]));
+        if (myToken !== sumVisualToken) return;
+        sumVisualOff = withImg.length === 0;
+        chip.classList.toggle('is-off', sumVisualOff);
+        chip.title = sumVisualOff ? 'Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng' : '';
+        if (sumVisualOff && sumTypes.has('visual')) {
+            sumTypes.delete('visual');
+            chip.classList.remove('sel');
+            const allT = document.getElementById('sum-type-all'); if (allT) allT.classList.remove('sel');
+        }
     }
     function refreshSumMax() {
         const el = document.getElementById('sum-num-max'); if (!el) return;
@@ -6544,8 +6762,18 @@
         sumHardQuiz = !sumHardQuiz;
         syncSummaryChips();
     }
-    function toggleSumType(t) { if (sumTypes.has(t)) sumTypes.delete(t); else sumTypes.add(t); syncSummaryChips(); }
-    function toggleSumAllTypes() { sumTypes = (sumTypes.size === 5) ? new Set() : new Set(['quiz','typing','listen','guess','visual']); syncSummaryChips(); }
+    function toggleSumType(t) {
+        if (t === 'visual' && sumVisualOff && !sumTypes.has('visual')) {
+            alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa dùng được dạng "Nhìn hình chọn từ" nhé!');
+            return;
+        }
+        if (sumTypes.has(t)) sumTypes.delete(t); else sumTypes.add(t); syncSummaryChips();
+    }
+    function toggleSumAllTypes() {
+        const full = sumVisualOff ? ['quiz','typing','listen','guess'] : ['quiz','typing','listen','guess','visual'];
+        sumTypes = (sumTypes.size === full.length) ? new Set() : new Set(full);
+        syncSummaryChips();
+    }
 
     // Ôn 1 dạng quiz đơn lẻ trên vốn từ trộn — tái dùng engine sẵn có
     function launchIndividualSummaryQuiz(type) {
@@ -6598,20 +6826,42 @@
         return shuffleArray(bag).slice(0, n);
     }
 
-    function startCombinedTest() {
+    async function startCombinedTest() {
         const units = [...sumSelUnits].sort((a,b) => parseInt(a) - parseInt(b));
         if (units.length === 0) { alert('Hãy chọn ít nhất 1 Unit.'); return; }
-        const types = [...sumTypes];
+        let types = [...sumTypes];
         if (types.length === 0) { alert('Hãy chọn ít nhất 1 dạng quiz.'); return; }
         const pool = buildMixedVocab(units);
         if (pool.length < 4) { alert('Cần ít nhất 4 từ để tạo đề. Hãy chọn thêm Unit.'); return; }
+
+        // 🖼️ Dạng "Nhìn hình chọn từ": chỉ dùng từ có ảnh thật trong kho assets
+        let visualSet = new Set();
+        if (types.includes('visual')) {
+            visualSet = new Set(await itemsWithRealImage(pool));
+            if (visualSet.size === 0) {
+                if (types.length === 1) {
+                    alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa tạo được đề "Nhìn hình chọn từ".\nHãy chọn thêm dạng quiz khác hoặc Unit khác nhé!');
+                    return;
+                }
+                types = types.filter(t => t !== 'visual');
+            }
+        }
+        const onlyVisual = types.length === 1 && types[0] === 'visual';
+        const pickFrom = onlyVisual ? [...visualSet] : pool;
+
         let nInput = parseInt(document.getElementById('sum-num-q').value) || 10;
-        const n = Math.max(1, Math.min(nInput, pool.length));
-        const picked = shuffleArray([...pool]).slice(0, n);
+        const n = Math.max(1, Math.min(nInput, pickFrom.length));
+        const picked = shuffleArray([...pickFrom]).slice(0, n);
         sumTest = { answerLang: sumAnswerLang, units: units, questions: [], graded: false };
         const typePlan = buildCombinedTypePlan(types, picked.length);
+        const altTypes = types.filter(t => t !== 'visual');
         picked.forEach((item, i) => {
-            sumTest.questions.push(buildCombinedQuestion(item, typePlan[i] || types[0], pool));
+            let t = typePlan[i] || types[0];
+            // Từ chưa có ảnh thật -> đổi sang dạng quiz khác mà học viên đã chọn
+            if (t === 'visual' && !visualSet.has(item) && altTypes.length > 0) {
+                t = altTypes[Math.floor(Math.random() * altTypes.length)];
+            }
+            sumTest.questions.push(buildCombinedQuestion(item, t, pool));
         });
         renderCombinedTest();
         syncTeacherUI();
