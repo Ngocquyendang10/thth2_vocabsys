@@ -2216,22 +2216,155 @@
         } catch (e) {}
         return obj;
     }
-    // Nạp tiến độ từ server về máy khi đăng nhập (server là bản gốc lúc đăng nhập).
-    function applyServerProgress(sess, blob) {
-        if (!blob) return;
-        var key = String(sess || '').toLowerCase(), obj;
-        try { obj = JSON.parse(blob); } catch (e) { return; }
-        if (!obj || typeof obj !== 'object') return;
-        var allow = progressKeysForStudent(key);
-        var vmPref = 'vocabMastered_' + key + '_u';
-        Object.keys(obj).forEach(function (k) {
-            if ((allow.indexOf(k) > -1 || k.indexOf(vmPref) === 0) && obj[k] != null) { try { localStorage.setItem(k, obj[k]); } catch (e) {} }
+
+    /* ------------------------------------------------------------------
+       🔐 MẬT KHẨU DÙNG CHO ĐỒNG BỘ (tách khỏi "Ghi nhớ đăng nhập")
+       Trước đây chỉ đồng bộ khi học viên TICK "ghi nhớ đăng nhập" -> ai
+       không tick thì học bao nhiêu cũng KHÔNG lên server, đổi máy là trắng.
+       Nay mọi lần đăng nhập thành công đều lưu 1 khoá riêng để đồng bộ.
+       ------------------------------------------------------------------ */
+    var SYNC_PASS_KEY = 'sync_pass_QuyenClass';
+    function setSyncPass(pass) { try { if (pass) localStorage.setItem(SYNC_PASS_KEY, pass); } catch (e) {} }
+    function getSyncPass() {
+        try { return localStorage.getItem('saved_pass_QuyenClass') || localStorage.getItem(SYNC_PASS_KEY) || ''; } catch (e) { return ''; }
+    }
+
+    /* ------------------------------------------------------------------
+       🔀 GỘP TIẾN ĐỘ (MERGE) THAY VÌ GHI ĐÈ
+       Trước đây: máy nào ghi sau thì đè sạch máy kia -> học trên điện thoại,
+       mở PC (chưa có gì) là PC đẩy bản rỗng lên và xoá luôn dữ liệu cũ.
+       Nay: luôn GỘP local + server (lấy cái nhiều hơn / mới hơn) rồi mới ghi.
+       ------------------------------------------------------------------ */
+    function _pNum(v) { var n = parseInt(v, 10); return isNaN(n) ? 0 : n; }
+    function _pParse(v, d) { try { var o = JSON.parse(v); return (o == null) ? d : o; } catch (e) { return d; } }
+    function _pStr(o) { try { return JSON.stringify(o); } catch (e) { return String(o); } }
+    function _pUnion(a, b) {
+        var out = [], seen = {};
+        [].concat(Array.isArray(a) ? a : [], Array.isArray(b) ? b : []).forEach(function (it) {
+            var id = (it && typeof it === 'object') ? (it.ko || it.word || _pStr(it)) : String(it);
+            if (!seen[id]) { seen[id] = 1; out.push(it); }
         });
+        return out;
+    }
+    function _pIsObj(o) { return o && typeof o === 'object' && !Array.isArray(o); }
+    // Gộp unitQuiz: theo unit -> tab -> {right,wrong,total,done,started,modes}
+    function _pMergeQuiz(a, b) {
+        var out = Object.assign({}, _pIsObj(a) ? a : {});
+        Object.keys(_pIsObj(b) ? b : {}).forEach(function (unit) {
+            if (!_pIsObj(out[unit])) { out[unit] = b[unit]; return; }
+            Object.keys(b[unit] || {}).forEach(function (tab) {
+                var x = out[unit][tab], y = b[unit][tab];
+                if (!_pIsObj(x)) { out[unit][tab] = y; return; }
+                if (!_pIsObj(y)) return;
+                out[unit][tab] = {
+                    right: Math.max(_pNum(x.right), _pNum(y.right)),
+                    wrong: Math.max(_pNum(x.wrong), _pNum(y.wrong)),
+                    total: Math.max(_pNum(x.total), _pNum(y.total)),
+                    done: !!(x.done || y.done),
+                    started: !!(x.started || y.started)
+                };
+                if (x.modes || y.modes) {
+                    var m = Object.assign({}, x.modes || {});
+                    Object.keys(y.modes || {}).forEach(function (mk) {
+                        var mx = m[mk], my = y.modes[mk];
+                        if (!_pIsObj(mx)) { m[mk] = my; return; }
+                        m[mk] = {
+                            right: Math.max(_pNum(mx.right), _pNum(my.right)),
+                            wrong: Math.max(_pNum(mx.wrong), _pNum(my.wrong)),
+                            total: Math.max(_pNum(mx.total), _pNum(my.total)),
+                            done: !!(mx.done || my.done),
+                            started: !!(mx.started || my.started)
+                        };
+                    });
+                    out[unit][tab].modes = m;
+                }
+            });
+        });
+        return out;
+    }
+    // Gộp quizState/writeSentenceState: unit -> tab -> mode -> session (giữ session làm được nhiều câu hơn)
+    function _pSessScore(s) { return _pIsObj(s) ? Math.max((s.seen || []).length, _pNum(s.current)) : -1; }
+    function _pMergeState(a, b, depth) {
+        if (depth === 0) return (_pSessScore(b) > _pSessScore(a)) ? b : a;
+        var out = Object.assign({}, _pIsObj(a) ? a : {});
+        Object.keys(_pIsObj(b) ? b : {}).forEach(function (k) {
+            out[k] = (k in out) ? _pMergeState(out[k], b[k], depth - 1) : b[k];
+        });
+        return out;
+    }
+    // Gộp 1 khoá: ưu tiên "không mất dữ liệu"
+    function _pMergeKey(key, k, lv, sv) {
+        if (lv == null) return sv;
+        if (sv == null) return lv;
+        if (k === 'total_secs_' + key) return String(Math.max(_pNum(lv), _pNum(sv)));
+        if (k === 'unitSecs_' + key) {
+            var lo = _pParse(lv, {}), so = _pParse(sv, {}), out = Object.assign({}, lo);
+            Object.keys(so).forEach(function (u) { out[u] = Math.max(_pNum(out[u]), _pNum(so[u])); });
+            return _pStr(out);
+        }
+        if (k === 'completed_units_' + key || k === 'starred_' + key + '_QuyenClass' ||
+            k === 'wrongWords_' + key || k.indexOf('vocabMastered_') === 0) {
+            return _pStr(_pUnion(_pParse(lv, []), _pParse(sv, [])));
+        }
+        if (k === 'notes_' + key + '_QuyenClass') {
+            var ln = _pParse(lv, {}), sn = _pParse(sv, {}), on = Object.assign({}, sn);
+            Object.keys(ln).forEach(function (w) { if (String(ln[w] || '').trim()) on[w] = ln[w]; });
+            return _pStr(on);
+        }
+        if (k === 'unitQuiz_' + key) return _pStr(_pMergeQuiz(_pParse(lv, {}), _pParse(sv, {})));
+        if (k === 'quizState_' + key) return _pStr(_pMergeState(_pParse(lv, {}), _pParse(sv, {}), 3));
+        if (k === 'writeSentenceState_' + key) return _pStr(_pMergeState(_pParse(lv, {}), _pParse(sv, {}), 2));
+        if (k === 'quizHard_' + key) return (lv === '1' || sv === '1') ? '1' : lv;
+        return lv; // còn lại: giữ bản trên máy
+    }
+    function mergeProgressObjects(key, local, server) {
+        var out = {}, names = {};
+        Object.keys(local || {}).forEach(function (k) { names[k] = 1; });
+        Object.keys(server || {}).forEach(function (k) { names[k] = 1; });
+        Object.keys(names).forEach(function (k) {
+            if (k === 'today_secs_' + key || k === 'study_date_' + key) return; // xử lý riêng bên dưới
+            out[k] = _pMergeKey(key, k, local[k], server[k]);
+        });
+        // "Hôm nay": chỉ cộng gộp khi HAI bên cùng một ngày, khác ngày thì giữ bản trên máy.
+        var ld = local['study_date_' + key], sd = server['study_date_' + key];
+        if (ld && sd && ld === sd) {
+            out['study_date_' + key] = ld;
+            out['today_secs_' + key] = String(Math.max(_pNum(local['today_secs_' + key]), _pNum(server['today_secs_' + key])));
+        } else if (ld) {
+            out['study_date_' + key] = ld;
+            if (local['today_secs_' + key] != null) out['today_secs_' + key] = local['today_secs_' + key];
+        } else if (sd) {
+            out['study_date_' + key] = sd;
+            if (server['today_secs_' + key] != null) out['today_secs_' + key] = server['today_secs_' + key];
+        }
+        return out;
+    }
+
+    // ✅ Chỉ được phép ĐẨY lên server sau khi đã KÉO bản trên server về và gộp xong.
+    // Nhờ vậy một máy "trắng" không bao giờ đè mất tiến độ máy khác.
+    var _progressReady = false;
+    // Nạp tiến độ từ server và GỘP với những gì đang có trên máy.
+    function applyServerProgress(sess, blob) {
+        var key = String(sess || '').toLowerCase();
+        var server = {};
+        if (blob) { var o = _pParse(blob, null); if (_pIsObj(o)) server = o; }
+        var allow = progressKeysForStudent(key), vmPref = 'vocabMastered_' + key + '_u';
+        var clean = {};
+        Object.keys(server).forEach(function (k) {
+            if ((allow.indexOf(k) > -1 || k.indexOf(vmPref) === 0) && server[k] != null) clean[k] = server[k];
+        });
+        var merged = mergeProgressObjects(key, snapshotProgress(sess), clean);
+        Object.keys(merged).forEach(function (k) {
+            if (merged[k] != null) { try { localStorage.setItem(k, merged[k]); } catch (e) {} }
+        });
+        _progressReady = true;
+        scheduleProgressPush(1500); // đẩy bản đã gộp lên server cho các máy khác
     }
     function buildProgressPayload() {
         var sess = localStorage.getItem('studentSession_QuyenClass');
-        var pass = localStorage.getItem('saved_pass_QuyenClass');
-        if (!sess || !pass) return null; // chỉ đồng bộ khi có phiên thật + mật khẩu đã lưu
+        var pass = getSyncPass();
+        if (!sess || !pass) return null;      // chưa đăng nhập thật thì không đồng bộ
+        if (!_progressReady) return null;     // chưa kéo bản server về -> không được đè
         return JSON.stringify({ action: 'saveProgress', user: sess, pass: pass, data: JSON.stringify(snapshotProgress(sess)) });
     }
     function pushProgressToServer() {
@@ -2245,11 +2378,29 @@
     }
     var _progressPushTimer = null;
     function scheduleProgressPush(delay) {
-        if (!localStorage.getItem('saved_pass_QuyenClass')) return;
+        if (!getSyncPass()) return;
         clearTimeout(_progressPushTimer);
         _progressPushTimer = setTimeout(pushProgressToServer, delay || 4000);
     }
-    setInterval(function () { scheduleProgressPush(1000); }, 30000); // đẩy định kỳ để bắt kịp thời gian học
+    // 📴 Đăng nhập lúc mất mạng: chưa kéo được bản server -> thử kéo lại khi có mạng,
+    //    kéo xong (đã gộp) mới cho phép đẩy lên. Không bao giờ đẩy "mù".
+    var _pullTimer = null;
+    function pullProgressOnce() {
+        if (_progressReady) return;
+        var sess = localStorage.getItem('studentSession_QuyenClass'), pass = getSyncPass();
+        if (!sess || !pass) return;
+        fetch(SCRIPT_URL + '?action=unlockUnit&unit=LOGIN_AUTH&pass=' + encodeURIComponent(sess + '||' + pass))
+            .then(function (r) { return r.json(); })
+            .then(function (d) { if (d && d.success) applyServerProgress(sess, d.progress); })
+            .catch(function () {});
+    }
+    function markProgressOfflineLogin() {
+        _progressReady = false;
+        clearInterval(_pullTimer);
+        _pullTimer = setInterval(pullProgressOnce, 60000); // 1 phút thử lại 1 lần
+        window.addEventListener('online', pullProgressOnce);
+    }
+    setInterval(function () { _progressReady ? scheduleProgressPush(1000) : pullProgressOnce(); }, 30000);
     document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flushProgressNow(); });
     window.addEventListener('pagehide', flushProgressNow);
 
@@ -2527,6 +2678,7 @@
             if (data && data.success) {
                 // Đồng bộ mật khẩu mới cho các cơ chế đang chạy (nhớ đăng nhập + đồng bộ tiến độ + theo dõi vô hiệu hoá)
                 if (localStorage.getItem('saved_pass_QuyenClass') != null) localStorage.setItem('saved_pass_QuyenClass', newPass);
+                setSyncPass(newPass);   // 🔐 nếu không cập nhật, server sẽ từ chối lưu tiến độ vì sai mật khẩu
                 if (typeof __authPass !== 'undefined') __authPass = newPass;
                 setPwMsg('✅ Đổi mật khẩu thành công! Lần sau hãy đăng nhập bằng mật khẩu mới nhé.', 'success');
                 if (btn) { btn.textContent = 'Đã đổi ✓'; }
@@ -2730,7 +2882,8 @@
                     localStorage.setItem('saved_pass_QuyenClass', pass);
                 }
                 localStorage.setItem('studentSession_QuyenClass', user);
-                applyServerProgress(user, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
+                setSyncPass(pass);                        // 🔐 luôn đồng bộ tiến độ, dù có tick "ghi nhớ" hay không
+                applyServerProgress(user, data.progress); // nạp + GỘP tiến độ từ server
                 setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                 setTeacherRole(data.isTeacher, user);    // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
@@ -2749,9 +2902,11 @@
 
     function executeStudentLogout() {
         // Chỉ xoá phiên đăng nhập — GIỮ LẠI sổ tay/tiến độ riêng theo tài khoản để lần sau đăng nhập lại vẫn còn.
+        try { flushProgressNow(); } catch (e) {}            // 💾 đẩy nốt tiến độ lên server TRƯỚC khi xoá phiên
         localStorage.removeItem('studentSession_QuyenClass');
         localStorage.removeItem('saved_user_QuyenClass');
         localStorage.removeItem('saved_pass_QuyenClass');
+        localStorage.removeItem('sync_pass_QuyenClass');
         localStorage.removeItem('historyUnits_QuyenClass'); // dọn khoá chung cũ (không còn dùng)
         window.location.reload();
     }
@@ -2784,9 +2939,11 @@
         if (__statusPollTimer) { clearInterval(__statusPollTimer); __statusPollTimer = null; }
         try { sessionStorage.setItem('accountDisabledFlag_QuyenClass', '1'); } catch (e) {}
         // Xoá phiên để không tự đăng nhập lại; GIỮ dữ liệu học tập riêng theo tài khoản.
+        try { flushProgressNow(); } catch (e) {}   // 💾 đẩy nốt tiến độ trước khi mất phiên
         localStorage.removeItem('studentSession_QuyenClass');
         localStorage.removeItem('saved_user_QuyenClass');
         localStorage.removeItem('saved_pass_QuyenClass');
+        localStorage.removeItem('sync_pass_QuyenClass');
         window.location.reload();
     }
 
@@ -5732,7 +5889,8 @@
                 let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
                 let data = await res.json();
                 if(data.success) {
-                    applyServerProgress(savedUser, data.progress); // nạp tiến độ đã đồng bộ từ server (nếu có)
+                    setSyncPass(savedPass);
+                    applyServerProgress(savedUser, data.progress); // nạp + GỘP tiến độ từ server
                     setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                     setTeacherRole(data.isTeacher, savedUser);    // 👩‍🏫 quyền tải đề
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
@@ -5744,6 +5902,7 @@
                 }
             } catch(e) {
                 // Mất mạng: dùng lại danh sách unit đã lưu của chính tài khoản này (khoá riêng), có fallback khoá chung cũ.
+                markProgressOfflineLogin();   // ⛔ chưa kéo được tiến độ server -> chưa cho đẩy, sẽ thử lại khi có mạng
                 loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
                 loadTeacherRole(sessionUser); // 👩‍🏫 khôi phục quyền tải đề đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
