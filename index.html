@@ -654,33 +654,28 @@
         .ws-verdict { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
         .ws-verdict .v { font-size: 16px; font-weight: 800; }
         .ws-verdict .s { font-size: 12.5px; font-weight: 700; color: var(--sub-text); }
-        .ws-corrected { background: #fff; border-radius: var(--radius-sm); padding: 16px 18px; }
         .ws-label { font-size: 11px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
-        .ws-line { font-size: 18px; line-height: 1.35; display: flex; flex-wrap: wrap; align-items: flex-end; row-gap: 14px; }
-        .ws-line.ko, .ws-answer.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
-        /* Token xếp DỌC: chú thích nhỏ nằm trên, từ chính nằm dưới (kiểu ruby) */
-        .ws-tok { display: inline-flex; flex-direction: column; align-items: center; white-space: nowrap; margin-right: 10px; line-height: 1.15; }
-        .ws-anno { font-size: 11px; font-weight: 800; line-height: 1.2; min-height: 13px; margin-bottom: 2px; text-align: center; }
-        .ws-anno.amber { color: #b7791f; }
-        .ws-anno.red { color: #c53030; }
-        .ws-anno.green { color: #2f855a; }
-        .ws-main { display: inline-flex; align-items: baseline; }
-        .ws-pill { font-weight: 800; padding: 2px 8px; border-radius: 6px; }
-        .ws-pill.correct { background: #e6fbea; color: #22543d; }
-        .ws-pill.typo { background: #fef3c7; color: #7a5b00; }
-        .ws-pill.missing { background: #fee2e2; color: #742a2a; }
-        /* gạch ngang mờ nhẹ để vẫn đọc được câu mình đã viết */
-        .ws-strike { text-decoration: line-through; text-decoration-color: rgba(100,110,130,0.45); text-decoration-thickness: 1px; font-weight: 600; opacity: 0.62; }
-        .ws-strike.amber { color: #b7791f; }
-        .ws-strike.red { color: #c53030; }
-        .ws-answerbox { width: 100%; min-width: 0; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); background: #fff; box-shadow: var(--neu-concave); line-height: 2.1; }
+        /* ---- Bài đã chấm: 2 dòng "Bạn viết" / "Câu sửa" (kiểu cô giáo sửa vở) ---- */
+        .ws-answerbox { width: 100%; min-width: 0; padding: 6px 16px 10px; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); background: #fff; box-shadow: var(--neu-concave); }
+        .ws-drow { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; }
+        .ws-drow + .ws-drow { border-top: 1px dashed #eef2f8; }
+        .ws-dlab { flex: 0 0 72px; font-size: 10.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: var(--sub-text); padding-top: 8px; }
+        .ws-dtext { flex: 1 1 auto; min-width: 0; font-size: 17.5px; font-weight: 700; line-height: 1.95; word-break: break-word; }
+        .ws-dtext.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
+        /* dòng học viên viết: chữ mờ, lỗi gạch ngang, chỗ thiếu có dấu ∨ */
+        .ws-dtext.you { color: #8d95a3; }
+        .ws-dtext.you .bad { color: #c05621; text-decoration: line-through; text-decoration-thickness: 1.5px; text-decoration-color: rgba(192,86,33,.5); }
+        /* dòng câu sửa: chữ đúng đậm xanh, chỗ được sửa/bổ sung tô nền */
+        .ws-dtext.fix { color: #22543d; }
+        .ws-dtext.fix .new { background: #e9f9ee; border-radius: 6px; padding: 2px 8px; box-shadow: inset 0 -2px 0 #9ae6b4; }
+        /* 넣음표 — dấu "thiếu chỗ này" chèn vào dòng học viên viết */
+        .ws-ins { display: inline-block; width: 1.15em; height: .72em; margin: 0 1px; vertical-align: -.05em; color: #e53e3e; }
+        .ws-ins svg { display: block; width: 100%; height: 100%; overflow: visible; }
+        .ws-clean-line { font-size: 17.5px; font-weight: 700; line-height: 1.9; color: #22543d; padding: 8px 0; word-break: break-word; }
+        .ws-clean-line.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
         /* "Câu của bạn": ô chấm full chiều ngang, nút "Câu tiếp" xuống dòng riêng canh phải -> không bị ép hẹp */
         .ws-nextrow { display: flex; justify-content: flex-end; margin-top: 12px; }
         .ws-nextrow .ws-btn { padding: 12px 26px; }
-        .ws-arrow { color: #cbd5e0; margin: 0 5px; font-weight: 600; }
-        .ws-answer-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: var(--radius-sm); padding: 14px 18px; }
-        .ws-answer-card .ws-label { color: #2f855a; }
-        .ws-answer { font-size: 18px; font-weight: 700; color: #22543d; line-height: 1.5; }
         .ws-grammar { background: #f4f0ff; border: 1px solid rgba(97,76,255,0.18); border-radius: var(--radius-sm); padding: 14px 16px; }
         .ws-grammar .gh { font-size: 12px; font-weight: 800; color: var(--point-color); margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
         .ws-vocab-chips { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -693,6 +688,35 @@
         .ws-dot.bad { background: #f56565; }
         .ws-empty { text-align: center; color: var(--sub-text); padding: 24px 12px; font-weight: 600; }
         .ws-new-badge { display: inline-block; margin-left: 6px; background: #f6c944; color: #7a5b00; font-size: 9px; font-weight: 800; padding: 1px 6px; border-radius: 999px; vertical-align: middle; }
+
+        /* ---- Viết câu: tối ưu cho tablet & điện thoại ---- */
+        @media (max-width: 900px) {
+            .ws-src-txt.ko { font-size: 20px; }
+            .ws-dtext, .ws-clean-line { font-size: 17px; }
+        }
+        @media (max-width: 620px) {
+            .ws-card { padding: 16px 14px; gap: 10px; }
+            .ws-top { gap: 8px; }
+            .ws-toggles { gap: 12px; width: 100%; justify-content: flex-start; }
+            .ws-src { padding: 14px; gap: 10px; }
+            .ws-src-txt.ko { font-size: 19px; }
+            .ws-src-txt.vi { font-size: 16px; }
+            .ws-speak { width: 36px; height: 36px; }
+            /* ô nhập xuống dòng riêng, nút Kiểm tra full chiều ngang -> dễ bấm */
+            .ws-inputrow { flex-direction: column; }
+            .ws-inputrow .ws-btn { width: 100%; padding: 14px 0; }
+            .ws-answerbox { padding: 4px 12px 8px; }
+            /* nhãn "Bạn viết"/"Câu sửa" nằm trên, câu nằm dưới -> không bị bóp hẹp */
+            .ws-drow { flex-direction: column; gap: 2px; padding: 9px 0; }
+            .ws-dlab { flex: none; padding-top: 0; }
+            .ws-dtext, .ws-clean-line { font-size: 16.5px; line-height: 2; }
+            .ws-nextrow .ws-btn { width: 100%; padding: 14px 0; }
+            .ws-verdict .v { font-size: 15px; }
+        }
+        @media (max-width: 380px) {
+            .ws-dtext, .ws-clean-line { font-size: 15.5px; }
+            .ws-dtext.fix .new { padding: 2px 6px; }
+        }
 
         .toggle-mode { font-size: 12px; color: var(--point-color); background: var(--card-color); border: none; cursor: pointer; font-weight: 700; padding: 8px 18px; border-radius: 20px; box-shadow: var(--neu-convex); margin-bottom: 24px; display: inline-block; outline: none; transition: all 0.2s ease; }
 
@@ -4819,9 +4843,12 @@
         });
         flush();
 
+        // Câu đúng ĐẦY ĐỦ theo thứ tự chuẩn (kể cả từ tùy chọn được tha), đánh dấu chữ nào học viên chưa có
+        const corrected = ops.filter(o => o.op !== 'del').map(o => ({ w: o.c, isNew: o.op === 'ins' }));
+
         const ok = (missN === 0);                    // khoan dung: thừa/gõ nhầm nhỏ không tính là sai
         const clean = ok && typoN === 0 && extraN === 0;
-        return { segments, matched, typoN, extraN, missN, total, ok, clean };
+        return { segments, corrected, matched, typoN, extraN, missN, total, ok, clean };
     }
 
     // Gợi ý chữ cái đầu (cho chiều Hàn -> Việt): "Chủ nhà hàng" -> "C.. n.. h..."
@@ -4968,29 +4995,39 @@
         wsSaveSession(); wsRender(); updateDashboardStats();
     }
 
-    // Vẽ câu đã chấm THEO THỨ TỰ học viên gõ: xanh (đúng), vàng (gõ nhầm → sửa),
-    // đỏ gạch (thừa) ngay tại chỗ, đỏ "+từ" (thiếu) chèn đúng vị trí.
-    function wsRenderMatch(m) {
-        // Mỗi từ là 1 khối XẾP DỌC: chú thích nhỏ nằm NGAY TRÊN từ chính (kiểu ruby)
-        //  - match  : chỉ từ đúng (xanh), không có chú thích
-        //  - typo   : từ user bị gạch, phía trên là từ đúng (nhỏ, vàng nâu)
-        //  - extra  : từ user thừa bị gạch (đỏ), phía trên ghi "thừa"
-        //  - missing: từ user bỏ sót -> hiện từ đúng, phía trên ghi "thiếu"
-        let html = '';
+    // Vẽ câu đã chấm kiểu cô giáo sửa vở — 2 dòng:
+    //   "Bạn viết": đúng thứ tự học viên gõ, từ sai/thừa bị gạch, chỗ THIẾU chèn dấu ∨ (넣음표)
+    //   "Câu sửa" : câu đúng hoàn chỉnh, chỉ những chữ được sửa/bổ sung mới tô nền xanh
+    // Câu đúng tuyệt đối thì chỉ hiện 1 dòng (không cần đối chiếu).
+    const WS_INS_MARK = '<span class="ws-ins" title="Thiếu chữ ở đây" aria-label="thiếu chữ">'
+        + '<svg viewBox="0 0 24 16" fill="none" aria-hidden="true">'
+        + '<path d="M1.5 2.5C1.5 2.5 3 3 5.5 5.2C8.5 7.8 10.6 11 12 13.5C13.4 11 15.5 7.8 18.5 5.2C21 3 22.5 2.5 22.5 2.5" '
+        + 'stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';
+
+    function wsRenderMatch(m, koCls) {
+        koCls = koCls || '';
+        // Câu hoàn hảo: chỉ cần khen, không cần dòng đối chiếu
+        if (m.clean) {
+            const line = m.segments.map(seg => wsEsc(seg.text)).join(' ');
+            return `<div class="ws-clean-line${koCls}">${line}</div>`;
+        }
+
+        // Dòng 1 — đúng những gì học viên đã gõ
+        let you = '';
         m.segments.forEach(seg => {
-            if (seg.type === 'match') {
-                html += `<span class="ws-tok"><span class="ws-anno"></span><span class="ws-main"><span class="ws-pill correct">${wsEsc(seg.text)}</span></span></span>`;
-            } else if (seg.type === 'typo') {
-                html += `<span class="ws-tok"><span class="ws-anno amber">${wsEsc(seg.correct)}</span><span class="ws-main"><span class="ws-strike amber">${wsEsc(seg.user)}</span></span></span>`;
-            } else if (seg.type === 'extra') {
-                // Thừa: chỉ gạch đi, không ghi chú
-                html += `<span class="ws-tok"><span class="ws-anno"></span><span class="ws-main"><span class="ws-strike red">${wsEsc(seg.user)}</span></span></span>`;
-            } else if (seg.type === 'missing') {
-                // Thiếu: hiện từ đúng với dấu +
-                html += `<span class="ws-tok"><span class="ws-anno"></span><span class="ws-main"><span class="ws-pill missing">+${wsEsc(seg.correct)}</span></span></span>`;
-            }
+            if (seg.type === 'match') you += `<span>${wsEsc(seg.text)}</span> `;
+            else if (seg.type === 'typo') you += `<span class="bad">${wsEsc(seg.user)}</span> `;
+            else if (seg.type === 'extra') you += `<span class="bad">${wsEsc(seg.user)}</span> `;
+            else if (seg.type === 'missing') you += WS_INS_MARK + ' '; // dấu ∨: thiếu ngay chỗ này
         });
-        return html;
+
+        // Dòng 2 — câu đúng hoàn chỉnh, tô nền chỗ đã sửa/bổ sung
+        const fix = (m.corrected || []).map(c =>
+            c.isNew ? `<span class="new">${wsEsc(c.w)}</span>` : `<span>${wsEsc(c.w)}</span>`
+        ).join(' ');
+
+        return `<div class="ws-drow"><div class="ws-dlab">Bạn viết</div><div class="ws-dtext you${koCls}">${you}</div></div>`
+             + `<div class="ws-drow"><div class="ws-dlab">Câu sửa</div><div class="ws-dtext fix${koCls}">${fix}</div></div>`;
     }
 
     function wsRender() {
@@ -5038,8 +5075,8 @@
             const m = ws.match;
             workHtml = `
               <div class="ws-yourbox">
-                <div class="ws-label" style="margin-bottom:7px;">Câu của bạn</div>
-                <div class="ws-answerbox ws-line${koCls}">${wsRenderMatch(m)}</div>
+                <div class="ws-label" style="margin-bottom:7px;">Bài đã chấm</div>
+                <div class="ws-answerbox">${wsRenderMatch(m, koCls)}</div>
                 <div class="ws-nextrow">
                   <button class="ws-btn" onclick="wsNext()">Câu tiếp →</button>
                 </div>
@@ -5055,10 +5092,6 @@
             fbHtml = `
               <div class="ws-fb">
                 <div class="ws-verdict"><span class="v" style="color:${vColor};">${verdict}</span><span class="s">${matches}/${m.total} từ đúng</span></div>
-                <div class="ws-answer-card">
-                  <div class="ws-label">✅ Câu đúng hoàn chỉnh</div>
-                  <div class="ws-answer${koCls}">${wsEsc(targetText)}</div>
-                </div>
               </div>`;
         }
 
