@@ -261,11 +261,17 @@
         /* 🧩 GAME HÌNH THEO UNIT: Ghép chữ / Phân loại / Điền từ 초성 */
         .pg-tab { max-width: 1100px; margin-left: auto; margin-right: auto; width: 100%; }
         .pg-guide { font-size: 13px; font-weight: 600; color: var(--sub-text); text-align: center; margin: 0 0 10px; line-height: 1.5; }
-        .pg-boards { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+        .pg-boards { display: flex; flex-direction: column; align-items: center; gap: 10px; margin: 0 0 12px; }
         .pg-boards:empty { display: none; }
-        .pg-board-btn { font-family: inherit; font-size: 13px; font-weight: 800; padding: 8px 18px; border-radius: 999px; border: 2px solid transparent; background: var(--card-color); color: var(--sub-text); box-shadow: var(--neu-convex); cursor: pointer; transition: all .15s; }
-        .pg-board-btn:hover { color: var(--point-color); }
-        .pg-board-btn.active { color: var(--point-color); border-color: var(--point-color); }
+        .pg-games { display: inline-flex; gap: 4px; flex-wrap: wrap; justify-content: center; background: var(--bg-color); padding: 4px; border-radius: 999px; box-shadow: var(--neu-concave); }
+        .pg-game-btn { font-family: inherit; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 999px; border: none; background: transparent; color: var(--sub-text); cursor: pointer; transition: all .15s; }
+        .pg-game-btn:hover { color: #1a202c; }
+        .pg-game-btn.active { background: var(--card-color); color: #1a202c; font-weight: 800; box-shadow: var(--neu-convex); }
+        .pg-topics { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+        .pg-topics-lead { font-size: 12px; font-weight: 700; color: var(--sub-text); }
+        .pg-board-btn { font-family: inherit; font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(148,163,184,0.35); background: transparent; color: var(--sub-text); cursor: pointer; transition: all .15s; }
+        .pg-board-btn:hover { color: #1a202c; border-color: rgba(148,163,184,0.7); }
+        .pg-board-btn.active { color: #1a202c; background: var(--card-color); border-color: rgba(148,163,184,0.7); }
         .pg-pic-box { width: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
         .pg-pic { display: block; width: 100%; background-repeat: no-repeat; border-radius: 10px; pointer-events: none; }
         .sm-ghost { position: fixed; z-index: 99999; pointer-events: none; transform: translate(-50%, -50%) rotate(-3deg); box-shadow: 0 10px 24px rgba(0,0,0,.18); cursor: grabbing; }
@@ -286,8 +292,8 @@
         .sm-slot.shake { border-color: var(--error-color) !important; background: #ffe3e3 !important; animation: smShake .4s; }
         .sm-chip { padding: 9px 16px; border-radius: 999px; background: var(--card-color, #fff); box-shadow: var(--neu-convex); font-size: 16px; font-weight: 800; color: #1a202c; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; border: 2px solid transparent; transition: transform .12s, border-color .12s, opacity .12s; }
         .sm-chip:hover { color: var(--point-color); }
-        .sm-chip.selected, .ps-card.selected { border-color: var(--point-color); color: var(--point-color); transform: translateY(-2px); }
-        .sm-chip.dragging, .ps-card.dragging { opacity: .3; }
+        .sm-chip.selected { border-color: var(--point-color); color: var(--point-color); transform: translateY(-2px); }
+        .sm-chip.dragging { opacity: .3; }
 
         /* Phân loại: kéo thẻ hình + chữ vào đúng nhóm */
         .ps-zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
@@ -300,8 +306,7 @@
         .ps-zone-body { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
         .ps-mini { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 3px; border-radius: 10px; background: var(--card-color); border: 2px solid var(--success-color); font-size: 13px; font-weight: 800; color: #1a202c; cursor: pointer; animation: smPop .28s cubic-bezier(0.34,1.56,0.64,1); }
         .ps-mini.was-missed { border-color: #ed8936; }
-        .ps-mini .pg-pic { width: 40px; border-radius: 7px; }
-        .ps-card { width: 118px; padding: 6px 6px 8px; border-radius: 14px; background: var(--card-color); box-shadow: var(--neu-convex); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; color: #1a202c; text-align: center; line-height: 1.2; transition: transform .12s, border-color .12s, opacity .12s; }
+        .ps-mini .pg-pic { width: 56px; border-radius: 7px; }
 
         /* Điền từ 초성: nhìn hình + phụ âm đầu, tự gõ đủ từ */
         .cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
@@ -310,12 +315,14 @@
         .cs-card.ok.was-missed { border-color: #ed8936; }
         .cs-card.bad { border-color: var(--error-color); }
         .cs-card.shake { animation: smShake .4s; }
-        .cs-hint { text-align: center; font-size: 22px; font-weight: 900; letter-spacing: 4px; color: var(--point-color); line-height: 1.2; }
+        .cs-hint { text-align: center; font-size: 19px; font-weight: 800; letter-spacing: 3px; color: #2d3748; line-height: 1.2; }
         .cs-row { display: flex; gap: 6px; }
-        .cs-input { flex: 1; min-width: 0; font-family: inherit; font-size: 16px; font-weight: 700; padding: 8px 10px; border-radius: 10px; border: 1.5px solid rgba(148,163,184,0.5); background: #fff; color: #1a202c; outline: none; text-align: center; }
+        .cs-input { flex: 1; min-width: 0; font-family: inherit; font-size: 16px; font-weight: 700; padding: 7px 10px; border-radius: 10px; border: 1.5px solid rgba(148,163,184,0.5); background: #fff; color: #1a202c; outline: none; text-align: center; }
         .cs-input:focus { border-color: var(--point-color); }
         .cs-input:disabled { background: #f0fff4; color: #22543d; border-color: transparent; }
-        .cs-btn { font-family: inherit; border: none; border-radius: 10px; padding: 0 12px; background: var(--point-color); color: #fff; font-size: 13px; font-weight: 800; cursor: pointer; }
+        .cs-input::placeholder { font-weight: 500; font-size: 14px; color: #a0aec0; }
+        .cs-btn { font-family: inherit; flex: 0 0 auto; width: 38px; border: 1px solid rgba(148,163,184,0.45); border-radius: 10px; background: transparent; color: var(--sub-text); font-size: 16px; font-weight: 800; cursor: pointer; transition: all .15s; }
+        .cs-btn:hover { color: var(--success-color); border-color: var(--success-color); background: #f0fff4; }
         .cs-foot { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 18px; font-size: 12px; font-weight: 700; }
         .cs-reveal { background: none; border: none; padding: 0; font: inherit; color: var(--sub-text); text-decoration: underline; cursor: pointer; }
         .cs-ans { color: #c05621; }
@@ -324,7 +331,6 @@
         @media (max-width: 768px) {
             .sm-chip { font-size: 14px; padding: 8px 13px; }
             .pg-bank { gap: 8px; padding: 10px; }
-            .ps-card { width: 96px; font-size: 13px; padding: 5px 5px 7px; }
             .ps-zones { grid-template-columns: 1fr 1fr; gap: 8px; }
             .ps-zone { min-height: 84px; padding: 8px 9px 10px; }
             .ps-zone-head { font-size: 14px; }
@@ -1455,12 +1461,10 @@
                         <button id="sub-btn-listen" class="quiz-subtab-btn active" onclick="switchTab('listen')">Nghe &amp; chọn từ</button>
                         <button id="sub-btn-quiz" class="quiz-subtab-btn" onclick="switchTab('quiz')">Trắc nghiệm</button>
                         <button id="sub-btn-visual" class="quiz-subtab-btn" onclick="switchTab('visual')">Nhìn hình chọn từ</button>
-                        <button id="sub-btn-scenematch" class="quiz-subtab-btn" onclick="switchTab('scenematch')" style="display:none;">Ghép chữ</button>
-                        <button id="sub-btn-picsort" class="quiz-subtab-btn" onclick="switchTab('picsort')" style="display:none;">Phân loại</button>
-                        <button id="sub-btn-chosung" class="quiz-subtab-btn" onclick="switchTab('chosung')" style="display:none;">Điền từ 초성</button>
                         <button id="sub-btn-guess" class="quiz-subtab-btn" onclick="switchTab('guess')">Nghe &amp; tìm nghĩa</button>
                         <button id="sub-btn-typing" class="quiz-subtab-btn" onclick="switchTab('typing')">Viết từ</button>
                         <button id="sub-btn-writesentence" class="quiz-subtab-btn" onclick="switchTab('writesentence')">Viết câu<span class="ws-new-badge" id="ws-new-badge" style="display:none;">Mới</span></button>
+                        <button id="sub-btn-game" class="quiz-subtab-btn" onclick="openPicGame()" style="display:none;">Game</button>
                     </div>
 
                     <!-- Thanh công cụ quiz: thanh chọn dạng (pills) bên trái, nút Làm lại + Ngẫu nhiên bên phải -->
@@ -1724,7 +1728,7 @@
                 <!-- 10. PHÂN LOẠI THẺ HÌNH + CHỮ -->
                 <div id="picsort-tab" class="tab-render-view pg-tab">
                     <div class="pg-boards" id="picsort-boards"></div>
-                    <p class="pg-guide">Kéo từng thẻ (hình + chữ) bên dưới thả vào đúng nhóm <span style="opacity:.75;">(hoặc chạm vào thẻ rồi chạm vào nhóm)</span>.</p>
+                    <p class="pg-guide">Kéo từng từ bên dưới thả vào đúng nhóm — xếp đúng sẽ hiện hình minh hoạ <span style="opacity:.75;">(hoặc chạm vào thẻ rồi chạm vào nhóm)</span>.</p>
                     <div class="ps-zones" id="ps-zones"></div>
                     <div class="pg-bank" id="ps-bank"></div>
                 </div>
@@ -1732,7 +1736,7 @@
                 <!-- 11. ĐIỀN TỪ THEO 초성 -->
                 <div id="chosung-tab" class="tab-render-view pg-tab">
                     <div class="pg-boards" id="chosung-boards"></div>
-                    <p class="pg-guide">Nhìn hình và phụ âm đầu (초성), gõ <b>đầy đủ</b> từ tiếng Hàn rồi bấm Enter hoặc "Kiểm tra".</p>
+                    <p class="pg-guide">Nhìn hình và phụ âm đầu (초성), gõ <b>đầy đủ</b> từ tiếng Hàn rồi bấm Enter (hoặc nút ✓).</p>
                     <div class="cs-grid" id="cs-grid"></div>
                 </div>
 
@@ -3308,7 +3312,37 @@
     // Sheet luôn ghi sẵn tên file ảnh cho mọi từ, nhưng file .png có thể CHƯA được làm.
     // Vì vậy phải tải thử từng ảnh: chỉ những từ có ảnh tồn tại thật mới được đưa vào
     // dạng "Nhìn hình chọn từ" (cả trong Unit lẫn đề Tổng hợp).
-    function wordImgSrc(item) { return (item && item.img) ? String(item.img).trim() : ''; }
+    // ⚡ Kho ảnh từ vựng chia 2 thư mục:
+    //   assets/tuvung-goc/  ảnh PNG gốc (cô bỏ hình mới vào đây) — dùng khi xuất Word cho nét
+    //   assets/tuvung-web/  bản .webp nhẹ (~80 KB thay vì ~1,5 MB) — web dùng bản này
+    // Sheet vẫn ghi "assets/<tên>.png" như cũ. Thứ tự tìm: tuvung-web -> tuvung-goc -> đúng đường dẫn Sheet.
+    function wordImgPaths(raw) {
+        const s = String(raw || '').trim();
+        const m = s.match(/^(?:\.\/)?assets\/([^\/?#]+)$/i);
+        if (!m) return { web: s, goc: s, raw: s };
+        const stem = m[1].replace(/\.[^.]+$/, '');
+        return { web: 'assets/tuvung-web/' + stem + '.webp', goc: 'assets/tuvung-goc/' + m[1], raw: s };
+    }
+    const wordImgResolved = new Map();   // đường dẫn trong Sheet -> file thật đã tải được
+    function wordImgSrc(item) {
+        const raw = (item && item.img) ? String(item.img).trim() : '';
+        return wordImgResolved.get(raw) || wordImgPaths(raw).web;
+    }
+    async function probeWordImage(item) {
+        const raw = (item && item.img) ? String(item.img).trim() : '';
+        if (!raw) return false;
+        const p = wordImgPaths(raw);
+        for (const src of [...new Set([p.web, p.goc, p.raw])]) {
+            if (await probeImageExists(src)) { wordImgResolved.set(raw, src); return true; }
+        }
+        return false;
+    }
+    // Ảnh nét nhất để in/xuất Word: ưu tiên PNG gốc
+    async function wordImgForPrint(raw) {
+        const p = wordImgPaths(raw);
+        for (const src of [...new Set([p.goc, p.raw, p.web])]) { if (await probeImageExists(src)) return src; }
+        return p.goc;
+    }
 
     const imgExistCache = new Map();   // src -> true/false (hoặc Promise trong lúc đang dò)
     function probeImageExists(src) {
@@ -3332,7 +3366,7 @@
     }
     // Lọc danh sách TỪ (object) -> chỉ giữ từ có ảnh thật
     async function itemsWithRealImage(items) {
-        const flags = await Promise.all((items || []).map(it => probeImageExists(wordImgSrc(it))));
+        const flags = await Promise.all((items || []).map(it => probeWordImage(it)));
         return (items || []).filter((_, i) => flags[i]);
     }
 
@@ -3350,7 +3384,7 @@
         visualPoolSet = new Set();
         syncVisualTabAvailability();
         const list = vocabData.slice();
-        const flags = await Promise.all(list.map(it => probeImageExists(wordImgSrc(it))));
+        const flags = await Promise.all(list.map(it => probeWordImage(it)));
         if (myToken !== visualPoolToken) return;  // đã đổi Unit -> bỏ kết quả cũ
         const pool = [];
         list.forEach((_, i) => { if (flags[i]) pool.push(i); });
@@ -3382,9 +3416,9 @@
     }
 
     /* ============================================================
-       🧩 GAME HÌNH THEO UNIT — 3 dạng dùng chung 1 bộ ảnh:
+       🧩 GAME HÌNH THEO UNIT (gom trong nút "Game") — 3 dạng dùng chung 1 bộ ảnh:
        • Ghép chữ (scenematch): kéo từ thả vào đúng ô nhãn trong ảnh.
-       • Phân loại (picsort): kéo thẻ hình + chữ vào đúng nhóm.
+       • Phân loại (picsort): kéo từ vào đúng nhóm, xếp đúng mới hiện hình.
        • Điền từ 초성 (chosung): nhìn hình + phụ âm đầu, tự gõ cả từ.
        Toạ độ tính theo pixel của ảnh gốc [x0, y0, x1, y1]:
          label = ô nhãn chữ trong ảnh, pic = vùng tranh để cắt làm thẻ.
@@ -3395,7 +3429,7 @@
         8: {
             boards: {
                 movie: {
-                    title: '🎬 Phim ảnh', img: 'assets/unit8-movie.webp', w: 1672, h: 941,
+                    title: '🎬 Phim ảnh', img: 'assets/game/unit8-movie.webp', w: 1672, h: 941,
                     groups: [
                         { ko: '영화 종류', vi: 'Thể loại phim', color: '#f4a3b4', items: [
                             { ko: '멜로 영화',       label: [60, 268, 230, 310],   pic: [45, 100, 245, 265] },
@@ -3421,7 +3455,7 @@
                     ]
                 },
                 emotion: {
-                    title: '😊 Tâm trạng', img: 'assets/unit8-emotion.webp', w: 1672, h: 941,
+                    title: '😊 Tâm trạng', img: 'assets/game/unit8-emotion.webp', w: 1672, h: 941,
                     groups: [
                         { ko: '긍정적 감정', vi: 'Cảm xúc tích cực', color: '#f4a3b4', items: [
                             { ko: '행복하다', label: [60, 308, 215, 348],  pic: [40, 112, 235, 305] },
@@ -3492,11 +3526,15 @@
     }
     // Chỉ hiện nút các dạng game hình cho Unit có ảnh
     function syncPicGameTabs() {
-        PG_TABS.forEach(t => {
-            const btn = document.getElementById('sub-btn-' + t);
-            if (btn) btn.style.display = pgHas(t) ? '' : 'none';
-        });
+        const btn = document.getElementById('sub-btn-game');
+        if (btn) btn.style.display = PG_TABS.some(pgHas) ? '' : 'none';
         if (PG_TABS.includes(currentTab) && !pgHas(currentTab)) switchTab('listen');
+    }
+    // Nút "Game": mở lại game đang chơi dở (hoặc game đầu tiên của Unit)
+    let pgLastTab = null;
+    function openPicGame() {
+        const t = (pgLastTab && pgHas(pgLastTab)) ? pgLastTab : PG_TABS.find(pgHas);
+        if (t) switchTab(t);
     }
     function pgSwitchBoard(tab, key) {
         if (pgBoardKey(tab) === key) return;
@@ -3506,15 +3544,22 @@
         pgRender(tab);
         updateDashboardStats();
     }
+    const PG_GAME_NAMES = { scenematch: '🧩 Ghép chữ vào hình', picsort: '🗂️ Phân loại', chosung: '⌨️ Điền từ 초성' };
+    // Hàng 1: chọn game. Hàng 2: chọn chủ đề (chỉ khi game có nhiều bộ ảnh)
     function pgRenderBoardPills(tab) {
         const box = document.getElementById(tab + '-boards');
         if (!box) return;
         const list = pgBoards(tab), u = pgUnitCfg(), cur = pgBoardKey(tab);
-        box.innerHTML = list.length < 2 ? '' : list.map(k =>
-            `<button type="button" class="pg-board-btn${k === cur ? ' active' : ''}" onclick="pgSwitchBoard('${tab}','${k}')">${u.boards[k].title}</button>`).join('');
+        const games = PG_TABS.filter(pgHas);
+        let html = games.length < 2 ? '' : '<div class="pg-games">' + games.map(t =>
+            `<button type="button" class="pg-game-btn${t === tab ? ' active' : ''}" onclick="switchTab('${t}')">${PG_GAME_NAMES[t]}</button>`).join('') + '</div>';
+        if (list.length > 1) html += '<div class="pg-topics"><span class="pg-topics-lead">Chủ đề:</span>' + list.map(k =>
+            `<button type="button" class="pg-board-btn${k === cur ? ' active' : ''}" onclick="pgSwitchBoard('${tab}','${k}')">${u.boards[k].title}</button>`).join('') + '</div>';
+        box.innerHTML = html;
     }
     function pgRender(tab) {
         if (!pgHas(tab)) return;
+        pgLastTab = tab;
         pgState(tab);
         pgRenderBoardPills(tab);
         if (tab === 'scenematch') renderSceneMatch();
@@ -3750,13 +3795,11 @@
         const left = st.order.filter(i => !st.done[i]);
         if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">🎉 Bạn đã phân loại xong toàn bộ thẻ!</span>'; return; }
         left.forEach(i => {
+            // Chỉ hiện chữ (hiện hình thì học sinh đoán qua hình) — xếp đúng nhóm mới hiện hình
             const card = document.createElement('div');
-            card.className = 'ps-card';
+            card.className = 'sm-chip';
             card.dataset.i = i;
-            card.appendChild(pgPic(board, items[i].pic, 84));
-            const t = document.createElement('span');
-            t.textContent = items[i].ko;
-            card.appendChild(t);
+            card.textContent = items[i].ko;
             pgBindDrag(card, '.ps-zone', z => psTryPlace(+z.dataset.g, i));
             bank.appendChild(card);
         });
@@ -3806,7 +3849,7 @@
         inp.type = 'text';
         inp.autocomplete = 'off'; inp.spellcheck = false;
         inp.setAttribute('autocapitalize', 'off');
-        inp.placeholder = 'Gõ cả từ…';
+        inp.placeholder = 'Gõ cả từ';
         inp.value = st.done[i] ? it.ko : (st.vals[i] || '');
         inp.disabled = !!st.done[i];
         inp.addEventListener('input', () => { st.vals[i] = inp.value; card.classList.remove('bad'); });
@@ -3819,7 +3862,7 @@
         row.appendChild(inp);
         if (!st.done[i]) {
             const btn = document.createElement('button');
-            btn.type = 'button'; btn.className = 'cs-btn'; btn.textContent = 'Kiểm tra';
+            btn.type = 'button'; btn.className = 'cs-btn'; btn.textContent = '✓'; btn.title = 'Kiểm tra (hoặc bấm Enter)';
             btn.addEventListener('click', () => csCheck(i));
             row.appendChild(btn);
         }
@@ -3939,7 +3982,7 @@
         if (subNav) {
             if (group === 'quizgroup') {
                 subNav.style.display = 'flex';
-                const subBtn = document.getElementById('sub-btn-' + tabName);
+                const subBtn = document.getElementById('sub-btn-' + (PG_TABS.includes(tabName) ? 'game' : tabName));
                 if (subBtn) subBtn.classList.add('active');
             } else {
                 subNav.style.display = 'none';
@@ -6503,7 +6546,9 @@
     }
 
     // --- HÀM TỰ ĐỘNG CHẠY KHI TRANG LOAD ---
-    window.onload = async function() {
+    // Chạy ngay khi khung trang dựng xong (DOMContentLoaded), KHÔNG đợi tải hết ảnh/font như window.onload
+    // -> gọi đăng nhập + tải giáo trình sớm hơn vài giây.
+    const startAppOnLoad = async function() {
         startVersionWatch();       // 🔄 luôn dùng bản mới nhất cô đã deploy
         maybeShowDisabledBanner(); // 🔒 nếu vừa bị vô hiệu hoá thì hiện thông báo nhã nhặn
         // Bắt đầu tải giáo trình NGAY, song song với lúc học viên đang gõ mật khẩu.
@@ -6558,6 +6603,8 @@
             document.getElementById('main-app-layout').style.display = 'none'; 
         }
     };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startAppOnLoad);
+    else startAppOnLoad();
 
     /* ============================================================
        THU GỌN / MỞ RỘNG SIDEBAR TRÁI & PHẢI
@@ -7808,8 +7855,10 @@
                     + `<div class="ct-prompt-sub">Bấm các từ theo thứ tự để tạo thành câu ${q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn'} hoàn chỉnh:</div><div id="ct-body-${i}"></div>`;
             } else if (q.type === 'visual') {
                 let ctFallback = `https://loremflickr.com/500/300/${encodeURIComponent((q.item.vi || 'word').split('/')[0])}/all?random=${i}`;
-                let src = (q.img && q.img.trim() !== '') ? q.img : ctFallback;
-                inner += `<div class="ct-img-frame"><img src="${src}" alt="Hình minh họa" onerror="this.onerror=null;this.src='${ctFallback}';"></div><div class="ct-prompt-sub">Nhìn hình và chọn từ đúng:</div>`;
+                let src = (q.img && q.img.trim() !== '') ? wordImgSrc(q) : ctFallback;
+                // .webp lỗi -> thử .png gốc -> cuối cùng mới dùng ảnh tạm
+                const pngBack = (q.img && src !== wordImgPaths(q.img).goc) ? wordImgPaths(q.img).goc : '';
+                inner += `<div class="ct-img-frame"><img src="${src}" alt="Hình minh họa" onerror="if(this.dataset.png!=='1'&&'${pngBack}'){this.dataset.png='1';this.src='${pngBack}';}else{this.onerror=null;this.src='${ctFallback}';}"></div><div class="ct-prompt-sub">Nhìn hình và chọn từ đúng:</div>`;
             } else {
                 if (q.quizKind === 'spell') {
                     inner += `<div class="ct-spell-prompt">${ctFormatSpellPrompt(q.prompt)}</div>`;
@@ -8464,7 +8513,7 @@
                     });
                     return;
                 }
-                const imageUrl = examAbsUrl(q.img);
+                const imageUrl = examAbsUrl(await wordImgForPrint(q.img));
                 let blob;
                 try {
                     const res = await fetch(imageUrl, { cache: 'force-cache' });
