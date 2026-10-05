@@ -258,6 +258,80 @@
         .pool-btn.selected-correct::after { content: ' ✓'; font-weight: 800; }
         .pool-btn.selected-wrong::after { content: ' ✕'; font-weight: 800; }
 
+        /* 🧩 GAME HÌNH THEO UNIT: Ghép chữ / Phân loại / Điền từ 초성 */
+        .pg-tab { max-width: 1100px; margin-left: auto; margin-right: auto; width: 100%; }
+        .pg-guide { font-size: 13px; font-weight: 600; color: var(--sub-text); text-align: center; margin: 0 0 10px; line-height: 1.5; }
+        .pg-boards { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+        .pg-boards:empty { display: none; }
+        .pg-board-btn { font-family: inherit; font-size: 13px; font-weight: 800; padding: 8px 18px; border-radius: 999px; border: 2px solid transparent; background: var(--card-color); color: var(--sub-text); box-shadow: var(--neu-convex); cursor: pointer; transition: all .15s; }
+        .pg-board-btn:hover { color: var(--point-color); }
+        .pg-board-btn.active { color: var(--point-color); border-color: var(--point-color); }
+        .pg-pic-box { width: 100%; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+        .pg-pic { display: block; width: 100%; background-repeat: no-repeat; border-radius: 10px; pointer-events: none; }
+        .sm-ghost { position: fixed; z-index: 99999; pointer-events: none; transform: translate(-50%, -50%) rotate(-3deg); box-shadow: 0 10px 24px rgba(0,0,0,.18); cursor: grabbing; }
+        @keyframes smPop { 0% { transform: scale(.6); } 100% { transform: scale(1); } }
+        @keyframes smShake { 0%,100% { transform: translateX(0); } 20%,60% { transform: translateX(-5px); } 40%,80% { transform: translateX(5px); } }
+        .pg-bank { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin: 16px auto 0; padding: 14px; border-radius: var(--radius-md); background: var(--bg-color); box-shadow: var(--neu-concave); min-height: 54px; }
+        .pg-bank-done { font-size: 14px; font-weight: 700; color: var(--success-color); align-self: center; }
+
+        /* Ghép chữ: ô trống phủ lên nhãn chữ trong ảnh (ảnh còn chữ cũng bị che) */
+        .sm-scroll { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-md); box-shadow: var(--neu-concave); }
+        .sm-frame { position: relative; width: 100%; min-width: 720px; container-type: inline-size; line-height: 0; }
+        .sm-frame > img { width: 100%; height: auto; display: block; user-select: none; -webkit-user-drag: none; pointer-events: none; }
+        .sm-slot { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 0.9cqw; background: #fffaf3; border: 2px dashed rgba(97,76,255,0.35); line-height: 1; font-size: 1.35cqw; font-weight: 800; color: #1a202c; white-space: nowrap; cursor: pointer; transition: background .15s, border-color .15s, transform .15s; box-sizing: border-box; }
+        .sm-slot:not(.filled):hover, .sm-slot.hover { border-color: var(--point-color); background: #ece8ff; }
+        .sm-slot.hover { transform: scale(1.06); }
+        .sm-slot.filled { background: #fffdf7; border: 2px solid var(--success-color); animation: smPop .28s cubic-bezier(0.34,1.56,0.64,1); }
+        .sm-slot.filled.was-missed { border-color: #ed8936; }
+        .sm-slot.shake { border-color: var(--error-color) !important; background: #ffe3e3 !important; animation: smShake .4s; }
+        .sm-chip { padding: 9px 16px; border-radius: 999px; background: var(--card-color, #fff); box-shadow: var(--neu-convex); font-size: 16px; font-weight: 800; color: #1a202c; cursor: grab; user-select: none; -webkit-user-select: none; touch-action: none; border: 2px solid transparent; transition: transform .12s, border-color .12s, opacity .12s; }
+        .sm-chip:hover { color: var(--point-color); }
+        .sm-chip.selected, .ps-card.selected { border-color: var(--point-color); color: var(--point-color); transform: translateY(-2px); }
+        .sm-chip.dragging, .ps-card.dragging { opacity: .3; }
+
+        /* Phân loại: kéo thẻ hình + chữ vào đúng nhóm */
+        .ps-zones { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+        .ps-zone { border-radius: var(--radius-md); background: var(--bg-color); box-shadow: var(--neu-concave); padding: 10px 12px 12px; min-height: 120px; border: 2px dashed transparent; border-top: 5px solid var(--zc, var(--point-color)); cursor: pointer; transition: background .15s, border-color .15s, transform .15s; }
+        .ps-zone.hover { border-color: var(--point-color); border-top-color: var(--zc, var(--point-color)); background: rgba(97,76,255,0.08); transform: scale(1.02); }
+        .ps-zone.shake { border-color: var(--error-color) !important; background: rgba(245,101,101,0.12) !important; animation: smShake .4s; }
+        .ps-zone-head { font-size: 17px; font-weight: 900; color: #1a202c; line-height: 1.3; }
+        .ps-zone-vi { font-size: 12px; font-weight: 600; color: var(--sub-text); }
+        .ps-zone-count { float: right; font-size: 12px; font-weight: 800; color: var(--sub-text); }
+        .ps-zone-body { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .ps-mini { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px 3px 3px; border-radius: 10px; background: var(--card-color); border: 2px solid var(--success-color); font-size: 13px; font-weight: 800; color: #1a202c; cursor: pointer; animation: smPop .28s cubic-bezier(0.34,1.56,0.64,1); }
+        .ps-mini.was-missed { border-color: #ed8936; }
+        .ps-mini .pg-pic { width: 40px; border-radius: 7px; }
+        .ps-card { width: 118px; padding: 6px 6px 8px; border-radius: 14px; background: var(--card-color); box-shadow: var(--neu-convex); cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none; border: 2px solid transparent; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; color: #1a202c; text-align: center; line-height: 1.2; transition: transform .12s, border-color .12s, opacity .12s; }
+
+        /* Điền từ 초성: nhìn hình + phụ âm đầu, tự gõ đủ từ */
+        .cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
+        .cs-card { background: var(--card-color); border-radius: 16px; box-shadow: var(--neu-convex); padding: 10px; display: flex; flex-direction: column; gap: 8px; border: 2px solid transparent; transition: border-color .15s; }
+        .cs-card.ok { border-color: var(--success-color); }
+        .cs-card.ok.was-missed { border-color: #ed8936; }
+        .cs-card.bad { border-color: var(--error-color); }
+        .cs-card.shake { animation: smShake .4s; }
+        .cs-hint { text-align: center; font-size: 22px; font-weight: 900; letter-spacing: 4px; color: var(--point-color); line-height: 1.2; }
+        .cs-row { display: flex; gap: 6px; }
+        .cs-input { flex: 1; min-width: 0; font-family: inherit; font-size: 16px; font-weight: 700; padding: 8px 10px; border-radius: 10px; border: 1.5px solid rgba(148,163,184,0.5); background: #fff; color: #1a202c; outline: none; text-align: center; }
+        .cs-input:focus { border-color: var(--point-color); }
+        .cs-input:disabled { background: #f0fff4; color: #22543d; border-color: transparent; }
+        .cs-btn { font-family: inherit; border: none; border-radius: 10px; padding: 0 12px; background: var(--point-color); color: #fff; font-size: 13px; font-weight: 800; cursor: pointer; }
+        .cs-foot { display: flex; justify-content: center; align-items: center; gap: 8px; min-height: 18px; font-size: 12px; font-weight: 700; }
+        .cs-reveal { background: none; border: none; padding: 0; font: inherit; color: var(--sub-text); text-decoration: underline; cursor: pointer; }
+        .cs-ans { color: #c05621; }
+        .cs-ok-txt { color: var(--success-color); cursor: pointer; }
+
+        @media (max-width: 768px) {
+            .sm-chip { font-size: 14px; padding: 8px 13px; }
+            .pg-bank { gap: 8px; padding: 10px; }
+            .ps-card { width: 96px; font-size: 13px; padding: 5px 5px 7px; }
+            .ps-zones { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .ps-zone { min-height: 84px; padding: 8px 9px 10px; }
+            .ps-zone-head { font-size: 14px; }
+            .ps-zone-vi { font-size: 11px; }
+            .cs-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+        }
+
         /* Thanh công cụ trên cùng khu quiz (nút Trộn bài góc phải như Hình 4) */
         .quiz-tools { display: none; justify-content: space-between; align-items: center; gap: 10px; max-width: 900px; margin: 0 auto 12px; }
         /* Nút xổ chọn dạng/ngôn ngữ quiz (góc trái, ngang nút Ngẫu nhiên) */
@@ -1381,6 +1455,9 @@
                         <button id="sub-btn-listen" class="quiz-subtab-btn active" onclick="switchTab('listen')">Nghe &amp; chọn từ</button>
                         <button id="sub-btn-quiz" class="quiz-subtab-btn" onclick="switchTab('quiz')">Trắc nghiệm</button>
                         <button id="sub-btn-visual" class="quiz-subtab-btn" onclick="switchTab('visual')">Nhìn hình chọn từ</button>
+                        <button id="sub-btn-scenematch" class="quiz-subtab-btn" onclick="switchTab('scenematch')" style="display:none;">Ghép chữ</button>
+                        <button id="sub-btn-picsort" class="quiz-subtab-btn" onclick="switchTab('picsort')" style="display:none;">Phân loại</button>
+                        <button id="sub-btn-chosung" class="quiz-subtab-btn" onclick="switchTab('chosung')" style="display:none;">Điền từ 초성</button>
                         <button id="sub-btn-guess" class="quiz-subtab-btn" onclick="switchTab('guess')">Nghe &amp; tìm nghĩa</button>
                         <button id="sub-btn-typing" class="quiz-subtab-btn" onclick="switchTab('typing')">Viết từ</button>
                         <button id="sub-btn-writesentence" class="quiz-subtab-btn" onclick="switchTab('writesentence')">Viết câu<span class="ws-new-badge" id="ws-new-badge" style="display:none;">Mới</span></button>
@@ -1634,6 +1711,29 @@
                     </div>
                     <div class="quiz-question">Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:</div>
                     <div class="quiz-options" id="visual-opts"></div>
+                </div>
+
+                <!-- 9. GHÉP CHỮ VÀO HÌNH -->
+                <div id="scenematch-tab" class="tab-render-view pg-tab">
+                    <div class="pg-boards" id="scenematch-boards"></div>
+                    <p class="pg-guide">Kéo từ vựng bên dưới thả vào đúng ô trống trong hình <span style="opacity:.75;">(hoặc chạm vào từ rồi chạm vào ô)</span>.</p>
+                    <div class="sm-scroll"><div class="sm-frame" id="sm-frame"></div></div>
+                    <div class="pg-bank" id="sm-bank"></div>
+                </div>
+
+                <!-- 10. PHÂN LOẠI THẺ HÌNH + CHỮ -->
+                <div id="picsort-tab" class="tab-render-view pg-tab">
+                    <div class="pg-boards" id="picsort-boards"></div>
+                    <p class="pg-guide">Kéo từng thẻ (hình + chữ) bên dưới thả vào đúng nhóm <span style="opacity:.75;">(hoặc chạm vào thẻ rồi chạm vào nhóm)</span>.</p>
+                    <div class="ps-zones" id="ps-zones"></div>
+                    <div class="pg-bank" id="ps-bank"></div>
+                </div>
+
+                <!-- 11. ĐIỀN TỪ THEO 초성 -->
+                <div id="chosung-tab" class="tab-render-view pg-tab">
+                    <div class="pg-boards" id="chosung-boards"></div>
+                    <p class="pg-guide">Nhìn hình và phụ âm đầu (초성), gõ <b>đầy đủ</b> từ tiếng Hàn rồi bấm Enter hoặc "Kiểm tra".</p>
+                    <div class="cs-grid" id="cs-grid"></div>
                 </div>
 
                 <div class="feedback-reserved-space">
@@ -2548,7 +2648,10 @@
         writesentence: { indices: [], current: 0, mode: 'vi2ko', seen: [], right: 0, wrong: 0, results: {}, checked: false, match: null, inputValue: '', showAnswer: false, showGrammar: false },
         listen: { indices: [], current: 0, answered: false },
         guess: { indices: [], current: 0, answered: false },
-        visual: { indices: [], current: 0, answered: false }
+        visual: { indices: [], current: 0, answered: false },
+        scenematch: { indices: [], current: 0, seen: [], right: 0, wrong: 0 },
+        picsort: { indices: [], current: 0, seen: [], right: 0, wrong: 0 },
+        chosung: { indices: [], current: 0, seen: [], right: 0, wrong: 0 }
     };
 
     /* ============================================================
@@ -2557,7 +2660,8 @@
 
     const TAB_DONE_LABELS = {
         flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ", writesentence: "Viết câu",
-        listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ"
+        listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ",
+        scenematch: "Ghép chữ", picsort: "Phân loại", chosung: "Điền từ 초성"
     };
 
     function resetTabScore(tabName) {
@@ -2630,6 +2734,7 @@
         let state = tabState[tab];
         if (!state) return;
         if (tab === 'writesentence') { wsPrepare(currentModeOf('writesentence'), true); wsRender(); updateDashboardStats(); return; }
+        if (PG_TABS.includes(tab)) { pgReset(tab); pgRender(tab); updateDashboardStats(); return; }
         prepareTabForMode(tab, currentModeOf(tab), { forceFresh: true });
         if (tab === 'typing') renderTypingSheet(true);
         else if (tabRenderMap[tab]) tabRenderMap[tab]();
@@ -3276,6 +3381,500 @@
         updateDashboardStats();
     }
 
+    /* ============================================================
+       🧩 GAME HÌNH THEO UNIT — 3 dạng dùng chung 1 bộ ảnh:
+       • Ghép chữ (scenematch): kéo từ thả vào đúng ô nhãn trong ảnh.
+       • Phân loại (picsort): kéo thẻ hình + chữ vào đúng nhóm.
+       • Điền từ 초성 (chosung): nhìn hình + phụ âm đầu, tự gõ cả từ.
+       Toạ độ tính theo pixel của ảnh gốc [x0, y0, x1, y1]:
+         label = ô nhãn chữ trong ảnh, pic = vùng tranh để cắt làm thẻ.
+       Thay ảnh HD: giữ nguyên tên file + tỉ lệ khung (w:h) là toạ độ vẫn khớp.
+       Muốn thêm Unit khác: bỏ ảnh vào assets rồi khai báo thêm 1 mục ở đây.
+       ============================================================ */
+    const PIC_GAMES = {
+        8: {
+            boards: {
+                movie: {
+                    title: '🎬 Phim ảnh', img: 'assets/unit8-movie.webp', w: 1672, h: 941,
+                    groups: [
+                        { ko: '영화 종류', vi: 'Thể loại phim', color: '#f4a3b4', items: [
+                            { ko: '멜로 영화',       label: [60, 268, 230, 310],   pic: [45, 100, 245, 265] },
+                            { ko: '공포 영화',       label: [290, 268, 470, 310],  pic: [270, 100, 495, 265] },
+                            { ko: '에스에프 영화',   label: [530, 268, 725, 310],  pic: [515, 98, 740, 265] },
+                            { ko: '액션 영화',       label: [65, 497, 235, 540],   pic: [38, 345, 255, 495] },
+                            { ko: '코미디 영화',     label: [290, 490, 460, 535],  pic: [275, 330, 465, 490] },
+                            { ko: '애니메이션 영화', label: [480, 490, 675, 535],  pic: [480, 330, 680, 490] }
+                        ] },
+                        { ko: '사람 & 활동', vi: 'Con người & hoạt động', color: '#f2c94c', items: [
+                            { ko: '영화감독',  label: [985, 273, 1135, 318],  pic: [955, 120, 1180, 270] },
+                            { ko: '영화배우',  label: [1210, 273, 1360, 318], pic: [1210, 110, 1395, 270] },
+                            { ko: '연기하다',  label: [1455, 273, 1610, 318], pic: [1420, 110, 1630, 270] },
+                            { ko: '영화 제목', label: [1130, 505, 1300, 550], pic: [1090, 340, 1300, 500] },
+                            { ko: '팬',        label: [1425, 515, 1575, 560], pic: [1325, 340, 1635, 512] }
+                        ] },
+                        { ko: '영화관 & 관람', vi: 'Rạp chiếu & xem phim', color: '#8fd19e', items: [
+                            { ko: '매표소',   label: [225, 858, 375, 900],   pic: [95, 650, 540, 855] },
+                            { ko: '영화 표',  label: [625, 862, 775, 905],   pic: [585, 690, 830, 855] },
+                            { ko: '개봉하다', label: [930, 862, 1100, 905],  pic: [865, 675, 1135, 858] },
+                            { ko: '상영하다', label: [1290, 862, 1470, 905], pic: [1175, 640, 1600, 860] }
+                        ] }
+                    ]
+                },
+                emotion: {
+                    title: '😊 Tâm trạng', img: 'assets/unit8-emotion.webp', w: 1672, h: 941,
+                    groups: [
+                        { ko: '긍정적 감정', vi: 'Cảm xúc tích cực', color: '#f4a3b4', items: [
+                            { ko: '행복하다', label: [60, 308, 215, 348],  pic: [40, 112, 235, 305] },
+                            { ko: '기쁘다',   label: [280, 308, 410, 348], pic: [250, 112, 440, 305] },
+                            { ko: '즐겁다',   label: [480, 308, 620, 350], pic: [455, 112, 650, 305] },
+                            { ko: '신나다',   label: [700, 308, 835, 350], pic: [660, 108, 870, 305] }
+                        ] },
+                        { ko: '우울, 슬픔 & 지루함', vi: 'Buồn bã, u sầu & chán', color: '#8ab4f8', items: [
+                            { ko: '슬프다',   label: [940, 280, 1080, 320],  pic: [910, 112, 1085, 280] },
+                            { ko: '우울하다', label: [1120, 280, 1260, 320], pic: [1098, 112, 1278, 280] },
+                            { ko: '외롭다',   label: [1310, 280, 1440, 320], pic: [1290, 112, 1468, 280] },
+                            { ko: '속상하다', label: [1500, 280, 1630, 320], pic: [1478, 112, 1648, 280] },
+                            { ko: '그립다',   label: [1030, 512, 1155, 552], pic: [955, 335, 1190, 510] },
+                            { ko: '지루하다', label: [1230, 512, 1370, 552], pic: [1205, 335, 1385, 510] },
+                            { ko: '심심하다', label: [1445, 512, 1590, 552], pic: [1400, 335, 1640, 510] }
+                        ] },
+                        { ko: '자극 & 강한 감정', vi: 'Cảm xúc mạnh', color: '#f2c94c', items: [
+                            { ko: '화나다', label: [100, 640, 245, 680], pic: [45, 475, 315, 638] },
+                            { ko: '무섭다', label: [410, 640, 545, 682], pic: [330, 470, 620, 638] },
+                            { ko: '놀라다', label: [105, 865, 250, 905], pic: [35, 690, 320, 863] },
+                            { ko: '웃기다', label: [440, 865, 590, 905], pic: [340, 690, 705, 863] }
+                        ] },
+                        { ko: '신체 상태 & 행동', vi: 'Trạng thái cơ thể & hành động', color: '#8fd19e', items: [
+                            { ko: '졸리다', label: [855, 865, 995, 905],   pic: [740, 672, 1095, 863] },
+                            { ko: '웃다',   label: [1170, 868, 1300, 908], pic: [1110, 672, 1350, 866] },
+                            { ko: '울다',   label: [1440, 868, 1575, 908], pic: [1365, 672, 1645, 866] }
+                        ] }
+                    ]
+                }
+            },
+            // Dạng nào dùng bộ ảnh nào (nhiều bộ -> hiện nút chọn chủ đề)
+            scenematch: ['movie'],
+            picsort: ['movie', 'emotion'],
+            chosung: ['emotion']
+        }
+    };
+    const PG_TABS = ['scenematch', 'picsort', 'chosung'];
+    const pgStore = {};      // tiến độ theo "unit|dạng|bộ ảnh" (giữ trong phiên)
+    const pgBoardOf = {};    // bộ ảnh đang chọn của từng dạng
+    let pgSelected = null;   // thẻ đang chọn (chế độ chạm thẻ rồi chạm ô)
+
+    function pgUnitCfg() {
+        if (summaryActive || currentUnit == null || currentUnit === 'SUM') return null;
+        return PIC_GAMES[currentUnit] || null;
+    }
+    function pgBoards(tab) { const u = pgUnitCfg(); return (u && u[tab]) ? u[tab] : []; }
+    function pgHas(tab) { return pgBoards(tab).length > 0; }
+    function pgBoardKey(tab) { const list = pgBoards(tab); return list.includes(pgBoardOf[tab]) ? pgBoardOf[tab] : list[0]; }
+    function pgBoard(tab) { const u = pgUnitCfg(), k = pgBoardKey(tab); return (u && k) ? u.boards[k] : null; }
+    function pgItems(board) {
+        if (!board._items) board._items = board.groups.flatMap((g, gi) => g.items.map(it => Object.assign({ g: gi }, it)));
+        return board._items;
+    }
+    // Trạng thái của dạng đang mở = tabState[tab] (để popup hoàn thành / Làm lại / Ngẫu nhiên dùng chung)
+    function pgState(tab) {
+        const key = currentUnit + '|' + tab + '|' + pgBoardKey(tab);
+        if (!pgStore[key]) {
+            const idx = pgItems(pgBoard(tab)).map((_, i) => i);
+            pgStore[key] = { indices: idx, order: shuffleArray(idx.slice()), current: 0, seen: [], right: 0, wrong: 0, missed: {}, done: {}, vals: {}, reveal: {} };
+        }
+        tabState[tab] = pgStore[key];
+        return tabState[tab];
+    }
+    function pgReset(tab) {
+        delete pgStore[currentUnit + '|' + tab + '|' + pgBoardKey(tab)];
+        pgSelected = null;
+        clearFeedback();
+    }
+    // Chỉ hiện nút các dạng game hình cho Unit có ảnh
+    function syncPicGameTabs() {
+        PG_TABS.forEach(t => {
+            const btn = document.getElementById('sub-btn-' + t);
+            if (btn) btn.style.display = pgHas(t) ? '' : 'none';
+        });
+        if (PG_TABS.includes(currentTab) && !pgHas(currentTab)) switchTab('listen');
+    }
+    function pgSwitchBoard(tab, key) {
+        if (pgBoardKey(tab) === key) return;
+        pgBoardOf[tab] = key;
+        pgSelected = null;
+        clearFeedback();
+        pgRender(tab);
+        updateDashboardStats();
+    }
+    function pgRenderBoardPills(tab) {
+        const box = document.getElementById(tab + '-boards');
+        if (!box) return;
+        const list = pgBoards(tab), u = pgUnitCfg(), cur = pgBoardKey(tab);
+        box.innerHTML = list.length < 2 ? '' : list.map(k =>
+            `<button type="button" class="pg-board-btn${k === cur ? ' active' : ''}" onclick="pgSwitchBoard('${tab}','${k}')">${u.boards[k].title}</button>`).join('');
+    }
+    function pgRender(tab) {
+        if (!pgHas(tab)) return;
+        pgState(tab);
+        pgRenderBoardPills(tab);
+        if (tab === 'scenematch') renderSceneMatch();
+        else if (tab === 'picsort') renderPicSort();
+        else if (tab === 'chosung') renderChosung();
+        pgUpdateCounter(tab);
+    }
+    function pgUpdateCounter(tab) {
+        const st = tabState[tab], c = document.getElementById('global-counter');
+        if (c && st) c.innerText = st.seen.length + ' / ' + st.indices.length;
+    }
+    // Cắt 1 vùng tranh từ ảnh lớn (không cần file ảnh riêng cho từng thẻ)
+    // boxH: đặt hình vừa trong khung cao boxH px (giữ đúng tỉ lệ) để các thẻ cao đều nhau
+    function pgPic(board, rect, boxH) {
+        const [x0, y0, x1, y1] = rect, pw = x1 - x0, ph = y1 - y0;
+        const el = document.createElement('div');
+        el.className = 'pg-pic';
+        el.style.backgroundImage = `url('${board.img}')`;
+        el.style.backgroundSize = `${board.w / pw * 100}% ${board.h / ph * 100}%`;
+        el.style.backgroundPosition = `${x0 / (board.w - pw) * 100}% ${y0 / (board.h - ph) * 100}%`;
+        el.style.aspectRatio = pw + ' / ' + ph;
+        if (!boxH) return el;
+        el.style.width = `min(100%, ${Math.round(boxH * pw / ph)}px)`;
+        const box = document.createElement('div');
+        box.className = 'pg-pic-box';
+        box.style.height = boxH + 'px';
+        box.appendChild(el);
+        return box;
+    }
+    function pgVocabIndex(ko) {
+        const norm = t => String(t || '').replace(/\s+/g, '');
+        return (vocabData || []).findIndex(w => norm(w.ko) === norm(ko));
+    }
+    function pgViOf(ko) { const v = pgVocabIndex(ko); return v >= 0 ? vocabData[v].vi : ''; }
+    // Đúng: mỗi từ chỉ được tính điểm nếu chưa từng sai
+    function pgMarkRight(tab, i, ko) {
+        const st = tabState[tab];
+        if (st.done[i]) return;
+        st.done[i] = true;
+        st.seen.push(i);
+        const v = pgVocabIndex(ko);
+        if (!st.missed[i]) { st.right++; if (v >= 0) recordVocabMastered(vocabData[v].ko); }
+        playFeedbackSound(true);
+        const fb = document.getElementById('global-feedback');
+        if (fb) {
+            fb.className = 'feedback success compact';
+            fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác! <b>' + ko + '</b>' + (v >= 0 ? ' — ' + vocabData[v].vi : '');
+        }
+        pgUpdateCounter(tab);
+        if (isTabFinished(tab)) setTimeout(() => showTabDonePopup(tab), 700);
+    }
+    // Sai: mỗi từ chỉ trừ điểm 1 lần
+    function pgMarkWrong(tab, i, ko, msg) {
+        const st = tabState[tab];
+        if (!st.missed[i]) { st.missed[i] = true; st.wrong++; const v = pgVocabIndex(ko); if (v >= 0) recordWrongWord(v); }
+        playFeedbackSound(false);
+        const fb = document.getElementById('global-feedback');
+        if (fb) {
+            fb.className = 'feedback error compact';
+            fb.innerHTML = '<span style="color:var(--error-color);font-size:17px;line-height:1;">✗</span> ' + msg;
+        }
+    }
+    function pgShake(el) {
+        if (!el) return;
+        el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake');
+        setTimeout(() => el.classList.remove('shake'), 450);
+    }
+    function pgSelect(chip) {
+        if (pgSelected) pgSelected.classList.remove('selected');
+        pgSelected = (pgSelected === chip) ? null : chip;
+        if (pgSelected) pgSelected.classList.add('selected');
+    }
+    // Kéo bằng Pointer Events (chuột, bút, cảm ứng). Nhấp không kéo = chọn thẻ.
+    function pgBindDrag(chip, targetSel, onDrop) {
+        chip.addEventListener('pointerdown', e => {
+            if (e.button > 0) return;
+            e.preventDefault();
+            const sx = e.clientX, sy = e.clientY;
+            let ghost = null, hover = null, lastX = sx, lastY = sy, scrollTimer = null;
+            try { chip.setPointerCapture(e.pointerId); } catch (_) {}
+            // Kéo tới sát mép trên/dưới -> tự cuộn khung để thả được vào ô đang khuất
+            const scroller = (() => { let el = chip.parentElement; while (el) { const oy = getComputedStyle(el).overflowY; if (/(auto|scroll)/.test(oy) && el.scrollHeight > el.clientHeight) return el; el = el.parentElement; } return document.scrollingElement; })();
+            const autoScroll = () => {
+                const edge = 70, h = window.innerHeight;
+                const dy = lastY < edge ? -Math.ceil((edge - lastY) / 4) : (lastY > h - edge ? Math.ceil((lastY - (h - edge)) / 4) : 0);
+                if (dy && scroller) scroller.scrollTop += dy;
+                if (dy) updateHover();
+            };
+            const targetAt = (x, y) => {
+                const t = document.elementFromPoint(x, y);
+                const s = t && t.closest ? t.closest(targetSel) : null;
+                return (s && !s.classList.contains('filled')) ? s : null;
+            };
+            const onMove = ev => {
+                if (!ghost) {
+                    if (Math.hypot(ev.clientX - sx, ev.clientY - sy) < 6) return;
+                    ghost = chip.cloneNode(true);
+                    ghost.classList.remove('selected');
+                    ghost.classList.add('sm-ghost');
+                    document.body.appendChild(ghost);
+                    chip.classList.add('dragging');
+                }
+                lastX = ev.clientX; lastY = ev.clientY;
+                ghost.style.left = lastX + 'px';
+                ghost.style.top = lastY + 'px';
+                if (!scrollTimer) scrollTimer = setInterval(autoScroll, 16);
+                updateHover();
+            };
+            const updateHover = () => {
+                const s = targetAt(lastX, lastY);
+                if (s !== hover) {
+                    if (hover) hover.classList.remove('hover');
+                    hover = s;
+                    if (hover) hover.classList.add('hover');
+                }
+            };
+            const onUp = ev => {
+                chip.removeEventListener('pointermove', onMove);
+                chip.removeEventListener('pointerup', onUp);
+                chip.removeEventListener('pointercancel', onUp);
+                if (scrollTimer) clearInterval(scrollTimer);
+                if (hover) hover.classList.remove('hover');
+                if (!ghost) { if (ev.type === 'pointerup') pgSelect(chip); return; }
+                ghost.remove();
+                chip.classList.remove('dragging');
+                const s = ev.type === 'pointerup' ? targetAt(ev.clientX, ev.clientY) : null;
+                if (s) onDrop(s);
+            };
+            chip.addEventListener('pointermove', onMove);
+            chip.addEventListener('pointerup', onUp);
+            chip.addEventListener('pointercancel', onUp);
+        });
+    }
+
+    /* ---------- 1) GHÉP CHỮ VÀO HÌNH ---------- */
+    function renderSceneMatch() {
+        const board = pgBoard('scenematch'), st = pgState('scenematch');
+        const frame = document.getElementById('sm-frame');
+        if (!board || !frame) return;
+        const items = pgItems(board);
+        frame.innerHTML = '';
+        const img = document.createElement('img');
+        img.src = board.img; img.alt = 'Hình ghép chữ Unit ' + currentUnit; img.draggable = false;
+        frame.appendChild(img);
+        items.forEach((it, i) => {
+            const [x0, y0, x1, y1] = it.label;
+            const el = document.createElement('div');
+            el.className = 'sm-slot';
+            el.dataset.slot = i;
+            el.style.left = (x0 / board.w * 100) + '%';
+            el.style.top = (y0 / board.h * 100) + '%';
+            el.style.width = ((x1 - x0) / board.w * 100) + '%';
+            el.style.height = ((y1 - y0) / board.h * 100) + '%';
+            if (st.done[i]) smFillSlot(el, it, st.missed[i], false);
+            el.addEventListener('click', () => {
+                if (st.done[i]) { triggerKoreanVoice(it.ko, false); return; }
+                if (pgSelected) smTryPlace(i, +pgSelected.dataset.i);
+            });
+            frame.appendChild(el);
+        });
+        smRenderBank();
+    }
+    function smFillSlot(el, it, missed, animate) {
+        el.classList.add('filled');
+        if (missed) el.classList.add('was-missed');
+        if (!animate) el.style.animation = 'none';
+        el.textContent = it.ko;
+        const vi = pgViOf(it.ko);
+        el.title = (vi ? vi + ' — ' : '') + 'bấm để nghe';
+    }
+    function smRenderBank() {
+        const bank = document.getElementById('sm-bank');
+        const items = pgItems(pgBoard('scenematch')), st = tabState.scenematch;
+        bank.innerHTML = '';
+        pgSelected = null;
+        const left = st.order.filter(i => !st.done[i]);
+        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">🎉 Bạn đã ghép xong toàn bộ từ vựng!</span>'; return; }
+        left.forEach(i => {
+            const chip = document.createElement('div');
+            chip.className = 'sm-chip';
+            chip.dataset.i = i;
+            chip.textContent = items[i].ko;
+            pgBindDrag(chip, '.sm-slot', s => smTryPlace(+s.dataset.slot, i));
+            bank.appendChild(chip);
+        });
+    }
+    function smTryPlace(slotIdx, wordIdx) {
+        const st = tabState.scenematch, items = pgItems(pgBoard('scenematch'));
+        if (st.done[slotIdx]) return;
+        const slotEl = document.querySelector(`#sm-frame .sm-slot[data-slot="${slotIdx}"]`);
+        const ko = items[wordIdx].ko;
+        if (slotIdx === wordIdx) {
+            pgMarkRight('scenematch', wordIdx, ko);
+            if (slotEl) smFillSlot(slotEl, items[slotIdx], st.missed[slotIdx], true);
+        } else {
+            pgMarkWrong('scenematch', wordIdx, ko, '<b>' + ko + '</b> chưa đúng chỗ này, thử ô khác nhé!');
+            pgShake(slotEl);
+        }
+        smRenderBank();
+    }
+
+    /* ---------- 2) PHÂN LOẠI THẺ HÌNH + CHỮ ---------- */
+    function renderPicSort() {
+        const board = pgBoard('picsort'), st = pgState('picsort');
+        const zones = document.getElementById('ps-zones'), bank = document.getElementById('ps-bank');
+        if (!board || !zones || !bank) return;
+        const items = pgItems(board);
+        pgSelected = null;
+        zones.innerHTML = '';
+        board.groups.forEach((g, gi) => {
+            const z = document.createElement('div');
+            z.className = 'ps-zone';
+            z.dataset.g = gi;
+            z.style.setProperty('--zc', g.color || 'var(--point-color)');
+            const doneIdx = items.map((_, i) => i).filter(i => items[i].g === gi && st.done[i]);
+            z.innerHTML = `<span class="ps-zone-count">${doneIdx.length}/${g.items.length}</span><div class="ps-zone-head">${g.ko}</div><div class="ps-zone-vi">${g.vi || ''}</div>`;
+            const body = document.createElement('div');
+            body.className = 'ps-zone-body';
+            doneIdx.forEach(i => {
+                const m = document.createElement('div');
+                m.className = 'ps-mini' + (st.missed[i] ? ' was-missed' : '');
+                m.title = (pgViOf(items[i].ko) || '') + ' — bấm để nghe';
+                m.appendChild(pgPic(board, items[i].pic));
+                m.appendChild(document.createTextNode(items[i].ko));
+                m.addEventListener('click', e => { e.stopPropagation(); triggerKoreanVoice(items[i].ko, false); });
+                body.appendChild(m);
+            });
+            z.appendChild(body);
+            z.addEventListener('click', () => { if (pgSelected) psTryPlace(gi, +pgSelected.dataset.i); });
+            zones.appendChild(z);
+        });
+        bank.innerHTML = '';
+        const left = st.order.filter(i => !st.done[i]);
+        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">🎉 Bạn đã phân loại xong toàn bộ thẻ!</span>'; return; }
+        left.forEach(i => {
+            const card = document.createElement('div');
+            card.className = 'ps-card';
+            card.dataset.i = i;
+            card.appendChild(pgPic(board, items[i].pic, 84));
+            const t = document.createElement('span');
+            t.textContent = items[i].ko;
+            card.appendChild(t);
+            pgBindDrag(card, '.ps-zone', z => psTryPlace(+z.dataset.g, i));
+            bank.appendChild(card);
+        });
+    }
+    function psTryPlace(gi, i) {
+        const board = pgBoard('picsort'), items = pgItems(board);
+        const it = items[i];
+        if (it.g === gi) {
+            pgMarkRight('picsort', i, it.ko);
+            renderPicSort();
+        } else {
+            pgMarkWrong('picsort', i, it.ko, '<b>' + it.ko + '</b> không thuộc nhóm "' + board.groups[gi].ko + '", thử nhóm khác nhé!');
+            renderPicSort();
+            pgShake(document.querySelector(`#ps-zones .ps-zone[data-g="${gi}"]`));
+        }
+    }
+
+    /* ---------- 3) ĐIỀN TỪ THEO 초성 ---------- */
+    const PG_CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+    function toChosung(s) {
+        return Array.from(String(s || '')).map(ch => {
+            const c = ch.charCodeAt(0) - 0xAC00;
+            return (c >= 0 && c < 11172) ? PG_CHO[Math.floor(c / 588)] : ch;
+        }).join('');
+    }
+    function renderChosung() {
+        const board = pgBoard('chosung'), st = pgState('chosung');
+        const grid = document.getElementById('cs-grid');
+        if (!board || !grid) return;
+        grid.innerHTML = '';
+        st.order.forEach(i => grid.appendChild(csCard(board, st, i)));
+    }
+    function csCard(board, st, i) {
+        const it = pgItems(board)[i];
+        const card = document.createElement('div');
+        card.className = 'cs-card' + (st.done[i] ? ' ok' : '') + (st.missed[i] ? ' was-missed' : '');
+        card.dataset.i = i;
+        card.appendChild(pgPic(board, it.pic, 120));
+        const hint = document.createElement('div');
+        hint.className = 'cs-hint';
+        hint.textContent = toChosung(it.ko);
+        card.appendChild(hint);
+        const row = document.createElement('div');
+        row.className = 'cs-row';
+        const inp = document.createElement('input');
+        inp.className = 'cs-input';
+        inp.type = 'text';
+        inp.autocomplete = 'off'; inp.spellcheck = false;
+        inp.setAttribute('autocapitalize', 'off');
+        inp.placeholder = 'Gõ cả từ…';
+        inp.value = st.done[i] ? it.ko : (st.vals[i] || '');
+        inp.disabled = !!st.done[i];
+        inp.addEventListener('input', () => { st.vals[i] = inp.value; card.classList.remove('bad'); });
+        // Enter khi bộ gõ đang ghép dở chữ cuối: đợi bộ gõ chốt chữ rồi mới chấm
+        inp.addEventListener('keydown', e => {
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+            setTimeout(() => csCheck(i), (e.isComposing || e.keyCode === 229) ? 60 : 0);
+        });
+        row.appendChild(inp);
+        if (!st.done[i]) {
+            const btn = document.createElement('button');
+            btn.type = 'button'; btn.className = 'cs-btn'; btn.textContent = 'Kiểm tra';
+            btn.addEventListener('click', () => csCheck(i));
+            row.appendChild(btn);
+        }
+        card.appendChild(row);
+        const foot = document.createElement('div');
+        foot.className = 'cs-foot';
+        if (st.done[i]) {
+            const ok = document.createElement('span');
+            ok.className = 'cs-ok-txt';
+            ok.textContent = '🔊 ' + (pgViOf(it.ko) || 'Nghe lại');
+            ok.addEventListener('click', () => triggerKoreanVoice(it.ko, false));
+            foot.appendChild(ok);
+        } else if (st.reveal[i]) {
+            foot.innerHTML = '<span class="cs-ans">Đáp án: <b>' + it.ko + '</b> — gõ lại nhé!</span>';
+        } else if (st.missed[i]) {
+            const rv = document.createElement('button');
+            rv.type = 'button'; rv.className = 'cs-reveal'; rv.textContent = '👀 Xem đáp án';
+            rv.addEventListener('click', () => { st.reveal[i] = true; csRefresh(i, true); });
+            foot.appendChild(rv);
+        }
+        card.appendChild(foot);
+        return card;
+    }
+    function csRefresh(i, focus) {
+        const board = pgBoard('chosung'), st = tabState.chosung;
+        const old = document.querySelector(`#cs-grid .cs-card[data-i="${i}"]`);
+        if (!old) return null;
+        const card = csCard(board, st, i);
+        old.replaceWith(card);
+        if (focus) { const inp = card.querySelector('.cs-input:not(:disabled)'); if (inp) inp.focus(); }
+        return card;
+    }
+    function csCheck(i) {
+        const st = tabState.chosung, it = pgItems(pgBoard('chosung'))[i];
+        if (st.done[i]) return;
+        const card = document.querySelector(`#cs-grid .cs-card[data-i="${i}"]`);
+        const inp = card && card.querySelector('.cs-input');
+        const val = inp ? inp.value : '';
+        st.vals[i] = val;
+        if (!val.trim()) { if (inp) inp.focus(); return; }
+        const norm = t => String(t || '').replace(/\s+/g, '').normalize('NFC');
+        if (norm(val) === norm(it.ko)) {
+            pgMarkRight('chosung', i, it.ko);
+            triggerKoreanVoice(it.ko, false);
+            csRefresh(i, false);
+            // Nhảy sang ô kế tiếp chưa làm
+            const next = st.order.slice(st.order.indexOf(i) + 1).concat(st.order).find(j => !st.done[j]);
+            if (next != null) { const n = document.querySelector(`#cs-grid .cs-card[data-i="${next}"] .cs-input`); if (n) n.focus({ preventScroll: true }); }
+        } else {
+            pgMarkWrong('chosung', i, it.ko, 'Chưa đúng rồi, nhìn kỹ hình và phụ âm đầu <b>' + toChosung(it.ko) + '</b> nhé!');
+            const c = csRefresh(i, true);
+            if (c) { c.classList.add('bad'); pgShake(c); }
+        }
+    }
+
     // Unit không có ảnh nào -> khoá hẳn nút "Nhìn hình chọn từ"
     function syncVisualTabAvailability() {
         const btn = document.getElementById('sub-btn-visual');
@@ -3310,10 +3909,11 @@
         tabState.quiz.plan = buildQuizPlan(tabState.quiz.indices, 'mix');
         syncQuizModeToggles();
         ensureVisualPool();   // 🖼️ dò ảnh thật cho dạng "Nhìn hình chọn từ" (chạy ngầm)
+        syncPicGameTabs();    // 🧩 bật/tắt các dạng game hình theo Unit có ảnh hay không
     }
 
     // 5 chức năng nằm trong nhóm "4. Quiz"
-    const QUIZ_SUBTABS = ['quiz', 'typing', 'writesentence', 'listen', 'guess', 'visual'];
+    const QUIZ_SUBTABS = ['quiz', 'typing', 'writesentence', 'listen', 'guess', 'visual', 'scenematch', 'picsort', 'chosung'];
     function mainGroupOf(tab) { return QUIZ_SUBTABS.includes(tab) ? 'quizgroup' : tab; }
 
     function switchTab(tabName) {
@@ -3322,6 +3922,8 @@
             if (currentTab !== 'visual') { alert('Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa mở được dạng "Nhìn hình chọn từ" nhé!'); return; }
             tabName = 'listen';   // đang đứng ở tab này mà Unit mới không có ảnh -> chuyển sang dạng khác
         }
+        // 🧩 Unit không có ảnh game -> không mở các dạng game hình
+        if (PG_TABS.includes(tabName) && !pgHas(tabName)) tabName = 'listen';
         currentTab = tabName;
         document.querySelectorAll('.tab-click-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.quiz-subtab-btn').forEach(btn => btn.classList.remove('active'));
@@ -3380,13 +3982,13 @@
         const typingProgressWrap = document.getElementById('typing-progress-wrap');
         if (typingProgressWrap) typingProgressWrap.style.display = (tabName === 'typing') ? 'flex' : 'none';
         // Viết từ & Viết câu có nút điều hướng riêng trong khung -> ẩn nút "Tiếp theo" ở footer
-        document.getElementById('ctrl-next-btn').style.display = (tabName === 'typing' || tabName === 'writesentence') ? 'none' : 'inline-block';
+        document.getElementById('ctrl-next-btn').style.display = (tabName === 'typing' || tabName === 'writesentence' || PG_TABS.includes(tabName)) ? 'none' : 'inline-block';
 
         if (vocabData.length === 0 && tabName !== 'lecture') return;
 
         // Khôi phục tiến độ đã lưu của dạng đang mở (làm tiếp thay vì làm mới).
         // Chỉ nạp lại khi chưa nạp cho đúng unit+mode này trong phiên hiện tại.
-        if (QUIZ_SUBTABS.includes(tabName) && tabName !== 'writesentence') {
+        if (QUIZ_SUBTABS.includes(tabName) && tabName !== 'writesentence' && !PG_TABS.includes(tabName)) {
             const _mode = currentModeOf(tabName);
             const _st = tabState[tabName];
             if (!_st._loadedFor || _st._loadedFor !== (currentUnit + ':' + _mode)) prepareTabForMode(tabName, _mode);
@@ -3401,6 +4003,7 @@
         else if (tabName === 'listen') generateListenQuestion();
         else if (tabName === 'guess') generateGuessQuestion();
         else if (tabName === 'visual') generateVisualQuestion();
+        else if (PG_TABS.includes(tabName)) pgRender(tabName);
 
         // Cập nhật chỉ số thống kê Dashboard
         updateDashboardStats();
@@ -3414,11 +4017,15 @@
         writesentence: () => wsRender(),
         listen: generateListenQuestion,
         guess: generateGuessQuestion,
-        visual: generateVisualQuestion
+        visual: generateVisualQuestion,
+        scenematch: () => pgRender('scenematch'),
+        picsort: () => pgRender('picsort'),
+        chosung: () => pgRender('chosung')
     };
 
     function handleNextAction() {
         if (currentTab === 'writesentence') { wsNext(); return; }
+        if (PG_TABS.includes(currentTab)) return;
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
 
