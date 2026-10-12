@@ -2352,6 +2352,10 @@
        Nay mọi lần đăng nhập thành công đều lưu 1 khoá riêng để đồng bộ.
        ------------------------------------------------------------------ */
     var SYNC_PASS_KEY = 'sync_pass_QuyenClass';
+    // 🛡️ Tham số tài khoản kèm theo khi tải giáo trình (máy chủ kiểm tra quyền từng Unit).
+    function authQuery() {
+        return 'user=' + encodeURIComponent(localStorage.getItem('studentSession_QuyenClass') || '') + '&pass=' + encodeURIComponent(getSyncPass());
+    }
     function setSyncPass(pass) { try { if (pass) localStorage.setItem(SYNC_PASS_KEY, pass); } catch (e) {} }
     function getSyncPass() {
         try { return localStorage.getItem('saved_pass_QuyenClass') || localStorage.getItem(SYNC_PASS_KEY) || ''; } catch (e) { return ''; }
@@ -2998,7 +3002,7 @@
         document.getElementById('loading-area').style.display = 'block';
         document.getElementById('loading-text').innerText = "Đang xác thực thông tin học viên...";
         
-        const targetUrl = `${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}`;
+        const targetUrl = `${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}${hasFreshBundle(user) ? '&nb=1' : ''}`;
         
         try {
             let res = await fetch(targetUrl, {
@@ -3020,11 +3024,12 @@
                 setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                 setTeacherRole(data.isTeacher, user);    // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
+                useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản (chỉ Unit được mở)
                 await parseAndInitApp(data.allowedUnits);
             } else if (data.disabled) {
                 forceAccountDisabled(); // tài khoản có nhưng đã bị khoá (Status = OUT)
             } else {
-                alert("Tài khoản hoặc mật khẩu chưa chính xác!");
+                alert(data.locked ? "Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút." : "Tài khoản hoặc mật khẩu chưa chính xác!");
                 window.location.reload();
             }
         } catch(e) {
@@ -3036,6 +3041,7 @@
     function executeStudentLogout() {
         // Chỉ xoá phiên đăng nhập — GIỮ LẠI sổ tay/tiến độ riêng theo tài khoản để lần sau đăng nhập lại vẫn còn.
         try { flushProgressNow(); } catch (e) {}            // 💾 đẩy nốt tiến độ lên server TRƯỚC khi xoá phiên
+        try { localStorage.removeItem(bundleCacheKey()); } catch (e) {} // 🛡️ xoá giáo trình đã lưu trên máy
         localStorage.removeItem('studentSession_QuyenClass');
         localStorage.removeItem('saved_user_QuyenClass');
         localStorage.removeItem('saved_pass_QuyenClass');
@@ -3107,31 +3113,54 @@
        Nay: gọi getBundle (1 lượt, có sẵn toàn bộ Unit) NGAY khi mở trang,
        chạy song song với lúc học viên đang gõ mật khẩu.
        ============================================================ */
-    const BUNDLE_CACHE_KEY = 'bundleCache_QuyenClass';
+    // 🛡️ (13/10/2026) Giáo trình CHỈ tải sau khi đăng nhập, máy chủ chỉ trả các Unit học viên được mở.
+    //    Bộ nhớ đệm lưu RIÊNG theo tài khoản; bản cũ (chứa mọi Unit) bị xoá khỏi máy.
+    try { localStorage.removeItem('bundleCache_QuyenClass'); } catch (e) {}
     const BUNDLE_CACHE_TTL = 12 * 60 * 60 * 1000; // 12 tiếng
     let bundlePromise = null;
+    function bundleCacheKey(user) {
+        return 'bundleCache_v2_' + String(user || localStorage.getItem('studentSession_QuyenClass') || '').toLowerCase();
+    }
+    // Máy đã có giáo trình còn hạn -> báo máy chủ khỏi gửi kèm khi đăng nhập (vào lại nhanh như cũ).
+    function hasFreshBundle(user) {
+        try {
+            const p = JSON.parse(localStorage.getItem(bundleCacheKey(user)) || 'null');
+            return !!(p && p.data && (Date.now() - p.at) < BUNDLE_CACHE_TTL);
+        } catch (e) { return false; }
+    }
+    function saveBundleCache(data) {
+        try { localStorage.setItem(bundleCacheKey(), JSON.stringify({ at: Date.now(), data: data })); } catch (e) {}
+    }
+    // Đăng nhập xong máy chủ trả kèm gói giáo trình -> dùng luôn, khỏi gọi thêm lượt nữa.
+    function useLoginBundle(bundle) {
+        if (!bundle || !bundle.success) return;
+        saveBundleCache(bundle);
+        bundlePromise = Promise.resolve(bundle);
+    }
 
     function startBundlePrefetch() {
         if (bundlePromise) return bundlePromise;
+        const user = localStorage.getItem('studentSession_QuyenClass') || '';
+        const pass = getSyncPass();
+        if (!user || !pass) return Promise.resolve(null); // chưa đăng nhập -> không tải gì
         bundlePromise = (async () => {
             try {
-                let res = await fetch(`${SCRIPT_URL}?action=getBundle`);
+                let res = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'getBundle', user: user, pass: pass })
+                });
                 let data = await res.json();
-                if (data && data.success && data.vocabByUnit) {
-                    try {
-                        localStorage.setItem(BUNDLE_CACHE_KEY, JSON.stringify({ at: Date.now(), data: data }));
-                    } catch (e) { /* hết dung lượng localStorage thì bỏ qua, không ảnh hưởng gì */ }
-                    return data;
-                }
+                if (data && data.success && data.vocabByUnit) { saveBundleCache(data); return data; }
             } catch (e) {}
-            return null; // Apps Script chưa cập nhật action getBundle -> dùng đường cũ
+            return null; // Apps Script chưa cập nhật -> dùng đường cũ
         })();
         return bundlePromise;
     }
 
     function readBundleCache() {
         try {
-            let raw = localStorage.getItem(BUNDLE_CACHE_KEY);
+            let raw = localStorage.getItem(bundleCacheKey());
             if (!raw) return null;
             let parsed = JSON.parse(raw);
             if (!parsed || !parsed.data || (Date.now() - parsed.at) > BUNDLE_CACHE_TTL) return null;
@@ -3165,7 +3194,7 @@
 
             if (!bundle) {
                 // Đường dự phòng: Apps Script vẫn là bản cũ, chưa có action getBundle
-                let res = await fetch(`${SCRIPT_URL}?action=getUnits`);
+                let res = await fetch(`${SCRIPT_URL}?action=getUnits&${authQuery()}`);
                 let data = await res.json();
                 if (!data.success) { document.getElementById('loading-area').style.display = 'none'; return; }
                 unitsConfig = data.units;
@@ -3257,7 +3286,7 @@
         } else {
             document.getElementById('loading-area').style.display = 'block';
             try {
-                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&pass=PRE_AUTHED`);
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${unitNum}&${authQuery()}`);
                 let data = await res.json();
                 if(data.success) {
                     allVocabCache[unitNum] = data.vocab;
@@ -3277,7 +3306,7 @@
             if (allVocabCache[u]) continue; 
             
             try {
-                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${u}&pass=PRE_AUTHED`);
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=${u}&${authQuery()}`);
                 let data = await res.json();
                 if (data.success) {
                     allVocabCache[u] = data.vocab;
@@ -6551,9 +6580,8 @@
     const startAppOnLoad = async function() {
         startVersionWatch();       // 🔄 luôn dùng bản mới nhất cô đã deploy
         maybeShowDisabledBanner(); // 🔒 nếu vừa bị vô hiệu hoá thì hiện thông báo nhã nhặn
-        // Bắt đầu tải giáo trình NGAY, song song với lúc học viên đang gõ mật khẩu.
-        // Dữ liệu giáo trình không phụ thuộc tài khoản nên tải sớm được.
-        startBundlePrefetch();
+        // 🛡️ Giáo trình giờ CHỈ tải sau khi đăng nhập (máy chủ trả kèm lúc đăng nhập),
+        //    nên không tải trước ở đây nữa.
 
         const savedUser = localStorage.getItem('saved_user_QuyenClass');
         const savedPass = localStorage.getItem('saved_pass_QuyenClass');
@@ -6571,7 +6599,7 @@
             }
             
             try {
-                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}`);
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}${hasFreshBundle(savedUser) ? '&nb=1' : ''}`);
                 let data = await res.json();
                 if(data.success) {
                     setSyncPass(savedPass);
@@ -6579,6 +6607,7 @@
                     setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                     setTeacherRole(data.isTeacher, savedUser);    // 👩‍🏫 quyền tải đề
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
+                    useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản
                     await parseAndInitApp(data.allowedUnits);
                 } else if (data.disabled) {
                     forceAccountDisabled(); // tài khoản đã bị khoá (Status = OUT)
