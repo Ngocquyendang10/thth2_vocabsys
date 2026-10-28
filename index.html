@@ -308,6 +308,31 @@
         .ps-mini.was-missed { border-color: #ed8936; }
         .ps-mini .pg-pic { width: 56px; border-radius: 7px; }
 
+        /* Thẻ hình đồ vật (đã tách nền) trong game Phân loại */
+        .pg-item-img { display: block; max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none; user-select: none; -webkit-user-drag: none; }
+        .ps-pic-card { padding: 8px 10px; border-radius: 16px; width: 104px; display: flex; align-items: center; justify-content: center; }
+        .ps-mini .pg-item-img { width: 40px; height: 40px; }
+
+        /* Quiz tích: món nào dùng được với động từ */
+        .tq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; max-width: 760px; margin: 0 auto; }
+        .tq-card { font-family: inherit; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 8px 10px; border-radius: 14px; border: 2px solid transparent; background: var(--card-color); box-shadow: var(--neu-convex); cursor: pointer; color: #1a202c; transition: border-color .15s, transform .12s; position: relative; }
+        .tq-card:hover { transform: translateY(-1px); }
+        .tq-box { width: 20px; height: 20px; border-radius: 6px; border: 1.5px solid rgba(148,163,184,0.7); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; color: #fff; position: absolute; top: 8px; left: 8px; }
+        .tq-card.ticked { border-color: rgba(148,163,184,0.7); }
+        .tq-card.ticked .tq-box { background: #4a5568; border-color: #4a5568; }
+        .tq-word { font-size: 18px; font-weight: 800; padding-top: 10px; }
+        .tq-note { font-size: 12px; font-weight: 700; color: var(--sub-text); }
+        .tq-card.res-ok { border-color: var(--success-color); }
+        .tq-card.res-ok .tq-box { border-color: var(--success-color); }
+        .tq-card.res-ok.ticked .tq-box { background: var(--success-color); }
+        .tq-card.res-bad { border-color: var(--error-color); background: #fff5f5; }
+        .tq-card.res-bad .tq-box { background: var(--error-color); border-color: var(--error-color); }
+        .tq-card.res-bad .tq-note { color: var(--error-color); }
+        .tq-card.res-miss { border-color: #ed8936; background: #fffaf0; }
+        .tq-card.res-miss .tq-note { color: #c05621; }
+        .tq-actions { display: flex; justify-content: center; margin-top: 16px; }
+        .tq-check-btn { font-family: inherit; font-size: 14px; font-weight: 800; padding: 10px 26px; border-radius: 999px; border: none; background: var(--point-color); color: #fff; cursor: pointer; box-shadow: var(--neu-convex); }
+
         /* Điền từ 초성: nhìn hình + phụ âm đầu, tự gõ đủ từ */
         .cs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; }
         .cs-card { background: var(--card-color); border-radius: 16px; box-shadow: var(--neu-convex); padding: 10px; display: flex; flex-direction: column; gap: 8px; border: 2px solid transparent; transition: border-color .15s; }
@@ -1728,7 +1753,7 @@
                 <!-- 10. PHÂN LOẠI THẺ HÌNH + CHỮ -->
                 <div id="picsort-tab" class="tab-render-view pg-tab">
                     <div class="pg-boards" id="picsort-boards"></div>
-                    <p class="pg-guide">Kéo từng từ bên dưới thả vào đúng nhóm — xếp đúng sẽ hiện hình minh hoạ <span style="opacity:.75;">(hoặc chạm vào thẻ rồi chạm vào nhóm)</span>.</p>
+                    <p class="pg-guide" id="ps-guide">Kéo từng từ bên dưới thả vào đúng nhóm — xếp đúng sẽ hiện hình minh hoạ <span style="opacity:.75;">(hoặc chạm vào thẻ rồi chạm vào nhóm)</span>.</p>
                     <div class="ps-zones" id="ps-zones"></div>
                     <div class="pg-bank" id="ps-bank"></div>
                 </div>
@@ -1738,6 +1763,14 @@
                     <div class="pg-boards" id="chosung-boards"></div>
                     <p class="pg-guide">Nhìn hình và phụ âm đầu (초성), gõ <b>đầy đủ</b> từ tiếng Hàn rồi bấm Enter (hoặc nút ✓).</p>
                     <div class="cs-grid" id="cs-grid"></div>
+                </div>
+
+                <!-- 12. QUIZ TÍCH: món nào dùng được với 1 động từ (vd 벗다) -->
+                <div id="tickquiz-tab" class="tab-render-view pg-tab">
+                    <div class="pg-boards" id="tickquiz-boards"></div>
+                    <p class="pg-guide" id="tq-guide"></p>
+                    <div class="tq-grid" id="tq-grid"></div>
+                    <div class="tq-actions"><button type="button" class="tq-check-btn" id="tq-check-btn" onclick="tqCheck()">Kiểm tra</button></div>
                 </div>
 
                 <div class="feedback-reserved-space">
@@ -2659,7 +2692,8 @@
         visual: { indices: [], current: 0, answered: false },
         scenematch: { indices: [], current: 0, seen: [], right: 0, wrong: 0 },
         picsort: { indices: [], current: 0, seen: [], right: 0, wrong: 0 },
-        chosung: { indices: [], current: 0, seen: [], right: 0, wrong: 0 }
+        chosung: { indices: [], current: 0, seen: [], right: 0, wrong: 0 },
+        tickquiz: { indices: [], current: 0, seen: [], right: 0, wrong: 0 }
     };
 
     /* ============================================================
@@ -2669,7 +2703,7 @@
     const TAB_DONE_LABELS = {
         flashcard: "Flashcard", quiz: "Trắc nghiệm", typing: "Viết từ", writesentence: "Viết câu",
         listen: "Nghe & chọn từ", guess: "Nghe & tìm nghĩa", visual: "Nhìn hình chọn từ",
-        scenematch: "Ghép chữ", picsort: "Phân loại", chosung: "Điền từ 초성"
+        scenematch: "Ghép chữ", picsort: "Phân loại", chosung: "Điền từ 초성", tickquiz: "벗다 được không?"
     };
 
     function resetTabScore(tabName) {
@@ -3519,9 +3553,57 @@
             scenematch: ['movie'],
             picsort: ['movie', 'emotion'],
             chosung: ['emotion']
+        },
+        10: {
+            boards: {
+                // Thẻ là hình đồ vật đã tách nền (src) — kéo vào đúng động từ "mặc/đeo"
+                wear: {
+                    title: '👕 Trang phục', cardPic: true,
+                    groups: [
+                        { ko: '입다', vi: 'Mặc', color: '#f08aa0', items: [
+                            { ko: '옷', src: 'assets/game/u10-wear/ot.webp' },
+                            { ko: '바지', src: 'assets/game/u10-wear/baji.webp' },
+                            { ko: '치마', src: 'assets/game/u10-wear/chima.webp' },
+                            { ko: '정장', src: 'assets/game/u10-wear/jeongjang.webp' },
+                            { ko: '외투', src: 'assets/game/u10-wear/oetu.webp' }
+                        ] },
+                        { ko: '신다', vi: 'Xỏ, đi', color: '#6aa5e6', items: [
+                            { ko: '신발', src: 'assets/game/u10-wear/sinbal.webp' },
+                            { ko: '구두', src: 'assets/game/u10-wear/gudu.webp' },
+                            { ko: '운동화', src: 'assets/game/u10-wear/undonghwa.webp' },
+                            { ko: '양말', src: 'assets/game/u10-wear/yangmal.webp' }
+                        ] },
+                        { ko: '쓰다', vi: 'Đội, đeo', color: '#f2c14e', items: [
+                            { ko: '모자', src: 'assets/game/u10-wear/moja.webp' },
+                            { ko: '안경', src: 'assets/game/u10-wear/angyeong.webp' },
+                            { ko: '우산', src: 'assets/game/u10-wear/usan.webp' }
+                        ] },
+                        { ko: '끼다', vi: 'Đeo, xỏ, luồn', color: '#b28ae6', items: [
+                            { ko: '반지', src: 'assets/game/u10-wear/banji.webp' },
+                            { ko: '장갑', src: 'assets/game/u10-wear/janggap.webp' },
+                            { ko: '렌즈', src: 'assets/game/u10-wear/renjeu.webp' }
+                        ] },
+                        { ko: '차다', vi: 'Đeo, cài', color: '#f59a6c', items: [
+                            { ko: '시계', src: 'assets/game/u10-wear/sigye.webp' },
+                            { ko: '팔찌', src: 'assets/game/u10-wear/palji.webp' },
+                            { ko: '벨트', src: 'assets/game/u10-wear/belteu.webp' }
+                        ] }
+                    ]
+                },
+                // Quiz tích: món nào dùng được với 벗다 (alt = động từ đúng để tháo/bỏ ra)
+                beosda: {
+                    title: '✅ 벗다', verb: '벗다', verbVi: 'cởi, bỏ ra', pick: 12,
+                    groups: [
+                        { ko: 'yes', items: [{ ko: '옷' }, { ko: '바지' }, { ko: '치마' }, { ko: '정장' }, { ko: '외투' }, { ko: '모자' }, { ko: '안경' }, { ko: '장갑' }, { ko: '신발' }, { ko: '구두' }, { ko: '운동화' }, { ko: '양말' }] },
+                        { ko: 'no', items: [{ ko: '반지', alt: '빼다' }, { ko: '렌즈', alt: '빼다' }, { ko: '시계', alt: '풀다' }, { ko: '팔찌', alt: '풀다' }, { ko: '벨트', alt: '풀다' }, { ko: '우산', alt: '접다' }, { ko: '책', alt: '' }, { ko: '의자', alt: '' }, { ko: '우유', alt: '' }, { ko: '사과', alt: '' }, { ko: '컴퓨터', alt: '' }, { ko: '핸드폰', alt: '' }] }
+                    ]
+                }
+            },
+            picsort: ['wear'],
+            tickquiz: ['beosda']
         }
     };
-    const PG_TABS = ['scenematch', 'picsort', 'chosung'];
+    const PG_TABS = ['scenematch', 'picsort', 'chosung', 'tickquiz'];
     const pgStore = {};      // tiến độ theo "unit|dạng|bộ ảnh" (giữ trong phiên)
     const pgBoardOf = {};    // bộ ảnh đang chọn của từng dạng
     let pgSelected = null;   // thẻ đang chọn (chế độ chạm thẻ rồi chạm ô)
@@ -3573,7 +3655,7 @@
         pgRender(tab);
         updateDashboardStats();
     }
-    const PG_GAME_NAMES = { scenematch: '🧩 Ghép chữ vào hình', picsort: '🗂️ Phân loại', chosung: '⌨️ Điền từ 초성' };
+    const PG_GAME_NAMES = { scenematch: '🧩 Ghép chữ vào hình', picsort: '🗂️ Phân loại', chosung: '⌨️ Điền từ 초성', tickquiz: '✅ 벗다 được không?' };
     // Hàng 1: chọn game. Hàng 2: chọn chủ đề (chỉ khi game có nhiều bộ ảnh)
     function pgRenderBoardPills(tab) {
         const box = document.getElementById(tab + '-boards');
@@ -3594,6 +3676,7 @@
         if (tab === 'scenematch') renderSceneMatch();
         else if (tab === 'picsort') renderPicSort();
         else if (tab === 'chosung') renderChosung();
+        else if (tab === 'tickquiz') renderTickQuiz();
         pgUpdateCounter(tab);
     }
     function pgUpdateCounter(tab) {
@@ -3791,10 +3874,32 @@
     }
 
     /* ---------- 2) PHÂN LOẠI THẺ HÌNH + CHỮ ---------- */
+    // Hình của 1 món: file đã tách nền (src) hoặc vùng cắt từ ảnh lớn (pic)
+    function pgItemPic(board, it, boxH) {
+        if (!it.src) return pgPic(board, it.pic, boxH);
+        const im = document.createElement('img');
+        im.className = 'pg-item-img'; im.src = it.src; im.alt = ''; im.draggable = false;
+        if (!boxH) return im;
+        const box = document.createElement('div');
+        box.className = 'pg-pic-box';
+        box.style.height = boxH + 'px';
+        box.appendChild(im);
+        return box;
+    }
+    // 모자 + 쓰다 -> "모자를 쓰다" (tự chọn 을/를 theo patchim)
+    function pgObjPhrase(noun, verb) {
+        const c = String(noun).charCodeAt(noun.length - 1) - 0xAC00;
+        const hasFinal = c >= 0 && c < 11172 && c % 28 !== 0;
+        return noun + (hasFinal ? '을 ' : '를 ') + verb;
+    }
     function renderPicSort() {
         const board = pgBoard('picsort'), st = pgState('picsort');
         const zones = document.getElementById('ps-zones'), bank = document.getElementById('ps-bank');
         if (!board || !zones || !bank) return;
+        const guide = document.getElementById('ps-guide');
+        if (guide) guide.innerHTML = board.cardPic
+            ? 'Kéo từng hình bên dưới thả vào đúng động từ <span style="opacity:.75;">(hoặc chạm vào hình rồi chạm vào động từ)</span>.'
+            : 'Kéo từng từ bên dưới thả vào đúng nhóm — xếp đúng sẽ hiện hình minh hoạ <span style="opacity:.75;">(hoặc chạm vào thẻ rồi chạm vào nhóm)</span>.';
         const items = pgItems(board);
         pgSelected = null;
         zones.innerHTML = '';
@@ -3810,10 +3915,11 @@
             doneIdx.forEach(i => {
                 const m = document.createElement('div');
                 m.className = 'ps-mini' + (st.missed[i] ? ' was-missed' : '');
+                const say = board.cardPic ? pgObjPhrase(items[i].ko, g.ko) : items[i].ko;
                 m.title = (pgViOf(items[i].ko) || '') + ' — bấm để nghe';
-                m.appendChild(pgPic(board, items[i].pic));
-                m.appendChild(document.createTextNode(items[i].ko));
-                m.addEventListener('click', e => { e.stopPropagation(); triggerKoreanVoice(items[i].ko, false); });
+                m.appendChild(pgItemPic(board, items[i]));
+                m.appendChild(document.createTextNode(say));
+                m.addEventListener('click', e => { e.stopPropagation(); triggerKoreanVoice(say, false); });
                 body.appendChild(m);
             });
             z.appendChild(body);
@@ -3824,11 +3930,17 @@
         const left = st.order.filter(i => !st.done[i]);
         if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">🎉 Bạn đã phân loại xong toàn bộ thẻ!</span>'; return; }
         left.forEach(i => {
-            // Chỉ hiện chữ (hiện hình thì học sinh đoán qua hình) — xếp đúng nhóm mới hiện hình
             const card = document.createElement('div');
-            card.className = 'sm-chip';
             card.dataset.i = i;
-            card.textContent = items[i].ko;
+            if (board.cardPic) {
+                // Bộ "hình đồ vật": thẻ chỉ có hình, xếp đúng mới hiện tên + cụm từ
+                card.className = 'sm-chip ps-pic-card';
+                card.appendChild(pgItemPic(board, items[i], 76));
+            } else {
+                // Chỉ hiện chữ (hiện hình thì học sinh đoán qua hình) — xếp đúng nhóm mới hiện hình
+                card.className = 'sm-chip';
+                card.textContent = items[i].ko;
+            }
             pgBindDrag(card, '.ps-zone', z => psTryPlace(+z.dataset.g, i));
             bank.appendChild(card);
         });
@@ -3838,12 +3950,92 @@
         const it = items[i];
         if (it.g === gi) {
             pgMarkRight('picsort', i, it.ko);
+            if (board.cardPic) {
+                const say = pgObjPhrase(it.ko, board.groups[gi].ko);
+                const fb = document.getElementById('global-feedback');
+                if (fb) fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác! <b>' + say + '</b>' + (pgViOf(it.ko) ? ' — ' + pgViOf(it.ko) : '');
+                triggerKoreanVoice(say, false);
+            }
             renderPicSort();
         } else {
-            pgMarkWrong('picsort', i, it.ko, '<b>' + it.ko + '</b> không thuộc nhóm "' + board.groups[gi].ko + '", thử nhóm khác nhé!');
+            pgMarkWrong('picsort', i, it.ko, board.cardPic
+                ? 'Món này không dùng với <b>' + board.groups[gi].ko + '</b>, thử động từ khác nhé!'
+                : '<b>' + it.ko + '</b> không thuộc nhóm "' + board.groups[gi].ko + '", thử nhóm khác nhé!');
             renderPicSort();
             pgShake(document.querySelector(`#ps-zones .ps-zone[data-g="${gi}"]`));
         }
+    }
+
+    /* ---------- 4) QUIZ TÍCH: món nào dùng được với động từ (vd 벗다) ---------- */
+    // Mỗi lượt lấy ngẫu nhiên `pick` thẻ, khoảng nửa "dùng được", nửa "không".
+    // Tích xong bấm Kiểm tra: mỗi thẻ đánh giá đúng = 1 điểm. Thẻ "không" hiện động từ đúng (alt).
+    function tqState() {
+        const board = pgBoard('tickquiz'), st = pgState('tickquiz');
+        if (!st.round) {
+            const items = pgItems(board), n = board.pick || 12;
+            const yes = shuffleArray(items.map((_, i) => i).filter(i => items[i].g === 0));
+            const no = shuffleArray(items.map((_, i) => i).filter(i => items[i].g === 1));
+            const ny = Math.min(yes.length, Math.ceil(n / 2)), nn = Math.min(no.length, n - ny);
+            st.round = shuffleArray(yes.slice(0, ny).concat(no.slice(0, nn)));
+            st.indices = st.round.slice();
+            st.ticks = {}; st.checked = false;
+        }
+        return st;
+    }
+    function renderTickQuiz() {
+        const board = pgBoard('tickquiz'), grid = document.getElementById('tq-grid');
+        if (!board || !grid) return;
+        const st = tqState(), items = pgItems(board);
+        const guide = document.getElementById('tq-guide');
+        if (guide) guide.innerHTML = `Tích vào <b>tất cả</b> những thứ dùng được với <b>${board.verb}</b> (${board.verbVi}), rồi bấm "Kiểm tra".`;
+        grid.innerHTML = '';
+        st.round.forEach(i => {
+            const it = items[i], ok = it.g === 0, ticked = !!st.ticks[i];
+            const el = document.createElement('button');
+            el.type = 'button';
+            el.className = 'tq-card' + (ticked ? ' ticked' : '');
+            let note = '';
+            if (st.checked) {
+                const right = ticked === ok;
+                el.classList.add(right ? 'res-ok' : (ok ? 'res-miss' : 'res-bad'));
+                note = ok ? pgObjPhrase(it.ko, board.verb)
+                          : (it.alt ? pgObjPhrase(it.ko, it.alt) : 'không phải đồ mặc');
+            }
+            el.innerHTML = `<span class="tq-box">${ticked ? '✓' : ''}</span><span class="tq-word">${it.ko}</span>` +
+                (note ? `<span class="tq-note">${note}</span>` : '');
+            el.addEventListener('click', () => {
+                if (st.checked) { triggerKoreanVoice(note && note !== 'không phải đồ mặc' ? note : it.ko, false); return; }
+                st.ticks[i] = !st.ticks[i];
+                renderTickQuiz();
+            });
+            grid.appendChild(el);
+        });
+        const btn = document.getElementById('tq-check-btn');
+        if (btn) { btn.textContent = st.checked ? 'Làm lượt mới' : 'Kiểm tra'; }
+    }
+    function tqCheck() {
+        const board = pgBoard('tickquiz');
+        if (!board) return;
+        const st = tqState();
+        if (st.checked) { restartTab('tickquiz'); return; }
+        const items = pgItems(board);
+        st.checked = true; st.right = 0; st.wrong = 0; st.seen = st.round.slice();
+        st.round.forEach(i => {
+            const it = items[i];
+            if (!!st.ticks[i] === (it.g === 0)) { st.right++; const v = pgVocabIndex(it.ko); if (v >= 0) recordVocabMastered(vocabData[v].ko); }
+            else { st.wrong++; st.missed[i] = true; const v = pgVocabIndex(it.ko); if (v >= 0) recordWrongWord(v); }
+        });
+        const allRight = st.wrong === 0;
+        playFeedbackSound(allRight);
+        const fb = document.getElementById('global-feedback');
+        if (fb) {
+            fb.className = 'feedback ' + (allRight ? 'success' : 'error') + ' compact';
+            fb.innerHTML = allRight
+                ? '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Tuyệt vời, đúng hết!'
+                : `Đúng <b>${st.right}/${st.round.length}</b>. Xem lại các thẻ <span style="color:var(--error-color);font-weight:800;">đỏ</span> (tích nhầm) và <span style="color:#dd6b20;font-weight:800;">cam</span> (bỏ sót) nhé — bấm vào thẻ để nghe.`;
+        }
+        renderTickQuiz();
+        pgUpdateCounter('tickquiz');   // không bật popup: để học sinh xem kỹ thẻ đỏ/cam
     }
 
     /* ---------- 3) ĐIỀN TỪ THEO 초성 ---------- */
@@ -3985,7 +4177,7 @@
     }
 
     // 5 chức năng nằm trong nhóm "4. Quiz"
-    const QUIZ_SUBTABS = ['quiz', 'typing', 'writesentence', 'listen', 'guess', 'visual', 'scenematch', 'picsort', 'chosung'];
+    const QUIZ_SUBTABS = ['quiz', 'typing', 'writesentence', 'listen', 'guess', 'visual', 'scenematch', 'picsort', 'chosung', 'tickquiz'];
     function mainGroupOf(tab) { return QUIZ_SUBTABS.includes(tab) ? 'quizgroup' : tab; }
 
     function switchTab(tabName) {
