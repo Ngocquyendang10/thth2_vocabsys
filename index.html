@@ -1371,6 +1371,133 @@
                 margin-top: 8px; padding-top: 10px !important; border-top: 1px dashed #edf2f7 !important;
             }
         }
+
+        /* ===== 📝 BÀI TẬP (Đọc, ...) ===== */
+        #exercise-tabs-nav { margin-top: 12px; justify-content: flex-start; }
+        #exercise-tabs-nav .tab-click-btn { flex: 0 0 auto; padding: 10px 18px; }
+        .ex-empty { text-align: center; color: var(--sub-text); font-size: 13px; padding: 60px 20px; }
+        .ex-block-title { font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; margin: 22px 0 10px; letter-spacing: 0.5px; border-left: 3px solid var(--point-color); padding-left: 8px; }
+        .ex-reading { display: grid; gap: 12px; }
+        .ex-passage { background: var(--point-light); border-radius: var(--radius-md); padding: 14px 18px; }
+        .ex-passage-name { font-weight: 800; color: var(--point-color); font-size: 14px; margin-bottom: 6px; }
+        .ex-passage p { font-size: 15px; line-height: 1.85; color: var(--text-color); margin: 0; }
+        .ex-q { border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 12px; }
+        .ex-q-head { font-weight: 800; font-size: 14px; color: #1a202c; margin-bottom: 4px; }
+        .ex-q-sub { font-size: 14px; color: var(--text-color); margin-bottom: 10px; line-height: 1.7; }
+        .ex-opts { display: grid; gap: 8px; }
+        .ex-opt { text-align: left; background: #fff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 10px 14px; font-size: 14px; color: var(--text-color); cursor: pointer; font-family: inherit; transition: border-color .15s, background .15s; }
+        .ex-opt:hover:not(:disabled) { border-color: var(--point-color); background: var(--point-light); }
+        .ex-opt:disabled { cursor: default; }
+        .ex-opt.correct { border-color: var(--success-color); background: rgba(72,187,120,0.12); font-weight: 700; }
+        .ex-opt.wrong { border-color: var(--error-color); background: rgba(245,101,101,0.1); }
+        .ex-fb { font-size: 13px; font-weight: 700; margin-top: 8px; }
+        .ex-fb.ok { color: var(--success-color); }
+        .ex-fb.no { color: var(--error-color); }
+        .ex-input { width: 100%; box-sizing: border-box; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; font-family: inherit; margin-top: 6px; resize: vertical; min-height: 44px; }
+        .ex-input:focus { outline: none; border-color: var(--point-color); }
+        .ex-input-label { font-size: 13px; font-weight: 700; color: var(--sub-text); margin-top: 8px; display: block; }
+        .ex-hint { font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 4px; }
+        .ex-answer-btn { margin-top: 10px; background: none; border: 1.5px solid var(--point-color); color: var(--point-color); border-radius: var(--radius-sm); padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+        .ex-answer-btn:hover { background: var(--point-light); }
+        .ex-answer { display: none; margin-top: 10px; background: rgba(72,187,120,0.1); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 14px; line-height: 1.7; }
+        .ex-answer.show { display: block; }
+        .ex-score-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: var(--bg-color); border-radius: var(--radius-md); padding: 10px 16px; margin: 16px 0 6px; font-size: 14px; font-weight: 700; }
+        .ex-reset-btn { background: var(--point-color); color: #fff; border: none; border-radius: var(--radius-sm); padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+        .ex-player { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--bg-color); border-radius: var(--radius-md); padding: 10px 14px; margin-bottom: 12px; }
+        .ex-play-btn { width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; border: none; background: var(--point-color); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .ex-play-btn:hover { background: var(--point-hover); }
+        .ex-play-btn svg { width: 20px; height: 20px; fill: currentColor; pointer-events: none; }
+        .ex-seek { flex: 1 1 140px; min-width: 120px; accent-color: var(--point-color); }
+        .ex-time { font-size: 12px; font-weight: 700; color: var(--sub-text); font-variant-numeric: tabular-nums; }
+        .ex-speeds { display: flex; gap: 4px; }
+        .ex-speed-btn { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 8px; padding: 4px 8px; font-size: 12px; font-weight: 700; color: var(--sub-text); cursor: pointer; font-family: inherit; }
+        .ex-speed-btn.active { border-color: var(--point-color); color: var(--point-color); background: var(--point-light); }
+        .ex-marks { flex-basis: 100%; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; font-size: 12px; font-weight: 700; color: var(--sub-text); }
+        .ex-mark-btn { background: #fff; border: 1.5px solid #e2e8f0; border-radius: 999px; padding: 4px 10px; font-size: 12px; font-weight: 700; color: var(--text-color); cursor: pointer; font-family: inherit; }
+        .ex-mark-btn small { color: var(--sub-text); font-weight: 600; margin-left: 2px; }
+        .ex-mark-btn:hover, .ex-mark-btn.active { border-color: var(--point-color); color: var(--point-color); background: var(--point-light); }
+        .ex-passage { border: 2px solid transparent; transition: border-color .2s; }
+        .ex-passage.reading { border-color: var(--point-color); }
+        .ex-passage-play { background: none; border: none; cursor: pointer; font-size: 14px; padding: 0 2px; vertical-align: 1px; }
+        .ex-w { position: relative; cursor: default; border-bottom: 1.5px dotted rgba(97,76,255,0.45); outline: none; }
+        .ex-w:hover, .ex-w:focus { background: rgba(97,76,255,0.12); border-radius: 4px; }
+        .ex-w::after { content: attr(data-tip); position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); background: #2d3748; color: #fff; font-size: 12px; font-weight: 600; line-height: 1.4; padding: 5px 9px; border-radius: 8px; white-space: nowrap; pointer-events: none; display: none; z-index: 20; }
+        .ex-w:hover::after, .ex-w:focus::after { display: block; }
+        .ex-seg { border-radius: 4px; transition: background .2s; }
+        .ex-seg.now { background: rgba(255, 214, 102, 0.28); }
+        .ex-tok { border-radius: 4px; transition: color .15s, background .15s; }
+        .ex-tok.done { color: var(--point-color); }
+        .ex-tok.cur { color: #fff; background: var(--point-color); box-shadow: 0 0 0 2px var(--point-color); }
+        .ex-done-status { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: rgba(72,187,120,0.12); border: 1.5px solid var(--success-color); color: #276749; border-radius: var(--radius-md); padding: 10px 14px; font-size: 13.5px; margin-top: 6px; }
+        .ex-done-status-text { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 4px; line-height: 1.5; }
+        .ex-done-status-sep { margin: 0 2px; }
+        .ex-done-status-btns { display: flex; gap: 6px; }
+        .ex-info { position: relative; display: inline-flex; margin-left: 4px; outline: none; cursor: default; }
+        .ex-info-ico { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 1.5px solid var(--success-color); color: #276749; font-size: 11px; font-weight: 800; font-style: italic; font-family: Georgia, serif; display: inline-flex; align-items: center; justify-content: center; }
+        .ex-info:hover .ex-info-ico, .ex-info:focus .ex-info-ico { background: var(--success-color); color: #fff; }
+        .ex-info-pop { display: none; position: absolute; top: calc(100% + 8px); left: 50%; transform: translateX(-50%); flex-direction: column; gap: 4px; background: #2d3748; color: #fff; font-size: 12.5px; line-height: 1.5; padding: 9px 12px; border-radius: 10px; white-space: nowrap; z-index: 30; box-shadow: 0 8px 20px rgba(0,0,0,0.18); }
+        .ex-info-pop::before { content: ''; position: absolute; top: -5px; left: 50%; transform: translateX(-50%) rotate(45deg); width: 10px; height: 10px; background: #2d3748; }
+        .ex-warn { color: #dd6b20; }
+        .ex-info-pop .ex-warn { color: #fbb36b; }
+        .ex-info:hover .ex-info-pop, .ex-info:focus .ex-info-pop { display: flex; }
+        .ex-done-view { background: #fff; border: 1.5px solid var(--success-color); color: #276749; border-radius: var(--radius-sm); padding: 7px 12px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
+        .ex-submit-wrap { text-align: center; margin: 18px 0 8px; }
+        .ex-submit-btn { padding: 12px 40px; font-size: 15px; }
+        .ex-submit-note { font-size: 12px; color: var(--sub-text); margin-top: 8px; }
+        .ex-done-box { max-width: 440px; max-height: 92vh; overflow-y: auto; }
+        .ex-done-box h3 { font-size: 18px; font-weight: 800; color: #1a202c; margin-bottom: 10px; }
+        .ex-done-name { font-size: 15px; font-weight: 800; color: var(--point-color); }
+        .ex-done-lesson { font-size: 13px; color: var(--sub-text); margin-top: 2px; }
+        .ex-done-score { display: flex; flex-direction: column; align-items: center; margin: 12px auto 4px; font-size: 20px; color: var(--sub-text); line-height: 1.1; }
+        .ex-done-score-label { font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--sub-text); margin-bottom: 2px; }
+        .ex-done-score b { font-size: 46px; color: var(--point-color); font-weight: 800; }
+        .ex-done-sheet { border: 1px solid #e2e8f0; border-radius: var(--radius-sm); overflow: hidden; margin-top: 12px; text-align: left; }
+        .ex-sheet-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 12px; font-size: 13px; color: var(--text-color); }
+        .ex-sheet-row + .ex-sheet-row { border-top: 1px solid #edf2f7; }
+        .ex-sheet-row:nth-child(even) { background: #f8f9fc; }
+        .ex-sheet-label { color: var(--sub-text); font-weight: 600; white-space: nowrap; }
+        .ex-sheet-val { text-align: right; display: flex; flex-direction: column; align-items: flex-end; }
+        .ex-sheet-val small { font-size: 11px; color: var(--sub-text); }
+        .ex-sheet-row.warn .ex-sheet-val b { color: #dd6b20; }
+        .ex-sheet-row.good .ex-sheet-val b { color: #2f855a; }
+        .ex-done-note { font-size: 13px; line-height: 1.6; color: var(--text-color); background: var(--point-light); border-radius: var(--radius-sm); padding: 10px 12px; margin: 14px 0; text-align: left; }
+        .ex-done-actions { display: flex; gap: 8px; justify-content: center; }
+        .ex-done-actions .btn { padding: 10px 18px; font-size: 13px; }
+        /* 📱 Bài tập trên tablet / điện thoại */
+        @media (max-width: 768px) {
+            .ex-done-status { flex-direction: column; align-items: stretch; position: relative; }
+            /* Màn hẹp: khung chi tiết bám theo cả khung xanh (không lệch ra ngoài mép màn hình) */
+            .ex-info { position: static; }
+            .ex-info-pop { top: calc(100% + 6px); left: 8px; right: 8px; transform: none; white-space: normal; }
+            .ex-info-pop::before { display: none; }
+            .ex-done-status-btns > button { flex: 1; }
+            .ex-player { gap: 8px 10px; }
+            .ex-seek { flex-basis: calc(100% - 52px); order: 1; }
+            .ex-time { order: 2; }
+            .ex-speeds { order: 3; margin-left: auto; }
+            .ex-marks { order: 4; }
+            .ex-passage p { font-size: 15.5px; }
+            .ex-notes { grid-template-columns: 1fr; }
+            .ex-submit-btn { width: 100%; }
+        }
+        @media (max-width: 480px) {
+            .ex-done-box { padding: 22px 16px; width: 94%; }
+            .ex-done-box h3 { font-size: 16px; }
+            .ex-done-score b { font-size: 40px; }
+            .ex-sheet-row { padding: 7px 10px; font-size: 12.5px; }
+            .ex-done-note { font-size: 12.5px; }
+            .ex-done-actions { flex-direction: column-reverse; }
+            .ex-done-actions .btn { width: 100%; }
+            .ex-q { padding: 12px; }
+            .ex-opt { padding: 10px 12px; }
+        }
+        .ex-gloss-tip { font-size: 12px; color: var(--sub-text); margin-top: 8px; }
+        .ex-notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+        .ex-note { display: flex; align-items: center; gap: 10px; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 10px 12px; background: #fff; }
+        .ex-note-img { width: 56px; height: 56px; flex-shrink: 0; object-fit: contain; }
+        .ex-note-ko { font-weight: 800; font-size: 15px; color: var(--point-color); }
+        .ex-note-vi { font-size: 13px; color: var(--text-color); margin-top: 2px; }
+        .ex-note-ex { font-size: 12px; color: var(--sub-text); margin-top: 4px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -1433,6 +1560,9 @@
                 </li>
                 <li class="menu-item" id="menu-grammar" onclick="showAppMode('grammar')"><a href="#">
                     <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Ngữ pháp<span class="lock-badge" id="grammar-lock-badge" style="display:none;">🔒</span></a>
+                </li>
+                <li class="menu-item" id="menu-exercise" onclick="showAppMode('exercise')"><a href="#">
+                    <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>Bài tập</a>
                 </li>
                 <li class="menu-item" id="menu-review" onclick="showAppMode('review')"><a href="#">
                     <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm0 16H5V8h14v11z"/></svg>Ôn lại từ vựng</a>
@@ -1938,6 +2068,18 @@
             </div>
         </div>
 
+        <!-- BÀI TẬP PHÂN HỆ -->
+        <div id="mode-exercise-section" style="display: none; width:100%; height:100%;">
+            <div class="work-workspace-container" style="justify-content: flex-start;">
+                <div class="workspace-header">
+                    <h1 id="exercise-main-title">Bài tập</h1>
+                    <p id="exercise-subtitle">Vui lòng chọn Unit ở trên để xem bài tập tương ứng.</p>
+                </div>
+                <div class="workspace-tabs" id="exercise-tabs-nav" style="display: none;"></div>
+                <div id="exercise-content"></div>
+            </div>
+        </div>
+
         <!-- NHẮC LẠI TỪ VỰNG PHÂN HỆ -->
         <div id="mode-review-section" style="display: none; width:100%; height:100%;">
             <div class="work-workspace-container" style="justify-content: flex-start;">
@@ -2142,6 +2284,23 @@
         <h3 id="popup-title">Tuyệt vời quá!</h3>
         <p id="popup-message">Sự siêng năng của bạn đã thành công mở khóa bài học mới.</p>
         <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px;" onclick="closeCustomBouncePopup()">Bắt Đầu Học</button>
+    </div>
+</div>
+
+<!-- POPUP HOÀN THÀNH BÀI TẬP (Đọc, ...) -->
+<div class="bounce-popup-overlay" id="ex-done-popup">
+    <div class="bounce-popup-box ex-done-box" id="ex-done-card">
+        <div class="popup-icon-animate">🎉</div>
+        <h3>Chúc mừng bạn đã hoàn thành bài tập!</h3>
+        <div class="ex-done-name" id="ex-done-name"></div>
+        <div class="ex-done-lesson" id="ex-done-lesson"></div>
+        <div class="ex-done-score"><span class="ex-done-score-label">Điểm</span><span id="ex-done-score"></span></div>
+        <div class="ex-done-sheet" id="ex-done-sheet"></div>
+        <p class="ex-done-note">Để giáo viên có thể ghi nhận kết quả và theo dõi tiến độ học tập, bạn vui lòng chụp lại màn hình kết quả này và gửi cho giáo viên. Trân trọng cảm ơn!</p>
+        <div class="ex-done-actions">
+            <button class="btn btn-primary" onclick="captureExerciseResult(this)">📸 Chụp màn hình</button>
+            <button class="btn" onclick="closeExerciseDonePopup()">Đóng</button>
+        </div>
     </div>
 </div>
 
@@ -2908,6 +3067,531 @@
         else renderVocabTableIndex();
     }
 
+    // ===== 📝 BÀI TẬP THEO UNIT =====
+    // Mỗi unit có danh sách tab bài tập (Đọc, ...). Unit chưa có thì hiện "chưa có bài tập".
+    const EXERCISE_DATA = {
+        11: [
+            {
+                key: 'reading',
+                label: 'Đọc',
+                audio: 'assets/doc/unit11-doc.mp3', // file nghe bài đọc (đọc cả 3 đoạn)
+                passages: [
+                    // segs: [bắt đầu, kết thúc (giây trong file nghe), câu/vế] -> chữ chạy highlight theo audio
+                    { name: '남', start: 0, segs: [
+                        [0, 2.4, '저는 이번 방학에 배낭여행을 할 겁니다.'],
+                        [3.15, 6.0, '그래서 지난 1년 동안 열심히 아르바이트를 했습니다.'],
+                        [7.0, 8.8, '배낭여행은 한국으로 갈 겁니다.'],
+                        [9.6, 11.2, '먼저 서울을 구경하고,'], [11.65, 13.35, '경주와 부산에도 갈 겁니다.'],
+                        [14.35, 17.0, '경주에서는 불국사에서 사진을 많이 찍고,'], [17.6, 19.45, '부산에서는 유람선을 탈 겁니다.'],
+                        [20.55, 24.75, '내년에는 더 열심히 아르바이트를 해서 유럽으로 배낭여행을 갈 겁니다.'] ] },
+                    { name: '박수빈', start: 25.9, segs: [
+                        [26.0, 28.85, '저는 다음 연휴에 후에에 갈 겁니다.'],
+                        [29.4, 33.7, '다낭도 좋지만, 후에는 다낭보다 사람들이 많지 않습니다.'],
+                        [34.45, 38.0, '후에는 하노이에서 비행기로 1시간 정도 걸립니다.'],
+                        [39.05, 43.1, '첫째 날에는 옛 왕궁을 보고, 호텔에서 쉴 겁니다.'],
+                        [44.05, 47.8, '둘째 날에는 시내를 구경하고 시장에도 갈 겁니다.'],
+                        [48.85, 53.6, '마지막 날에는 바다에 가서 물놀이도 하고 생선 요리를 먹을 겁니다.'] ] },
+                    { name: '풍', start: 54.5, segs: [
+                        [54.66, 56.64, '저는 5년 후에 결혼할 겁니다.'],
+                        [57.04, 59.18, '신혼여행은 싱가포르로 갈 겁니다.'],
+                        [59.64, 61.6, '싱가포르에서 낮에는 쇼핑을 하고'], [61.94, 63.78, '밤에는 센토사 섬에 갈 겁니다.'],
+                        [64.2, 65.6, '섬에서 쇼를 볼 겁니다.'],
+                        [66.1, 68.9, '아내와 맛있는 음식을 먹고 맥주도 마실 겁니다.'],
+                        [69.34, 70.74, '사진도 많이 찍을 겁니다.'] ] }
+                ],
+                // Từ vựng / biểu hiện cần lưu ý (img: hình minh hoạ cho danh từ chỉ sự vật)
+                notes: [
+                    { ko: '아르바이트를 하다', vi: 'làm thêm, làm việc bán thời gian', ex: '지난 1년 동안 열심히 아르바이트를 했습니다.' },
+                    { ko: '유람선', vi: 'du thuyền, tàu du lịch', ex: '부산에서는 유람선을 탈 겁니다.', img: 'assets/doc/u11_yuramseon.svg' },
+                    { ko: '먼저 / 첫째 / 둘째 / 마지막', vi: 'trước tiên / thứ nhất / thứ hai / cuối cùng (kể trình tự)', ex: '첫째 날에는 … 둘째 날에는 … 마지막 날에는 …' },
+                    { ko: '물놀이', vi: 'vui chơi dưới nước, tắm biển', ex: '바다에 가서 물놀이도 하고 …' },
+                    { ko: '낮 – 밤', vi: 'ban ngày – ban đêm', ex: '낮에는 쇼핑을 하고 밤에는 센토사 섬에 갈 겁니다.' },
+                    { ko: '섬', vi: 'đảo, hòn đảo', ex: '센토사 섬에 갈 겁니다.', img: 'assets/doc/u11_seom.svg' },
+                    { ko: '쇼', vi: 'show, buổi biểu diễn', ex: '섬에서 쇼를 볼 겁니다.' },
+                    { ko: '맥주', vi: 'bia', ex: '맥주도 마실 겁니다.', img: 'assets/doc/u11_maekju.svg' }
+                ],
+                // Rê chuột / chạm vào từ trong bài đọc để xem nghĩa (khớp cụm dài nhất trước)
+                glossary: {
+                    '이번': 'lần này', '방학': 'kỳ nghỉ (của học sinh, sinh viên)', '배낭여행': 'du lịch ba lô, du lịch bụi',
+                    '할 겁니다': 'sẽ làm', '그래서': 'vì vậy', '지난 1년 동안': 'suốt 1 năm qua', '열심히': 'chăm chỉ',
+                    '아르바이트': 'việc làm thêm', '했습니다': 'đã làm', '한국': 'Hàn Quốc', '갈 겁니다': 'sẽ đi',
+                    '먼저': 'trước tiên', '서울': 'Seoul', '구경하고': 'ngắm cảnh, tham quan … rồi', '경주': 'Gyeongju (cố đô của Hàn Quốc)',
+                    '부산': 'Busan', '불국사': 'chùa Bulguksa', '사진': 'ảnh, bức ảnh', '많이': 'nhiều', '찍고': 'chụp … rồi', '찍을 겁니다': 'sẽ chụp',
+                    '유람선': 'du thuyền', '탈 겁니다': 'sẽ đi (phương tiện)', '내년': 'năm sau', '더': 'hơn, thêm', '해서': 'làm … rồi / nên',
+                    '유럽': 'châu Âu', '다음': 'tới, sau', '연휴': 'kỳ nghỉ dài (nhiều ngày nghỉ liền nhau)', '후에': 'Huế',
+                    '다낭': 'Đà Nẵng', '좋지만': 'tốt nhưng', '다낭보다': 'so với Đà Nẵng', '사람들': 'mọi người, người ta',
+                    '많지 않습니다': 'không nhiều', '하노이': 'Hà Nội', '비행기로': 'bằng máy bay', '1시간 정도': 'khoảng 1 tiếng',
+                    '걸립니다': 'mất (thời gian)', '첫째 날': 'ngày thứ nhất', '옛 왕궁': 'hoàng cung xưa (Đại Nội)', '보고': 'xem … rồi',
+                    '호텔': 'khách sạn', '쉴 겁니다': 'sẽ nghỉ ngơi', '둘째 날': 'ngày thứ hai', '시내': 'nội thành, trung tâm thành phố',
+                    '시장': 'chợ', '마지막 날': 'ngày cuối cùng', '바다': 'biển',
+                    '가서': 'đi đến … rồi', '물놀이': 'vui chơi dưới nước', '생선 요리': 'món cá', '먹을 겁니다': 'sẽ ăn',
+                    '5년 후에': 'sau 5 năm nữa', '결혼할 겁니다': 'sẽ kết hôn', '신혼여행': 'tuần trăng mật', '싱가포르': 'Singapore',
+                    '낮': 'ban ngày', '쇼핑': 'mua sắm', '밤': 'ban đêm', '센토사 섬': 'đảo Sentosa', '섬': 'đảo', '쇼': 'show, buổi biểu diễn',
+                    '볼 겁니다': 'sẽ xem', '아내': 'vợ', '맛있는 음식': 'món ăn ngon', '먹고': 'ăn … rồi', '맥주': 'bia', '마실 겁니다': 'sẽ uống'
+                },
+                mcq: [
+                    { q: 'Chọn từ vựng đúng để điền vào chỗ trống.', sub: '남 씨는 지난 1년 동안 돈을 모아서 이번 방학에 한국으로 __________을/를 갈 겁니다.', opts: ['가족 여행', '신혼여행', '배낭여행', '국내 여행'], ans: 2 },
+                    { q: 'Chọn câu đúng với kế hoạch của 풍 씨.', sub: '풍 씨의 계획에 대한 설명으로 맞는 것을 고르십시오.', opts: ['풍 씨는 지금 싱가포르에 가고 있습니다.', '풍 씨는 5년 후에 싱가포르로 신혼여행을 갈 겁니다.', '풍 씨는 싱가포르에 가 본 적이 있습니다.', '풍 씨는 낮에 센토사 섬에서 쇼를 볼 겁니다.'], ans: 1 },
+                    { q: 'Dựa vào bài đọc, lý do nào có thể giải thích việc 수빈 씨 chọn Huế thay vì Đà Nẵng?', opts: ['후에는 다낭보다 관광지가 더 많기 때문입니다.', '후에는 다낭보다 사람이 적기 때문입니다.', '후에는 하노이에서 기차로 1시간 정도 걸리기 때문입니다.', '후에는 다낭보다 호텔이 더 좋기 때문입니다.'], ans: 1 },
+                    { q: 'Điền cụm từ phù hợp với ngữ pháp -거나.', sub: '수빈 씨는 마지막 날에 바다에 가서 __________ 생선 요리를 먹을 겁니다.', opts: ['물놀이를 하거나', '물놀이를 하고 있고', '물놀이를 한 적이 있거나', '물놀이를 하지 않거나'], ans: 0 },
+                    { q: 'Nam dự định làm gì tại 경주?', opts: ['유람선을 탈 겁니다.', '불국사에서 사진을 찍을 겁니다.', '시장에서 쇼핑을 할 겁니다.', '호텔에서 쉴 겁니다.'], ans: 1 },
+                    { q: 'Chọn câu có ngữ pháp và nội dung phù hợp nhất với bài đọc.', opts: ['남 씨는 서울을 구경하고 경주와 부산에도 갈 겁니다.', '남 씨는 서울을 구경하거나 경주와 부산에도 갈 겁니다.', '남 씨는 서울을 구경하고 있거나 경주에 갔습니다.', '남 씨는 서울을 구경한 적이 없거나 부산에 갑니다.'], ans: 0 },
+                    { q: 'Chọn nội dung đúng với lịch trình du lịch của 남 씨.', sub: '남 씨의 여행 일정에 맞는 것을 고르십시오.', opts: ['서울을 구경하기 전에 부산에 먼저 갈 겁니다.', '부산에서 유람선을 탈 겁니다.', '경주에서는 유람선을 타고 사진을 찍을 겁니다.', '이번 방학에 유럽으로 배낭여행을 갈 겁니다.'], ans: 1 },
+                    { q: 'Điền từ vựng phù hợp vào chỗ trống.', sub: '수빈 씨는 첫째 날에 옛 왕궁을 구경한 후에 __________에서 쉴 겁니다.', opts: ['여행사', '관광지', '호텔', '콘도'], ans: 2 },
+                    { q: 'Chọn câu có nội dung đúng với bài đọc.', opts: ['후에는 다낭보다 사람이 더 많습니다.', '풍 씨는 싱가포르에서 낮에 쇼핑을 할 겁니다.', '남 씨는 작년에 유럽으로 배낭여행을 다녀왔습니다.', '풍 씨는 5년 후에 결혼한 적이 있습니다.'], ans: 1 },
+                    { q: 'Dựa vào bài đọc, có thể hiểu như thế nào về kế hoạch du lịch của 남 씨?', opts: ['남 씨는 한국 여행을 다녀온 후에 여행을 안 할 겁니다.', '남 씨는 한국 여행을 먼저 하고, 나중에 유럽 여행도 할 계획입니다.', '남 씨는 유럽 여행을 위해 한국에서 아르바이트를 할 겁니다.', '남 씨는 한국과 유럽을 같은 해에 여행할 겁니다.'], ans: 1 }
+                ],
+                essay: [
+                    { q: '남 씨는 부산에서 무엇을 할 겁니까?', hint: 'Gợi ý: Trả lời bằng câu hoàn chỉnh với cấu trúc -(으)ㄹ 겁니다.', fields: [''], check: [['유람선', '타|탈|탑']], answer: '부산에서 유람선을 탈 겁니다.' },
+                    { q: '풍 dự định làm gì ở Singapore vào ban ngày và ban đêm?', fields: ['Ban ngày (낮)', 'Ban đêm (밤)'], check: [['쇼핑'], ['센토사|쇼(?!핑)']], answer: '낮: 쇼핑을 할 겁니다.<br>밤: 센토사 섬에 갈 겁니다. / 섬에서 쇼를 볼 겁니다.<br><i style="color:var(--sub-text);font-size:12px;">Phần buổi tối chấp nhận cả hai cách trả lời vì đều đúng với bài đọc.</i>' }
+                ]
+            }
+        ]
+    };
+    const EX_CIRCLED = ['①', '②', '③', '④'];
+    let currentExerciseTab = null;
+    let exerciseState = {}; // "unit|tab" -> { picks: {qIdx: optIdx} }
+
+    // 🎧 Trình phát file nghe bài đọc: tự phát khi mở bài, mặc định tốc độ 0.8
+    const EX_SPEEDS = [0.6, 0.8, 1, 1.2];
+    let exSpeed = 0.8;
+    const exAudio = new Audio();
+    exAudio.preload = 'auto';
+    ['play', 'pause', 'ended', 'timeupdate', 'loadedmetadata'].forEach(ev => exAudio.addEventListener(ev, syncExPlayerUI));
+
+    function _fmtTime(t) {
+        t = Math.max(0, Math.floor(t || 0));
+        return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0');
+    }
+
+    function syncExPlayerUI() {
+        const btn = document.getElementById('ex-play-btn');
+        if (!btn) return;
+        const playing = !exAudio.paused && !exAudio.ended;
+        // Chỉ vẽ lại icon khi đổi trạng thái — vẽ lại liên tục (timeupdate) làm nuốt mất cú bấm
+        if (btn.dataset.state !== String(playing)) {
+            btn.dataset.state = String(playing);
+            btn.innerHTML = playing
+                ? '<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>'
+                : '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+            btn.title = playing ? 'Tạm dừng' : 'Phát';
+        }
+        const dur = exAudio.duration || 0;
+        const seek = document.getElementById('ex-seek');
+        if (seek && !seek.dataset.dragging) seek.value = dur ? (exAudio.currentTime / dur) * 1000 : 0;
+        document.getElementById('ex-time').innerText = _fmtTime(exAudio.currentTime) + ' / ' + _fmtTime(dur);
+        document.querySelectorAll('.ex-speed-btn').forEach(b => b.classList.toggle('active', Number(b.dataset.speed) === exSpeed));
+        // Tô sáng nhân vật đang được đọc (mốc trong data-start)
+        const marks = [...document.querySelectorAll('.ex-mark-btn')];
+        let cur = -1;
+        if (exAudio.currentTime > 0 || playing)
+            marks.forEach((b, i) => { if (exAudio.currentTime >= Number(b.dataset.start)) cur = i; });
+        marks.forEach((b, i) => b.classList.toggle('active', i === cur));
+        document.querySelectorAll('.ex-passage').forEach((p, i) => p.classList.toggle('reading', i === cur));
+        _syncKaraoke();
+        if (playing && !_karaokeRaf) _karaokeRaf = requestAnimationFrame(_karaokeLoop);
+    }
+
+    // 🎤 Chữ chạy theo audio: tô chữ đang được đọc. Thời điểm của từng chữ được chia
+    // theo số ký tự trong câu/vế (mốc đầu-cuối của câu lấy từ segs).
+    let _karaokeRaf = 0, _karaokeCur = null, _karaokeSeg = null;
+    function _karaokeLoop() {
+        _karaokeRaf = 0;
+        _syncKaraoke();
+        if (!exAudio.paused && !exAudio.ended) _karaokeRaf = requestAnimationFrame(_karaokeLoop);
+    }
+    function _syncKaraoke() {
+        const t = exAudio.currentTime;
+        const active = (t > 0 || !exAudio.paused);
+        let seg = null, tok = null;
+        if (active) {
+            for (const s of document.querySelectorAll('.ex-seg')) {
+                if (t >= Number(s.dataset.s) && t <= Number(s.dataset.e) + 0.5) { seg = s; break; }
+            }
+            if (seg) for (const k of seg.querySelectorAll('.ex-tok')) { if (t >= Number(k.dataset.t)) tok = k; }
+        }
+        if (seg !== _karaokeSeg) {
+            if (_karaokeSeg) { _karaokeSeg.classList.remove('now'); _karaokeSeg.querySelectorAll('.ex-tok.done').forEach(k => k.classList.remove('done')); }
+            if (seg) seg.classList.add('now');
+            _karaokeSeg = seg;
+        }
+        const curKey = tok ? tok.dataset.w : null;
+        if (tok !== _karaokeCur) {
+            document.querySelectorAll('.ex-tok.cur').forEach(k => k.classList.remove('cur'));
+            if (seg) seg.querySelectorAll('.ex-tok').forEach(k => {
+                const isCur = curKey !== null && k.dataset.w === curKey;
+                k.classList.toggle('cur', isCur);
+                k.classList.toggle('done', !isCur && t >= Number(k.dataset.t));
+            });
+            _karaokeCur = tok;
+        }
+    }
+
+    function jumpExerciseAudio(t) {
+        exAudio.currentTime = t;
+        exAudio.playbackRate = exSpeed;
+        exAudio.play().catch(() => {});
+    }
+
+    // Dựng 1 câu/vế: chữ nào có trong glossary thì rê chuột / chạm là hiện nghĩa,
+    // mỗi chữ (tách theo khoảng trắng) được gắn thời điểm đọc để chạy highlight.
+    function _renderSeg(seg, glossary) {
+        const [s, e, text] = seg;
+        const keys = Object.keys(glossary || {}).sort((a, b) => b.length - a.length);
+        const re = keys.length ? new RegExp(keys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g') : null;
+        const pieces = []; // [{ text, tip }]
+        let last = 0, m;
+        if (re) while ((m = re.exec(text))) {
+            if (m.index > last) pieces.push({ text: text.slice(last, m.index) });
+            pieces.push({ text: m[0], tip: glossary[m[0]] });
+            last = m.index + m[0].length;
+        }
+        if (last < text.length) pieces.push({ text: text.slice(last) });
+        // Thời điểm đọc của từng chữ (tách theo khoảng trắng), chia theo số ký tự
+        const total = text.replace(/\s/g, '').length || 1;
+        const wordTimes = [];
+        text.trim().split(/\s+/).reduce((acc, w) => { wordTimes.push(s + (acc / total) * (e - s)); return acc + w.length; }, 0);
+        // Glossary có thể cắt 1 chữ thành nhiều mảnh (낮|에는) -> các mảnh cùng chữ dùng chung data-w để sáng cùng lúc
+        let wi = -1, afterSpace = true;
+        const toks = str => str.split(/(\s+)/).map(w => {
+            if (!w) return w;
+            if (/^\s+$/.test(w)) { afterSpace = true; return w; }
+            if (afterSpace) wi++;
+            afterSpace = false;
+            return `<span class="ex-tok" data-w="${wi}" data-t="${wordTimes[wi].toFixed(2)}">${w}</span>`;
+        }).join('');
+        const html = pieces.map(p => p.tip
+            ? `<span class="ex-w" tabindex="0" data-tip="${p.tip.replace(/"/g, '&quot;')}">${toks(p.text)}</span>`
+            : toks(p.text)).join('');
+        return `<span class="ex-seg" data-s="${s}" data-e="${e}">${html}</span>`;
+    }
+
+    function toggleExerciseAudio() {
+        if (exAudio.paused || exAudio.ended) exAudio.play().catch(() => {});
+        else exAudio.pause();
+    }
+
+    function setExerciseSpeed(s) {
+        exSpeed = s;
+        exAudio.playbackRate = s;
+        syncExPlayerUI();
+    }
+
+    function seekExerciseAudio(v) {
+        if (exAudio.duration) exAudio.currentTime = (v / 1000) * exAudio.duration;
+    }
+
+    function stopExerciseAudio() {
+        if (!exAudio.paused) exAudio.pause();
+    }
+
+    function _startExerciseAudio(src) {
+        if (exAudio.getAttribute('src') !== src) exAudio.src = src;
+        exAudio.currentTime = 0;
+        exAudio.playbackRate = exSpeed;
+        exAudio.play().catch(() => {}); // trình duyệt chặn tự phát -> học sinh bấm nút Phát
+    }
+
+    function renderExerciseMode(autoplay = true) {
+        const title = document.getElementById('exercise-main-title');
+        const subtitle = document.getElementById('exercise-subtitle');
+        const nav = document.getElementById('exercise-tabs-nav');
+        const content = document.getElementById('exercise-content');
+        if (!currentUnit || currentUnit === 'SUM') {
+            stopExerciseAudio();
+            title.innerText = 'Bài tập';
+            subtitle.innerText = 'Vui lòng chọn Unit ở trên để xem bài tập tương ứng.';
+            nav.style.display = 'none';
+            content.innerHTML = '';
+            return;
+        }
+        title.innerText = `Unit ${currentUnit}`;
+        const tabs = EXERCISE_DATA[currentUnit] || [];
+        if (!tabs.length) {
+            stopExerciseAudio();
+            subtitle.innerText = '';
+            nav.style.display = 'none';
+            content.innerHTML = `<div class="ex-empty">Unit ${currentUnit} chưa có bài tập. Cô sẽ cập nhật sớm nhé!</div>`;
+            return;
+        }
+        subtitle.innerText = 'Chọn dạng bài tập bên dưới.';
+        if (!tabs.some(t => t.key === currentExerciseTab)) currentExerciseTab = tabs[0].key;
+        nav.style.display = 'flex';
+        nav.innerHTML = tabs.map((t, i) =>
+            `<button class="tab-click-btn${t.key === currentExerciseTab ? ' active' : ''}" onclick="switchExerciseTab('${t.key}')">${i + 1}. ${t.label}</button>`).join('');
+        const ex = tabs.find(t => t.key === currentExerciseTab);
+        renderExerciseContent(ex);
+        if (!ex.audio) stopExerciseAudio();
+        else if (autoplay) _startExerciseAudio(ex.audio);
+        syncExPlayerUI();
+    }
+
+    function switchExerciseTab(key) {
+        currentExerciseTab = key;
+        renderExerciseMode();
+    }
+
+    // Bài làm của học sinh (đáp án đã chọn, câu tự luận, kết quả nộp bài) — lưu lại trên máy theo tài khoản
+    function _exStoreKey(k) {
+        return 'exercise_' + (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase() + '_' + k;
+    }
+    function _exState() {
+        const k = currentUnit + '|' + currentExerciseTab;
+        if (!exerciseState[k]) {
+            let saved = null;
+            try { saved = JSON.parse(localStorage.getItem(_exStoreKey(k))); } catch (e) {}
+            exerciseState[k] = Object.assign({ picks: {}, essays: {}, done: null }, saved || {});
+        }
+        return exerciseState[k];
+    }
+    function _exSave() {
+        const k = currentUnit + '|' + currentExerciseTab;
+        try { localStorage.setItem(_exStoreKey(k), JSON.stringify(exerciseState[k])); } catch (e) {}
+    }
+    function _exCurrent() {
+        return (EXERCISE_DATA[currentUnit] || []).find(t => t.key === currentExerciseTab);
+    }
+    function _escHtml(s) {
+        return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+    function _fmtDuration(ms) {
+        const t = Math.max(0, Math.round((ms || 0) / 1000)), h = Math.floor(t / 3600), m = Math.floor(t % 3600 / 60), s = t % 60;
+        return (h ? h + ' giờ ' : '') + (h || m ? m + ' phút ' : '') + s + ' giây';
+    }
+
+    // 🔀 Theo dõi chuyển tab / rời trang trong lúc đang làm bài (chưa nộp):
+    // tính cả khi ẩn tab (visibilitychange) lẫn khi chuyển sang cửa sổ / ứng dụng khác (blur).
+    let _exAwaySince = null, _exAwayKey = null;
+    function _exLeave() {
+        if (_exAwaySince) return;
+        const sec = document.getElementById('mode-exercise-section');
+        if (!sec || sec.style.display === 'none' || !_exCurrent()) return;
+        const st = _exState();
+        if (st.done) return;
+        st.tabSwitches = (st.tabSwitches || 0) + 1;
+        _exAwaySince = Date.now();
+        _exAwayKey = currentUnit + '|' + currentExerciseTab;
+        _exSave();
+    }
+    function _exBack() {
+        if (!_exAwaySince) return;
+        const st = exerciseState[_exAwayKey];
+        if (st && !st.done) {
+            st.awayMs = (st.awayMs || 0) + (Date.now() - _exAwaySince);
+            try { localStorage.setItem(_exStoreKey(_exAwayKey), JSON.stringify(st)); } catch (e) {}
+        }
+        _exAwaySince = null;
+    }
+    document.addEventListener('visibilitychange', () => document.hidden ? _exLeave() : _exBack());
+    // Hộp thoại alert/confirm của chính trang cũng làm cửa sổ mất focus -> không tính là chuyển tab
+    let _exDialogOpen = false;
+    function _exDialog(fn) { _exDialogOpen = true; try { return fn(); } finally { setTimeout(() => { _exDialogOpen = false; }, 300); } }
+    window.addEventListener('blur', () => { if (!_exDialogOpen) _exLeave(); });
+    window.addEventListener('focus', _exBack);
+
+    function _fmtDoneAt(ts) {
+        const d = new Date(ts), p = n => String(n).padStart(2, '0');
+        return `${p(d.getHours())}:${p(d.getMinutes())}, ${p(d.getDate())}/${p(d.getMonth() + 1)}/${d.getFullYear()}`;
+    }
+
+    // Chấm tự luận: mỗi ô phải chứa đủ các từ khoá (regex) trong check[ô]
+    function _gradeEssay(e, vals) {
+        if (!e.check) return false;
+        return e.check.every((rules, fi) => {
+            const v = String((vals || [])[fi] || '').replace(/\s+/g, ' ');
+            return rules.every(r => new RegExp(r).test(v));
+        });
+    }
+
+    function renderExerciseContent(ex) {
+        const st = _exState();
+        const fin = st.done;
+        if (!fin && !st.startedAt) { st.startedAt = Date.now(); _exSave(); } // ⏱️ bắt đầu tính giờ từ lúc mở bài
+        let html = '';
+        if (fin) {
+            // Thời gian làm bài + chuyển tab: gói trong nút ⓘ nhỏ, rê chuột / chạm mới hiện
+            const info = fin.duration == null ? '' :
+                `<span class="ex-info" tabindex="0" aria-label="Chi tiết thời gian làm bài"><span class="ex-info-ico">i</span>` +
+                `<span class="ex-info-pop"><span>⏱️ Thời gian làm bài: <b>${_fmtDuration(fin.duration)}</b></span>` +
+                `<span>🔀 Chuyển tab / rời trang: <b class="${fin.tabSwitches ? 'ex-warn' : ''}">${fin.tabSwitches} lần</b>` +
+                (fin.tabSwitches ? ` (tổng ${_fmtDuration(fin.awayMs)})` : '') + '</span></span></span>';
+            html += `<div class="ex-done-status"><span class="ex-done-status-text">✅ Đã hoàn thành lúc <b>${_fmtDoneAt(fin.at)}</b>` +
+                `<span class="ex-done-status-sep">·</span>Điểm: <b>${fin.score}/${fin.total}</b>${info}</span>` +
+                `<span class="ex-done-status-btns"><button class="ex-done-view" onclick="showExerciseDonePopup()">Xem kết quả</button>` +
+                `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button></span></div>`;
+        }
+        html += '<div class="ex-block-title">Bài đọc</div>';
+        if (ex.audio) {
+            html += '<div class="ex-player">' +
+                '<button class="ex-play-btn" id="ex-play-btn" onclick="toggleExerciseAudio()"></button>' +
+                '<input type="range" class="ex-seek" id="ex-seek" min="0" max="1000" value="0" ' +
+                'oninput="this.dataset.dragging=1" onchange="delete this.dataset.dragging; seekExerciseAudio(this.value)">' +
+                '<span class="ex-time" id="ex-time">0:00 / 0:00</span>' +
+                '<div class="ex-speeds">' + EX_SPEEDS.map(s =>
+                    `<button class="ex-speed-btn" data-speed="${s}" onclick="setExerciseSpeed(${s})">${s}x</button>`).join('') + '</div>' +
+                '<div class="ex-marks"><span>Nghe nhanh đến:</span>' + ex.passages.filter(p => p.start != null).map(p =>
+                    `<button class="ex-mark-btn" data-start="${p.start}" onclick="jumpExerciseAudio(${p.start})">▶ ${p.name} <small>${_fmtTime(p.start)}</small></button>`).join('') + '</div>' +
+                '</div>';
+        }
+        html += '<div class="ex-reading">' +
+            ex.passages.map(p => `<div class="ex-passage"><div class="ex-passage-name">${p.name}` +
+                (ex.audio && p.start != null ? ` <button class="ex-passage-play" title="Nghe đoạn của ${p.name}" onclick="jumpExerciseAudio(${p.start})">🎧</button>` : '') +
+                `</div><p>${p.segs.map(sg => _renderSeg(sg, ex.glossary)).join(' ')}</p></div>`).join('') + '</div>';
+        if (ex.glossary) html += '<div class="ex-gloss-tip">💡 Rê chuột (hoặc chạm) vào từ có gạch chân để xem nghĩa.</div>';
+
+        if (ex.notes && ex.notes.length) {
+            html += '<div class="ex-block-title">Từ vựng / biểu hiện cần lưu ý</div><div class="ex-notes">' +
+                ex.notes.map(n => `<div class="ex-note">` +
+                    (n.img ? `<img class="ex-note-img" src="${n.img}" alt="${n.ko}" loading="lazy">` : '') +
+                    `<div class="ex-note-body"><div class="ex-note-ko">${n.ko}</div><div class="ex-note-vi">${n.vi}</div>` +
+                    (n.ex ? `<div class="ex-note-ex">${n.ex}</div>` : '') + '</div></div>').join('') + '</div>';
+        }
+
+        html += '<div class="ex-block-title">Phần 1. Trắc nghiệm</div>';
+        ex.mcq.forEach((m, qi) => {
+            const pick = st.picks[qi];
+            const done = pick !== undefined;
+            html += `<div class="ex-q"><div class="ex-q-head">Câu ${qi + 1}. ${m.q}</div>` +
+                (m.sub ? `<div class="ex-q-sub">${m.sub}</div>` : '') + '<div class="ex-opts">' +
+                m.opts.map((o, oi) => {
+                    let cls = 'ex-opt';
+                    if (done && oi === m.ans) cls += ' correct';
+                    else if (done && oi === pick) cls += ' wrong';
+                    return `<button class="${cls}" ${done || fin ? 'disabled' : ''} onclick="pickExerciseOption(${qi}, ${oi})">${EX_CIRCLED[oi]} ${o}</button>`;
+                }).join('') + '</div>' +
+                (done ? (pick === m.ans ? '<div class="ex-fb ok">✔ Chính xác!</div>' : `<div class="ex-fb no">✘ Chưa đúng — đáp án là ${EX_CIRCLED[m.ans]}</div>`) : '') +
+                '</div>';
+        });
+        const answered = Object.keys(st.picks).length;
+        const correct = Object.entries(st.picks).filter(([qi, oi]) => ex.mcq[qi].ans === oi).length;
+        html += `<div class="ex-score-bar"><span>Đã làm ${answered}/${ex.mcq.length} câu · Đúng ${correct} câu</span>` +
+            `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button></div>`;
+
+        html += '<div class="ex-block-title">Phần 2. Tự luận</div>';
+        ex.essay.forEach((e, ei) => {
+            const vals = st.essays[ei] || [];
+            const ok = fin ? _gradeEssay(e, vals) : null;
+            html += `<div class="ex-q"><div class="ex-q-head">Câu ${ei + 1}. ${e.q}</div>` +
+                (e.hint ? `<div class="ex-hint">${e.hint}</div>` : '') +
+                e.fields.map((f, fi) => (f ? `<label class="ex-input-label">${f}:</label>` : '') +
+                    `<textarea class="ex-input" rows="1" placeholder="Viết câu trả lời của bạn..." ${fin ? 'readonly' : ''} ` +
+                    `oninput="saveExerciseEssay(${ei}, ${fi}, this.value)">${_escHtml(vals[fi])}</textarea>`).join('') +
+                (fin ? (ok ? '<div class="ex-fb ok">✔ Đạt</div>' : '<div class="ex-fb no">✘ Chưa đạt — xem đáp án gợi ý bên dưới</div>') +
+                    `<div class="ex-answer show">${e.answer}</div>` : '') +
+                '</div>';
+        });
+        if (!fin) html += `<div class="ex-submit-wrap"><button class="btn btn-primary ex-submit-btn" onclick="submitExercise()">Nộp bài</button>` +
+            `<div class="ex-submit-note">Đáp án gợi ý của phần tự luận sẽ hiện sau khi nộp bài.</div></div>`;
+        document.getElementById('exercise-content').innerHTML = html;
+    }
+
+    function saveExerciseEssay(ei, fi, val) {
+        const st = _exState();
+        if (st.done) return;
+        (st.essays[ei] = st.essays[ei] || [])[fi] = val;
+        _exSave();
+    }
+
+    function pickExerciseOption(qi, oi) {
+        const st = _exState();
+        if (st.picks[qi] !== undefined || st.done) return;
+        st.picks[qi] = oi;
+        _exSave();
+        const y = window.scrollY;
+        renderExerciseMode(false);
+        window.scrollTo(0, y);
+    }
+
+    function submitExercise() {
+        const ex = _exCurrent(), st = _exState();
+        if (!ex || st.done) return;
+        const left = ex.mcq.length - Object.keys(st.picks).length;
+        if (left > 0) { _exDialog(() => alert(`Bạn còn ${left} câu trắc nghiệm chưa làm. Hãy hoàn thành rồi nộp bài nhé!`)); return; }
+        const emptyEssay = ex.essay.some((e, ei) => e.fields.some((f, fi) => !String((st.essays[ei] || [])[fi] || '').trim()));
+        if (emptyEssay && !_exDialog(() => confirm('Bạn chưa viết đủ phần tự luận. Vẫn nộp bài chứ?'))) return;
+        const mcq = Object.entries(st.picks).filter(([qi, oi]) => ex.mcq[qi].ans === oi).length;
+        const essay = ex.essay.filter((e, ei) => _gradeEssay(e, st.essays[ei])).length;
+        const now = Date.now();
+        st.done = { mcq, essay, score: mcq + essay, total: ex.mcq.length + ex.essay.length, at: now,
+            duration: now - (st.startedAt || now), tabSwitches: st.tabSwitches || 0, awayMs: st.awayMs || 0 };
+        _exSave();
+        renderExerciseMode(false);
+        document.getElementById('exercise-content').scrollIntoView({ block: 'start' });
+        showExerciseDonePopup();
+    }
+
+    function resetExercise() {
+        const st = _exState();
+        if (st.done && !_exDialog(() => confirm('Làm lại sẽ xoá kết quả bài đã nộp. Bạn có chắc không?'))) return;
+        exerciseState[currentUnit + '|' + currentExerciseTab] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), tabSwitches: 0, awayMs: 0 };
+        _exSave();
+        renderExerciseMode(false);
+    }
+
+    // 🎉 Popup chúc mừng hoàn thành bài tập
+    function showExerciseDonePopup() {
+        const ex = _exCurrent(), st = _exState();
+        if (!ex || !st.done) return;
+        const d = st.done;
+        const name = (document.getElementById('student-display-name') || {}).innerText || '';
+        document.getElementById('ex-done-name').innerText = name;
+        document.getElementById('ex-done-lesson').innerText = `Unit ${currentUnit} · Bài tập ${ex.label}`;
+        document.getElementById('ex-done-score').innerHTML = `<b>${d.score}</b>/${d.total}`;
+        // Bảng kết quả đầy đủ cho giáo viên theo dõi (cũng là phần được chụp lại)
+        const row = (icon, label, val, cls = '', sub = '') => `<div class="ex-sheet-row ${cls}"><span class="ex-sheet-label">${icon} ${label}</span>` +
+            `<span class="ex-sheet-val"><span>${val}</span>${sub ? `<small>${sub}</small>` : ''}</span></div>`;
+        let rows = row('📝', 'Trắc nghiệm', `<b>${d.mcq}/${ex.mcq.length}</b> câu đúng`) +
+            row('✍️', 'Tự luận', `<b>${d.essay}/${ex.essay.length}</b> câu đạt`);
+        if (d.duration != null) {
+            rows += row('▶️', 'Bắt đầu làm', _fmtDoneAt(d.at - d.duration)) +
+                row('🏁', 'Nộp bài', _fmtDoneAt(d.at)) +
+                row('⏱️', 'Thời gian làm bài', `<b>${_fmtDuration(d.duration)}</b>`) +
+                (d.tabSwitches
+                    ? row('🔀', 'Chuyển tab / rời trang', `<b>${d.tabSwitches} lần</b>`, 'warn', `tổng ${_fmtDuration(d.awayMs)} ở ngoài trang`)
+                    : row('🔀', 'Chuyển tab / rời trang', '<b>Không có</b>', 'good'));
+        } else {
+            rows += row('🏁', 'Nộp bài', _fmtDoneAt(d.at));
+        }
+        document.getElementById('ex-done-sheet').innerHTML = rows;
+        document.getElementById('ex-done-popup').classList.add('active');
+    }
+    function closeExerciseDonePopup() { document.getElementById('ex-done-popup').classList.remove('active'); }
+
+    // 📸 Chụp khung kết quả thành ảnh: điện thoại -> mở bảng chia sẻ (lưu ảnh / gửi Zalo), máy tính -> tải file PNG
+    function _loadHtml2Canvas() {
+        if (window.html2canvas) return Promise.resolve();
+        return new Promise((ok, fail) => {
+            const s = document.createElement('script');
+            s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+            s.onload = ok; s.onerror = fail;
+            document.head.appendChild(s);
+        });
+    }
+    async function captureExerciseResult(btn) {
+        const old = btn.innerHTML;
+        btn.disabled = true; btn.innerText = 'Đang chụp...';
+        try {
+            await _loadHtml2Canvas();
+            const card = document.getElementById('ex-done-card');
+            const canvas = await html2canvas(card, { backgroundColor: '#ffffff', scale: 2, ignoreElements: el => el.classList && el.classList.contains('ex-done-actions'),
+                onclone: doc => { const c = doc.getElementById('ex-done-card'); c.style.maxHeight = 'none'; c.style.overflow = 'visible'; } });
+            const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+            const fname = `KetQua_Unit${currentUnit}_${currentExerciseTab}.png`;
+            const file = new File([blob], fname, { type: 'image/png' });
+            if (navigator.canShare && navigator.canShare({ files: [file] }) && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+                await navigator.share({ files: [file], title: 'Kết quả bài tập' }).catch(() => {});
+            } else {
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob); a.download = fname;
+                document.body.appendChild(a); a.click(); a.remove();
+                setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+            }
+        } catch (e) {
+            alert('Không chụp được tự động. Bạn vui lòng tự chụp màn hình (hoặc dùng phím chụp màn hình của máy) nhé!');
+        }
+        btn.disabled = false; btn.innerHTML = old;
+    }
+
     function showAppMode(modeName) {
         // Chuyển menu -> luôn thoát chế độ Tổng hợp
         summaryActive = false;
@@ -2921,6 +3605,7 @@
         document.getElementById('mode-vocab-section').style.display = (modeName === 'vocab') ? 'flex' : 'none';
         document.getElementById('mode-grammar-section').style.display = (modeName === 'grammar') ? 'block' : 'none';
         document.getElementById('mode-review-section').style.display = (modeName === 'review') ? 'block' : 'none';
+        document.getElementById('mode-exercise-section').style.display = (modeName === 'exercise') ? 'block' : 'none';
 
         // "Nhắc lại từ vựng" không cần thanh chọn Unit
         const unitPanel = document.querySelector('.unit-panel-box');
@@ -2928,6 +3613,8 @@
 
         if (modeName === 'grammar') renderGrammarMode();
         if (modeName === 'review') renderReviewTable();
+        if (modeName === 'exercise') renderExerciseMode();
+        else stopExerciseAudio();
     }
 
     // --- HỆ THỐNG PHÁT ÂM AUDIO ---
@@ -3308,6 +3995,8 @@
             document.getElementById('mode-grammar-section').style.display = 'block';
         else if (document.getElementById('menu-vocab').classList.contains('active'))
             document.getElementById('mode-vocab-section').style.display = 'flex';
+        else if (document.getElementById('menu-exercise').classList.contains('active'))
+            document.getElementById('mode-exercise-section').style.display = 'block';
 
         currentUnit = unitNum;
         renderUnitGrid([]);
@@ -3363,8 +4052,11 @@
         if (document.getElementById('grammar-main-title')) { document.getElementById('grammar-main-title').innerText = `Unit ${currentUnit}`; }
         
         const isGrammarMode = document.getElementById('mode-grammar-section').style.display === 'block';
+        const isExerciseMode = document.getElementById('mode-exercise-section').style.display === 'block';
         if (isGrammarMode) {
             renderGrammarMode();
+        } else if (isExerciseMode) {
+            renderExerciseMode();
         } else {
             switchTab('lecture');
         }
@@ -7578,6 +8270,8 @@
         document.getElementById('mode-vocab-section').style.display = 'none';
         document.getElementById('mode-grammar-section').style.display = 'none';
         document.getElementById('mode-review-section').style.display = 'none';
+        document.getElementById('mode-exercise-section').style.display = 'none';
+        stopExerciseAudio();
         document.getElementById('mode-summary-section').style.display = 'none';
         const g = document.getElementById('mode-grammar-summary-section');
         if (g) g.style.display = 'none';
