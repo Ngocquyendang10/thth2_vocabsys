@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <defs>
+    <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a9c8ff"/><stop offset="1" stop-color="#7d9ff0"/>
+    </linearGradient>
+    <linearGradient id="deck" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#e9e6f7"/>
+    </linearGradient>
+    <linearGradient id="funnel" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffb3ad"/><stop offset="1" stop-color="#f58f8a"/>
+    </linearGradient>
+    <radialGradient id="win" cx="0.35" cy="0.35" r="0.7">
+      <stop offset="0" stop-color="#e3f3ff"/><stop offset="1" stop-color="#8fc3ee"/>
+    </radialGradient>
+  </defs>
+  <ellipse cx="60" cy="101" rx="44" ry="5" fill="#b9b4d6" opacity="0.35"/>
+  <!-- ống khói -->
+  <rect x="68" y="22" width="14" height="22" rx="4" fill="url(#funnel)"/>
+  <rect x="68" y="22" width="14" height="6" rx="3" fill="#7a6fa8" opacity="0.55"/>
+  <!-- tầng trên -->
+  <rect x="34" y="38" width="54" height="16" rx="6" fill="url(#deck)" stroke="#d8d3ee" stroke-width="1"/>
+  <circle cx="44" cy="46" r="3.2" fill="url(#win)"/><circle cx="54" cy="46" r="3.2" fill="url(#win)"/>
+  <circle cx="64" cy="46" r="3.2" fill="url(#win)"/><circle cx="74" cy="46" r="3.2" fill="url(#win)"/>
+  <!-- tầng dưới -->
+  <rect x="22" y="52" width="78" height="18" rx="7" fill="url(#deck)" stroke="#d8d3ee" stroke-width="1"/>
+  <rect x="22" y="62" width="78" height="4" fill="#ffc9dd"/>
+  <circle cx="33" cy="58" r="3" fill="url(#win)"/><circle cx="44" cy="58" r="3" fill="url(#win)"/>
+  <circle cx="55" cy="58" r="3" fill="url(#win)"/><circle cx="66" cy="58" r="3" fill="url(#win)"/>
+  <circle cx="77" cy="58" r="3" fill="url(#win)"/><circle cx="88" cy="58" r="3" fill="url(#win)"/>
+  <!-- thân tàu -->
+  <path d="M10 68 H110 Q108 84 96 94 Q92 97 86 97 H30 Q24 97 20 93 Q12 84 10 68 Z" fill="url(#hull)"/>
+  <path d="M14 70 H106" stroke="#ffffff" stroke-width="3" stroke-linecap="round" opacity="0.7"/>
+  <path d="M24 86 Q60 90 98 84" stroke="#ffffff" stroke-width="2" fill="none" opacity="0.35" stroke-linecap="round"/>
+  <!-- ánh sáng -->
+  <rect x="38" y="40" width="20" height="3" rx="1.5" fill="#ffffff" opacity="0.8"/>
+  <ellipse cx="72" cy="26" rx="3" ry="2" fill="#ffffff" opacity="0.6"/>
+</svg>
