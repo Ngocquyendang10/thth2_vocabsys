@@ -753,19 +753,31 @@
         .ws-input:focus { border-color: var(--point-color); }
         .ws-btn { flex: 0 0 auto; padding: 0 22px; border: none; border-radius: var(--radius-sm); background: var(--point-color); color: #fff; font-size: 13.5px; font-weight: 800; cursor: pointer; white-space: nowrap; box-shadow: 0 4px 12px rgba(97,76,255,0.25); }
         .ws-btn:disabled { background: #c3b8ff; cursor: default; box-shadow: none; }
-        .ws-hintbox { font-size: 13px; color: var(--sub-text); background: #fdfaf1; border: 1px dashed #ecc94b; border-radius: 10px; padding: 10px 14px; }
+        .ws-card { container-type: inline-size; }
+        .ws-body { display: flex; flex-direction: column; gap: 12px; }
+        .ws-main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+        .ws-pic { background: #fff; border-radius: var(--radius-sm); padding: 12px; display: flex; align-items: center; justify-content: center; }
+        .ws-pic img { display: block; max-width: 100%; max-height: 190px; object-fit: contain; border-radius: 10px; }
+        /* Khung đủ rộng (màn 16:9, hoặc đã thu gọn 2 thanh bên) -> hình 3 : bài 7 */
+        @container (min-width: 760px) {
+            .ws-body.has-pic { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 7fr); gap: 20px; align-items: start; }
+            .ws-body.has-pic .ws-pic { position: sticky; top: 12px; padding: 16px; min-height: 220px; }
+            .ws-body.has-pic .ws-pic img { width: 100%; max-height: 380px; }
+        }
+        .ws-hintbox { font-size: 14px; color: var(--sub-text); background: #fdfaf1; border: 1px dashed #ecc94b; border-radius: 10px; padding: 10px 14px; }
         .ws-hintbox b { font-weight: 700; color: #7a5b00; }
+        .ws-hintbox b.ko { font-size: 17px; letter-spacing: .5px; line-height: 1.8; }
         .ws-fb { padding-top: 12px; border-top: 1px solid #eef2f8; display: flex; flex-direction: column; gap: 14px; }
         .ws-verdict { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-        .ws-verdict .v { font-size: 16px; font-weight: 800; }
-        .ws-verdict .s { font-size: 12.5px; font-weight: 700; color: var(--sub-text); }
-        .ws-label { font-size: 11px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
+        .ws-verdict .v { font-size: 19px; font-weight: 800; }
+        .ws-verdict .s { font-size: 14px; font-weight: 700; color: var(--sub-text); }
+        .ws-label { font-size: 12.5px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 10px; }
         /* ---- Bài đã chấm: 2 dòng "Bạn viết" / "Câu sửa" (kiểu cô giáo sửa vở) ---- */
         .ws-answerbox { width: 100%; min-width: 0; padding: 6px 16px 10px; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); background: #fff; box-shadow: var(--neu-concave); }
         .ws-drow { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; }
         .ws-drow + .ws-drow { border-top: 1px dashed #eef2f8; }
-        .ws-dlab { flex: 0 0 72px; font-size: 10.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: var(--sub-text); padding-top: 8px; }
-        .ws-dtext { flex: 1 1 auto; min-width: 0; font-size: 17.5px; font-weight: 700; line-height: 1.95; word-break: break-word; }
+        .ws-dlab { flex: 0 0 82px; font-size: 12px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; color: var(--sub-text); padding-top: 8px; }
+        .ws-dtext { flex: 1 1 auto; min-width: 0; font-size: 20px; font-weight: 700; line-height: 1.95; word-break: break-word; }
         .ws-dtext.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
         /* dòng học viên viết: chữ mờ, lỗi gạch ngang, chỗ thiếu có dấu ∨ */
         .ws-dtext.you { color: #8d95a3; }
@@ -776,7 +788,7 @@
         /* 넣음표 — dấu "thiếu chỗ này" chèn vào dòng học viên viết */
         .ws-ins { display: inline-block; width: 1.15em; height: .72em; margin: 0 1px; vertical-align: -.05em; color: #e53e3e; }
         .ws-ins svg { display: block; width: 100%; height: 100%; overflow: visible; }
-        .ws-clean-line { font-size: 17.5px; font-weight: 700; line-height: 1.9; color: #22543d; padding: 8px 0; word-break: break-word; }
+        .ws-clean-line { font-size: 20px; font-weight: 700; line-height: 1.9; color: #22543d; padding: 8px 0; word-break: break-word; }
         .ws-clean-line.ko { font-family: "Chiron Sung HK","Chiron GoRound TC",serif; }
         /* "Câu của bạn": ô chấm full chiều ngang, nút "Câu tiếp" xuống dòng riêng canh phải -> không bị ép hẹp */
         .ws-nextrow { display: flex; justify-content: flex-end; margin-top: 12px; }
@@ -797,7 +809,7 @@
         /* ---- Viết câu: tối ưu cho tablet & điện thoại ---- */
         @media (max-width: 900px) {
             .ws-src-txt.ko { font-size: 20px; }
-            .ws-dtext, .ws-clean-line { font-size: 17px; }
+            .ws-dtext, .ws-clean-line { font-size: 19px; }
         }
         @media (max-width: 620px) {
             .ws-card { padding: 16px 14px; gap: 10px; }
@@ -814,12 +826,12 @@
             /* nhãn "Bạn viết"/"Câu sửa" nằm trên, câu nằm dưới -> không bị bóp hẹp */
             .ws-drow { flex-direction: column; gap: 2px; padding: 9px 0; }
             .ws-dlab { flex: none; padding-top: 0; }
-            .ws-dtext, .ws-clean-line { font-size: 16.5px; line-height: 2; }
+            .ws-dtext, .ws-clean-line { font-size: 18px; line-height: 2; }
             .ws-nextrow .ws-btn { width: 100%; padding: 14px 0; }
-            .ws-verdict .v { font-size: 15px; }
+            .ws-verdict .v { font-size: 17px; }
         }
         @media (max-width: 380px) {
-            .ws-dtext, .ws-clean-line { font-size: 15.5px; }
+            .ws-dtext, .ws-clean-line { font-size: 17px; }
             .ws-dtext.fix .new { padding: 2px 6px; }
         }
 
@@ -1382,21 +1394,21 @@
         .ex-passage-name { font-weight: 800; color: var(--point-color); font-size: 14px; margin-bottom: 6px; }
         .ex-passage p { font-size: 15px; line-height: 1.85; color: var(--text-color); margin: 0; }
         .ex-q { border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 14px 16px; margin-bottom: 12px; }
-        .ex-q-head { font-weight: 800; font-size: 14px; color: #1a202c; margin-bottom: 4px; }
-        .ex-q-sub { font-size: 14px; color: var(--text-color); margin-bottom: 10px; line-height: 1.7; }
+        .ex-q-head { font-weight: 800; font-size: 16.5px; color: #1a202c; margin-bottom: 4px; }
+        .ex-q-sub { font-size: 16px; color: var(--text-color); margin-bottom: 10px; line-height: 1.7; }
         .ex-opts { display: grid; gap: 8px; }
-        .ex-opt { text-align: left; background: #fff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 10px 14px; font-size: 14px; color: var(--text-color); cursor: pointer; font-family: inherit; transition: border-color .15s, background .15s; }
+        .ex-opt { text-align: left; background: #fff; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 12px 16px; font-size: 16px; line-height: 1.5; color: var(--text-color); cursor: pointer; font-family: inherit; transition: border-color .15s, background .15s; }
         .ex-opt:hover:not(:disabled) { border-color: var(--point-color); background: var(--point-light); }
         .ex-opt:disabled { cursor: default; }
         .ex-opt.correct { border-color: var(--success-color); background: rgba(72,187,120,0.12); font-weight: 700; }
         .ex-opt.wrong { border-color: var(--error-color); background: rgba(245,101,101,0.1); }
-        .ex-fb { font-size: 13px; font-weight: 700; margin-top: 8px; }
+        .ex-fb { font-size: 14.5px; font-weight: 700; margin-top: 8px; }
         .ex-fb.ok { color: var(--success-color); }
         .ex-fb.no { color: var(--error-color); }
-        .ex-input { width: 100%; box-sizing: border-box; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 14px; font-family: inherit; margin-top: 6px; resize: vertical; min-height: 44px; }
+        .ex-input { width: 100%; box-sizing: border-box; border: 1.5px solid #e2e8f0; border-radius: var(--radius-sm); padding: 10px 12px; font-size: 16px; font-family: inherit; margin-top: 6px; resize: vertical; min-height: 44px; }
         .ex-input:focus { outline: none; border-color: var(--point-color); }
-        .ex-input-label { font-size: 13px; font-weight: 700; color: var(--sub-text); margin-top: 8px; display: block; }
-        .ex-hint { font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 4px; }
+        .ex-input-label { font-size: 14.5px; font-weight: 700; color: var(--sub-text); margin-top: 8px; display: block; }
+        .ex-hint { font-size: 13.5px; color: var(--sub-text); font-style: italic; margin-bottom: 4px; }
         .ex-answer-btn { margin-top: 10px; background: none; border: 1.5px solid var(--point-color); color: var(--point-color); border-radius: var(--radius-sm); padding: 7px 14px; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; }
         .ex-answer-btn:hover { background: var(--point-light); }
         .ex-answer { display: none; margin-top: 10px; background: rgba(72,187,120,0.1); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 14px; line-height: 1.7; }
@@ -1489,7 +1501,8 @@
             .ex-done-actions { flex-direction: column-reverse; }
             .ex-done-actions .btn { width: 100%; }
             .ex-q { padding: 12px; }
-            .ex-opt { padding: 10px 12px; }
+            .ex-q-head { font-size: 16px; }
+            .ex-opt { padding: 11px 12px; font-size: 15.5px; }
         }
         .ex-gloss-tip { font-size: 12px; color: var(--sub-text); margin-top: 8px; }
         .ex-notes { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
@@ -2520,7 +2533,8 @@
             'wrongWords_' + key, 'unitQuiz_' + key, 'unitSecs_' + key,
             'completed_units_' + key, 'today_secs_' + key, 'total_secs_' + key,
             'study_date_' + key, 'starred_' + key + '_QuyenClass', 'notes_' + key + '_QuyenClass',
-            'quizState_' + key, 'writeSentenceState_' + key, 'quizHard_' + key
+            'quizState_' + key, 'writeSentenceState_' + key, 'quizHard_' + key,
+            'sumLog_' + key   // 📊 lịch sử bài kiểm tra / luyện tập Tổng hợp
         ];
     }
     function snapshotProgress(sess) {
@@ -2528,10 +2542,11 @@
         progressKeysForStudent(key).forEach(function (k) { var v = localStorage.getItem(k); if (v != null) obj[k] = v; });
         // Tiến độ theo từ vựng (vocabMastered_<key>_u<unit>) — số khoá đổi theo unit nên quét prefix
         try {
-            var pref = 'vocabMastered_' + key + '_u';
+            // + kết quả Bài tập (exercise_<key>_<unit>|<tab>) cũng quét theo prefix
+            var pref = 'vocabMastered_' + key + '_u', exPref = 'exercise_' + key + '_';
             for (var i = 0; i < localStorage.length; i++) {
                 var lk = window.__lsUnprefix(localStorage.key(i)); // bóc tiền tố "T2::" khỏi khoá thô
-                if (lk && lk.indexOf(pref) === 0) { var lv = localStorage.getItem(lk); if (lv != null) obj[lk] = lv; }
+                if (lk && (lk.indexOf(pref) === 0 || lk.indexOf(exPref) === 0)) { var lv = localStorage.getItem(lk); if (lv != null) obj[lk] = lv; }
             }
         } catch (e) {}
         return obj;
@@ -2639,6 +2654,21 @@
         if (k === 'quizState_' + key) return _pStr(_pMergeState(_pParse(lv, {}), _pParse(sv, {}), 3));
         if (k === 'writeSentenceState_' + key) return _pStr(_pMergeState(_pParse(lv, {}), _pParse(sv, {}), 2));
         if (k === 'quizHard_' + key) return (lv === '1' || sv === '1') ? '1' : lv;
+        if (k === 'sumLog_' + key) { // gộp lịch sử Tổng hợp theo thời điểm nộp, giữ 200 lần gần nhất
+            var seenAt = {}, all = [].concat(_pParse(lv, []), _pParse(sv, [])).filter(function (x) {
+                if (!_pIsObj(x) || seenAt[x.at]) return false; seenAt[x.at] = 1; return true;
+            });
+            all.sort(function (a, b) { return _pNum(a.at) - _pNum(b.at); });
+            return _pStr(all.slice(-200));
+        }
+        if (k.indexOf('exercise_' + key + '_') === 0) { // Bài tập: giữ bản đã nộp, trừ khi máy này vừa bấm "Làm lại" sau đó
+            var le = _pParse(lv, {}), se = _pParse(sv, {});
+            if (_pIsObj(se) && se.done && !(_pIsObj(le) && le.done)) {
+                return (_pIsObj(le) && _pNum(le.resetAt) > _pNum(se.done.at)) ? lv : sv; // chỉ khi thật sự bấm "Làm lại" sau lần nộp đó
+            }
+            if (_pIsObj(le) && le.done && _pIsObj(se) && se.done) return (_pNum(se.done.at) > _pNum(le.done.at)) ? sv : lv;
+            return lv;
+        }
         return lv; // còn lại: giữ bản trên máy
     }
     function mergeProgressObjects(key, local, server) {
@@ -2672,10 +2702,10 @@
         var key = String(sess || '').toLowerCase();
         var server = {};
         if (blob) { var o = _pParse(blob, null); if (_pIsObj(o)) server = o; }
-        var allow = progressKeysForStudent(key), vmPref = 'vocabMastered_' + key + '_u';
+        var allow = progressKeysForStudent(key), vmPref = 'vocabMastered_' + key + '_u', exPref = 'exercise_' + key + '_';
         var clean = {};
         Object.keys(server).forEach(function (k) {
-            if ((allow.indexOf(k) > -1 || k.indexOf(vmPref) === 0) && server[k] != null) clean[k] = server[k];
+            if ((allow.indexOf(k) > -1 || k.indexOf(vmPref) === 0 || k.indexOf(exPref) === 0) && server[k] != null) clean[k] = server[k];
         });
         var merged = mergeProgressObjects(key, snapshotProgress(sess), clean);
         Object.keys(merged).forEach(function (k) {
@@ -2725,6 +2755,45 @@
         window.addEventListener('online', pullProgressOnce);
     }
     setInterval(function () { _progressReady ? scheduleProgressPush(1000) : pullProgressOnce(); }, 30000);
+
+    /* 🔁 KÉO TIẾN ĐỘ MỚI KHI ĐANG MỞ SẴN WEB (đa thiết bị)
+       Trước đây chỉ kéo 1 lần lúc đăng nhập -> điện thoại để web mở nền sẽ không bao giờ
+       thấy bài vừa làm trên máy tính. Nay kéo lại khi quay lại trang (tối đa 1 lần / 45 giây)
+       và định kỳ 2 phút khi đang mở, gộp vào máy rồi vẽ lại các phần đang hiển thị. */
+    var _lastRefreshAt = 0, _refreshing = false;
+    function refreshProgressFromServer(force) {
+        if (!_progressReady || _refreshing || document.hidden) return;
+        if (!force && Date.now() - _lastRefreshAt < 45000) return;
+        var sess = localStorage.getItem('studentSession_QuyenClass'), pass = getSyncPass();
+        if (!sess || !pass) return;
+        _lastRefreshAt = Date.now(); _refreshing = true;
+        fetch(SCRIPT_URL + '?action=unlockUnit&unit=LOGIN_AUTH&nb=1&pass=' + encodeURIComponent(sess + '||' + pass))
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                if (!d || !d.success) return;
+                var before = _pStr(snapshotProgress(sess));
+                applyServerProgress(sess, d.progress);
+                if (_pStr(snapshotProgress(sess)) !== before) onProgressRefreshed();
+            })
+            .catch(function () {})
+            .then(function () { _refreshing = false; });
+    }
+    // Vẽ lại những phần đọc từ bộ nhớ máy (không đụng bài đang làm dở trên màn hình)
+    function onProgressRefreshed() {
+        try { if (typeof exerciseState === 'object') Object.keys(exerciseState).forEach(function (k) { delete exerciseState[k]; }); } catch (e) {}
+        try {
+            var ex = document.getElementById('mode-exercise-section');
+            if (ex && ex.style.display !== 'none') renderExerciseMode(false);
+            var rv = document.getElementById('mode-review-section');
+            if (rv && rv.style.display !== 'none') renderReviewTable();
+            renderDashboardUnitGrid();
+            updateDashboardStats();
+        } catch (e) {}
+    }
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) refreshProgressFromServer(false); });
+    window.addEventListener('focus', function () { refreshProgressFromServer(false); });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) refreshProgressFromServer(true); });
+    setInterval(function () { refreshProgressFromServer(false); }, 120000);
     document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden') flushProgressNow(); });
     window.addEventListener('pagehide', flushProgressNow);
 
@@ -2917,6 +2986,10 @@
             const right = (tabName === 'typing') ? countTypingCorrect() : (state.right || 0);
             const wrong = (tabName === 'typing') ? countTypingBad() : (state.wrong || 0);
             const pct = total > 0 ? Math.round((right / total) * 100) : 0;
+            if (currentUnit === 'SUM' && !state._sumLogged) { // mỗi lượt luyện chỉ ghi 1 lần (bấm "Tiếp" sẽ hiện lại popup)
+                state._sumLogged = true;
+                logSummaryResult({ kind: 'practice', units: sumPracticeUnits, types: [tabName], right: right, total: total });
+            }
             document.getElementById('tab-done-message').innerText =
                 `Bạn đã hoàn thành ${total}/${total} câu của phần "${label}" — Unit ${currentUnit}.`;
             scoreBox.innerHTML =
@@ -3347,6 +3420,7 @@
     function _exSave() {
         const k = currentUnit + '|' + currentExerciseTab;
         try { localStorage.setItem(_exStoreKey(k), JSON.stringify(exerciseState[k])); } catch (e) {}
+        scheduleProgressPush();
     }
     function _exCurrent() {
         return (EXERCISE_DATA[currentUnit] || []).find(t => t.key === currentExerciseTab);
@@ -3515,6 +3589,7 @@
         st.done = { mcq, essay, score: mcq + essay, total: ex.mcq.length + ex.essay.length, at: now,
             duration: now - (st.startedAt || now), tabSwitches: st.tabSwitches || 0, awayMs: st.awayMs || 0 };
         _exSave();
+        scheduleProgressPush(500); // 📤 gửi kết quả cho giáo viên ngay
         renderExerciseMode(false);
         document.getElementById('exercise-content').scrollIntoView({ block: 'start' });
         showExerciseDonePopup();
@@ -3523,7 +3598,7 @@
     function resetExercise() {
         const st = _exState();
         if (st.done && !_exDialog(() => confirm('Làm lại sẽ xoá kết quả bài đã nộp. Bạn có chắc không?'))) return;
-        exerciseState[currentUnit + '|' + currentExerciseTab] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), tabSwitches: 0, awayMs: 0 };
+        exerciseState[currentUnit + '|' + currentExerciseTab] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0 };
         _exSave();
         renderExerciseMode(false);
     }
@@ -3648,27 +3723,45 @@
         setTimeout(clear, 6000); // phòng khi không bắt được sự kiện kết thúc
     }
 
-    function _playFemaleVoice(clean) {
+    // Hội thoại trong List từ vựng: "A: ... B: ..." -> người B (C...) xuống dòng
+    function dialogBreak(html) { return String(html).replace(/\s+(?=[A-Z]\s?[:：])/g, '<br>'); }
+
+    // Tách hội thoại "A: ... B: ..." thành từng lượt, bỏ nhãn A/B (để giọng đọc không đọc chữ "A", "B")
+    function _dialogueTurns(text) {
+        const t = String(text || '');
+        if (!/(^|\s)[A-Z]\s?[:：]/.test(t)) return null;
+        const parts = t.split(/(?:^|\s+)[A-Z]\s?[:：]\s*/).map(x => x.trim()).filter(Boolean);
+        return parts.length ? parts : null;
+    }
+
+    function _playFemaleVoice(clean, onDone) {
         let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" +
                   encodeURIComponent(clean) +
                   "&lang=ko&engine=g3&name=Korean%20Female&pitch=0.5&rate=0.45&volume=1";
         let audio = new Audio(url);
+        if (onDone) audio.addEventListener('ended', onDone);
         audio.load();
         audio.play().catch(function () {
             try {
                 if ('speechSynthesis' in window) {
                     let u = new SpeechSynthesisUtterance(clean);
                     u.lang = 'ko-KR'; u.rate = 0.9;
+                    if (onDone) { u.onend = onDone; u.onerror = onDone; }
                     window.speechSynthesis.cancel();
                     window.speechSynthesis.speak(u);
-                }
-            } catch (_) {}
+                } else if (onDone) onDone();
+            } catch (_) { if (onDone) onDone(); }
         });
         return audio;
     }
 
-    function _playBase64Mp3(b64) {
-        try { let a = new Audio("data:audio/mpeg;base64," + b64); a.play().catch(function () {}); return a; } catch (_) { return null; }
+    function _playBase64Mp3(b64, onDone) {
+        try {
+            let a = new Audio("data:audio/mpeg;base64," + b64);
+            if (onDone) { a.addEventListener('ended', onDone); a.addEventListener('error', onDone); }
+            a.play().catch(function () { if (onDone) onDone(); });
+            return a;
+        } catch (_) { if (onDone) onDone(); return null; }
     }
 
     // Tải trước base64 giọng nam cho 1 từ (gọi khi hiện flashcard) -> bấm là phát ngay.
@@ -3681,14 +3774,35 @@
             .catch(function () {});
     }
 
+    // Hội thoại: đọc từng lượt, nghỉ ~0,8 giây giữa 2 người. Bấm loa khác thì chuỗi cũ dừng.
+    let _voiceSeq = 0;
     function triggerKoreanVoice(text, isMale, speakerBtn) {
-        let clean = _cleanKoreanText(text);
-        if (!clean) return;
+        const seq = ++_voiceSeq;
+        const turns = _dialogueTurns(text);
+        if (!turns || turns.length < 2) { _speakKorean(turns ? turns[0] : text, isMale, speakerBtn); return; }
+        let i = 0;
+        const next = function () {
+            if (seq !== _voiceSeq || i >= turns.length) return;
+            const part = turns[i++];
+            let fired = false;
+            const done = function () {
+                if (fired) return; fired = true;
+                setTimeout(next, 800);
+            };
+            setTimeout(done, 15000); // phòng khi không bắt được sự kiện kết thúc
+            _speakKorean(part, isMale, speakerBtn, done);
+        };
+        next();
+    }
 
-        if (!isMale) { _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); return; }
+    function _speakKorean(text, isMale, speakerBtn, onDone) {
+        let clean = _cleanKoreanText(text);
+        if (!clean) { if (onDone) onDone(); return; }
+
+        if (!isMale) { _bindSpeakerPulse(_playFemaleVoice(clean, onDone), speakerBtn); return; }
 
         // 남: có sẵn trong cache thì phát ngay (đồng bộ -> hợp lệ trên iOS)
-        if (_ttsMaleCache[clean]) { _bindSpeakerPulse(_playBase64Mp3(_ttsMaleCache[clean]), speakerBtn); return; }
+        if (_ttsMaleCache[clean]) { _bindSpeakerPulse(_playBase64Mp3(_ttsMaleCache[clean], onDone), speakerBtn); return; }
 
         // Chưa có -> nhờ backend lấy giọng Google Translate rồi phát
         if (speakerBtn) speakerBtn.classList.add('is-playing');
@@ -3696,10 +3810,10 @@
             .then(r => r.json())
             .then(d => {
                 if (speakerBtn) speakerBtn.classList.remove('is-playing');
-                if (d && d.success && d.audio) { _ttsMaleCache[clean] = d.audio; _bindSpeakerPulse(_playBase64Mp3(d.audio), speakerBtn); }
-                else { _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); } // backend chưa hỗ trợ / lỗi -> dùng giọng nữ
+                if (d && d.success && d.audio) { _ttsMaleCache[clean] = d.audio; _bindSpeakerPulse(_playBase64Mp3(d.audio, onDone), speakerBtn); }
+                else { _bindSpeakerPulse(_playFemaleVoice(clean, onDone), speakerBtn); } // backend chưa hỗ trợ / lỗi -> dùng giọng nữ
             })
-            .catch(function () { if (speakerBtn) speakerBtn.classList.remove('is-playing'); _bindSpeakerPulse(_playFemaleVoice(clean), speakerBtn); });
+            .catch(function () { if (speakerBtn) speakerBtn.classList.remove('is-playing'); _bindSpeakerPulse(_playFemaleVoice(clean, onDone), speakerBtn); });
     }
 
     async function executeStudentLogin() {
@@ -6414,6 +6528,11 @@
         return { segments, corrected, matched, typoN, extraN, missN, total, ok, clean };
     }
 
+    // Hội thoại "A: ... B: ..." -> người B (C...) xuống dòng. Nhận chuỗi THÔ, tự escape.
+    function wsDialogHtml(text) {
+        return wsEsc(text).replace(/\s+(?=[A-Z]\s?[:：])/g, '<br>');
+    }
+
     // Gợi ý chữ cái đầu (cho chiều Hàn -> Việt): "Chủ nhà hàng" -> "C.. n.. h..."
     function wsMaskHint(text) {
         return String(text || '').trim().split(/\s+/).map(w => {
@@ -6421,6 +6540,28 @@
             if (!chars.length) return w;
             return chars[0] + '.'.repeat(Math.max(1, chars.length - 1));
         }).join('  ');
+    }
+
+    // Gợi ý câu Hàn dạng khung: "상사는 부하와 밥을 먹습니다." -> "_____는 _____와 _____을 먹습니다."
+    // Giữ trợ từ + vị ngữ cuối câu, che phần từ để học viên tự nhớ.
+    const WS_PARTICLES = ['에서는','에게는','에서','에게','한테','으로','이랑','까지','부터','보다','처럼','은','는','이','가','을','를','와','과','에','도','만','의','로','랑'];
+    function wsKoFrameHint(text) {
+        const toks = String(text || '').trim().split(/\s+/).filter(Boolean);
+        return toks.map((t, i) => {
+            if (/^[A-Z]\s*[:：]$/.test(t)) return t;                 // nhãn hội thoại A: / B:
+            const m = t.match(/^(.*?)([.,!?…~"”']*)$/), core = m[1], punct = m[2];
+            if (/[.!?]/.test(punct) || i === toks.length - 1) return t; // vị ngữ cuối câu giữ nguyên
+            const pt = WS_PARTICLES.find(x => core.length > x.length && core.endsWith(x));
+            return '_____' + (pt || '') + punct;
+        }).join(' ');
+    }
+    // Hình minh hoạ của từ (ví dụ 2 là câu mô tả hình). Ảnh lỗi -> thử PNG gốc -> bỏ cột hình.
+    function wsPicHtml(item) {
+        const raw = (item && item.img) ? String(item.img).trim() : '';
+        if (!raw) return '';
+        const p = wordImgPaths(raw), src = wordImgSrc(item);
+        const back = src !== p.goc ? p.goc : '';
+        return `<div class="ws-pic"><img src="${wsEsc(src)}" alt="Hình minh hoạ" onerror="if(!this.dataset.b&&'${wsEsc(back)}'){this.dataset.b='1';this.src='${wsEsc(back)}';}else{this.onerror=null;var b=this.closest('.ws-body');if(b)b.classList.remove('has-pic');this.parentNode.remove();}"></div>`;
     }
 
     function wsSentenceAt(id) {
@@ -6435,8 +6576,9 @@
         const bank = [];
         for (let i = 0; i < vocabData.length; i++) {
             const it = vocabData[i];
-            if ((it.ex || '').trim() && (it.exVi || '').trim()) bank.push(i * 2);
+            // Mỗi từ 1 câu: lấy ví dụ 2 (câu đi kèm hình minh hoạ); từ nào thiếu ví dụ 2 mới dùng ví dụ 1
             if ((it.ex2 || '').trim() && (it.ex2Vi || '').trim()) bank.push(i * 2 + 1);
+            else if ((it.ex || '').trim() && (it.exVi || '').trim()) bank.push(i * 2);
         }
         return shuffleArray(bank);
     }
@@ -6478,8 +6620,9 @@
         ws.mode = mode || 'vi2ko';
         let sess = null;
         if (!forceFresh && currentUnit && currentUnit !== 'SUM') sess = wsLoadSession(currentUnit, ws.mode);
+        const bankIds = new Set(wsBuildBank());
         const valid = sess && Array.isArray(sess.order) && sess.order.length &&
-            sess.order.every(id => { const wi = Math.floor(id / 2); return wi >= 0 && wi < vocabData.length; }) &&
+            sess.order.length === bankIds.size && sess.order.every(id => bankIds.has(id)) &&
             (sess.seen || []).length < sess.order.length;
         if (valid) {
             ws.indices = sess.order.slice();
@@ -6630,7 +6773,7 @@
             const checkBtn = `<button class="ws-btn" id="ws-check-btn" onclick="wsCheck()" ${(ws.inputValue || '').trim() ? '' : 'disabled'}>Kiểm tra</button>`;
             let hintHtml = '';
             if (ws.showAnswer) {
-                if (targetIsKo) hintHtml = `<div class="ws-hintbox">💡 Gợi ý: <b style="font-family:${koFont}">${wsEsc(targetText)}</b></div>`;
+                if (targetIsKo) hintHtml = `<div class="ws-hintbox">💡 Gợi ý cấu trúc: <b class="ko" style="font-family:${koFont}">${wsDialogHtml(wsKoFrameHint(targetText))}</b></div>`;
                 else hintHtml = `<div class="ws-hintbox">💡 Gợi ý (chữ cái đầu): <b style="letter-spacing:1px; font-weight:800;">${wsEsc(wsMaskHint(targetText))}</b></div>`;
             }
             workHtml = `<div class="ws-inputrow">${inputHtml}${checkBtn}</div>${hintHtml}`;
@@ -6674,6 +6817,7 @@
             return `<span class="${cls}"></span>`;
         }).join('');
 
+        const pic = wsPicHtml(s.item);
         panel.innerHTML = `
           <div class="ws-card">
             <div class="ws-top">
@@ -6683,10 +6827,15 @@
                 <label class="ws-toggle" onclick="wsToggleGrammar()"><span class="ws-switch${ws.showGrammar ? ' on' : ''}"><span class="knob"></span></span>Gợi ý ngữ pháp/từ</label>
               </div>
             </div>
-            <div class="ws-src">${speakBtn}<p class="ws-src-txt ${sourceIsKo ? 'ko' : 'vi'}">${wsEsc(sourceText)}</p></div>
-            ${workHtml}
-            ${fbHtml}
-            ${graHtml}
+            <div class="ws-body${pic ? ' has-pic' : ''}">
+              ${pic}
+              <div class="ws-main">
+                <div class="ws-src">${speakBtn}<p class="ws-src-txt ${sourceIsKo ? 'ko' : 'vi'}">${wsDialogHtml(sourceText)}</p></div>
+                ${workHtml}
+                ${fbHtml}
+                ${graHtml}
+              </div>
+            </div>
             <div class="ws-dots">${dots}</div>
           </div>`;
 
@@ -7108,13 +7257,13 @@
                 <td class="col-vocab-ex-cell" style="vertical-align:middle;">
                     <div style="display:flex; flex-direction:column; gap:8px;" ${state.showEx ? '' : 'class="cell-toggle-blur" onclick="this.classList.remove(\'cell-toggle-blur\')"'}>
                         <div style="display:flex; flex-direction:column; gap:2px;">
-                            <span style="color:#1a202c; font-weight:700; font-size:15px;">${item.ex || '...'}</span>
-                            <span style="color:var(--sub-text); font-style:italic; font-size:13px;">${item.exVi || '...'}</span>
+                            <span style="color:#1a202c; font-weight:700; font-size:15px;">${dialogBreak(item.ex || '...')}</span>
+                            <span style="color:var(--sub-text); font-style:italic; font-size:13px;">${dialogBreak(item.exVi || '...')}</span>
                         </div>
                         ${(item.ex2 && item.ex2.trim() !== '') ? `
                         <div style="display:flex; flex-direction:column; gap:2px; padding-top:6px; border-top:1px dashed rgba(160,174,192,0.45);">
-                            <span style="color:#1a202c; font-weight:700; font-size:15px;">${item.ex2}</span>
-                            <span style="color:var(--sub-text); font-style:italic; font-size:13px;">${item.ex2Vi || '...'}</span>
+                            <span style="color:#1a202c; font-weight:700; font-size:15px;">${dialogBreak(item.ex2)}</span>
+                            <span style="color:var(--sub-text); font-style:italic; font-size:13px;">${dialogBreak(item.ex2Vi || '...')}</span>
                         </div>` : ''}
                     </div>
                 </td>
@@ -8200,6 +8349,18 @@
             const gain = Math.min(Math.round(elapsed / 1000), 2);
             if (gain <= 0) return;
 
+            // Máy khác vừa đồng bộ thời gian lớn hơn về -> lấy số lớn hơn, không ghi đè số cũ lên
+            totalSeconds = Math.max(totalSeconds, parseInt(localStorage.getItem(`total_secs_${studentKey}`)) || 0);
+            if (localStorage.getItem(`study_date_${studentKey}`) === todayStr)
+                todaySeconds = Math.max(todaySeconds, parseInt(localStorage.getItem(`today_secs_${studentKey}`)) || 0);
+            if (currentUnit != null && currentUnit !== 'SUM') {
+                try {
+                    const stored = JSON.parse(localStorage.getItem(`unitSecs_${studentKey}`)) || {};
+                    Object.keys(stored).forEach(u => { unitSecsStore[u] = Math.max(unitSecsStore[u] || 0, stored[u] || 0); });
+                    currentUnitActiveSeconds = Math.max(currentUnitActiveSeconds, stored[currentUnit] || 0);
+                } catch (e) {}
+            }
+
             todaySeconds += gain;
             totalSeconds += gain;
             currentUnitActiveSeconds += gain;
@@ -8537,6 +8698,18 @@
     }
 
     // Ôn 1 dạng quiz đơn lẻ trên vốn từ trộn — tái dùng engine sẵn có
+    // 📊 Ghi lại mỗi lần làm Tổng hợp (đồng bộ lên server cho trang giáo viên)
+    //   kind: 'test' = bài kiểm tra tổng hợp (chấm cuối) | 'practice' = luyện từng dạng quiz
+    function logSummaryResult(entry) {
+        const k = 'sumLog_' + getStudentKey();
+        let arr = [];
+        try { arr = JSON.parse(localStorage.getItem(k)) || []; } catch (e) { arr = []; }
+        arr.push(Object.assign({ at: Date.now() }, entry));
+        try { localStorage.setItem(k, JSON.stringify(arr.slice(-200))); } catch (e) {}
+        scheduleProgressPush(500);
+    }
+    let sumPracticeUnits = [];
+
     function launchIndividualSummaryQuiz(type) {
         const units = [...sumSelUnits].sort((a,b) => parseInt(a) - parseInt(b));
         if (units.length === 0) { alert('Hãy chọn ít nhất 1 Unit để ôn nhé!'); return; }
@@ -8544,6 +8717,7 @@
         if (mixed.length < 4) { alert('Cần ít nhất 4 từ. Hãy chọn thêm Unit.'); return; }
         vocabData = mixed;
         currentUnit = 'SUM';
+        sumPracticeUnits = units;
         initTabIndices();
         document.getElementById('mode-summary-section').style.display = 'none';
         document.getElementById('mode-vocab-section').style.display = 'flex';
@@ -8613,7 +8787,7 @@
         let nInput = parseInt(document.getElementById('sum-num-q').value) || 10;
         const n = Math.max(1, Math.min(nInput, pickFrom.length));
         const picked = shuffleArray([...pickFrom]).slice(0, n);
-        sumTest = { answerLang: sumAnswerLang, units: units, questions: [], graded: false };
+        sumTest = { answerLang: sumAnswerLang, units: units, types: types, questions: [], graded: false, startedAt: Date.now() };
         const typePlan = buildCombinedTypePlan(types, picked.length);
         const altTypes = types.filter(t => t !== 'visual');
         picked.forEach((item, i) => {
@@ -8921,6 +9095,8 @@
             }
         });
         const pct = Math.round(correct / sumTest.questions.length * 100);
+        logSummaryResult({ kind: 'test', units: sumTest.units, types: sumTest.types, right: correct,
+            total: sumTest.questions.length, duration: Date.now() - (sumTest.startedAt || Date.now()) });
         const banner = document.getElementById('ct-result-banner');
         banner.className = 'ct-result-banner'; banner.style.display = 'block';
         banner.innerHTML =
