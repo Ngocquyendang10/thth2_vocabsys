@@ -218,7 +218,7 @@
   </header>
 
   <div class="howto hidden" id="howtoBar">
-    <span class="howto-icon" id="howtoIcon">💡</span>
+    <span class="howto-icon" id="howtoIcon"></span>
     <span class="howto-text" id="howtoText"></span>
     <button class="howto-close" id="howtoClose" type="button" title="Ẩn hướng dẫn" aria-label="Ẩn hướng dẫn">✕</button>
   </div>
@@ -235,12 +235,25 @@
     //    thì đổi cả 2 nơi cho khớp.
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKepdyG-ORWiL_qHy8VDArBIbGyIeNZapGfj6g-p566IuFnUTS1qZDQmEZsU8PLQqQ/exec";
 
+    // Icon SVG phẳng 1 màu (không dùng emoji hệ thống)
+    const IC = {
+      search: '<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>',
+      lock: '<rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+      hourglass: '<path d="M6 2h12M6 22h12M7 2v4a5 5 0 0 0 10 0V2M7 22v-4a5 5 0 0 1 10 0v4"/>',
+      inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+      wifiOff: '<path d="M1 1l22 22M16.7 11.1a11 11 0 0 1 2.3 1.4M5 12.5a11 11 0 0 1 5.2-2.4M10.7 5.1A16 16 0 0 1 22.6 9M1.4 9a16 16 0 0 1 4.7-2.9M8.5 16.1a6 6 0 0 1 7 0M12 20h.01"/>',
+      bulb: '<path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/>',
+      phone: '<rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/>',
+      laptop: '<rect x="4" y="4" width="16" height="11" rx="1.5"/><path d="M2 19h20"/>'
+    };
+    function ic(n){ return '<svg viewBox="0 0 24 24" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (IC[n]||'') + '</svg>'; }
+
     const MESSAGES = {
-      NO_ID:      { icon: "🔎", title: "Thiếu mã bài giảng", text: "Đường dẫn chưa có mã bài giảng.<br>Bạn hãy mở lại đúng link cô Quyên đã gửi nhé!" },
-      NOT_FOUND:  { icon: "🔒", title: "Không tìm thấy bài giảng", text: "Liên kết này không tồn tại hoặc đã bị gỡ bỏ.<br>Vui lòng liên hệ cô Quyên để nhận link mới nhé!" },
-      EXPIRED:    { icon: "⏳", title: "Liên kết đã hết hạn", text: "Thời hạn xem lại bài giảng này đã kết thúc.<br>Vui lòng liên hệ cô Quyên để được hỗ trợ nhé!" },
-      NO_LECTURE: { icon: "📭", title: "Chưa có bài giảng", text: "Bài giảng cho unit này chưa được cập nhật.<br>Bạn quay lại sau ít phút nhé!" },
-      ERROR:      { icon: "📡", title: "Không kết nối được", text: "Có lỗi khi tải dữ liệu bài giảng.<br>Bạn kiểm tra mạng rồi thử tải lại trang nhé!" }
+      NO_ID:      { icon: ic('search'), title: "Thiếu mã bài giảng", text: "Đường dẫn chưa có mã bài giảng.<br>Vui lòng mở lại đúng liên kết do giáo viên gửi." },
+      NOT_FOUND:  { icon: ic('lock'), title: "Không tìm thấy bài giảng", text: "Liên kết này không tồn tại hoặc đã bị gỡ bỏ.<br>Vui lòng liên hệ giáo viên để nhận liên kết mới." },
+      EXPIRED:    { icon: ic('hourglass'), title: "Liên kết đã hết hạn", text: "Thời hạn xem lại bài giảng này đã kết thúc.<br>Vui lòng liên hệ giáo viên để được hỗ trợ." },
+      NO_LECTURE: { icon: ic('inbox'), title: "Chưa có bài giảng", text: "Bài giảng cho unit này chưa được cập nhật.<br>Vui lòng quay lại sau." },
+      ERROR:      { icon: ic('wifiOff'), title: "Không kết nối được", text: "Có lỗi khi tải dữ liệu bài giảng.<br>Vui lòng kiểm tra kết nối mạng và tải lại trang." }
     };
 
     // Máy cảm ứng (điện thoại/tablet) hay laptop -> hiện hướng dẫn phù hợp
@@ -263,10 +276,10 @@
       const txt  = document.getElementById('howtoText');
 
       if (IS_TOUCH) {
-        icon.textContent = '📱';
-        txt.innerHTML = '<b>Điện thoại:</b> vuốt ngang trên slide hoặc chạm <b>&lsaquo;&nbsp;&rsaquo;</b> ở đáy slide để qua trang · bấm <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg> để xem <b>toàn màn hình</b> · <b>xoay ngang máy</b> sẽ rõ hơn nhiều nhé!';
+        icon.innerHTML = ic('phone');
+        txt.innerHTML = '<b>Điện thoại:</b> vuốt ngang trên slide hoặc chạm <b>&lsaquo;&nbsp;&rsaquo;</b> ở đáy slide để qua trang · bấm <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg> để xem <b>toàn màn hình</b> · <b>xoay ngang thiết bị</b> để xem rõ hơn.';
       } else {
-        icon.textContent = '💻';
+        icon.innerHTML = ic('laptop');
         txt.innerHTML = '<b>Dùng laptop:</b> bấm vào slide một cái rồi dùng phím <kbd>&larr;</kbd> <kbd>&rarr;</kbd> để chuyển trang · hoặc bấm nút <b>&lsaquo;&nbsp;&rsaquo;</b> ở đáy slide · bấm <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M15 4h4a1 1 0 0 1 1 1v4M20 15v4a1 1 0 0 1-1 1h-4M9 20H5a1 1 0 0 1-1-1v-4"/></svg> (hoặc phím <kbd>F</kbd>) để xem <b>toàn màn hình</b>, <kbd>Esc</kbd> để thoát.';
       }
       bar.classList.remove('hidden');

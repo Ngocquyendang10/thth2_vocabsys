@@ -598,6 +598,8 @@
         .ct-audio-btn { background:var(--point-light); border:none; color:var(--point-color); font-weight:800; padding:14px 22px; border-radius:14px; cursor:pointer; box-shadow:var(--neu-convex); outline:none; font-size:14px; display:inline-flex; align-items:center; gap:8px; margin-bottom:14px; }
         .ct-img-frame { width:100%; max-width:420px; height:220px; margin:0 auto 14px; background:var(--bg-color); border-radius:var(--radius-md); box-shadow:var(--neu-concave); overflow:hidden; display:flex; align-items:center; justify-content:center; }
         .ct-img-frame img { max-width:100%; max-height:100%; object-fit:contain; }
+        .qpic-frame { width:100%; max-width:340px; aspect-ratio:1/1; margin:12px auto 4px; background:var(--bg-color); border-radius:var(--radius-md); box-shadow:var(--neu-concave); overflow:hidden; display:flex; align-items:center; justify-content:center; }
+        .qpic-frame img { width:100%; height:100%; object-fit:contain; display:block; }
         .ct-correct-hint { font-size:12px; color:var(--success-color); font-weight:700; margin-top:10px; }
         /* Ghép cặp & Sắp xếp câu trong ĐỀ DỌC (chấm sau cùng) */
         .ct-match { display:flex; gap:12px; }
@@ -1386,6 +1388,98 @@
 
         /* ===== 📝 BÀI TẬP (Đọc, ...) ===== */
         #exercise-tabs-nav { margin-top: 12px; justify-content: flex-start; }
+        /* ---- 📝 Bài tập được giao: danh sách ---- */
+        .exh-summary { display: flex; align-items: center; gap: 18px; background: #fff; border: 1px solid #eef2f8; border-radius: var(--radius-md); padding: 16px 20px; margin: 4px 0 16px; box-shadow: var(--neu-convex); }
+        .exh-ring { --p: 0; flex: 0 0 auto; width: 78px; height: 78px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(closest-side, #fff 78%, transparent 80% 100%), conic-gradient(var(--point-color) calc(var(--p) * 1%), #e9edf5 0); }
+        .exh-ring b { font-size: 18px; font-weight: 800; color: var(--point-color); line-height: 1; }
+        .exh-ring small { font-size: 10.5px; font-weight: 700; color: var(--sub-text); margin-top: 3px; }
+        .exh-sum-main { font-size: 16px; font-weight: 700; color: #1a202c; }
+        .exh-sum-main b { color: var(--point-color); }
+        .exh-sum-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+        .exh-pill { font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: #f1f4f9; color: var(--sub-text); }
+        .exh-pill.warn { background: #fff4e5; color: #c05621; }
+        .exh-pill.ok { background: #e9f9ee; color: #2f855a; }
+        .exh-pill.bad { background: #fdecec; color: #c53030; }
+        .exh-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+        .exh-fchip { border: 1.5px solid #e2e8f0; background: #fff; border-radius: 999px; padding: 7px 14px; font-size: 13px; font-weight: 700; color: var(--text-color); cursor: pointer; font-family: inherit; }
+        .exh-fchip span { margin-left: 4px; font-size: 11px; color: var(--sub-text); }
+        .exh-fchip.on { background: var(--point-color); border-color: var(--point-color); color: #fff; }
+        .exh-fchip.on span { color: rgba(255,255,255,.8); }
+        .exh-sec { margin-bottom: 22px; }
+        .exh-sec-hd { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: .4px; margin: 0 0 10px 2px; }
+        .exh-sec-hd .ic { width: 16px; height: 16px; color: var(--point-color); }
+        .exh-sec-hd span { min-width: 20px; text-align: center; padding: 1px 7px; border-radius: 999px; background: #eef1f7; font-size: 11px; }
+        .exh-card { display: flex; gap: 16px; background: #fff; border: 1px solid #edf0f6; border-radius: 18px; padding: 16px 18px; margin-bottom: 12px; cursor: pointer;
+            box-shadow: 0 1px 2px rgba(26,32,44,.04), 0 4px 14px rgba(26,32,44,.04); transition: box-shadow .18s, transform .18s, border-color .18s; }
+        .exh-card:hover { border-color: #d9d4ff; box-shadow: 0 10px 26px rgba(97,76,255,.12); transform: translateY(-2px); }
+        .exh-card:focus-visible { outline: 2px solid var(--point-color); outline-offset: 2px; }
+        .exh-ic { flex: 0 0 auto; width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            background: var(--point-light); color: var(--point-color); }
+        .exh-ic .ic { width: 24px; height: 24px; }
+        .exh-card.s-done .exh-ic { background: #e9f9ee; color: #2f855a; }
+        .exh-card.s-expired { cursor: default; background: #fafbfd; }
+        .exh-card.s-expired:hover { transform: none; box-shadow: 0 1px 2px rgba(26,32,44,.04); border-color: #edf0f6; }
+        .exh-card.s-expired .exh-ic { background: #eef0f4; color: #a0aec0; }
+        .exh-main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+        .exh-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .exh-over { font-size: 11.5px; font-weight: 800; letter-spacing: .5px; text-transform: uppercase; color: var(--sub-text); }
+        .exh-title { font-size: 17px; font-weight: 800; color: #1a202c; line-height: 1.35; margin-top: 3px; }
+        .exh-card.s-expired .exh-title { color: #718096; }
+        .exh-new { display: inline-block; margin-left: 8px; background: var(--point-color); color: #fff; font-size: 10.5px; font-weight: 800; padding: 2px 8px; border-radius: 999px; vertical-align: 2px; }
+        .exh-facts { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; }
+        .exh-fact { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--sub-text); }
+        .exh-fact .ic { width: 15px; height: 15px; color: #a0aec0; }
+        .exh-fact b { font-weight: 800; color: #2f855a; }
+        .exh-fact.warn, .exh-fact.warn b, .exh-fact.warn .ic { color: #c05621; }
+        .exh-note { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: #4a5568; background: #f6f5ff; border-radius: 10px; padding: 8px 12px; margin-top: 10px; }
+        .exh-note .ic { width: 15px; height: 15px; color: var(--point-color); margin-top: 2px; }
+        .exh-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f2f7; }
+        .exh-sub { font-size: 12.5px; color: var(--sub-text); }
+        .exh-prog { display: flex; align-items: center; gap: 10px; flex: 1 1 auto; max-width: 300px; font-size: 12.5px; font-weight: 700; color: #c05621; }
+        .exh-bar { flex: 1 1 auto; height: 6px; border-radius: 999px; background: #fdebd3; overflow: hidden; }
+        .exh-bar i { display: block; height: 100%; background: #ed8936; border-radius: 999px; }
+        .exh-result { display: flex; flex-direction: column; gap: 2px; }
+        .exh-score { font-size: 13px; font-weight: 700; color: var(--sub-text); }
+        .exh-score b { font-size: 22px; font-weight: 800; color: #2f855a; }
+        .exh-chip { flex: 0 0 auto; font-size: 11.5px; font-weight: 800; padding: 4px 10px; border-radius: 999px; }
+        .exh-chip.todo { background: var(--point-light); color: var(--point-color); }
+        .exh-chip.doing { background: #fff4e5; color: #c05621; }
+        .exh-chip.done { background: #e9f9ee; color: #2f855a; }
+        .exh-chip.expired { background: #edf0f5; color: #718096; }
+        .exh-go { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 800; color: #fff; background: var(--point-color); padding: 9px 16px; border-radius: 11px; white-space: nowrap; }
+        .exh-go .ic { width: 15px; height: 15px; }
+        .exh-go.ghost { background: transparent; color: var(--point-color); box-shadow: inset 0 0 0 1.5px var(--point-color); }
+        .exh-empty { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; padding: 40px 16px; background: #fff; border-radius: var(--radius-md); border: 1px dashed #d8dee9; color: var(--sub-text); }
+        .exh-empty b { color: #1a202c; font-size: 16px; }
+        .exh-empty-ic { color: #a0aec0; } .exh-empty-ic .ic { width: 44px; height: 44px; }
+        /* ---- Thanh trên cùng khi đang mở 1 bài ---- */
+        .exd-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 14px; margin: 2px 0 12px; }
+        .exd-back { border: none; background: var(--bg-color); box-shadow: var(--neu-convex); color: var(--point-color); font-weight: 800; font-size: 13px; padding: 9px 14px; border-radius: 10px; cursor: pointer; font-family: inherit; }
+        .exd-crumb { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 800; color: #1a202c; min-width: 0; }
+        .exd-unit { background: var(--point-color); color: #fff; font-size: 12px; padding: 3px 10px; border-radius: 999px; flex: 0 0 auto; }
+        .exd-due { margin-left: auto; font-size: 13px; font-weight: 700; color: #2f855a; background: #e9f9ee; padding: 5px 11px; border-radius: 999px; }
+        .exd-due.warn { color: #c05621; background: #fff4e5; }
+        .exd-back { display: inline-flex; align-items: center; gap: 6px; }
+        .exd-crumb { flex-direction: column; align-items: flex-start; gap: 2px; }
+        .exd-unit { background: none; color: var(--sub-text); padding: 0; font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase; }
+        .exd-name { font-size: 16px; }
+        .exd-due { display: inline-flex; align-items: center; gap: 6px; }
+        .exd-note { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: #4a5568; background: #f6f5ff; border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
+        .exd-note .ic { color: var(--point-color); margin-top: 3px; flex: 0 0 auto; }
+        .exh-pill { display: inline-flex; align-items: center; gap: 5px; }
+        /* Icon SVG dùng chung */
+        .ic { width: 1em; height: 1em; vertical-align: -0.14em; flex: 0 0 auto; }
+        @media (max-width: 600px) {
+            .exh-summary { padding: 14px; gap: 14px; }
+            .exh-ring { width: 66px; height: 66px; }
+            .exh-card { gap: 12px; padding: 14px; }
+            .exh-ic { width: 40px; height: 40px; border-radius: 12px; }
+            .exh-ic .ic { width: 20px; height: 20px; }
+            .exh-title { font-size: 16px; }
+            .exh-facts { gap: 4px 12px; }
+            .exd-due { margin-left: 0; }
+        }
         #exercise-tabs-nav .tab-click-btn { flex: 0 0 auto; padding: 10px 18px; }
         .ex-empty { text-align: center; color: var(--sub-text); font-size: 13px; padding: 60px 20px; }
         .ex-block-title { font-size: 13px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; margin: 22px 0 10px; letter-spacing: 0.5px; border-left: 3px solid var(--point-color); padding-left: 8px; }
@@ -1525,7 +1619,7 @@
         <p>Nền tảng ôn luyện từ vựng & ngữ pháp</p>
     </div>
     <div class="login-right-form">
-        <h2>Xin chào các bạn học viên 👋</h2>
+        <h2>Xin chào các bạn học viên</h2>
         <p class="info-p">Vui lòng đăng nhập tài khoản lớp học để tiếp tục bài ôn tập.</p>
         <div class="form-group">
             <label>Tên đăng nhập / Mã học sinh</label>
@@ -1572,7 +1666,7 @@
                     <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Từ vựng</a>
                 </li>
                 <li class="menu-item" id="menu-grammar" onclick="showAppMode('grammar')"><a href="#">
-                    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Ngữ pháp<span class="lock-badge" id="grammar-lock-badge" style="display:none;">🔒</span></a>
+                    <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Ngữ pháp<span class="lock-badge" id="grammar-lock-badge" style="display:none;"><i data-ic="lock"></i></span></a>
                 </li>
                 <li class="menu-item" id="menu-exercise" onclick="showAppMode('exercise')"><a href="#">
                     <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>Bài tập</a>
@@ -1618,7 +1712,7 @@
 
                     <!-- SUBTAB LỚN: gộp còn 4 nhóm chính -->
                     <div class="workspace-tabs" id="main-tabs-nav" style="display: none;">
-                        <button id="main-btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng<span class="lock-badge" id="lecture-lock-badge" style="display:none;">🔒</span></button>
+                        <button id="main-btn-lecture" class="tab-click-btn active" onclick="switchTab('lecture')">1. Bài giảng<span class="lock-badge" id="lecture-lock-badge" style="display:none;"><i data-ic="lock"></i></span></button>
                         <button id="main-btn-vocabTable" class="tab-click-btn" onclick="switchTab('vocabTable')">2. List từ vựng</button>
                         <button id="main-btn-flashcard" class="tab-click-btn" onclick="switchTab('flashcard')">3. Flashcard</button>
                         <button id="main-btn-quizgroup" class="tab-click-btn" onclick="switchTab('listen')">4. Quiz</button>
@@ -1677,13 +1771,13 @@
                         <!-- Khung nội dung danh sách hướng dẫn -->
                         <div id="lecture-guide-content" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px; padding: 14px 18px; background: #ffffff; border-radius: var(--radius-md); box-shadow: var(--neu-concave); border: 1px solid rgba(255,255,255,0.5); text-align: left; animation: slideDownGuide 0.25s ease-out;">
                             <div style="display: flex; align-items: baseline; gap: 8px;">
-                                <span style="color: #614CFF; font-size: 10px;">🔸</span>
+                                <span style="color: #614CFF; font-size: 10px;"><i data-ic="diamond"></i></span>
                                 <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
                                     Đối với dạng slide (Canva), bạn có thể tương tác các nút <b style="color: #614CFF; font-weight: 700;">tiến/lùi</b> trong khung hình và mở chế độ <b style="color: #614CFF; font-weight: 700;">"Toàn màn hình"</b>.
                                 </span>
                             </div>
                             <div style="display: flex; align-items: baseline; gap: 8px;">
-                                <span style="color: #614CFF; font-size: 10px;">🔸</span>
+                                <span style="color: #614CFF; font-size: 10px;"><i data-ic="diamond"></i></span>
                                 <span style="font-size: 13px; color: var(--sub-text); font-weight: 500; line-height: 1.5;">
                                     Đối với dạng hình tương tác, bạn có thể <b style="color: #614CFF; font-weight: 700;">di chuyển tiến/lùi</b> giữa các hình, <b style="color: #614CFF; font-weight: 700;">tắt/mở các nút hình vuông</b> trong hình để ôn tập và mở <b style="color: #614CFF; font-weight: 700;">toàn màn hình</b>.
                                 </span>
@@ -1706,7 +1800,7 @@
                         <div class="lesson-locked-msg" id="lecture-locked-msg" style="display: none;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                             <p class="lesson-locked-title">Bài giảng của Unit này chưa được mở khoá</p>
-                            <p class="lesson-locked-sub">Phần bài giảng chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn có thể luyện tập đầy đủ ở các mục <b>List từ vựng, Flashcard và Quiz</b> nhé. Nếu cần mở bài giảng, hãy liên hệ giáo viên.</p>
+                            <p class="lesson-locked-sub">Phần bài giảng chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn có thể luyện tập đầy đủ ở các mục <b>List từ vựng, Flashcard và Quiz</b>. Nếu cần mở bài giảng, vui lòng liên hệ giáo viên.</p>
                         </div>
 
                         <!-- Iframe thêm sự kiện onload để tự báo hiệu cho JavaScript ẩn bộ khung xương -->
@@ -1881,7 +1975,7 @@
                         </div>
                         <button class="hint-btn-bottom-right" id="visual-hint-btn" onclick="toggleVisualHint(this)" title="Gợi ý: câu minh hoạ cho hình"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></button>
                     </div>
-                    <div class="quiz-question">Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:</div>
+                    <div class="quiz-question" id="visual-question">Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:</div>
                     <div class="quiz-options" id="visual-opts"></div>
                 </div>
 
@@ -2018,7 +2112,7 @@
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; min-height:320px; color:var(--sub-text); text-align:center;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:52px;height:52px; color:#cbd5e0;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                         <div style="font-size:16px; font-weight:800; color:#1a202c;">Tính năng đang phát triển</div>
-                        <div style="font-size:13px;">Bài quiz ngữ pháp tổng hợp sẽ sớm ra mắt. Cảm ơn bạn đã kiên nhẫn nhé!</div>
+                        <div style="font-size:13px;">Bài quiz ngữ pháp tổng hợp sẽ sớm được cập nhật. Cảm ơn bạn đã kiên nhẫn chờ đợi.</div>
                     </div>
                 </div>
             </div>
@@ -2037,7 +2131,7 @@
                 <div class="lesson-locked-msg" id="grammar-locked-msg" style="display: none;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     <p class="lesson-locked-title">Ngữ pháp của Unit này chưa được mở khoá</p>
-                    <p class="lesson-locked-sub">Phần ngữ pháp chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn luyện tập từ vựng đầy đủ ở mục <b>Từ vựng</b> nhé. Nếu cần mở ngữ pháp, hãy liên hệ giáo viên.</p>
+                    <p class="lesson-locked-sub">Phần ngữ pháp chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn có thể luyện tập từ vựng đầy đủ ở mục <b>Từ vựng</b>. Nếu cần mở ngữ pháp, vui lòng liên hệ giáo viên.</p>
                 </div>
 
                 <div class="grammar-two-column-layout" id="grammar-main-wrapper" style="display: none;">
@@ -2047,7 +2141,7 @@
                     <!-- CỘT PHẢI -->
                     <div class="grammar-main-content" id="grammar-detail-view">
                         <div class="grammar-empty-state" id="grammar-empty-msg">
-                            <span style="font-size: 32px; margin-bottom: 8px;">👉</span>
+                            <span style="font-size: 32px; margin-bottom: 8px; color: var(--point-color);"><i data-ic="arrowLeft"></i></span>
                             <span>Vui lòng chọn một cấu trúc ngữ pháp ở cột bên trái để xem chi tiết bài học.</span>
                         </div>
                         
@@ -2163,8 +2257,8 @@
     <!-- ⚡ ÔN NHANH TỰ CHẠY — luôn hiển thị, cao cố định 88px -->
     <div id="quick-review-pop" class="qr-pop" onmouseenter="qrPause(true)" onmouseleave="qrPause(false)" onclick="qrToggleManualPause()" title="Chạm để tạm dừng / tiếp tục">
         <div class="qr-head">
-            <span class="qr-title">⚡ Ôn nhanh</span>
-            <span class="qr-pausemark" id="qr-pausemark" style="display:none;">⏸ đã dừng</span>
+            <span class="qr-title"><i data-ic="zap"></i> Ôn nhanh</span>
+            <span class="qr-pausemark" id="qr-pausemark" style="display:none;"><i data-ic="pause"></i> đã dừng</span>
             <span class="qr-count" id="qr-count">0/0</span>
         </div>
         <div class="qr-wordrow">
@@ -2189,7 +2283,7 @@
 </div>
             <h4 style="font-size: 13px; font-weight: 800; color: #1a202c; text-transform: none; margin: 0; flex: 1;">Từ vựng cần ôn</h4>
             <span style="font-size: 18px; font-weight: 800; color: #f56565; line-height:1;"><span id="dash-total-unlearned">0</span></span>
-            <span class="ur-info-tip" tabindex="0" role="button" aria-label="Giải thích" onclick="toggleInfoTip(event, this)">i<span class="ur-tip-bubble">Tổng hợp những từ làm chưa đúng và từ đánh dấu ⭐️</span></span>
+            <span class="ur-info-tip" tabindex="0" role="button" aria-label="Giải thích" onclick="toggleInfoTip(event, this)">i<span class="ur-tip-bubble">Tổng hợp những từ làm chưa đúng và từ đánh dấu <i data-ic="star"></i></span></span>
         </div>
 
         <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
@@ -2293,17 +2387,17 @@
 <!-- POPUP MODAL KHEN NGỢI -->
 <div class="bounce-popup-overlay" id="custom-bounce-popup">
     <div class="bounce-popup-box">
-        <div class="popup-icon-animate">🎉</div>
-        <h3 id="popup-title">Tuyệt vời quá!</h3>
-        <p id="popup-message">Sự siêng năng của bạn đã thành công mở khóa bài học mới.</p>
-        <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px;" onclick="closeCustomBouncePopup()">Bắt Đầu Học</button>
+        <div class="popup-icon-animate"><i data-ic="sparkles"></i></div>
+        <h3 id="popup-title">Hoàn thành</h3>
+        <p id="popup-message">Bài học mới đã được mở cho tài khoản của bạn.</p>
+        <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px;" onclick="closeCustomBouncePopup()">Bắt đầu học</button>
     </div>
 </div>
 
 <!-- POPUP HOÀN THÀNH BÀI TẬP (Đọc, ...) -->
 <div class="bounce-popup-overlay" id="ex-done-popup">
     <div class="bounce-popup-box ex-done-box" id="ex-done-card">
-        <div class="popup-icon-animate">🎉</div>
+        <div class="popup-icon-animate"><i data-ic="sparkles"></i></div>
         <h3>Chúc mừng bạn đã hoàn thành bài tập!</h3>
         <div class="ex-done-name" id="ex-done-name"></div>
         <div class="ex-done-lesson" id="ex-done-lesson"></div>
@@ -2311,7 +2405,7 @@
         <div class="ex-done-sheet" id="ex-done-sheet"></div>
         <p class="ex-done-note">Để giáo viên có thể ghi nhận kết quả và theo dõi tiến độ học tập, bạn vui lòng chụp lại màn hình kết quả này và gửi cho giáo viên. Trân trọng cảm ơn!</p>
         <div class="ex-done-actions">
-            <button class="btn btn-primary" onclick="captureExerciseResult(this)">📸 Chụp màn hình</button>
+            <button class="btn btn-primary" onclick="captureExerciseResult(this)"><i data-ic="camera"></i> Chụp màn hình</button>
             <button class="btn" onclick="closeExerciseDonePopup()">Đóng</button>
         </div>
     </div>
@@ -2335,11 +2429,11 @@
 <div class="bounce-popup-overlay" id="policy-modal-popup">
     <div class="bounce-popup-box policy-modal-box">
         <button class="policy-modal-close-btn" onclick="closePolicyModal()" aria-label="Đóng">&times;</button>
-        <h3 style="margin-bottom: 2px;">📜 Chính Sách Sử Dụng Nền Tảng Học Tập</h3>
+        <h3 style="margin-bottom: 2px;"><i data-ic="shield"></i> Chính Sách Sử Dụng Nền Tảng Học Tập</h3>
         <p style="font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 14px;">NGOC QUYEN'S CLASSROOM — Áp dụng đối với toàn bộ học viên tham gia học tập trên nền tảng</p>
         <div class="policy-modal-content">
             <p>Chào mừng các bạn học viên đã đến với Ngoc Quyen's Classroom! Nền tảng ôn tập Từ vựng & Ngữ pháp này được xây dựng với tất cả tâm huyết, nhằm mang lại cho các bạn một không gian học tập công nghệ hiện đại, cá nhân hóa và đạt hiệu quả tối ưu nhất.</p>
-            <p>Để cùng nhau duy trì một môi trường học tập văn minh, tôn trọng tri thức và bảo vệ quyền lợi của chính mình, chúng mình cùng điểm qua những quy ước nhỏ nhưng vô cùng quan trọng dưới đây nha:</p>
+            <p>Nhằm duy trì một môi trường học tập văn minh, tôn trọng tri thức và bảo vệ quyền lợi của mỗi học viên, xin vui lòng lưu ý các quy định dưới đây:</p>
 
             <h4>1. Tôn Trọng Bản Quyền & Sở Hữu Trí Tuệ</h4>
             <ul>
@@ -2359,8 +2453,8 @@
 
             <h4>3. Cam Kết Đồng Hành</h4>
             <p>Bằng việc nhấn nút Đăng nhập và trải nghiệm các bài học trên nền tảng, học viên đã chính thức đồng ý và đồng hành cùng lớp học trong việc thực hiện đầy đủ các quy định trên.</p>
-            <p>Ngoc Quyen's Classroom tin rằng, với tinh thần siêng năng, tự giác và sự tôn trọng lẫn nhau, chúng mình sẽ cùng nhau tạo nên những cột mốc thành tựu tiếng Hàn thật rực rỡ và ý nghĩa!</p>
-            <p>Chúc các bạn có những giờ phút học tập thật nhiều niềm vui và năng lượng! 😊</p>
+            <p>Ngoc Quyen's Classroom tin rằng, với tinh thần siêng năng, tự giác và sự tôn trọng lẫn nhau, mỗi học viên sẽ đạt được những thành tựu tiếng Hàn ý nghĩa.</p>
+            <p>Chúc các bạn có những giờ phút học tập thật nhiều niềm vui và năng lượng!</p>
         </div>
         <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px; margin-top: 14px; flex-shrink: 0;" onclick="closePolicyModal()">Đã hiểu, đóng lại</button>
     </div>
@@ -2370,8 +2464,8 @@
 <div class="bounce-popup-overlay" id="change-pw-modal">
     <div class="bounce-popup-box change-pw-box">
         <button class="policy-modal-close-btn" onclick="closeChangePwModal()" aria-label="Đóng">&times;</button>
-        <h3 style="margin-bottom: 2px;">🔑 Đổi mật khẩu</h3>
-        <p style="font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 16px;">Đặt mật khẩu mới cho tài khoản của bạn. Hãy ghi nhớ để đăng nhập lần sau nhé.</p>
+        <h3 style="margin-bottom: 2px;"><i data-ic="key"></i> Đổi mật khẩu</h3>
+        <p style="font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 16px;">Đặt mật khẩu mới cho tài khoản của bạn. Vui lòng ghi nhớ mật khẩu để sử dụng cho lần đăng nhập sau.</p>
         <div class="pw-field">
             <label for="pw-old">Mật khẩu hiện tại</label>
             <input type="password" id="pw-old" autocomplete="current-password" placeholder="Nhập mật khẩu đang dùng">
@@ -2403,8 +2497,8 @@
         </div>
         <div class="ct-topbar-right">
             <span id="ct-export-zone" style="display:none; gap:8px; margin-right:10px;">
-                <button class="ct-export-btn" onclick="printCombinedExam()" title="Mở cửa sổ in để lưu thành PDF">📄 In / PDF</button>
-                <button class="ct-export-btn" onclick="downloadCombinedExamDoc()" title="Tải file Word (.doc) để chỉnh sửa">📝 Word</button>
+                <button class="ct-export-btn" onclick="printCombinedExam()" title="Mở cửa sổ in để lưu thành PDF"><i data-ic="fileText"></i> In / PDF</button>
+                <button class="ct-export-btn" onclick="downloadCombinedExamDoc()" title="Tải file Word (.doc) để chỉnh sửa"><i data-ic="edit"></i> Word</button>
             </span>
             <button class="ct-close-btn" onclick="closeCombinedTest()" aria-label="Thoát">&times;</button>
         </div>
@@ -2472,7 +2566,7 @@
         _verBannerShown = true;
         const bar = document.createElement('div');
         bar.id = 'app-update-bar';
-        bar.innerHTML = '<span>🎉 Đã có phiên bản mới của web!</span><button type="button">Cập nhật ngay</button>';
+        bar.innerHTML = '<span>' + ic('sparkles') + ' Đã có phiên bản mới của web!</span><button type="button">Cập nhật ngay</button>';
         bar.querySelector('button').onclick = () => applyAppUpdate(buildTime, true);
         document.body.appendChild(bar);
     }
@@ -2771,9 +2865,10 @@
             .then(function (r) { return r.json(); })
             .then(function (d) {
                 if (!d || !d.success) return;
-                var before = _pStr(snapshotProgress(sess));
+                var before = _pStr(snapshotProgress(sess)), asBefore = JSON.stringify(exAssignments);
                 applyServerProgress(sess, d.progress);
-                if (_pStr(snapshotProgress(sess)) !== before) onProgressRefreshed();
+                if (d.assignments !== undefined) setExerciseAssignments(d.assignments, sess);
+                if (_pStr(snapshotProgress(sess)) !== before || JSON.stringify(exAssignments) !== asBefore) onProgressRefreshed();
             })
             .catch(function () {})
             .then(function () { _refreshing = false; });
@@ -2829,6 +2924,66 @@
         eyeOff: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>',
         note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>'
     };
+
+    // 🎨 BỘ ICON SVG PHẲNG, 1 MÀU (theo màu chữ) — KHÔNG dùng emoji của hệ thống.
+    //    JS: ic('calendar')  ·  HTML tĩnh: <i data-ic="calendar"></i> (tự đổi thành SVG khi tải trang)
+    const ICON_PATHS = {
+        calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+        clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        list: '<path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/>',
+        message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+        checkCircle: '<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
+        check: '<path d="M20 6 9 17l-5-5"/>',
+        x: '<path d="M18 6 6 18M6 6l12 12"/>',
+        clipboard: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 12h6M9 16h4"/>',
+        hourglass: '<path d="M6 2h12M6 22h12M7 2v4a5 5 0 0 0 10 0V2M7 22v-4a5 5 0 0 1 10 0v4"/>',
+        inbox: '<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/>',
+        sparkles: '<path d="M12 3l1.9 4.6 4.6 1.9-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9z"/><path d="M19 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/>',
+        headphones: '<path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>',
+        book: '<path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z"/><path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z"/>',
+        pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+        bulb: '<path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/>',
+        camera: '<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>',
+        flag: '<path d="M4 22V3h13l-2 4 2 4H4"/>',
+        play: '<circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/>',
+        timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
+        swap: '<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+        key: '<circle cx="7.5" cy="15.5" r="4.5"/><path d="M21 2l-9.6 9.6M15.5 7.5l3 3L22 7l-3-3"/>',
+        fileText: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>',
+        shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>',
+        zap: '<path d="M13 2 3 14h9l-1 8 10-12h-9z"/>',
+        pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
+        star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
+        tag: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/>',
+        playSolid: '<path d="M7 4v16l13-8z" fill="currentColor" stroke="none"/>',
+        diamond: '<path d="M12 4l8 8-8 8-8-8z" fill="currentColor" stroke="none"/>',
+        arrowLeft: '<path d="M19 12H5M12 19l-7-7 7-7"/>',
+        arrowRight: '<path d="M5 12h14M12 5l7 7-7 7"/>',
+        lock: '<rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+        eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+        puzzle: '<path d="M10 3h4v3a2 2 0 1 0 4 0V3h3v7h-3a2 2 0 1 0 0 4h3v7h-7v-3a2 2 0 1 0-4 0v3H3v-7h3a2 2 0 1 0 0-4H3V3z"/>',
+        folder: '<path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>',
+        keyboard: '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M6 9h.01M10 9h.01M14 9h.01M18 9h.01M6 13h.01M18 13h.01M8 16h8"/>',
+        checkSquare: '<rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12.5l3 3 5-6"/>',
+        film: '<rect x="2" y="3" width="20" height="18" rx="2"/><path d="M7 3v18M17 3v18M2 8h5M2 16h5M17 8h5M17 16h5M2 12h20"/>',
+        smile: '<circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/>',
+        shirt: '<path d="M20.4 6.6 16 4a4 4 0 0 1-8 0L3.6 6.6a1 1 0 0 0-.5 1.2l1 3a1 1 0 0 0 1.2.6L7 11v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-9l1.7.4a1 1 0 0 0 1.2-.6l1-3a1 1 0 0 0-.5-1.2z"/>',
+        speaker: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>',
+        alert: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+        users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+        chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/>',
+        edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>'
+    };
+    function ic(name, cls) {
+        const p = ICON_PATHS[name];
+        if (!p) return '';
+        return `<svg class="ic${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+    }
+    function hydrateIcons(root) {
+        (root || document).querySelectorAll('i[data-ic]').forEach(el => { el.outerHTML = ic(el.getAttribute('data-ic'), el.className); });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => hydrateIcons());
+    else hydrateIcons();
 
     let unitsConfig = [];
     let allowedUnitsList = [];
@@ -2973,7 +3128,7 @@
         const total = state.indices.length;
         const label = TAB_DONE_LABELS[tabName] || tabName;
 
-        document.getElementById('tab-done-title').innerText = "Chúc mừng hoàn thành! 🎉";
+        document.getElementById('tab-done-title').innerText = "Chúc mừng hoàn thành!";
         const scoreBox = document.getElementById('tab-done-score');
 
         if (tabName === 'flashcard') {
@@ -3083,7 +3238,7 @@
                 if (localStorage.getItem('saved_pass_QuyenClass') != null) localStorage.setItem('saved_pass_QuyenClass', newPass);
                 setSyncPass(newPass);   // 🔐 nếu không cập nhật, server sẽ từ chối lưu tiến độ vì sai mật khẩu
                 if (typeof __authPass !== 'undefined') __authPass = newPass;
-                setPwMsg('✅ Đổi mật khẩu thành công! Lần sau hãy đăng nhập bằng mật khẩu mới nhé.', 'success');
+                setPwMsg('Đổi mật khẩu thành công. Vui lòng sử dụng mật khẩu mới cho lần đăng nhập sau.', 'success');
                 if (btn) { btn.textContent = 'Đã đổi ✓'; }
                 setTimeout(closeChangePwModal, 1800);
             } else {
@@ -3110,7 +3265,7 @@
         }
 
         if (starList.length === 0) {
-            showCustomBouncePopup('Tuyệt vời! 🎉', 'Bạn không còn từ vựng nào cần ôn tập lại cả. Cứ tiếp tục phát huy nhé!');
+            showCustomBouncePopup('Đã hoàn thành ôn tập', 'Hiện không còn từ vựng nào cần ôn tập lại. Chúc bạn tiếp tục học tập hiệu quả.');
             return;
         }
 
@@ -3145,8 +3300,10 @@
     const EXERCISE_DATA = {
         11: [
             {
+                id: 'U11-DOC',                       // mã bài — dùng trong tab "BaiTap" của Google Sheet
                 key: 'reading',
                 label: 'Đọc',
+                title: 'Kế hoạch du lịch của 3 người',
                 audio: 'assets/doc/unit11-doc.mp3', // file nghe bài đọc (đọc cả 3 đoạn)
                 passages: [
                     // segs: [bắt đầu, kết thúc (giây trong file nghe), câu/vế] -> chữ chạy highlight theo audio
@@ -3223,6 +3380,69 @@
     };
     const EX_CIRCLED = ['①', '②', '③', '④'];
     let currentExerciseTab = null;
+    // 📝 Bài đang mở trong tab Bài tập: { unit, key } — null = đang ở danh sách bài được giao
+    let exOpen = null;
+    let exFilterUnit = null;            // lọc danh sách theo Unit (null = tất cả)
+
+    /* ---------- BÀI ĐƯỢC GIAO (tab "BaiTap" trong Google Sheet) ----------
+       Mỗi dòng = 1 đợt giao: { id, from, due, note }. from/due dạng 'YYYY-MM-DD'.
+       null = backend chưa có tính năng giao bài -> hiện mọi bài (như trước). */
+    let exAssignments = null;
+    function exAssignKey(user) { return 'exAssign_' + String(user || '').toLowerCase(); }
+    function setExerciseAssignments(list, user) {
+        exAssignments = Array.isArray(list) ? list : null;
+        try { localStorage.setItem(exAssignKey(user), JSON.stringify(exAssignments)); } catch (e) {}
+    }
+    function loadExerciseAssignments(user) {
+        try { const v = JSON.parse(localStorage.getItem(exAssignKey(user))); exAssignments = Array.isArray(v) ? v : null; }
+        catch (e) { exAssignments = null; }
+    }
+    function _exToday() {
+        const d = new Date(), p = n => String(n).padStart(2, '0');
+        return d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+    }
+    function _exDay(s) { if (!s) return ''; const a = String(s).split('-'); return a[2] + '/' + a[1]; }
+    // Số ngày còn lại tới HẾT ngày hạn nộp (0 = hạn là hôm nay)
+    function _exDaysLeft(due) {
+        if (!due) return null;
+        const a = due.split('-').map(Number), end = new Date(a[0], a[1] - 1, a[2]);
+        const t = new Date(); t.setHours(0, 0, 0, 0);
+        return Math.round((end - t) / 86400000);
+    }
+    function _exLeftText(n) { return n == null ? '' : (n < 0 ? 'đã hết hạn' : n === 0 ? 'hạn là hôm nay' : n === 1 ? 'còn 1 ngày' : `còn ${n} ngày`); }
+    function exFindById(id) {
+        for (const u of Object.keys(EXERCISE_DATA)) {
+            const ex = (EXERCISE_DATA[u] || []).find(x => x.id === id);
+            if (ex) return { unit: String(u), ex };
+        }
+        return null;
+    }
+    // Danh sách bài học sinh thấy, kèm đợt giao đang áp dụng + trạng thái làm bài.
+    function exAssignedList() {
+        const today = _exToday(), showAll = exAssignments === null || isTeacherAccount, out = [];
+        Object.keys(EXERCISE_DATA).sort((a, b) => a - b).forEach(unit => (EXERCISE_DATA[unit] || []).forEach(ex => {
+            let win = null, expired = false;
+            if (!showAll) {
+                const ws = exAssignments.filter(a => String(a.id || '').toUpperCase() === ex.id);
+                if (!ws.length) return;                                   // chưa giao -> ẩn
+                const live = ws.filter(w => (!w.from || w.from <= today) && (!w.due || w.due >= today));
+                if (live.length) win = live.sort((a, b) => (b.due || '9999').localeCompare(a.due || '9999'))[0];
+                else {
+                    const past = ws.filter(w => w.due && w.due < today);
+                    if (!past.length) return;                             // chỉ có đợt chưa tới ngày mở -> ẩn
+                    win = past.sort((a, b) => b.due.localeCompare(a.due))[0]; expired = true;
+                }
+            }
+            const st = _exState(unit, ex.key);
+            const total = ex.mcq.length + ex.essay.length;
+            const answered = Object.keys(st.picks || {}).length +
+                ex.essay.filter((e, ei) => (st.essays[ei] || []).some(v => String(v || '').trim())).length;
+            const status = st.done ? 'done' : expired ? 'expired' : answered > 0 ? 'doing' : 'todo';
+            out.push({ unit: String(unit), ex, win: win || {}, expired, status, st, total, answered });
+        }));
+        return out;
+    }
+    function _exInfoOf(unit, key) { return exAssignedList().find(i => i.unit === String(unit) && i.ex.key === key) || null; }
     let exerciseState = {}; // "unit|tab" -> { picks: {qIdx: optIdx} }
 
     // 🎧 Trình phát file nghe bài đọc: tự phát khi mở bài, mặc định tốc độ 0.8
@@ -3366,50 +3586,128 @@
     }
 
     function renderExerciseMode(autoplay = true) {
-        const title = document.getElementById('exercise-main-title');
-        const subtitle = document.getElementById('exercise-subtitle');
-        const nav = document.getElementById('exercise-tabs-nav');
-        const content = document.getElementById('exercise-content');
-        if (!currentUnit || currentUnit === 'SUM') {
-            stopExerciseAudio();
-            title.innerText = 'Bài tập';
-            subtitle.innerText = 'Vui lòng chọn Unit ở trên để xem bài tập tương ứng.';
-            nav.style.display = 'none';
-            content.innerHTML = '';
-            return;
-        }
-        title.innerText = `Unit ${currentUnit}`;
-        const tabs = EXERCISE_DATA[currentUnit] || [];
-        if (!tabs.length) {
-            stopExerciseAudio();
-            subtitle.innerText = '';
-            nav.style.display = 'none';
-            content.innerHTML = `<div class="ex-empty">Unit ${currentUnit} chưa có bài tập. Cô sẽ cập nhật sớm nhé!</div>`;
-            return;
-        }
-        subtitle.innerText = 'Chọn dạng bài tập bên dưới.';
-        if (!tabs.some(t => t.key === currentExerciseTab)) currentExerciseTab = tabs[0].key;
-        nav.style.display = 'flex';
-        nav.innerHTML = tabs.map((t, i) =>
-            `<button class="tab-click-btn${t.key === currentExerciseTab ? ' active' : ''}" onclick="switchExerciseTab('${t.key}')">${i + 1}. ${t.label}</button>`).join('');
-        const ex = tabs.find(t => t.key === currentExerciseTab);
+        document.getElementById('exercise-tabs-nav').style.display = 'none';
+        const info = exOpen ? _exInfoOf(exOpen.unit, exOpen.key) : null;
+        if (exOpen && (!info || (info.expired && !info.st.done))) exOpen = null; // bài bị gỡ / hết hạn -> về danh sách
+        if (!exOpen) { renderExerciseHome(); return; }
+        const ex = info.ex;
+        exOpen.locked = info.expired;                       // hết hạn: chỉ xem lại, không làm lại
+        document.getElementById('exercise-main-title').innerText = 'Bài tập';
+        document.getElementById('exercise-subtitle').innerText = '';
         renderExerciseContent(ex);
+        const left = _exDaysLeft(info.win.due);
+        const bar = `<div class="exd-bar">`
+            + `<button class="exd-back" onclick="closeExercise()">${ic('arrowLeft')} Tất cả bài tập</button>`
+            + `<div class="exd-crumb"><span class="exd-unit">Unit ${info.unit} · ${_escHtml(ex.label)}</span><span class="exd-name">${_escHtml(ex.title || '')}</span></div>`
+            + (info.win.due ? `<span class="exd-due${left != null && left <= 1 && !info.st.done ? ' warn' : ''}">${ic('clock')} Hạn nộp ${_exDay(info.win.due)} · ${_exLeftText(left)}</span>` : '')
+            + `</div>`
+            + (info.win.note ? `<div class="exd-note">${ic('message')}<span><b>Lời dặn của giáo viên:</b> ${_escHtml(info.win.note)}</span></div>` : '');
+        document.getElementById('exercise-content').insertAdjacentHTML('afterbegin', bar);
         if (!ex.audio) stopExerciseAudio();
         else if (autoplay) _startExerciseAudio(ex.audio);
         syncExPlayerUI();
     }
 
-    function switchExerciseTab(key) {
+    function openExercise(unit, key) {
+        exOpen = { unit: String(unit), key: key };
         currentExerciseTab = key;
-        renderExerciseMode();
+        renderExerciseMode(true);
+        window.scrollTo(0, 0);
+    }
+    function closeExercise() {
+        exOpen = null;
+        renderExerciseMode(false);
+        window.scrollTo(0, 0);
+    }
+    function setExerciseFilter(u) { exFilterUnit = u; renderExerciseHome(); }
+
+    // 📋 Danh sách bài được giao: Cần làm / Đã nộp / Hết hạn
+    function renderExerciseHome() {
+        stopExerciseAudio();
+        document.getElementById('exercise-main-title').innerText = 'Bài tập của bạn';
+        document.getElementById('exercise-subtitle').innerText = 'Giáo viên giao bài sau mỗi buổi học. Vui lòng hoàn thành trước hạn nộp và gửi ảnh chụp kết quả cho giáo viên.';
+        const content = document.getElementById('exercise-content');
+        const items = exAssignedList();
+        if (!items.length) {
+            content.innerHTML = `<div class="exh-empty"><div class="exh-empty-ic">${ic('inbox')}</div><b>Hiện chưa có bài tập nào được giao.</b><span>Giáo viên sẽ giao bài sau buổi học. Vui lòng quay lại sau.</span></div>`;
+            return;
+        }
+        const units = [...new Set(items.map(i => i.unit))];
+        if (exFilterUnit && !units.includes(exFilterUnit)) exFilterUnit = null;
+        const shown = items.filter(i => !exFilterUnit || i.unit === exFilterUnit);
+        const done = items.filter(i => i.status === 'done');
+        const todo = items.filter(i => i.status === 'todo' || i.status === 'doing');
+        const soon = todo.filter(i => { const l = _exDaysLeft(i.win.due); return l != null && l <= 1; });
+        const avg = done.length ? Math.round(done.reduce((a, i) => a + i.st.done.score / i.st.done.total, 0) / done.length * 100) : null;
+        const pct = Math.round(done.length / items.length * 100);
+
+        let html = `<div class="exh-summary">
+            <div class="exh-ring" style="--p:${pct}"><b>${done.length}/${items.length}</b><small>đã nộp</small></div>
+            <div class="exh-sum-txt">
+              <div class="exh-sum-main">${todo.length ? `Bạn còn <b>${todo.length}</b> bài cần làm` : 'Bạn đã làm hết bài được giao!'}</div>
+              <div class="exh-sum-chips">
+                ${soon.length ? `<span class="exh-pill warn">${ic('clock')} ${soon.length} bài sắp hết hạn</span>` : ''}
+                ${avg != null ? `<span class="exh-pill ok">${ic('chart')} Điểm trung bình ${avg}%</span>` : ''}
+                ${items.some(i => i.status === 'expired') ? `<span class="exh-pill bad">${ic('hourglass')} ${items.filter(i => i.status === 'expired').length} bài đã hết hạn</span>` : ''}
+              </div>
+            </div>
+          </div>`;
+        if (units.length > 1) {
+            html += `<div class="exh-filter"><button class="exh-fchip${!exFilterUnit ? ' on' : ''}" onclick="setExerciseFilter(null)">Tất cả <span>${items.length}</span></button>`
+                + units.map(u => `<button class="exh-fchip${exFilterUnit === u ? ' on' : ''}" onclick="setExerciseFilter('${u}')">Unit ${u} <span>${items.filter(i => i.unit === u).length}</span></button>`).join('')
+                + `</div>`;
+        }
+        // Thẻ bài: [icon dạng bài] | Unit · Dạng + trạng thái / Tên bài / ngày giao · hạn · số câu / lời dặn | chân thẻ: tiến độ hoặc điểm + nút
+        const TYPE_IC = { 'Đọc': 'book', 'Nghe': 'headphones', 'Viết': 'pen' };
+        const STATUS = { todo: 'Chưa làm', doing: 'Đang làm', done: 'Đã nộp', expired: 'Hết hạn' };
+        const card = i => {
+            const ex = i.ex, w = i.win, left = _exDaysLeft(w.due), open = i.status === 'todo' || i.status === 'doing';
+            const isNew = i.status === 'todo' && w.from && (_exDaysLeft(w.from) || 0) >= -3;
+            const facts = [];
+            if (w.from) facts.push(`<span class="exh-fact">${ic('calendar')}Giao ${_exDay(w.from)}</span>`);
+            if (w.due) facts.push(`<span class="exh-fact${open && left <= 1 ? ' warn' : ''}">${ic('clock')}Hạn ${_exDay(w.due)}${open ? ` · <b>${_exLeftText(left)}</b>` : ''}</span>`);
+            facts.push(`<span class="exh-fact">${ic('list')}${i.total} câu</span>`);
+            let foot = '';
+            if (i.status === 'done') {
+                const d = i.st.done;
+                foot = `<div class="exh-result"><span class="exh-score"><b>${d.score}</b>/${d.total} điểm</span><span class="exh-sub">Nộp ${_fmtDoneAt(d.at)}</span></div>`
+                     + `<span class="exh-go ghost">Xem lại</span>`;
+            } else if (i.status === 'expired') {
+                foot = `<span class="exh-sub">Vui lòng liên hệ giáo viên nếu cần mở lại bài này.</span>`;
+            } else {
+                foot = (i.status === 'doing'
+                        ? `<div class="exh-prog"><span class="exh-bar"><i style="width:${Math.round(i.answered / i.total * 100)}%"></i></span><span>${i.answered}/${i.total} câu</span></div>`
+                        : `<span class="exh-sub">Chưa bắt đầu</span>`)
+                     + `<span class="exh-go">${i.status === 'doing' ? 'Làm tiếp' : 'Làm bài'}${ic('arrowRight')}</span>`;
+            }
+            const click = i.status === 'expired' ? '' : ` onclick="openExercise('${i.unit}','${ex.key}')" role="button" tabindex="0" onkeydown="if(event.key==='Enter')this.click()"`;
+            return `<div class="exh-card s-${i.status}"${click}>
+                <div class="exh-ic">${ic(TYPE_IC[ex.label] || 'clipboard')}</div>
+                <div class="exh-main">
+                  <div class="exh-top"><span class="exh-over">Unit ${i.unit} · ${_escHtml(ex.label)}</span><span class="exh-chip ${i.status}">${STATUS[i.status]}</span></div>
+                  <div class="exh-title">${_escHtml(ex.title || ex.label)}${isNew ? '<span class="exh-new">Mới</span>' : ''}</div>
+                  <div class="exh-facts">${facts.join('')}</div>
+                  ${w.note && open ? `<div class="exh-note">${ic('message')}<span>${_escHtml(w.note)}</span></div>` : ''}
+                  <div class="exh-foot">${foot}</div>
+                </div>
+              </div>`;
+        };
+        const byDue = (a, b) => (a.win.due || '9999').localeCompare(b.win.due || '9999') || a.unit - b.unit;
+        const sec = (icon, name, list, sort) => list.length
+            ? `<div class="exh-sec"><div class="exh-sec-hd">${icon} ${name} <span>${list.length}</span></div>${list.slice().sort(sort).map(card).join('')}</div>` : '';
+        html += sec(ic('clipboard'), 'Cần làm', shown.filter(i => i.status === 'todo' || i.status === 'doing'), byDue)
+             + sec(ic('checkCircle'), 'Đã nộp', shown.filter(i => i.status === 'done'), (a, b) => b.st.done.at - a.st.done.at)
+             + sec(ic('hourglass'), 'Đã hết hạn', shown.filter(i => i.status === 'expired'), byDue);
+        content.innerHTML = html;
     }
 
     // Bài làm của học sinh (đáp án đã chọn, câu tự luận, kết quả nộp bài) — lưu lại trên máy theo tài khoản
     function _exStoreKey(k) {
         return 'exercise_' + (localStorage.getItem('studentSession_QuyenClass') || 'HocVien').toLowerCase() + '_' + k;
     }
-    function _exState() {
-        const k = currentUnit + '|' + currentExerciseTab;
+    function _exKey(unit, key) { return (unit != null ? unit : (exOpen ? exOpen.unit : '')) + '|' + (key != null ? key : (exOpen ? exOpen.key : '')); }
+    function _exState(unit, key) {
+        const k = _exKey(unit, key);
         if (!exerciseState[k]) {
             let saved = null;
             try { saved = JSON.parse(localStorage.getItem(_exStoreKey(k))); } catch (e) {}
@@ -3418,12 +3716,12 @@
         return exerciseState[k];
     }
     function _exSave() {
-        const k = currentUnit + '|' + currentExerciseTab;
+        const k = _exKey();
         try { localStorage.setItem(_exStoreKey(k), JSON.stringify(exerciseState[k])); } catch (e) {}
         scheduleProgressPush();
     }
     function _exCurrent() {
-        return (EXERCISE_DATA[currentUnit] || []).find(t => t.key === currentExerciseTab);
+        return exOpen ? (EXERCISE_DATA[exOpen.unit] || []).find(t => t.key === exOpen.key) : null;
     }
     function _escHtml(s) {
         return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -3444,7 +3742,7 @@
         if (st.done) return;
         st.tabSwitches = (st.tabSwitches || 0) + 1;
         _exAwaySince = Date.now();
-        _exAwayKey = currentUnit + '|' + currentExerciseTab;
+        _exAwayKey = _exKey();
         _exSave();
     }
     function _exBack() {
@@ -3486,13 +3784,13 @@
             // Thời gian làm bài + chuyển tab: gói trong nút ⓘ nhỏ, rê chuột / chạm mới hiện
             const info = fin.duration == null ? '' :
                 `<span class="ex-info" tabindex="0" aria-label="Chi tiết thời gian làm bài"><span class="ex-info-ico">i</span>` +
-                `<span class="ex-info-pop"><span>⏱️ Thời gian làm bài: <b>${_fmtDuration(fin.duration)}</b></span>` +
-                `<span>🔀 Chuyển tab / rời trang: <b class="${fin.tabSwitches ? 'ex-warn' : ''}">${fin.tabSwitches} lần</b>` +
+                `<span class="ex-info-pop"><span>${ic('timer')} Thời gian làm bài: <b>${_fmtDuration(fin.duration)}</b></span>` +
+                `<span>${ic('swap')} Chuyển tab / rời trang: <b class="${fin.tabSwitches ? 'ex-warn' : ''}">${fin.tabSwitches} lần</b>` +
                 (fin.tabSwitches ? ` (tổng ${_fmtDuration(fin.awayMs)})` : '') + '</span></span></span>';
-            html += `<div class="ex-done-status"><span class="ex-done-status-text">✅ Đã hoàn thành lúc <b>${_fmtDoneAt(fin.at)}</b>` +
+            html += `<div class="ex-done-status"><span class="ex-done-status-text">${ic('checkCircle')} Đã hoàn thành lúc <b>${_fmtDoneAt(fin.at)}</b>` +
                 `<span class="ex-done-status-sep">·</span>Điểm: <b>${fin.score}/${fin.total}</b>${info}</span>` +
                 `<span class="ex-done-status-btns"><button class="ex-done-view" onclick="showExerciseDonePopup()">Xem kết quả</button>` +
-                `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button></span></div>`;
+                (exOpen && exOpen.locked ? '' : `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button>`) + `</span></div>`;
         }
         html += '<div class="ex-block-title">Bài đọc</div>';
         if (ex.audio) {
@@ -3504,14 +3802,14 @@
                 '<div class="ex-speeds">' + EX_SPEEDS.map(s =>
                     `<button class="ex-speed-btn" data-speed="${s}" onclick="setExerciseSpeed(${s})">${s}x</button>`).join('') + '</div>' +
                 '<div class="ex-marks"><span>Nghe nhanh đến:</span>' + ex.passages.filter(p => p.start != null).map(p =>
-                    `<button class="ex-mark-btn" data-start="${p.start}" onclick="jumpExerciseAudio(${p.start})">▶ ${p.name} <small>${_fmtTime(p.start)}</small></button>`).join('') + '</div>' +
+                    `<button class="ex-mark-btn" data-start="${p.start}" onclick="jumpExerciseAudio(${p.start})">${ic('playSolid')} ${p.name} <small>${_fmtTime(p.start)}</small></button>`).join('') + '</div>' +
                 '</div>';
         }
         html += '<div class="ex-reading">' +
             ex.passages.map(p => `<div class="ex-passage"><div class="ex-passage-name">${p.name}` +
-                (ex.audio && p.start != null ? ` <button class="ex-passage-play" title="Nghe đoạn của ${p.name}" onclick="jumpExerciseAudio(${p.start})">🎧</button>` : '') +
+                (ex.audio && p.start != null ? ` <button class="ex-passage-play" title="Nghe đoạn của ${p.name}" onclick="jumpExerciseAudio(${p.start})">${ic('headphones')}</button>` : '') +
                 `</div><p>${p.segs.map(sg => _renderSeg(sg, ex.glossary)).join(' ')}</p></div>`).join('') + '</div>';
-        if (ex.glossary) html += '<div class="ex-gloss-tip">💡 Rê chuột (hoặc chạm) vào từ có gạch chân để xem nghĩa.</div>';
+        if (ex.glossary) html += '<div class="ex-gloss-tip">' + ic('bulb') + ' Rê chuột (hoặc chạm) vào từ có gạch chân để xem nghĩa.</div>';
 
         if (ex.notes && ex.notes.length) {
             html += '<div class="ex-block-title">Từ vựng / biểu hiện cần lưu ý</div><div class="ex-notes">' +
@@ -3533,13 +3831,13 @@
                     else if (done && oi === pick) cls += ' wrong';
                     return `<button class="${cls}" ${done || fin ? 'disabled' : ''} onclick="pickExerciseOption(${qi}, ${oi})">${EX_CIRCLED[oi]} ${o}</button>`;
                 }).join('') + '</div>' +
-                (done ? (pick === m.ans ? '<div class="ex-fb ok">✔ Chính xác!</div>' : `<div class="ex-fb no">✘ Chưa đúng — đáp án là ${EX_CIRCLED[m.ans]}</div>`) : '') +
+                (done ? (pick === m.ans ? '<div class="ex-fb ok">' + ic('check') + ' Chính xác!</div>' : `<div class="ex-fb no">${ic('x')} Chưa đúng — đáp án là ${EX_CIRCLED[m.ans]}</div>`) : '') +
                 '</div>';
         });
         const answered = Object.keys(st.picks).length;
         const correct = Object.entries(st.picks).filter(([qi, oi]) => ex.mcq[qi].ans === oi).length;
         html += `<div class="ex-score-bar"><span>Đã làm ${answered}/${ex.mcq.length} câu · Đúng ${correct} câu</span>` +
-            `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button></div>`;
+            (exOpen && exOpen.locked ? '' : `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button>`) + `</div>`;
 
         html += '<div class="ex-block-title">Phần 2. Tự luận</div>';
         ex.essay.forEach((e, ei) => {
@@ -3550,7 +3848,7 @@
                 e.fields.map((f, fi) => (f ? `<label class="ex-input-label">${f}:</label>` : '') +
                     `<textarea class="ex-input" rows="1" placeholder="Viết câu trả lời của bạn..." ${fin ? 'readonly' : ''} ` +
                     `oninput="saveExerciseEssay(${ei}, ${fi}, this.value)">${_escHtml(vals[fi])}</textarea>`).join('') +
-                (fin ? (ok ? '<div class="ex-fb ok">✔ Đạt</div>' : '<div class="ex-fb no">✘ Chưa đạt — xem đáp án gợi ý bên dưới</div>') +
+                (fin ? (ok ? '<div class="ex-fb ok">' + ic('check') + ' Đạt</div>' : '<div class="ex-fb no">' + ic('x') + ' Chưa đạt — xem đáp án gợi ý bên dưới</div>') +
                     `<div class="ex-answer show">${e.answer}</div>` : '') +
                 '</div>';
         });
@@ -3580,7 +3878,7 @@
         const ex = _exCurrent(), st = _exState();
         if (!ex || st.done) return;
         const left = ex.mcq.length - Object.keys(st.picks).length;
-        if (left > 0) { _exDialog(() => alert(`Bạn còn ${left} câu trắc nghiệm chưa làm. Hãy hoàn thành rồi nộp bài nhé!`)); return; }
+        if (left > 0) { _exDialog(() => alert(`Bạn còn ${left} câu trắc nghiệm chưa làm. Vui lòng hoàn thành trước khi nộp bài.`)); return; }
         const emptyEssay = ex.essay.some((e, ei) => e.fields.some((f, fi) => !String((st.essays[ei] || [])[fi] || '').trim()));
         if (emptyEssay && !_exDialog(() => confirm('Bạn chưa viết đủ phần tự luận. Vẫn nộp bài chứ?'))) return;
         const mcq = Object.entries(st.picks).filter(([qi, oi]) => ex.mcq[qi].ans === oi).length;
@@ -3598,7 +3896,8 @@
     function resetExercise() {
         const st = _exState();
         if (st.done && !_exDialog(() => confirm('Làm lại sẽ xoá kết quả bài đã nộp. Bạn có chắc không?'))) return;
-        exerciseState[currentUnit + '|' + currentExerciseTab] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0 };
+        if (exOpen && exOpen.locked) return; // đã hết hạn: không làm lại được
+        exerciseState[_exKey()] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0 };
         _exSave();
         renderExerciseMode(false);
     }
@@ -3610,22 +3909,22 @@
         const d = st.done;
         const name = (document.getElementById('student-display-name') || {}).innerText || '';
         document.getElementById('ex-done-name').innerText = name;
-        document.getElementById('ex-done-lesson').innerText = `Unit ${currentUnit} · Bài tập ${ex.label}`;
+        document.getElementById('ex-done-lesson').innerText = `Unit ${exOpen.unit} · ${ex.label} · ${ex.title || ''}`;
         document.getElementById('ex-done-score').innerHTML = `<b>${d.score}</b>/${d.total}`;
         // Bảng kết quả đầy đủ cho giáo viên theo dõi (cũng là phần được chụp lại)
         const row = (icon, label, val, cls = '', sub = '') => `<div class="ex-sheet-row ${cls}"><span class="ex-sheet-label">${icon} ${label}</span>` +
             `<span class="ex-sheet-val"><span>${val}</span>${sub ? `<small>${sub}</small>` : ''}</span></div>`;
-        let rows = row('📝', 'Trắc nghiệm', `<b>${d.mcq}/${ex.mcq.length}</b> câu đúng`) +
-            row('✍️', 'Tự luận', `<b>${d.essay}/${ex.essay.length}</b> câu đạt`);
+        let rows = row(ic('list'), 'Trắc nghiệm', `<b>${d.mcq}/${ex.mcq.length}</b> câu đúng`) +
+            row(ic('pen'), 'Tự luận', `<b>${d.essay}/${ex.essay.length}</b> câu đạt`);
         if (d.duration != null) {
-            rows += row('▶️', 'Bắt đầu làm', _fmtDoneAt(d.at - d.duration)) +
-                row('🏁', 'Nộp bài', _fmtDoneAt(d.at)) +
-                row('⏱️', 'Thời gian làm bài', `<b>${_fmtDuration(d.duration)}</b>`) +
+            rows += row(ic('play'), 'Bắt đầu làm', _fmtDoneAt(d.at - d.duration)) +
+                row(ic('flag'), 'Nộp bài', _fmtDoneAt(d.at)) +
+                row(ic('timer'), 'Thời gian làm bài', `<b>${_fmtDuration(d.duration)}</b>`) +
                 (d.tabSwitches
-                    ? row('🔀', 'Chuyển tab / rời trang', `<b>${d.tabSwitches} lần</b>`, 'warn', `tổng ${_fmtDuration(d.awayMs)} ở ngoài trang`)
-                    : row('🔀', 'Chuyển tab / rời trang', '<b>Không có</b>', 'good'));
+                    ? row(ic('swap'), 'Chuyển tab / rời trang', `<b>${d.tabSwitches} lần</b>`, 'warn', `tổng ${_fmtDuration(d.awayMs)} ở ngoài trang`)
+                    : row(ic('swap'), 'Chuyển tab / rời trang', '<b>Không có</b>', 'good'));
         } else {
-            rows += row('🏁', 'Nộp bài', _fmtDoneAt(d.at));
+            rows += row(ic('flag'), 'Nộp bài', _fmtDoneAt(d.at));
         }
         document.getElementById('ex-done-sheet').innerHTML = rows;
         document.getElementById('ex-done-popup').classList.add('active');
@@ -3651,7 +3950,7 @@
             const canvas = await html2canvas(card, { backgroundColor: '#ffffff', scale: 2, ignoreElements: el => el.classList && el.classList.contains('ex-done-actions'),
                 onclone: doc => { const c = doc.getElementById('ex-done-card'); c.style.maxHeight = 'none'; c.style.overflow = 'visible'; } });
             const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-            const fname = `KetQua_Unit${currentUnit}_${currentExerciseTab}.png`;
+            const fname = `KetQua_${(_exCurrent() || {}).id || ('Unit' + exOpen.unit)}.png`;
             const file = new File([blob], fname, { type: 'image/png' });
             if (navigator.canShare && navigator.canShare({ files: [file] }) && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
                 await navigator.share({ files: [file], title: 'Kết quả bài tập' }).catch(() => {});
@@ -3662,7 +3961,7 @@
                 setTimeout(() => URL.revokeObjectURL(a.href), 2000);
             }
         } catch (e) {
-            alert('Không chụp được tự động. Bạn vui lòng tự chụp màn hình (hoặc dùng phím chụp màn hình của máy) nhé!');
+            alert('Không chụp được tự động. Vui lòng tự chụp màn hình bằng phím chụp màn hình của thiết bị.');
         }
         btn.disabled = false; btn.innerHTML = old;
     }
@@ -3683,8 +3982,10 @@
         document.getElementById('mode-exercise-section').style.display = (modeName === 'exercise') ? 'block' : 'none';
 
         // "Nhắc lại từ vựng" không cần thanh chọn Unit
+        // Bài tập có danh sách riêng (lọc theo Unit ngay trong danh sách)
         const unitPanel = document.querySelector('.unit-panel-box');
-        if (unitPanel) unitPanel.style.display = (modeName === 'review') ? 'none' : 'block';
+        if (unitPanel) unitPanel.style.display = (modeName === 'review' || modeName === 'exercise') ? 'none' : 'block';
+        if (modeName === 'exercise') exOpen = null;
 
         if (modeName === 'grammar') renderGrammarMode();
         if (modeName === 'review') renderReviewTable();
@@ -3827,7 +4128,7 @@
         }
 
         if(!document.getElementById('login-policy-agree').checked) {
-            alert("Vui lòng đọc và đồng ý với Chính sách sử dụng lớp học trước khi đăng nhập nhé!");
+            alert("Vui lòng đọc và đồng ý với Chính sách sử dụng lớp học trước khi đăng nhập.");
             return;
         }
         
@@ -3857,6 +4158,7 @@
                 setSyncPass(pass);                        // 🔐 luôn đồng bộ tiến độ, dù có tick "ghi nhớ" hay không
                 applyServerProgress(user, data.progress); // nạp + GỘP tiến độ từ server
                 setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
+                setExerciseAssignments(data.assignments, user); // 📝 bài tập được giao (undefined = backend cũ)
                 setTeacherRole(data.isTeacher, user);    // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
                 useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản (chỉ Unit được mở)
@@ -4091,8 +4393,8 @@
         if(!isUnlocked) { alert("Bài học này chưa được mở khóa cho tài khoản của bạn."); return; }
         if(isBrandNew) {
             showCustomBouncePopup(
-                `Unit ${unitNum} Đã Sẵn Sàng! 🎉`, 
-                `Chúc mừng bạn học! Sự siêng năng của bạn đã mở khóa thành công Unit ${unitNum}! Cùng nhau ôn tập lại nhé!`
+                `Unit ${unitNum} đã sẵn sàng`, 
+                `Unit ${unitNum} đã được mở cho tài khoản của bạn. Chúc bạn ôn tập hiệu quả.`
             );
             renderUnitGrid([]); 
         }
@@ -4298,7 +4600,7 @@
         8: {
             boards: {
                 movie: {
-                    title: '🎬 Phim ảnh', img: 'assets/game/unit8-movie.webp', w: 1672, h: 941,
+                    title: ic('film') + ' Phim ảnh', img: 'assets/game/unit8-movie.webp', w: 1672, h: 941,
                     groups: [
                         { ko: '영화 종류', vi: 'Thể loại phim', color: '#f4a3b4', items: [
                             { ko: '멜로 영화',       label: [60, 268, 230, 310],   pic: [45, 100, 245, 265] },
@@ -4324,7 +4626,7 @@
                     ]
                 },
                 emotion: {
-                    title: '😊 Tâm trạng', img: 'assets/game/unit8-emotion.webp', w: 1672, h: 941,
+                    title: ic('smile') + ' Tâm trạng', img: 'assets/game/unit8-emotion.webp', w: 1672, h: 941,
                     groups: [
                         { ko: '긍정적 감정', vi: 'Cảm xúc tích cực', color: '#f4a3b4', items: [
                             { ko: '행복하다', label: [60, 308, 215, 348],  pic: [40, 112, 235, 305] },
@@ -4364,7 +4666,7 @@
             boards: {
                 // Thẻ là hình đồ vật đã tách nền (src) — kéo vào đúng động từ "mặc/đeo"
                 wear: {
-                    title: '👕 Trang phục', cardPic: true,
+                    title: ic('shirt') + ' Trang phục', cardPic: true,
                     groups: [
                         { ko: '입다', vi: 'Mặc', color: '#f08aa0', items: [
                             { ko: '옷', src: 'assets/game/u10-wear/ot.webp' },
@@ -4398,7 +4700,7 @@
                 },
                 // Quiz tích: món nào dùng được với 벗다 (alt = động từ đúng để tháo/bỏ ra)
                 beosda: {
-                    title: '✅ 벗다', verb: '벗다', verbVi: 'cởi, bỏ ra', pick: 12,
+                    title: ic('checkSquare') + ' 벗다', verb: '벗다', verbVi: 'cởi, bỏ ra', pick: 12,
                     groups: [
                         { ko: 'yes', items: [{ ko: '옷' }, { ko: '바지' }, { ko: '치마' }, { ko: '정장' }, { ko: '외투' }, { ko: '모자' }, { ko: '안경' }, { ko: '장갑' }, { ko: '신발' }, { ko: '구두' }, { ko: '운동화' }, { ko: '양말' }] },
                         { ko: 'no', items: [{ ko: '반지', alt: '빼다' }, { ko: '렌즈', alt: '빼다' }, { ko: '시계', alt: '풀다' }, { ko: '팔찌', alt: '풀다' }, { ko: '벨트', alt: '풀다' }, { ko: '우산', alt: '접다' }, { ko: '책', alt: '' }, { ko: '의자', alt: '' }, { ko: '우유', alt: '' }, { ko: '사과', alt: '' }, { ko: '컴퓨터', alt: '' }, { ko: '핸드폰', alt: '' }] }
@@ -4461,7 +4763,7 @@
         pgRender(tab);
         updateDashboardStats();
     }
-    const PG_GAME_NAMES = { scenematch: '🧩 Ghép chữ vào hình', picsort: '🗂️ Phân loại', chosung: '⌨️ Điền từ 초성', tickquiz: '✅ 벗다 được không?' };
+    const PG_GAME_NAMES = { scenematch: ic('puzzle') + ' Ghép chữ vào hình', picsort: ic('folder') + ' Phân loại', chosung: ic('keyboard') + ' Điền từ 초성', tickquiz: ic('checkSquare') + ' 벗다 được không?' };
     // Hàng 1: chọn game. Hàng 2: chọn chủ đề (chỉ khi game có nhiều bộ ảnh)
     function pgRenderBoardPills(tab) {
         const box = document.getElementById(tab + '-boards');
@@ -4654,7 +4956,7 @@
         bank.innerHTML = '';
         pgSelected = null;
         const left = st.order.filter(i => !st.done[i]);
-        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">🎉 Bạn đã ghép xong toàn bộ từ vựng!</span>'; return; }
+        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">' + ic('sparkles') + ' Bạn đã ghép xong toàn bộ từ vựng!</span>'; return; }
         left.forEach(i => {
             const chip = document.createElement('div');
             chip.className = 'sm-chip';
@@ -4673,7 +4975,7 @@
             pgMarkRight('scenematch', wordIdx, ko);
             if (slotEl) smFillSlot(slotEl, items[slotIdx], st.missed[slotIdx], true);
         } else {
-            pgMarkWrong('scenematch', wordIdx, ko, '<b>' + ko + '</b> chưa đúng chỗ này, thử ô khác nhé!');
+            pgMarkWrong('scenematch', wordIdx, ko, '<b>' + ko + '</b> chưa đúng vị trí này. Vui lòng thử ô khác.');
             pgShake(slotEl);
         }
         smRenderBank();
@@ -4734,7 +5036,7 @@
         });
         bank.innerHTML = '';
         const left = st.order.filter(i => !st.done[i]);
-        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">🎉 Bạn đã phân loại xong toàn bộ thẻ!</span>'; return; }
+        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">' + ic('sparkles') + ' Bạn đã phân loại xong toàn bộ thẻ!</span>'; return; }
         left.forEach(i => {
             const card = document.createElement('div');
             card.dataset.i = i;
@@ -4765,8 +5067,8 @@
             renderPicSort();
         } else {
             pgMarkWrong('picsort', i, it.ko, board.cardPic
-                ? 'Món này không dùng với <b>' + board.groups[gi].ko + '</b>, thử động từ khác nhé!'
-                : '<b>' + it.ko + '</b> không thuộc nhóm "' + board.groups[gi].ko + '", thử nhóm khác nhé!');
+                ? 'Món này không dùng với <b>' + board.groups[gi].ko + '</b>. Vui lòng thử động từ khác.'
+                : '<b>' + it.ko + '</b> không thuộc nhóm "' + board.groups[gi].ko + '". Vui lòng thử nhóm khác.');
             renderPicSort();
             pgShake(document.querySelector(`#ps-zones .ps-zone[data-g="${gi}"]`));
         }
@@ -4837,8 +5139,8 @@
         if (fb) {
             fb.className = 'feedback ' + (allRight ? 'success' : 'error') + ' compact';
             fb.innerHTML = allRight
-                ? '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Tuyệt vời, đúng hết!'
-                : `Đúng <b>${st.right}/${st.round.length}</b>. Xem lại các thẻ <span style="color:var(--error-color);font-weight:800;">đỏ</span> (tích nhầm) và <span style="color:#dd6b20;font-weight:800;">cam</span> (bỏ sót) nhé — bấm vào thẻ để nghe.`;
+                ? '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác toàn bộ.'
+                : `Đúng <b>${st.right}/${st.round.length}</b>. Xem lại các thẻ <span style="color:var(--error-color);font-weight:800;">đỏ</span> (tích nhầm) và <span style="color:#dd6b20;font-weight:800;">cam</span> (bỏ sót). Bấm vào thẻ để nghe.`;
         }
         renderTickQuiz();
         pgUpdateCounter('tickquiz');   // không bật popup: để học sinh xem kỹ thẻ đỏ/cam
@@ -4899,14 +5201,14 @@
         if (st.done[i]) {
             const ok = document.createElement('span');
             ok.className = 'cs-ok-txt';
-            ok.textContent = '🔊 ' + (pgViOf(it.ko) || 'Nghe lại');
+            ok.innerHTML = ic('speaker') + ' ' + _escHtml(pgViOf(it.ko) || 'Nghe lại');
             ok.addEventListener('click', () => triggerKoreanVoice(it.ko, false));
             foot.appendChild(ok);
         } else if (st.reveal[i]) {
-            foot.innerHTML = '<span class="cs-ans">Đáp án: <b>' + it.ko + '</b> — gõ lại nhé!</span>';
+            foot.innerHTML = '<span class="cs-ans">Đáp án: <b>' + it.ko + '</b>. Vui lòng gõ lại.</span>';
         } else if (st.missed[i]) {
             const rv = document.createElement('button');
-            rv.type = 'button'; rv.className = 'cs-reveal'; rv.textContent = '👀 Xem đáp án';
+            rv.type = 'button'; rv.className = 'cs-reveal'; rv.innerHTML = ic('eye') + ' Xem đáp án';
             rv.addEventListener('click', () => { st.reveal[i] = true; csRefresh(i, true); });
             foot.appendChild(rv);
         }
@@ -4939,7 +5241,7 @@
             const next = st.order.slice(st.order.indexOf(i) + 1).concat(st.order).find(j => !st.done[j]);
             if (next != null) { const n = document.querySelector(`#cs-grid .cs-card[data-i="${next}"] .cs-input`); if (n) n.focus({ preventScroll: true }); }
         } else {
-            pgMarkWrong('chosung', i, it.ko, 'Chưa đúng rồi, nhìn kỹ hình và phụ âm đầu <b>' + toChosung(it.ko) + '</b> nhé!');
+            pgMarkWrong('chosung', i, it.ko, 'Chưa chính xác. Hãy quan sát kỹ hình và phụ âm đầu <b>' + toChosung(it.ko) + '</b>.');
             const c = csRefresh(i, true);
             if (c) { c.classList.add('bad'); pgShake(c); }
         }
@@ -4989,7 +5291,7 @@
     function switchTab(tabName) {
         // 🖼️ Chưa có ảnh minh hoạ nào -> không mở dạng "Nhìn hình chọn từ"
         if (tabName === 'visual' && visualPoolReady && visualPoolSet.size === 0) {
-            if (currentTab !== 'visual') { alert('Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa mở được dạng "Nhìn hình chọn từ" nhé!'); return; }
+            if (currentTab !== 'visual') { alert('Phần này chưa có ảnh minh hoạ cho từ vựng nên chưa mở được dạng "Nhìn hình chọn từ".'); return; }
             tabName = 'listen';   // đang đứng ở tab này mà Unit mới không có ảnh -> chuyển sang dạng khác
         }
         // 🧩 Unit không có ảnh game -> không mở các dạng game hình
@@ -5160,7 +5462,7 @@
     function renderReviewTable() {
         const body = document.getElementById('review-table-body'); body.innerHTML = "";
         if(wrongWordsList.length === 0) {
-            body.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--sub-text);">Sổ tay trống. Chưa có từ vựng nào làm sai hết nha! 🎉</td></tr>`;
+            body.innerHTML = `<tr><td colspan="6" style="text-align:center; color: var(--sub-text);">Sổ tay trống. Hiện chưa có từ vựng nào làm sai.</td></tr>`;
             return;
         }
         wrongWordsList.forEach((item, index) => {
@@ -5282,8 +5584,59 @@
     }
     function jamoCommonLen(a, b) { let n = 0; while (n < a.length && n < b.length && a[n] === b[n]) n++; return n; }
 
-    // Tạo câu "đục lỗ": thay từ khoá trong câu ví dụ bằng chỗ trống ______
+    // Hai từ "cùng nghĩa" khi nghĩa tiếng Việt chính trùng nhau (vd 보내다 / 부치다 = gửi).
+    // Không cho 2 từ như vậy cùng xuất hiện làm đáp án -> tránh câu hỏi có 2 đáp án đúng.
+    function _viKey(v) { return String(v || '').trim().toLowerCase(); }
+    function sameMeaning(a, b) { return !!(a && b && a !== b && _viKey(a.vi) && _viKey(a.vi) === _viKey(b.vi)); }
+    // Lấy n đáp án nhiễu: bỏ trùng chữ và bỏ chữ trùng với đáp án đúng
+    function pickWrongTexts(cands, correct, n) {
+        const seen = new Set([String(correct == null ? '' : correct).trim()]), out = [];
+        shuffleArray((cands || []).slice()).forEach(x => {
+            const t = String(x == null ? '' : x).trim();
+            if (!t || seen.has(t)) return;
+            seen.add(t); out.push(x);
+        });
+        return out.slice(0, n);
+    }
+
+    // Từ khoá có nhiều cách ghi -> thử lần lượt từng cách:
+    //   "추석 / 한가위", "빨갛다 - 빨간색", "감기(독감)에 걸리다", "에스에프(SF) 영화"
+    function clozeKeyVariants(ko) {
+        const out = [];
+        const add = x => { x = String(x || '').replace(/\s+/g, ' ').trim(); if (x && out.indexOf(x) < 0) out.push(x); };
+        add(ko);
+        String(ko || '').split(/\s*\/\s*|\s+-\s+/).forEach(part => {
+            add(part);
+            if (/\(/.test(part)) {
+                add(part.replace(/\([^)]*\)/g, ''));                        // bỏ phần trong ngoặc
+                add(part.replace(/[^\s(]*\(([^)]*)\)/g, '$1'));             // dùng phần trong ngoặc
+            }
+        });
+        return out;
+    }
+    // Tạo câu "đục lỗ" (bản đầy đủ): thử mọi cách ghi của từ khoá; cụm "danh từ + động từ"
+    // (약속을 지키다) giữ phần đầu, đục lỗ động từ đã chia: 동생은 약속을 ______.
     function makeClozeSentence(ex, ko) {
+        if (!ex || !ko) return ex || '';
+        const variants = clozeKeyVariants(ko);
+        for (const v of variants) {
+            const r = makeClozeSentenceBasic(ex, v);
+            if (r.indexOf('cloze-blank') >= 0) return r;
+        }
+        for (const v of variants) {
+            const toks = v.split(' ');
+            if (toks.length < 2 || !/다$/.test(v)) continue;
+            const head = toks.slice(0, -1).join(' '), at = ex.indexOf(head);
+            if (at < 0) continue;
+            const cut = at + head.length;
+            const rest = makeClozeSentenceBasic(ex.slice(cut), toks[toks.length - 1]);
+            if (rest.indexOf('cloze-blank') >= 0) return ex.slice(0, cut) + rest;
+        }
+        return ex;
+    }
+
+    // Tạo câu "đục lỗ": thay từ khoá trong câu ví dụ bằng chỗ trống ______
+    function makeClozeSentenceBasic(ex, ko) {
         let blank = '<span class="cloze-blank">______</span>';
         if (!ex) return ex || '';
         if (!ko) return ex;
@@ -5411,9 +5764,12 @@
         const isVerb = /다$/.test(correctKo);
         let seen = {}; seen[correctKo] = true;
         let same = [], other = [];
-        getAllVocabGlobal().forEach(it => {
+        const all = getAllVocabGlobal();
+        const correctVi = new Set(all.filter(it => String(it.ko || '').trim() === correctKo).map(it => _viKey(it.vi)));
+        all.forEach(it => {
             const w = String(it.ko || '').trim();
             if (!w || seen[w]) return;
+            if (correctVi.has(_viKey(it.vi))) return; // cùng nghĩa -> điền vào cũng đúng
             seen[w] = true;
             if (sentenceKo && sentenceKo.indexOf(w) >= 0) return;
             (/다$/.test(w) === isVerb ? same : other).push(w);
@@ -5573,6 +5929,11 @@
         writesentence: {
             get: () => tabState.writesentence.mode || 'vi2ko',
             opts: [['vi2ko', 'Việt → Hàn', '', false], ['ko2vi', 'Hàn → Việt', '', false]]
+        },
+        // '_' = Chọn từ (giữ mã cũ để không mất tiến độ đã lưu)
+        visual: {
+            get: () => tabState.visual.mode || '_',
+            opts: [['_', 'Chọn từ', '', false], ['sentence', 'Chọn câu', '', true]]
         }
     };
     // Nhãn mode dùng cho báo cáo (học sinh) & dashboard (giáo viên)
@@ -5580,14 +5941,16 @@
         listen: { word: 'Nghe từ', sentence: 'Nghe câu điền từ' },
         guess:  { word: 'Nghe từ', sentence: 'Nghe câu tìm nghĩa' },
         quiz:   { vi: 'Việt', ko: 'Hàn', mix: 'Cả hai' },
-        writesentence: { vi2ko: 'Việt → Hàn', ko2vi: 'Hàn → Việt' }
+        writesentence: { vi2ko: 'Việt → Hàn', ko2vi: 'Hàn → Việt' },
+        visual: { '_': 'Nhìn hình chọn từ', sentence: 'Nhìn hình chọn câu' }
     };
     // Nhãn NGẮN cho chip mode (để không bị cắt chữ trong sidebar)
     const QUIZ_MODE_SHORT = {
         listen: { word: 'Từ', sentence: 'Câu' },
         guess:  { word: 'Từ', sentence: 'Câu' },
         quiz:   { vi: 'Việt', ko: 'Hàn', mix: 'Cả hai' },
-        writesentence: { vi2ko: 'V→H', ko2vi: 'H→V' }
+        writesentence: { vi2ko: 'V→H', ko2vi: 'H→V' },
+        visual: { '_': 'Từ', sentence: 'Câu' }
     };
     // Mode hiện tại của 1 tab ('_' cho tab không có mode: visual/typing)
     function currentModeOf(tab) {
@@ -5595,6 +5958,7 @@
         if (tab === 'listen') return tabState.listen.mode || 'word';
         if (tab === 'guess') return tabState.guess.mode || 'word';
         if (tab === 'writesentence') return tabState.writesentence.mode || 'vi2ko';
+        if (tab === 'visual') return tabState.visual.mode || '_';
         return '_';
     }
 
@@ -5663,6 +6027,7 @@
         else if (tab === 'listen') setListenMode(value);
         else if (tab === 'guess') setGuessMode(value);
         else if (tab === 'writesentence') setWriteSentenceMode(value);
+        else if (tab === 'visual') setVisualMode(value);
         renderQuizModeSelect(tab);
     }
 
@@ -5679,6 +6044,13 @@
         generateListenQuestion(); updateDashboardStats();
     }
 
+    // Nhìn hình: "Chọn từ" <-> "Chọn câu" — mỗi dạng giữ tiến độ riêng.
+    function setVisualMode(mode) {
+        tabState.visual.mode = mode;
+        if (visualAvailable()) prepareTabForMode('visual', mode);
+        generateVisualQuestion(); updateDashboardStats();
+    }
+
     // Nghe & tìm nghĩa: đổi dạng "Nghe từ" <-> "Nghe câu tìm nghĩa" — khôi phục tiến độ của dạng đã chọn.
     function setGuessMode(mode) {
         tabState.guess.mode = mode;
@@ -5693,9 +6065,9 @@
        ============================================================ */
 
     // Tỉ lệ xuất hiện của từng dạng (tổng 100)
-    const QUIZ_TYPE_WEIGHTS = { word: 25, sent: 20, cloze: 20, order: 13, match: 12, spell: 10 };
+    const QUIZ_TYPE_WEIGHTS = { word: 25, sent: 20, cloze: 20, order: 13, match: 12, spell: 10, pic: 10 };
     // Chế độ KHÓ: chỉ còn 10% câu hỏi từ đơn, 90% là các dạng nâng cao
-    const QUIZ_TYPE_WEIGHTS_HARD = { word: 10, sent: 24, cloze: 24, order: 16, match: 14, spell: 12 };
+    const QUIZ_TYPE_WEIGHTS_HARD = { word: 10, sent: 24, cloze: 24, order: 16, match: 14, spell: 12, pic: 12 };
     // Dạng nào hỗ trợ chiều trả lời nào
     const QUIZ_TYPE_LANGS = {
         word:  ['vi', 'ko'],
@@ -5703,11 +6075,13 @@
         cloze: ['vi', 'ko'],   // ko = điền từ Hàn vào câu Hàn; vi = đục lỗ câu tiếng Việt
         order: ['vi', 'ko'],
         match: ['vi', 'ko'],
-        spell: ['ko']          // chính tả chỉ có nghĩa khi đáp án là tiếng Hàn
+        spell: ['ko'],         // chính tả chỉ có nghĩa khi đáp án là tiếng Hàn
+        pic:   ['vi', 'ko']    // nhìn hình chọn câu mô tả (câu Hàn hoặc câu Việt)
     };
     const QUIZ_TYPE_BADGE = {
         word: 'Từ vựng', sent: 'Nghĩa cả câu', clozeKo: 'Điền từ',
-        clozeVi: 'Đục lỗ câu Việt', order: 'Sắp xếp câu', match: 'Ghép cặp', spell: 'Chính tả'
+        clozeVi: 'Đục lỗ câu Việt', order: 'Sắp xếp câu', match: 'Ghép cặp', spell: 'Chính tả',
+        pic: 'Nhìn hình chọn câu'
     };
     const QUIZ_TYPE_HARD = { sent: 1, order: 1, spell: 1 };
 
@@ -5722,6 +6096,8 @@
         if (type === 'cloze') return (d === 'vi') ? quizViClozePairsOf(item).length > 0 : quizClozePairsOf(item).length > 0;
         if (type === 'order') return quizOrderPairsOf(item, d).length > 0;
         if (type === 'spell') return makeMisspellings(item.ko).length >= 3;
+        if (type === 'pic')   return !!picSentenceOf(item) && getSentenceBankGlobal().length >= 4 &&
+                                     (visualPoolReady ? visualHasImage(vocabIdx) : !!String(item.img || '').trim());
         return false;
     }
 
@@ -5775,7 +6151,8 @@
 
     // Nạp sẵn nội dung "đáp án chi tiết" (ẩn) để ô này chiếm chỗ từ đầu -> chọn đáp án không bị nhảy UI
     function primeQuizReveal(html) {
-        tabState.quiz._reveal = html || '';
+        html = dialogBreak(html || '');
+        tabState.quiz._reveal = html;
         const el = document.getElementById('quiz-extra');
         if (!el) return;
         el.innerHTML = html || '';
@@ -5802,7 +6179,7 @@
                 label: `Nghĩa của từ <span class="ko-emph">${item.ko}</span> là gì?`,
                 promptHtml: '', reveal: reveal,
                 correct: item.vi,
-                wrongs: shuffleArray(vocabData.filter((_, i) => i !== actualIndex).map(x => x.vi)).slice(0, 3)
+                wrongs: pickWrongTexts(vocabData.filter((_, i) => i !== actualIndex).map(x => x.vi), item.vi, 3)
             };
         }
         return {
@@ -5810,7 +6187,7 @@
             label: `Từ nào mang nghĩa: "${item.vi}"?`,
             promptHtml: '', reveal: reveal,
             correct: item.ko,
-            wrongs: shuffleArray(vocabData.filter((_, i) => i !== actualIndex).map(x => x.ko)).slice(0, 3)
+            wrongs: pickWrongTexts(vocabData.filter((x, i) => i !== actualIndex && !sameMeaning(x, item)).map(x => x.ko), item.ko, 3)
         };
     }
 
@@ -5884,6 +6261,36 @@
         };
     }
 
+    // 5. NHÌN HÌNH CHỌN CÂU — ví dụ 2 là câu mô tả hình (thiếu thì dùng ví dụ 1).
+    //    Câu nhiễu: câu HAO HAO (chung nhiều từ) lấy từ kho câu mọi Unit, bỏ các câu của chính từ này.
+    function picSentenceOf(item) {
+        if (!item) return null;
+        const ko2 = String(item.ex2 || '').trim();
+        if (ko2) return { ko: ko2, vi: String(item.ex2Vi || '').trim() };
+        const ko1 = String(item.ex || '').trim();
+        return ko1 ? { ko: ko1, vi: String(item.exVi || '').trim() } : null;
+    }
+    function picImgHtml(item) {
+        const src = wordImgSrc(item), goc = wordImgPaths(item.img).goc;
+        const back = src !== goc ? goc : '';
+        return `<div class="qpic-frame"><img src="${wsEsc(src)}" alt="Hình minh hoạ" onerror="if(!this.dataset.b&&'${wsEsc(back)}'){this.dataset.b='1';this.src='${wsEsc(back)}';}else{this.onerror=null;}"></div>`;
+    }
+    function buildPicSentenceQuestion(item, d) {
+        const p = picSentenceOf(item);
+        if (!p || !String(item.img || '').trim()) return null;
+        const lang = (d === 'vi' && p.vi) ? 'vi' : 'ko';
+        const correct = lang === 'vi' ? p.vi : p.ko;
+        const own = new Set([item.ex, item.exVi, item.ex2, item.ex2Vi].map(x => String(x || '').trim()));
+        const wrongs = pickSimilarSentences(correct, lang, 8).filter(x => !own.has(x)).slice(0, 3);
+        if (wrongs.length < 3) return null;
+        return {
+            key: 'pic', label: 'Câu nào mô tả đúng bức tranh?',
+            promptHtml: picImgHtml(item),
+            correct: correct, wrongs: wrongs,
+            reveal: `<b style="font-family:${QUIZ_KO_FONT}">${p.ko}</b>` + (p.vi ? `<br>${p.vi}` : '')
+        };
+    }
+
     /* ---------- BỘ ĐIỀU PHỐI ---------- */
 
     function generateQuizQuestion() {
@@ -5915,11 +6322,12 @@
         if (p.t === 'sent') q = buildQuizSentenceQuestion(currentItem, p.d);
         else if (p.t === 'cloze') q = (p.d === 'vi') ? buildQuizViClozeQuestion(currentItem) : buildQuizClozeQuestion(currentItem);
         else if (p.t === 'spell') q = buildQuizSpellQuestion(currentItem);
+        else if (p.t === 'pic' && !(visualPoolReady && !visualHasImage(actualIndex))) q = buildPicSentenceQuestion(currentItem, p.d);
         // Thiếu dữ liệu -> quay về dạng hỏi từ để không bị kẹt câu hỏi
         if (!q) q = buildQuizWordQuestion(currentItem, actualIndex, p.d);
         primeQuizReveal(q.reveal || '');
 
-        document.getElementById('quiz-q').innerHTML = quizBadgeHtml(q.key) + `<div>${q.label}</div>` + (q.promptHtml || '');
+        document.getElementById('quiz-q').innerHTML = quizBadgeHtml(q.key) + `<div>${q.label}</div>` + dialogBreak(q.promptHtml || '');
         shuffleArray([q.correct, ...q.wrongs]).forEach((opt, idx) => {
             const btn = makeOptionBtn(opt, 'ABCD'[idx] || '•');
             if (q.optClass) btn.classList.add(q.optClass);
@@ -5938,10 +6346,10 @@
         if (fb) {
             if (isCorrect) {
                 fb.className = 'feedback success compact';
-                fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác! Bạn nhớ bài tốt lắm.';
+                fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác.';
             } else {
                 fb.className = 'feedback error compact';
-                fb.innerHTML = '<span style="color:var(--error-color);font-size:17px;line-height:1;">✗</span> ' + (wrongHtml || 'Chưa đúng rồi!');
+                fb.innerHTML = '<span style="color:var(--error-color);font-size:17px;line-height:1;">✗</span> ' + (wrongHtml || 'Chưa chính xác.');
             }
         }
         markTabAnswered('quiz', isCorrect);
@@ -5953,8 +6361,12 @@
     function renderQuizMatch(mainIdx) {
         const state = tabState.quiz;
         const n = Math.min(5, vocabData.length);
-        const others = shuffleArray(vocabData.map((_, i) => i).filter(i => i !== mainIdx)).slice(0, n - 1);
-        const ids = [mainIdx].concat(others);
+        const ids = [mainIdx];
+        shuffleArray(vocabData.map((_, i) => i).filter(i => i !== mainIdx)).forEach(i => {
+            if (ids.length >= n) return;
+            if (ids.some(j => sameMeaning(vocabData[i], vocabData[j]) || viShort(vocabData[i].vi) === viShort(vocabData[j].vi) || vocabData[i].ko === vocabData[j].ko)) return;
+            ids.push(i);
+        });
         state._match = { ids: ids, remain: ids.length, wrong: 0, sel: null };
         primeQuizReveal(ids.map(i => `<b style="font-family:${QUIZ_KO_FONT}">${vocabData[i].ko}</b> — ${viShort(vocabData[i].vi)}`).join(' · '));
 
@@ -5993,7 +6405,7 @@
             if (m.remain <= 0) {
                 const ok = m.wrong === 0;
                 if (!ok) recordWrongWord();
-                finishQuizQuestion(ok, ok ? '' : `Bạn ghép sai <b>${m.wrong}</b> lần. Xem lại các cặp bên dưới nhé!`);
+                finishQuizQuestion(ok, ok ? '' : `Bạn ghép sai <b>${m.wrong}</b> lần. Vui lòng xem lại các cặp bên dưới.`);
             }
         } else {
             m.wrong++;
@@ -6038,7 +6450,7 @@
         box.innerHTML = `<div class="qorder-slot empty" id="qorder-slot"></div>
             <div class="qorder-pool" id="qorder-pool"></div>
             <div class="qorder-actions">
-                <button type="button" class="qorder-btn" id="qorder-hint-btn" onclick="toggleQuizOrderHint()">💡 Gợi ý</button>
+                <button type="button" class="qorder-btn" id="qorder-hint-btn" onclick="toggleQuizOrderHint()">${ic('bulb')} Gợi ý</button>
                 <button type="button" class="qorder-btn" onclick="resetQuizOrder()">↺ Xoá hết</button>
                 <button type="button" class="qorder-btn primary" id="qorder-check" onclick="checkQuizOrder()" disabled>Kiểm tra</button>
             </div>
@@ -6139,7 +6551,12 @@
     // Danh sách mọi đáp án hợp lệ của 1 từ theo chiều đang học.
     // Chiều Hàn ➔ Việt chấp nhận cả cột "Vi (Nghĩa tiếng Việt)" lẫn "Nghĩa tiếng Việt khác".
     function getTypingAcceptedAnswers(item, direction) {
-        if (direction === 'vi-to-ko') return splitAcceptedAnswers(item.ko);
+        if (direction === 'vi-to-ko') {
+            // Đề "gửi" có thể là 보내다 hoặc 부치다 -> chấp nhận mọi từ cùng nghĩa
+            let list = splitAcceptedAnswers(item.ko);
+            (vocabData || []).concat(getAllVocabGlobal()).forEach(x => { if (sameMeaning(x, item)) list = list.concat(splitAcceptedAnswers(x.ko)); });
+            return list;
+        }
         let list = splitAcceptedAnswers(item.vi);
         ['viAlt', 'viOther', 'viAlts', 'viKhac', 'viExtra', 'vi2'].forEach(key => {
             if (item[key]) list = list.concat(splitAcceptedAnswers(item[key]));
@@ -6351,7 +6768,7 @@
             if (!state.seen.includes(rowIdx)) state.seen.push(rowIdx);
             recordWrongWord(vocabIdx);
             // Vẫn CHO chuyển sang câu khác dù đang sai (giữ ô đỏ). Trừ điểm chỉ khi giữ sai đến cuối.
-            setFeedback("😢 Chưa chính xác. Từ này đã được lưu vào mục 'Ôn lại từ vựng' cho bạn.", "error");
+            setFeedback("Chưa chính xác. Từ này đã được lưu vào mục 'Ôn lại từ vựng' cho bạn.", "error");
             updateTypingProgress();
             advanceTypingAfterSubmit(rowIdx);
         }
@@ -6369,7 +6786,7 @@
             setFeedback(`Bạn đã làm hết ${state.indices.length} câu. Còn ${bad} ô đỏ — sửa lại rồi Enter, hoặc bấm Thoát để giữ nguyên (tính là sai).`, "error");
             if (firstBad !== -1) focusTypingRow(firstBad, true);
         } else {
-            setFeedback("🎉 Tuyệt vời! Bạn đã hoàn thành toàn bộ danh sách từ vựng.", "success");
+            setFeedback("Bạn đã hoàn thành toàn bộ danh sách từ vựng.", "success");
         }
         // Chỉ bật popup 1 lần ở thời điểm vừa làm xong hết (tránh bật lại mỗi lần sửa)
         if (!state.donePopupShown) {
@@ -6773,8 +7190,8 @@
             const checkBtn = `<button class="ws-btn" id="ws-check-btn" onclick="wsCheck()" ${(ws.inputValue || '').trim() ? '' : 'disabled'}>Kiểm tra</button>`;
             let hintHtml = '';
             if (ws.showAnswer) {
-                if (targetIsKo) hintHtml = `<div class="ws-hintbox">💡 Gợi ý cấu trúc: <b class="ko" style="font-family:${koFont}">${wsDialogHtml(wsKoFrameHint(targetText))}</b></div>`;
-                else hintHtml = `<div class="ws-hintbox">💡 Gợi ý (chữ cái đầu): <b style="letter-spacing:1px; font-weight:800;">${wsEsc(wsMaskHint(targetText))}</b></div>`;
+                if (targetIsKo) hintHtml = `<div class="ws-hintbox">${ic('bulb')} Gợi ý cấu trúc: <b class="ko" style="font-family:${koFont}">${wsDialogHtml(wsKoFrameHint(targetText))}</b></div>`;
+                else hintHtml = `<div class="ws-hintbox">${ic('bulb')} Gợi ý (chữ cái đầu): <b style="letter-spacing:1px; font-weight:800;">${wsEsc(wsMaskHint(targetText))}</b></div>`;
             }
             workHtml = `<div class="ws-inputrow">${inputHtml}${checkBtn}</div>${hintHtml}`;
         } else {
@@ -6793,7 +7210,7 @@
         if (checked && ws.match) {
             const m = ws.match;
             const matches = m.matched + m.typoN;
-            const verdict = m.clean ? '🎉 Chính xác hoàn toàn!' : (m.ok ? '✅ Đúng rồi!' : '📝 Có lỗi cần sửa');
+            const verdict = m.clean ? ic('sparkles') + ' Chính xác hoàn toàn!' : (m.ok ? ic('checkCircle') + ' Đạt yêu cầu' : ic('edit') + ' Có lỗi cần sửa');
             const vColor = m.ok ? '#2f855a' : '#c05621';
             fbHtml = `
               <div class="ws-fb">
@@ -6805,7 +7222,7 @@
         if (ws.showGrammar) {
             graHtml = `
               <div class="ws-grammar">
-                <div class="gh">🔑 Từ vựng của câu này</div>
+                <div class="gh">${ic('key')} Từ vựng của câu này</div>
                 <div class="ws-vocab-chips"><span class="ws-vchip"><span class="k">${wsEsc(s.item.ko || '')}</span> · ${wsEsc(s.item.vi || '')}</span></div>
               </div>`;
         }
@@ -6877,18 +7294,21 @@
         const currentItem = vocabData[actualIndex];
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
 
+        // Câu đục lỗ được (ví dụ 1, không được thì ví dụ 2). Không có -> hỏi dạng từ cho câu này.
+        const lp = isSentence ? quizClozePairsOf(currentItem)[0] : null;
+        const asSentence = isSentence && !!lp;
         // Nội dung phát: câu ví dụ (dạng câu) hoặc từ (dạng từ)
-        const speakText = isSentence ? currentItem.ex : currentItem.ko;
+        const speakText = asSentence ? lp.ko : currentItem.ko;
         const listenPlayBtn = document.getElementById('btn-listen-play');
         if (listenPlayBtn) listenPlayBtn.onclick = function(e) { e.stopPropagation(); triggerKoreanVoice(speakText, false); };
 
         // Gợi ý (bóng đèn): dạng câu -> hiện câu; dạng từ -> nghĩa tiếng Việt
-        document.getElementById('listen-hint-text').innerText = isSentence ? currentItem.ex : currentItem.vi;
+        document.getElementById('listen-hint-text').innerText = asSentence ? lp.ko : currentItem.vi;
 
-        if (isSentence) {
+        if (asSentence) {
             clozeEl.style.display = 'block';
             // Kèm sẵn 1 dòng nghĩa Việt TRỐNG (chừa chỗ) -> lúc trả lời điền vào không đẩy layout
-            clozeEl.innerHTML = makeClozeSentence(currentItem.ex, currentItem.ko) + '<div class="cloze-vi"></div>';
+            clozeEl.innerHTML = dialogBreak(lp.cloze) + '<div class="cloze-vi"></div>';
             viLine.style.display = 'none';
         } else {
             clozeEl.style.display = 'none';
@@ -6897,8 +7317,8 @@
         }
 
         let correctAnswer = currentItem.ko;
-        let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
-        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 4)]);
+        let pool = vocabData.filter((it, idx) => idx !== actualIndex && !sameMeaning(it, currentItem)).map(item => item.ko);
+        let allChoices = shuffleArray([correctAnswer, ...pickWrongTexts(pool, correctAnswer, 4)]);
         const poolContainer = document.getElementById('listen-word-pool'); poolContainer.innerHTML = "";
         allChoices.forEach(choice => {
             const btn = document.createElement('button'); btn.className = 'pool-btn'; btn.innerText = choice;
@@ -6919,11 +7339,12 @@
     function handleListenAnswer(btn, selectedChoice, correctChoice) {
         let state = tabState.listen; if (state.answered) return; state.answered = true;
         const item = vocabData[state.indices[state.current]];
-        if (state.mode === 'sentence') {
+        const lp = state.mode === 'sentence' ? quizClozePairsOf(item)[0] : null;
+        if (lp) {
             // hiện câu đầy đủ (tô đậm từ đúng) + điền nghĩa Việt vào dòng đã chừa sẵn (không đẩy layout)
             document.getElementById('listen-cloze').innerHTML =
-                (item.ex || '').replace(item.ko, '<span class="cloze-blank">' + item.ko + '</span>')
-                + '<div class="cloze-vi">' + (item.exVi || '') + '</div>';
+                dialogBreak(lp.ko.replace(item.ko, '<span class="cloze-blank">' + item.ko + '</span>'))
+                + '<div class="cloze-vi">' + dialogBreak(lp.vi || '') + '</div>';
         } else {
             document.getElementById('listen-vi-meaning').innerText = item.vi;
         }
@@ -6970,8 +7391,7 @@
             wrong = pickSimilarExViDistractors(currentItem, 3);
         } else {
             correctAnswer = currentItem.vi;
-            let pool = Array.from(new Set(vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi)));
-            wrong = shuffleArray(pool).slice(0, 3);
+            wrong = pickWrongTexts(vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi), correctAnswer, 3);
         }
         let allChoices = shuffleArray([correctAnswer, ...wrong]);
         const optsContainer = document.getElementById('guess-opts'); optsContainer.innerHTML = "";
@@ -7044,8 +7464,20 @@
         imgElement.onerror = null;
         imgElement.src = wordImgSrc(currentItem);
 
-        let correctAnswer = currentItem.ko; let pool = vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.ko);
-        let allChoices = shuffleArray([correctAnswer, ...shuffleArray(pool).slice(0, 3)]);
+        // Dạng "Chọn câu": chọn câu tiếng Hàn mô tả đúng ảnh (từ thiếu câu/thiếu câu nhiễu -> hỏi từ như cũ)
+        const picQ = state.mode === 'sentence' ? buildPicSentenceQuestion(currentItem, 'ko') : null;
+        const qEl = document.getElementById('visual-question');
+        if (qEl) qEl.innerText = picQ ? 'Câu nào mô tả đúng tình huống trong ảnh?' : 'Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:';
+        if (vHintBtn) vHintBtn.style.display = picQ ? 'none' : ''; // gợi ý = chính đáp án -> ẩn
+        let correctAnswer, allChoices;
+        if (picQ) {
+            correctAnswer = picQ.correct;
+            allChoices = shuffleArray([picQ.correct, ...picQ.wrongs]);
+        } else {
+            correctAnswer = currentItem.ko;
+            const pool = vocabData.filter((it, idx) => idx !== actualIndex && !sameMeaning(it, currentItem)).map(item => item.ko);
+            allChoices = shuffleArray([correctAnswer, ...pickWrongTexts(pool, correctAnswer, 3)]);
+        }
         const optsContainer = document.getElementById('visual-opts'); optsContainer.innerHTML = "";
 
         allChoices.forEach((opt, idx) => {
@@ -7090,7 +7522,8 @@
         btn.className = 'option-btn';
         btn.dataset.opt = optValue;
         const badge = document.createElement('span'); badge.className = 'opt-badge'; badge.innerText = letter;
-        const txt = document.createElement('span'); txt.className = 'opt-text'; txt.innerText = optValue;
+        const txt = document.createElement('span'); txt.className = 'opt-text';
+        txt.innerText = String(optValue).replace(/\s+(?=[A-Z]\s?[:：])/g, '\n'); // hội thoại: người B xuống dòng
         btn.appendChild(badge); btn.appendChild(txt);
         return btn;
     }
@@ -7102,7 +7535,7 @@
         if (!fb) return;
         if (isCorrect) {
             fb.className = 'feedback success compact';
-            fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác! Bạn nhớ bài tốt lắm.';
+            fb.innerHTML = '<span style="color:var(--success-color);font-size:17px;line-height:1;">✓</span> Chính xác.';
         } else {
             fb.className = 'feedback error compact';
             fb.innerHTML = '<span style="color:var(--error-color);font-size:17px;line-height:1;">✗</span> Đáp án đúng: <b>' + correctText + '</b>';
@@ -7418,7 +7851,7 @@
         document.getElementById('grammar-real-content').style.display = "block";
         
         document.getElementById('g-detail-title').innerText = g.GrammarName;
-        let conceptHtml = g.Concept.split('|').map(c => `<p style="margin-bottom:6px;">🔹 ${c.trim()}</p>`).join('');
+        let conceptHtml = g.Concept.split('|').map(c => `<p style="margin-bottom:6px;"><span style="color:var(--point-color);font-size:9px;vertical-align:1px;">${ic('diamond')}</span> ${c.trim()}</p>`).join('');
         document.getElementById('g-detail-concept').innerHTML = conceptHtml;
         
         const structDiv = document.getElementById('g-detail-structure');
@@ -7455,7 +7888,7 @@
                         subHeadingEl.style.display = "flex";
                         subHeadingEl.style.alignItems = "center";
                         subHeadingEl.style.gap = "6px";
-                        subHeadingEl.innerHTML = `<span>🏷️</span> <span>${index + 1}. ${subHeadingText}</span>`;
+                        subHeadingEl.innerHTML = `<span>${ic('tag')}</span> <span>${index + 1}. ${subHeadingText}</span>`;
                         
                         subContainer.appendChild(subHeadingEl);
                     }
@@ -7549,7 +7982,7 @@
                     if (idx === 0) {
                         blockHtml += `
                             <div style="display: inline-flex; align-items: center; gap: 6px; background: #feebc8; color: #c05621; padding: 4px 12px; border-radius: 8px; font-size: 13px; font-weight: 800; margin-bottom: 10px;">
-                                🔶 ${cleanText}
+                                ${ic('diamond')} ${cleanText}
                             </div>
                         `;
                     } else if (cleanText.startsWith('>')) {
@@ -7638,6 +8071,7 @@
                     setSyncPass(savedPass);
                     applyServerProgress(savedUser, data.progress); // nạp + GỘP tiến độ từ server
                     setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
+                    setExerciseAssignments(data.assignments, savedUser); // 📝 bài tập được giao
                     setTeacherRole(data.isTeacher, savedUser);    // 👩‍🏫 quyền tải đề
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
                     useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản
@@ -7651,6 +8085,7 @@
                 // Mất mạng: dùng lại danh sách unit đã lưu của chính tài khoản này (khoá riêng), có fallback khoá chung cũ.
                 markProgressOfflineLogin();   // ⛔ chưa kéo được tiến độ server -> chưa cho đẩy, sẽ thử lại khi có mạng
                 loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
+                loadExerciseAssignments(sessionUser); // 📝 bài tập được giao đã lưu (offline)
                 loadTeacherRole(sessionUser); // 👩‍🏫 khôi phục quyền tải đề đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
                               || localStorage.getItem('historyUnits_QuyenClass');
@@ -7772,7 +8207,7 @@
     // Dựng danh sách câu mới (đã xáo) cho 1 dạng — lọc theo yêu cầu của dạng câu.
     function buildFreshIndices(tab, mode) {
         let base = Array.from({ length: vocabData.length }, (_, i) => i);
-        if (tab === 'listen' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '');
+        if (tab === 'listen' && mode === 'sentence') base = base.filter(i => quizClozePairsOf(vocabData[i]).length > 0); // chỉ câu đục lỗ được
         else if (tab === 'guess' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '' && (vocabData[i].exVi || '').trim() !== '');
         else if (tab === 'visual') base = visualIndicesOf(base); // chỉ từ có ảnh
         return shuffleArray(base);
@@ -8228,7 +8663,7 @@
     }
 
     function qrRenderEmpty() {
-        const w = document.getElementById('qr-word'); if (w) w.textContent = 'Chưa có từ cần ôn 🎉';
+        const w = document.getElementById('qr-word'); if (w) w.textContent = 'Chưa có từ cần ôn';
         const c = document.getElementById('qr-count'); if (c) c.textContent = '0/0';
         const bar = document.getElementById('qr-progress-bar'); if (bar) bar.style.width = '0%';
     }
@@ -8686,7 +9121,7 @@
     }
     function toggleSumType(t) {
         if (t === 'visual' && sumVisualOff && !sumTypes.has('visual')) {
-            alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa dùng được dạng "Nhìn hình chọn từ" nhé!');
+            alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa dùng được dạng "Nhìn hình chọn từ".');
             return;
         }
         if (sumTypes.has(t)) sumTypes.delete(t); else sumTypes.add(t); syncSummaryChips();
@@ -8712,7 +9147,7 @@
 
     function launchIndividualSummaryQuiz(type) {
         const units = [...sumSelUnits].sort((a,b) => parseInt(a) - parseInt(b));
-        if (units.length === 0) { alert('Hãy chọn ít nhất 1 Unit để ôn nhé!'); return; }
+        if (units.length === 0) { alert('Vui lòng chọn ít nhất 1 Unit để ôn tập.'); return; }
         const mixed = buildMixedVocab(units);
         if (mixed.length < 4) { alert('Cần ít nhất 4 từ. Hãy chọn thêm Unit.'); return; }
         vocabData = mixed;
@@ -8775,7 +9210,7 @@
             visualSet = new Set(await itemsWithRealImage(pool));
             if (visualSet.size === 0) {
                 if (types.length === 1) {
-                    alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa tạo được đề "Nhìn hình chọn từ".\nHãy chọn thêm dạng quiz khác hoặc Unit khác nhé!');
+                    alert('Các Unit đã chọn chưa có ảnh minh hoạ cho từ vựng nên chưa tạo được đề "Nhìn hình chọn từ".\nVui lòng chọn thêm dạng quiz khác hoặc Unit khác.');
                     return;
                 }
                 types = types.filter(t => t !== 'visual');
@@ -8787,6 +9222,9 @@
         let nInput = parseInt(document.getElementById('sum-num-q').value) || 10;
         const n = Math.max(1, Math.min(nInput, pickFrom.length));
         const picked = shuffleArray([...pickFrom]).slice(0, n);
+        // 🖼️ Trắc nghiệm có thêm dạng "Nhìn hình chọn câu" -> cần biết từ nào có ảnh thật
+        sumPicSet = new Set();
+        if (types.includes('quiz')) sumPicSet = visualSet.size ? visualSet : new Set(await itemsWithRealImage(pool));
         sumTest = { answerLang: sumAnswerLang, units: units, types: types, questions: [], graded: false, startedAt: Date.now() };
         const typePlan = buildCombinedTypePlan(types, picked.length);
         const altTypes = types.filter(t => t !== 'visual');
@@ -8803,6 +9241,7 @@
         document.getElementById('combined-test-overlay').classList.add('active');
     }
 
+    let sumPicSet = new Set();
     // Trả về 'ko' hoặc 'vi' cho từng câu; chế độ "Cả hai" -> trộn ngẫu nhiên mỗi câu
     function resolveSumLang() {
         if (sumAnswerLang === 'ko') return 'ko';
@@ -8813,7 +9252,7 @@
     function buildCombinedQuestion(item, type, pool) {
         const q = { type, item, userAnswer: null };
         function optsFrom(field, answer) {
-            let others = shuffleArray(pool.filter(w => w[field] && w[field] !== answer).map(w => w[field]));
+            let others = shuffleArray(pool.filter(w => w[field] && w[field] !== answer && !(field === 'ko' && sameMeaning(w, item))).map(w => w[field]));
             let uniq = [];
             others.forEach(o => { if (!uniq.includes(o)) uniq.push(o); });
             return shuffleArray([answer, ...uniq.slice(0, 3)]);
@@ -8831,12 +9270,18 @@
             if (lang === 'ko' && makeMisspellings(item.ko).length >= 3) cands.push({ t: 'spell', w: CW.spell });
             if (pool.length >= 5) cands.push({ t: 'match', w: CW.match });
             if (quizOrderPairsOf(item, lang).length) cands.push({ t: 'order', w: CW.order });
+            if (sumPicSet.has(item) && picSentenceOf(item)) cands.push({ t: 'pic', w: CW.pic });
             let rw = Math.random() * cands.reduce((a, c) => a + c.w, 0), sub = 'word';
             for (const c of cands) { rw -= c.w; if (rw <= 0) { sub = c.t; break; } }
 
             if (sub === 'match') {
-                const others = shuffleArray(pool.filter(w => w.ko !== item.ko)).slice(0, 4);
-                const picked = shuffleArray([item].concat(others));
+                const chosen = [item];
+                shuffleArray(pool.filter(w => w.ko !== item.ko)).forEach(w => {
+                    if (chosen.length >= 5) return;
+                    if (chosen.some(c => sameMeaning(c, w) || viShort(c.vi) === viShort(w.vi) || c.ko === w.ko)) return;
+                    chosen.push(w);
+                });
+                const picked = shuffleArray(chosen);
                 q.sub = 'match';
                 q.pairs = picked.map(x => ({ ko: x.ko, vi: viShort(x.vi) }));
                 q.left = shuffleArray(q.pairs.map((_, k) => k));
@@ -8863,6 +9308,7 @@
             if (sub === 'sent') built = buildQuizSentenceQuestion(item, lang);
             else if (sub === 'cloze') built = (lang === 'vi') ? buildQuizViClozeQuestion(item) : buildQuizClozeQuestion(item);
             else if (sub === 'spell') built = buildQuizSpellQuestion(item);
+            else if (sub === 'pic') built = buildPicSentenceQuestion(item, lang);
             if (built) {
                 q.quizKind = built.key;
                 if (built.promptHtml) { q.prompt = built.promptHtml; q.promptLabel = built.label; }
@@ -8870,6 +9316,7 @@
                 q.answer = built.correct;
                 q.options = shuffleArray([built.correct, ...built.wrongs]);
                 q.badge = (QUIZ_TYPE_BADGE[built.key] || 'Trắc nghiệm') + ' · ' + (lang === 'ko' ? 'Hàn' : 'Việt');
+                if (built.key === 'pic') { q.img = item.img; q.prompt = ''; q.promptLabel = built.label; }
             }
             else if (lang === 'ko') { q.prompt = item.vi; q.promptLabel = 'Từ nào mang nghĩa trên?'; q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Trắc nghiệm · Hàn'; }
             else { q.prompt = item.ko; q.promptLabel = 'Nghĩa của từ trên là gì?'; q.answer = item.vi; q.options = optsFrom('vi', item.vi); q.badge = 'Trắc nghiệm · Việt'; }
@@ -8879,8 +9326,9 @@
             else { q.prompt = item.ko; q.answer = item.vi; q.dir = 'ko-to-vi'; q.badge = 'Viết từ · Việt'; }
         } else if (type === 'listen') {
             // trộn: nghe từ / nghe câu (đục lỗ). Câu cần có ví dụ.
-            const sentence = (item.ex && item.ex.trim() !== '') && Math.random() < 0.5;
-            if (sentence) { q.sub = 'sentence'; q.audio = item.ex; q.cloze = makeClozeSentence(item.ex, item.ko); q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Nghe & chọn từ · Câu'; }
+            const lp = quizClozePairsOf(item)[0]; // chỉ dùng câu đục lỗ được
+            const sentence = !!lp && Math.random() < 0.5;
+            if (sentence) { q.sub = 'sentence'; q.audio = lp.ko; q.cloze = lp.cloze; q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Nghe & chọn từ · Câu'; }
             else { q.sub = 'word'; q.audio = item.ko; q.answer = item.ko; q.options = optsFrom('ko', item.ko); q.badge = 'Nghe & chọn từ'; }
         } else if (type === 'guess') {
             // trộn: nghe từ -> chọn nghĩa / nghe câu -> chọn nghĩa câu. Câu cần có ví dụ + dịch ví dụ.
@@ -8929,7 +9377,7 @@
             if (q.type === 'listen' || q.type === 'guess') {
                 inner += `<button class="ct-audio-btn" onclick="triggerKoreanVoice('${q.audio.replace(/'/g,"\\'")}',false)"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Nghe</button>`;
                 if (q.type === 'listen' && q.sub === 'sentence') {
-                inner += `<div class="${ctPromptClass(q.cloze)}">${q.cloze}</div>`;
+                inner += `<div class="${ctPromptClass(q.cloze)}">${dialogBreak(q.cloze)}</div>`;
                     inner += `<div class="ct-prompt-sub">Nghe câu và chọn từ điền vào chỗ trống:</div>`;
                 } else if (q.type === 'guess') {
                     inner += `<div class="ct-prompt-sub">${q.sub === 'sentence' ? 'Cụm từ bạn nghe được mang nghĩa gì?' : 'Từ bạn nghe được mang nghĩa gì?'}</div>`;
@@ -8940,19 +9388,19 @@
                 inner += `<div class="ct-prompt-sub">Bấm 1 từ tiếng Hàn rồi bấm nghĩa tương ứng để nối (bấm lại để gỡ).</div><div id="ct-body-${i}"></div>`;
             } else if (q.sub === 'order') {
                 const orderPrompt = q.dirLang === 'vi' ? q.srcKo : q.srcVi;
-                inner += `<div class="${ctPromptClass(orderPrompt)}">${orderPrompt}</div>`
+                inner += `<div class="${ctPromptClass(orderPrompt)}">${dialogBreak(orderPrompt)}</div>`
                     + `<div class="ct-prompt-sub">Bấm các từ theo thứ tự để tạo thành câu ${q.dirLang === 'vi' ? 'tiếng Việt' : 'tiếng Hàn'} hoàn chỉnh:</div><div id="ct-body-${i}"></div>`;
-            } else if (q.type === 'visual') {
+            } else if (q.type === 'visual' || q.quizKind === 'pic') {
                 let ctFallback = `https://loremflickr.com/500/300/${encodeURIComponent((q.item.vi || 'word').split('/')[0])}/all?random=${i}`;
                 let src = (q.img && q.img.trim() !== '') ? wordImgSrc(q) : ctFallback;
                 // .webp lỗi -> thử .png gốc -> cuối cùng mới dùng ảnh tạm
                 const pngBack = (q.img && src !== wordImgPaths(q.img).goc) ? wordImgPaths(q.img).goc : '';
-                inner += `<div class="ct-img-frame"><img src="${src}" alt="Hình minh họa" onerror="if(this.dataset.png!=='1'&&'${pngBack}'){this.dataset.png='1';this.src='${pngBack}';}else{this.onerror=null;this.src='${ctFallback}';}"></div><div class="ct-prompt-sub">Nhìn hình và chọn từ đúng:</div>`;
+                inner += `<div class="ct-img-frame"><img src="${src}" alt="Hình minh họa" onerror="if(this.dataset.png!=='1'&&'${pngBack}'){this.dataset.png='1';this.src='${pngBack}';}else{this.onerror=null;this.src='${ctFallback}';}"></div><div class="ct-prompt-sub">${q.quizKind === 'pic' ? 'Nhìn hình và chọn câu mô tả đúng:' : 'Nhìn hình và chọn từ đúng:'}</div>`;
             } else {
                 if (q.quizKind === 'spell') {
                     inner += `<div class="ct-spell-prompt">${ctFormatSpellPrompt(q.prompt)}</div>`;
                 } else {
-                    inner += `<div class="${ctPromptClass(q.prompt)}">${q.prompt}</div>`;
+                    inner += `<div class="${ctPromptClass(q.prompt)}">${dialogBreak(q.prompt)}</div>`;
                 }
                 inner += `<div class="ct-prompt-sub">${q.type === 'typing' ? 'Gõ đáp án:' : (q.promptLabel || 'Chọn đáp án đúng')}</div>`;
             }
@@ -8962,7 +9410,7 @@
                 inner += `<input type="text" class="ct-input" id="ct-input-${i}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Nhập đáp án..." oninput="sumTest.questions[${i}].userAnswer=this.value; updateCtCounter();">`;
             } else {
                 inner += `<div class="ct-opts" id="ct-opts-${i}">`;
-                q.options.forEach(opt => { inner += `<button class="ct-opt" onclick="selectCombinedOption(${i}, this)">${ctFormatOption(opt)}</button>`; });
+                q.options.forEach((opt, k) => { inner += `<button class="ct-opt" data-k="${k}" onclick="selectCombinedOption(${i}, this)">${ctFormatOption(opt)}</button>`; });
                 inner += `</div>`;
             }
             inner += `<div class="ct-correct-hint" id="ct-hint-${i}" style="display:none;"></div>`;
@@ -9054,7 +9502,9 @@
         const cont = btn.parentElement;
         cont.querySelectorAll('.ct-opt').forEach(b => b.classList.remove('sel'));
         btn.classList.add('sel');
-        sumTest.questions[i].userAnswer = btn.innerText;
+        // lấy giá trị gốc (đáp án hội thoại hiển thị 2 dòng nên innerText không khớp chuỗi gốc)
+        const q = sumTest.questions[i];
+        sumTest.questions[i].userAnswer = (q.options && btn.dataset.k != null) ? q.options[+btn.dataset.k] : btn.innerText;
         updateCtCounter();
     }
     function updateCtCounter() {
@@ -9083,8 +9533,9 @@
                 if (inp) { inp.classList.add(ok ? 'correct' : 'wrong'); inp.disabled = true; }
             } else {
                 document.querySelectorAll('#ct-opts-' + i + ' .ct-opt').forEach(b => {
-                    if (b.innerText === q.answer) b.classList.add('correct');
-                    else if (b.innerText === q.userAnswer) b.classList.add('wrong');
+                    const v = (q.options && b.dataset.k != null) ? q.options[+b.dataset.k] : b.innerText;
+                    if (v === q.answer) b.classList.add('correct');
+                    else if (v === q.userAnswer) b.classList.add('wrong');
                     b.style.pointerEvents = 'none';
                 });
             }
@@ -9102,8 +9553,8 @@
         banner.innerHTML =
             `<div style="font-size:13px;font-weight:800;color:var(--sub-text);text-transform:uppercase;letter-spacing:1px;">Kết quả bài kiểm tra tổng hợp</div>` +
             `<div style="font-size:44px;font-weight:800;color:var(--point-color);margin:6px 0;">${correct}/${sumTest.questions.length}</div>` +
-            `<div style="font-size:16px;font-weight:700;color:#1a202c;">Chính xác ${pct}% 🎉</div>` +
-            `<div style="font-size:12px;color:var(--sub-text);margin-top:8px;">Các câu sai đã được lưu vào Sổ tay từ vựng để bạn ôn lại. Kéo xuống xem chi tiết từng câu nhé.</div>` +
+            `<div style="font-size:16px;font-weight:700;color:#1a202c;">Chính xác ${pct}%</div>` +
+            `<div style="font-size:12px;color:var(--sub-text);margin-top:8px;">Các câu sai đã được lưu vào Sổ tay từ vựng để bạn ôn lại. Kéo xuống để xem chi tiết từng câu.</div>` +
             `<button class="btn" style="margin-top:14px;padding:10px 22px;font-size:13px;" onclick="closeCombinedTest()">Thoát ra</button>`;
         document.getElementById('ct-submit-zone').style.display = 'none';
         const sc = document.querySelector('.ct-scroll'); if (sc) sc.scrollTop = 0;
@@ -9201,10 +9652,10 @@
 
     // Lọc bỏ câu Nghe + hỏi ý giáo viên trước khi tải
     function collectExamQuestions() {
-        if (!sumTest || !sumTest.questions || !sumTest.questions.length) { alert('Chưa có đề nào để tải nhé!'); return null; }
+        if (!sumTest || !sumTest.questions || !sumTest.questions.length) { alert('Chưa có đề nào để tải.'); return null; }
         const keep = sumTest.questions.filter(q => q.type !== 'listen' && q.type !== 'guess');
         if (!keep.length) {
-            alert('Đề này toàn câu Nghe nên không in ra giấy được.\nHãy bỏ chọn 2 dạng "Nghe & chọn từ" / "Nghe & tìm nghĩa" khi tạo đề nhé!');
+            alert('Đề này toàn câu Nghe nên không in ra giấy được.\nVui lòng bỏ chọn 2 dạng "Nghe & chọn từ" / "Nghe & tìm nghĩa" khi tạo đề.');
             return null;
         }
         const dropped = sumTest.questions.length - keep.length;
@@ -9276,7 +9727,7 @@
         }
         // Còn lại đều là trắc nghiệm ABCD (kèm hình nếu là dạng nhìn hình)
         let head = '';
-        if (q.type === 'visual') {
+        if (q.type === 'visual' || q.quizKind === 'pic') {
             const imgSrc = q._wordImgSrc != null ? q._wordImgSrc : examAbsUrl(q.img || '');
             const hasImg = q.img && q.img.trim() !== '' && imgSrc;
             if (hasImg) {
@@ -9287,7 +9738,7 @@
                     : '<table class="e-img-table" width="100%" cellspacing="0" cellpadding="0"><tr><td align="center">'
                         + '<img src="' + imgSrc + '" width="227" height="227" style="width:6cm;height:6cm;" alt="">'
                         + '</td></tr></table>';
-                head += exSub('Nhìn hình và chọn từ đúng:');
+                head += exSub(q.quizKind === 'pic' ? 'Nhìn hình và chọn câu mô tả đúng:' : 'Nhìn hình và chọn từ đúng:');
             } else {
                 head = exSub(q.img && q.img.trim() !== ''
                     ? '(Không thể đóng gói hình minh hoạ vào file Word) Chọn đáp án đúng:'
@@ -9383,7 +9834,7 @@
             + qHtml
             + '<div class="e-pagebreak"></div>'
             + '<div class="e-head"><div class="e-title">Đáp án</div></div>'
-            + '<div class="e-note">⚠️ Trang này dành cho giáo viên — hãy XOÁ TRANG CUỐI trước khi gửi cho học sinh.</div>'
+            + '<div class="e-note">LƯU Ý: Trang này dành cho giáo viên — hãy XOÁ TRANG CUỐI trước khi gửi cho học sinh.</div>'
             + '<div class="e-akey">' + aHtml + '</div>';
 
         // Bản in: chờ font Google tải xong mới bật hộp thoại in (tối đa 3 giây)
@@ -9502,7 +9953,7 @@
         const list = collectExamQuestions();
         if (!list) return;
         const w = window.open('', '_blank');
-        if (!w) { alert('Trình duyệt đang chặn cửa sổ bật lên. Hãy cho phép pop-up rồi bấm lại nhé!'); return; }
+        if (!w) { alert('Trình duyệt đang chặn cửa sổ bật lên. Vui lòng cho phép cửa sổ bật lên (pop-up) rồi thử lại.'); return; }
         w.document.open();
         w.document.write(buildExamHtml(list));
         w.document.close();
@@ -9586,7 +10037,7 @@
     async function prepareWordImages(list) {
         await ensureWordImagePack();
         const attachments = [];
-        const visuals = list.filter(q => q.type === 'visual' && q.img && q.img.trim() !== '');
+        const visuals = list.filter(q => (q.type === 'visual' || q.quizKind === 'pic') && q.img && q.img.trim() !== '');
         await Promise.all(visuals.map(async (q, i) => {
             try {
                 const packed = findPackedWordImage(q.img);

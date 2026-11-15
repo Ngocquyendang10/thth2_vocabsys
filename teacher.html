@@ -62,7 +62,7 @@
   .toolbar{display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:16px;}
   .search-wrap{position:relative;}
   .search-wrap svg{position:absolute; left:14px; top:50%; transform:translateY(-50%); width:16px; height:16px; color:var(--sub);}
-  .toolbar input[type=search]{padding:11px 14px 11px 38px; font-size:13.5px; border:none; border-radius:12px; outline:none; min-width:260px; background:var(--card); box-shadow:var(--neu-concave); font-family:inherit;}
+  .toolbar input[type=search], .as-tools input[type=search]{padding:11px 14px 11px 38px; font-size:13.5px; border:none; border-radius:12px; outline:none; min-width:260px; background:var(--card); box-shadow:var(--neu-concave); font-family:inherit;}
   .legend{font-size:12px; color:var(--sub); display:flex; gap:16px; flex-wrap:wrap; align-items:center; margin-left:auto;}
   .legend span{display:flex; align-items:center; gap:6px;}
   .legend .dot{display:inline-block; width:11px; height:11px; border-radius:50%;}
@@ -120,6 +120,10 @@
   .tbadge.done{background:#e4f8ec; color:#158240;}
   .tbadge.doing{background:#fff1e0; color:#c2620a;}
   .tbadge.none{background:#eef1f7; color:#94a3b8;}
+  .exline{font-size:11px; color:var(--sub); margin-top:4px; line-height:1.45;}
+  .exwarn{color:#c2620a; font-weight:700;} .exok{color:#158240;}
+  .ucard-head .uh-ic.ex{background:var(--point);} .ucard-head .uh-ic.sum{background:#f6b73c;}
+  .ucard-head .uh-ic svg{color:#fff;}
   .tfrac{font-size:10.5px; font-weight:800; margin-left:auto;}
   .tfrac.done{color:var(--ok);} .tfrac.doing{color:var(--warn);} .tfrac.none{color:#b6bdca;}
   .mchips{display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;}
@@ -152,13 +156,69 @@
     .pg-size{position:static; width:100%; justify-content:center; margin:8px 0 0;}
   }
   @media (max-width:560px){ .legend{display:none;} .stat-row{grid-template-columns:1fr;} }
+
+  /* ===== 📝 Bài tập được giao ===== */
+  .view-tabs{display:inline-flex; gap:6px; background:var(--bg); padding:5px; border-radius:14px; box-shadow:var(--neu-concave); margin-bottom:18px;}
+  .view-tabs button{border:none; background:transparent; padding:9px 16px; border-radius:10px; font-size:13.5px; font-weight:800; color:var(--sub); cursor:pointer; font-family:inherit;}
+  .ic{width:1em; height:1em; vertical-align:-0.14em; flex:0 0 auto;}
+  .view-tabs button{display:inline-flex; align-items:center; gap:7px;}
+  .view-tabs button.on{background:var(--card); color:var(--point); box-shadow:var(--neu-sm);}
+  .as-tools{display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px;}
+  .as-tools .grow{flex:1;}
+  .as-tools a.btn{text-decoration:none;}
+  .as-tools select{padding:9px 12px; border:none; border-radius:11px; background:var(--bg); box-shadow:var(--neu-concave); font-family:inherit; font-size:13px; font-weight:700; color:var(--text);}
+  .as-warn{background:#fff8e6; border:1px solid #f3d27a; color:#7a5b00; border-radius:12px; padding:10px 14px; font-size:13px; margin-bottom:12px; line-height:1.6;}
+  .as-warn b{color:#5a4200;}
+  .as-help{font-size:12.5px; color:var(--sub); margin:-4px 0 14px; line-height:1.6;}
+  .as-help code{background:var(--bg); padding:1px 6px; border-radius:6px; font-weight:700; color:var(--point);}
+  .as-scroll{overflow-x:auto; border-radius:16px; box-shadow:var(--neu-sm); background:var(--card);}
+  table.as-grid{border-collapse:separate; border-spacing:0; width:100%; min-width:520px;}
+  .as-grid th, .as-grid td{padding:10px 12px; border-bottom:1px solid var(--line); text-align:center; vertical-align:middle; font-size:13px;}
+  .as-grid thead th{background:#f8f9fd; position:sticky; top:0; z-index:1;}
+  .as-grid th.stu, .as-grid td.stu{text-align:left; position:sticky; left:0; background:var(--card); z-index:2; min-width:170px;}
+  .as-grid thead th.stu{background:#f8f9fd; z-index:3;}
+  .as-grid tr:last-child td{border-bottom:none;}
+  .as-col-id{font-size:12px; font-weight:800; color:var(--point);}
+  .as-col-t{font-size:12.5px; font-weight:700; color:var(--text); margin-top:2px; max-width:180px; margin-left:auto; margin-right:auto;}
+  .as-col-m{font-size:11.5px; color:var(--sub); margin-top:4px; font-weight:600;}
+  .as-col-bar{height:5px; border-radius:99px; background:#e9edf5; margin:6px auto 0; max-width:140px; overflow:hidden;}
+  .as-col-bar i{display:block; height:100%; background:var(--ok);}
+  .as-stu-n{font-weight:800; font-size:13.5px;}
+  .as-stu-a{font-size:11.5px; color:var(--sub); margin-top:2px;}
+  .as-stu-a.doing{color:var(--warn); font-weight:700;}
+  .cell{display:inline-flex; flex-direction:column; align-items:center; gap:2px; min-width:86px; padding:7px 8px; border-radius:11px; font-weight:800; cursor:pointer; border:1.5px solid transparent; font-family:inherit; font-size:13px; background:none;}
+  .cell small{font-size:10.5px; font-weight:700;}
+  .cell.done{background:#e8f7ee; color:#1c7c43;}
+  .cell.done.low{background:#fff4e5; color:#b45309;}
+  .cell.doing{background:#fff4e5; color:#c05621;}
+  .cell.opened{background:#eef2fb; color:#4c6aa8;}
+  .cell.todo{background:#f3f4f8; color:#8a94a6;}
+  .cell.over{background:#fdecec; color:#c53030;}
+  .cell.soon{background:#f3f4f8; color:#8a94a6; font-weight:700; cursor:default;}
+  .cell.none{color:#c7cdd8; cursor:default; font-weight:600;}
+  .cell:not(.none):not(.soon):hover{border-color:var(--point);}
+  .late{display:inline-block; font-size:10px; background:#c53030; color:#fff; padding:0 6px; border-radius:99px; margin-top:1px;}
+  .as-legend{display:flex; flex-wrap:wrap; gap:8px; margin:12px 2px 0; font-size:12px; color:var(--sub);}
+  .as-legend .cell{min-width:0; padding:3px 8px; cursor:default; font-size:11.5px;}
+  /* modal chi tiết */
+  .as-modal{position:fixed; inset:0; background:rgba(20,24,40,.45); display:none; align-items:center; justify-content:center; z-index:50; padding:16px;}
+  .as-modal.on{display:flex;}
+  .as-box{background:var(--card); border-radius:20px; max-width:560px; width:100%; max-height:88vh; overflow:auto; padding:22px 22px 18px; box-shadow:0 20px 60px rgba(0,0,0,.25);}
+  .as-box h3{margin:0 0 4px; font-size:18px;}
+  .as-box .sub{font-size:13px; color:var(--sub); margin-bottom:14px;}
+  .as-kv{display:grid; grid-template-columns:150px 1fr; gap:8px 12px; font-size:13.5px; margin-bottom:14px;}
+  .as-kv div:nth-child(odd){color:var(--sub); font-weight:700;}
+  .as-essay{background:var(--bg); border-radius:12px; padding:10px 12px; margin-bottom:8px; font-size:13.5px; line-height:1.6;}
+  .as-essay .q{font-size:12px; font-weight:800; color:var(--sub); margin-bottom:4px;}
+  .as-close{float:right; border:none; background:var(--bg); border-radius:10px; width:34px; height:34px; font-size:18px; cursor:pointer; box-shadow:var(--neu-sm);}
+  @media (max-width:640px){ .as-kv{grid-template-columns:1fr;} .as-kv div:nth-child(odd){margin-top:6px;} }
 </style>
 </head>
 <body>
 
 <!-- ĐĂNG NHẬP GIÁO VIÊN -->
 <div id="login-box">
-  <h1>👩‍🏫 Bảng điều khiển giáo viên</h1>
+  <h1>Bảng điều khiển giáo viên</h1>
   <p>NQ Korean 2 — Nhập <b>mật mã giáo viên</b> để xem tiến độ làm bài của tất cả học viên.</p>
   <input type="password" id="key-input" placeholder="Mật mã giáo viên" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
   <label class="row-check"><input type="checkbox" id="remember-key" checked> Ghi nhớ trên thiết bị này</label>
@@ -183,6 +243,36 @@
       </div>
     </div>
 
+    <div class="view-tabs">
+      <button id="vt-progress" onclick="setView('progress')"><i data-ic="chart"></i> Tiến độ học</button>
+      <button id="vt-assign" onclick="setView('assign')"><i data-ic="clipboard"></i> Bài tập được giao</button>
+    </div>
+
+    <!-- 📝 BÀI TẬP ĐƯỢC GIAO -->
+    <div id="view-assign" style="display:none;">
+      <div class="as-tools">
+        <a class="btn btn-ghost" id="as-sheet-link" target="_blank" rel="noopener" style="display:none;"><i data-ic="edit"></i> Giao bài trong Google Sheet</a>
+        <select id="as-unit" onchange="renderAssign()"></select>
+        <label class="row-check" style="margin:0;"><input type="checkbox" id="as-hide-old" onchange="renderAssign()"> Ẩn bài đã hết hạn</label>
+        <div class="grow"></div>
+        <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><input type="search" id="as-search" placeholder="Tìm học viên…" oninput="renderAssign()"></div>
+      </div>
+      <div class="as-help">Giao bài: thêm 1 dòng vào tab <code>BaiTap</code> — Mã bài · Giao cho (<code>ALL</code> hoặc tên đăng nhập, cách nhau dấu phẩy) · Mở từ ngày · Hạn nộp · Lời dặn. Học sinh thấy bài trong vòng 2 phút. Bấm vào ô để xem chi tiết bài làm.</div>
+      <div id="as-warn"></div>
+      <div class="as-scroll"><div id="as-body"></div></div>
+      <div class="as-legend">
+        <span class="cell done">11/12</span>Đã nộp
+        <span class="cell doing">5/12</span>Đang làm
+        <span class="cell opened">Đã mở</span>Mở bài, chưa làm câu nào
+        <span class="cell todo">Chưa làm</span>
+        <span class="cell over">Quá hạn</span>
+        <span class="cell soon">Mở 20/11</span>Chưa tới ngày mở
+        <span class="cell none">—</span>Không giao
+      </div>
+    </div>
+    <div class="as-modal" id="as-modal" onclick="if(event.target===this)closeAsModal()"><div class="as-box" id="as-box"></div></div>
+
+    <div id="view-progress">
     <!-- Thẻ tổng quan -->
     <div class="stat-row">
       <div class="stat s-p"><div class="sic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1 2.5 2.5 6 2.5s6-1.5 6-2.5v-5"></path></svg></div><div><div class="sl">Tổng học viên</div><div class="sv" id="st-total">0 <small>học viên</small></div></div></div>
@@ -212,10 +302,28 @@
 
     <!-- Phân trang -->
     <div class="pager" id="pager"></div>
+    </div><!-- /view-progress -->
   </div>
 </div>
 
 <script>
+  // 🎨 Icon SVG phẳng 1 màu (không dùng emoji hệ thống)
+  const ICON_PATHS = {
+    chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/>',
+    clipboard: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 12h6M9 16h4"/>',
+    edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>',
+    timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
+    swap: '<path d="M17 2l4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14M7 22l-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/>',
+    alert: '<path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/>',
+    pen: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/>',
+    checkCircle: '<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
+    eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
+    hourglass: '<path d="M6 2h12M6 22h12M7 2v4a5 5 0 0 0 10 0V2M7 22v-4a5 5 0 0 1 10 0v4"/>',
+    ban: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>'
+  };
+  function ic(name){ const p = ICON_PATHS[name]; return p ? `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>` : ''; }
+  document.addEventListener('DOMContentLoaded', ()=>document.querySelectorAll('i[data-ic]').forEach(el=>{ el.outerHTML = ic(el.getAttribute('data-ic')); }));
+
   // ⚠️ Phải TRÙNG với SCRIPT_URL trong index.html (cùng 1 backend đã redeploy có action teacherReport).
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzKepdyG-ORWiL_qHy8VDArBIbGyIeNZapGfj6g-p566IuFnUTS1qZDQmEZsU8PLQqQ/exec";
 
@@ -227,20 +335,30 @@
     { key:'typing', label:'Viết từ' },
     { key:'writesentence', label:'Viết câu' }
   ];
+  const EX_TAB_LABELS = { reading:'Đọc' };   // tên các dạng Bài tập (menu "Bài tập" bên học sinh)
+  // 📝 DANH MỤC BÀI TẬP — PHẢI KHỚP với EXERCISE_DATA trong index.html (mã bài = cột A tab BaiTap)
+  const EX_CATALOG = {
+    'U11-DOC': { unit:'11', key:'reading', label:'Đọc', title:'Kế hoạch du lịch của 3 người', mcq:10,
+                 essay:[ { q:'남 씨는 부산에서 무엇을 할 겁니까?', fields:[''] },
+                         { q:'Phong dự định làm gì ở Singapore vào ban ngày và ban đêm?', fields:['Ban ngày','Ban đêm'] } ] }
+  };
+  function exIdOf(unit, key){ return Object.keys(EX_CATALOG).find(id=>EX_CATALOG[id].unit===String(unit) && EX_CATALOG[id].key===key) || null; }
   const MAX_STARS = QUIZ_TABS.length; // số sao tối đa mỗi Unit (đồng bộ với index.html)
   // Nhãn các mode (dạng) cho những quiz có lựa chọn — để hiện học sinh đã làm dạng nào.
   const QUIZ_MODE_LABELS = {
     listen: { word:'Nghe từ', sentence:'Nghe câu điền từ' },
     guess:  { word:'Nghe từ', sentence:'Nghe câu tìm nghĩa' },
     quiz:   { vi:'Việt', ko:'Hàn', mix:'Cả hai' },
-    writesentence: { vi2ko:'Việt → Hàn', ko2vi:'Hàn → Việt' }
+    writesentence: { vi2ko:'Việt → Hàn', ko2vi:'Hàn → Việt' },
+    visual: { '_':'Nhìn hình chọn từ', sentence:'Nhìn hình chọn câu' }
   };
   // Nhãn NGẮN cho chip mode (khỏi bị cắt chữ)
   const QUIZ_MODE_SHORT = {
     listen: { word:'Từ', sentence:'Câu' },
     guess:  { word:'Từ', sentence:'Câu' },
     quiz:   { vi:'Việt', ko:'Hàn', mix:'Cả hai' },
-    writesentence: { vi2ko:'V→H', ko2vi:'H→V' }
+    writesentence: { vi2ko:'V→H', ko2vi:'H→V' },
+    visual: { '_':'Từ', sentence:'Câu' }
   };
   // Icon từng dạng bài (trạng thái chưa xong)
   const TAB_ICONS = {
@@ -308,8 +426,12 @@
       }
       students = data.students || [];
       parsed = students.map(parseStudent);
+      assignRows = Array.isArray(data.assignments) ? data.assignments : null;
+      const link = document.getElementById('as-sheet-link');
+      if (data.assignSheetUrl){ link.href = data.assignSheetUrl; link.style.display = ''; } else link.style.display = 'none';
       currentPage = 1;
       renderAll();
+      setView(localStorage.getItem('thth2_teacher_view') || 'assign');
       return true;
     }catch(e){
       if (isLogin) setLoginMsg('Lỗi kết nối máy chủ. Kiểm tra mạng / SCRIPT_URL.');
@@ -349,13 +471,31 @@
       totalStars += stars;
     }
 
+    // 📝 Bài tập (Đọc, ...): khoá exercise_<key>_<unit>|<tab>
+    const exPref = 'exercise_'+key+'_';
+    const exercises = [];
+    Object.keys(blob).forEach(k=>{
+      if (k.indexOf(exPref)!==0) return;
+      const [unit, tab] = k.slice(exPref.length).split('|');
+      const st = readJson(k);
+      if (!st) return;
+      exercises.push({ unit, tab, id: exIdOf(unit, tab), done: st.done || null, started: !!st.startedAt,
+        startedAt: st.startedAt || null, essays: st.essays || {}, tabSwitches: st.tabSwitches || 0,
+        answered: Object.keys(st.picks||{}).length
+          + Object.keys(st.essays||{}).filter(k=>(st.essays[k]||[]).some(v=>String(v||'').trim())).length });
+    });
+    exercises.sort((a,b)=>parseInt(a.unit)-parseInt(b.unit) || String(a.tab).localeCompare(b.tab));
+    // 📊 Lịch sử Tổng hợp (mới nhất trước)
+    const sumLog = (readJson('sumLog_'+key) || []).filter(x=>x && x.at).sort((a,b)=>b.at-a.at);
+
     const allowedSet = toSet(s.unlockedUnits);
     const lessonSet  = toSet(s.unlockLesson);
 
     return {
       username: s.username, status: s.status, isOut: String(s.status||'').toUpperCase()==='OUT',
       unlockedUnits: s.unlockedUnits, unlockLesson: s.unlockLesson, expire: s.expire, updatedAt: s.updatedAt,
-      allowedSet, lessonSet, units, totalSecs, wrongCount, unitsWithActivity, totalStars, unitsFull
+      allowedSet, lessonSet, units, totalSecs, wrongCount, unitsWithActivity, totalStars, unitsFull,
+      exercises, sumLog
     };
   }
 
@@ -375,6 +515,11 @@
     const pad=n=>(n<10?'0':'')+n;
     return pad(d.getDate())+'/'+pad(d.getMonth()+1)+' '+pad(d.getHours())+':'+pad(d.getMinutes());
   }
+  function fmtDur(ms){
+    const t = Math.max(0, Math.round((ms||0)/1000)), h=Math.floor(t/3600), m=Math.floor(t%3600/60), s=t%60;
+    return (h? h+'g ' : '') + (h||m ? m+'p ' : '') + s+'s';
+  }
+  function tabLabel(k){ const t = QUIZ_TABS.find(x=>x.key===k); return t ? t.label : k; }
   function initials(name){
     const parts = String(name||'').trim().split(/\s+/);
     let s = (parts[0]||'').slice(0,1) + (parts.length>1 ? parts[parts.length-1].slice(0,1) : (parts[0]||'').slice(1,2));
@@ -391,7 +536,7 @@
     const hideEmpty = document.getElementById('hide-empty').checked;
     filtered = parsed.filter(p=>{
       if (q && !p.username.toLowerCase().includes(q)) return false;
-      if (hideEmpty && p.unitsWithActivity===0) return false;
+      if (hideEmpty && p.unitsWithActivity===0 && !p.exercises.length && !p.sumLog.length) return false;
       return true;
     });
   }
@@ -443,7 +588,9 @@
   function renderCard(p, idx){
     let chips=''; for (let u=1; u<=MAX_UNIT; u++) chips += unitChip(p, u);
     const isOpen = !!openDetails[idx];
-    const meta = `Mở học: ${escapeHtml(p.unlockedUnits||'—')} · Bài giảng: ${escapeHtml(p.unlockLesson||'—')}`;
+    const exDone = p.exercises.filter(e=>e.done).length;
+    const meta = `Mở học: ${escapeHtml(p.unlockedUnits||'—')} · Bài giảng: ${escapeHtml(p.unlockLesson||'—')}` +
+      (exDone ? ` · Bài tập: ${exDone} bài` : '') + (p.sumLog.length ? ` · Tổng hợp: ${p.sumLog.length} lần` : '');
     return `
       <div class="stu-card">
         <div class="stu-row">
@@ -511,10 +658,50 @@
         : `<div class="uh-ic part"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l2.5 2"></path></svg></div>`;
       html += `<div class="ucard"><div class="ucard-head">${headIc}<span class="ut">Unit ${u}</span><span class="ustars">${'★'.repeat(info.stars)}${'☆'.repeat(Math.max(0, MAX_STARS-info.stars))}</span></div>${lines}</div>`;
     }
+    html += renderExerciseCard(p) + renderSummaryCard(p);
     if (!html) html = '<div style="padding:6px; color:var(--sub); font-size:13px;">Học viên chưa làm bài ở unit nào.</div>';
     if (hasLocked) html += `<div class="ucard locked"><div class="lk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div><p>Các unit tiếp theo sẽ mở khoá khi giáo viên mở cho học viên.</p></div>`;
     return html;
   }
+
+  // 📝 Kết quả menu "Bài tập" (điểm, thời gian làm, chuyển tab)
+  function renderExerciseCard(p){
+    if (!p.exercises.length) return '';
+    const rows = p.exercises.map(e=>{
+      const cat = e.id ? EX_CATALOG[e.id] : null;
+      const name = `Unit ${escapeHtml(e.unit)} · ${escapeHtml(EX_TAB_LABELS[e.tab]||e.tab)}${cat ? ' · '+escapeHtml(cat.title) : ''}`;
+      if (!e.done){
+        return `<div class="trow"><div class="tic">${EX_ICON}</div><div class="tbody"><div class="tname">${name}</div>
+          <div class="tstatus"><span class="tbadge doing">Đang làm</span><span class="tfrac doing">${e.answered} câu đã chọn</span></div></div></div>`;
+      }
+      const d = e.done;
+      const track = d.duration!=null
+        ? `<div class="exline">${ic('timer')} ${fmtDur(d.duration)} · <span class="${d.tabSwitches?'exwarn':'exok'}">${ic('swap')} Chuyển tab ${d.tabSwitches} lần${d.tabSwitches?` (${fmtDur(d.awayMs)})`:''}</span></div>` : '';
+      return `<div class="trow"><div class="tic done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${CHECK}</svg></div>
+        <div class="tbody"><div class="tname">${name}</div>
+          <div class="tstatus"><span class="tbadge done">Đã nộp</span><span class="tfrac done">${d.score}/${d.total} điểm</span></div>
+          <div class="exline">Trắc nghiệm ${d.mcq} · Tự luận ${d.essay} · Nộp ${fmtDate(d.at)}</div>${track}</div></div>`;
+    }).join('');
+    return `<div class="ucard"><div class="ucard-head"><div class="uh-ic ex">${EX_ICON}</div><span class="ut">Bài tập</span></div>${rows}</div>`;
+  }
+
+  // 📊 Lịch sử làm Tổng hợp (8 lần gần nhất)
+  function renderSummaryCard(p){
+    if (!p.sumLog.length) return '';
+    const rows = p.sumLog.slice(0, 8).map(x=>{
+      const pct = x.total ? Math.round(x.right/x.total*100) : 0;
+      const kind = x.kind==='test' ? 'Kiểm tra' : 'Luyện tập';
+      const types = (x.types||[]).map(tabLabel).join(', ');
+      return `<div class="trow"><div class="tic ${pct>=80?'done':''}">${pct>=80?`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${CHECK}</svg>`:SUM_ICON}</div>
+        <div class="tbody"><div class="tname">${kind} · Unit ${escapeHtml((x.units||[]).join(', ')||'—')}</div>
+          <div class="tstatus"><span class="tbadge ${pct>=80?'done':'doing'}">${x.right}/${x.total} · ${pct}%</span></div>
+          <div class="exline">${escapeHtml(types)} · ${fmtDate(x.at)}${x.duration?` · ${ic('timer')} ${fmtDur(x.duration)}`:''}</div></div></div>`;
+    }).join('');
+    const more = p.sumLog.length>8 ? `<div class="exline" style="margin-top:6px;">… và ${p.sumLog.length-8} lần trước đó</div>` : '';
+    return `<div class="ucard"><div class="ucard-head"><div class="uh-ic sum">${SUM_ICON}</div><span class="ut">Tổng hợp</span><span class="ustars" style="color:var(--sub);font-size:12px;">${p.sumLog.length} lần</span></div>${rows}${more}</div>`;
+  }
+  const EX_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"></path><rect x="9" y="3" width="6" height="4" rx="1"></rect><path d="M9 14l2 2 4-4"></path></svg>';
+  const SUM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1.5"></circle></svg>';
 
   function toggleDetail(idx){
     const el = document.getElementById('detail-'+idx);
@@ -550,6 +737,153 @@
       </select></div>`;
     pager.innerHTML = btns;
   }
+
+  /* ================= 📝 BÀI TẬP ĐƯỢC GIAO ================= */
+  let assignRows = null;   // các dòng tab BaiTap (null = backend chưa có / chưa tạo tab)
+  function setView(v){
+    document.getElementById('view-assign').style.display = v==='assign' ? '' : 'none';
+    document.getElementById('view-progress').style.display = v==='assign' ? 'none' : '';
+    document.getElementById('vt-assign').classList.toggle('on', v==='assign');
+    document.getElementById('vt-progress').classList.toggle('on', v!=='assign');
+    try { localStorage.setItem('thth2_teacher_view', v); } catch(e){}
+    if (v==='assign') renderAssign();
+  }
+  function asToday(){ const d=new Date(), p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+  function asDay(s){ if(!s) return ''; const a=String(s).split('-'); return a[2]+'/'+a[1]; }
+  function asTargets(raw){ return String(raw||'').split(/[,;\n]+/).map(x=>x.trim().toLowerCase()).filter(Boolean); }
+  function asForAll(t){ return t.some(x=>x==='all'||x==='*'||x==='tất cả'||x==='cả lớp'); }
+  function asDueEnd(due){ const a=due.split('-').map(Number); return new Date(a[0],a[1]-1,a[2],23,59,59,999).getTime(); }
+  // Đợt giao áp dụng cho (học viên, mã bài): đang mở > đã hết hạn gần nhất > sắp mở
+  function asWindow(user, id){
+    const u = String(user).toLowerCase(), today = asToday();
+    const ws = (assignRows||[]).filter(r=>r.id===id && (asForAll(asTargets(r.to)) || asTargets(r.to).includes(u)));
+    if (!ws.length) return null;
+    const live = ws.filter(w=>(!w.from||w.from<=today) && (!w.due||w.due>=today));
+    if (live.length) return Object.assign({ state:'open' }, live.sort((a,b)=>(b.due||'9999').localeCompare(a.due||'9999'))[0]);
+    const past = ws.filter(w=>w.due && w.due<today).sort((a,b)=>b.due.localeCompare(a.due));
+    if (past.length) return Object.assign({ state:'past' }, past[0]);
+    return Object.assign({ state:'soon' }, ws.sort((a,b)=>(a.from||'').localeCompare(b.from||''))[0]);
+  }
+  function asCellInfo(p, id){
+    const w = asWindow(p.username, id);
+    const e = p.exercises.find(x=>x.id===id) || null;
+    if (!w && !(e && e.done)) return { kind:'none', w, e };
+    if (e && e.done){
+      const late = !!(w && w.due && e.done.at > asDueEnd(w.due));
+      return { kind:'done', w, e, late };
+    }
+    if (w && w.state==='soon') return { kind:'soon', w, e };
+    if (w && w.state==='past') return { kind:'over', w, e };
+    if (e && e.answered>0) return { kind:'doing', w, e };
+    if (e && e.started) return { kind:'opened', w, e };
+    return { kind:'todo', w, e };
+  }
+  function renderAssign(){
+    const body = document.getElementById('as-body'), warn = document.getElementById('as-warn');
+    if (assignRows===null){
+      warn.innerHTML = '';
+      body.innerHTML = `<div class="empty" style="padding:30px;">Chưa có tab <b>BaiTap</b> trong Google Sheet (hoặc backend chưa được triển khai bản mới).<br>Khi chưa có tab này, học sinh thấy mọi bài tập như trước.</div>`;
+      return;
+    }
+    // ⚠️ Kiểm tra lỗi gõ trong Sheet: mã bài chưa có / tên học viên không tồn tại
+    const names = new Set(parsed.map(p=>p.username.toLowerCase()));
+    const issues = [];
+    assignRows.forEach(r=>{
+      if (!EX_CATALOG[r.id]) issues.push(`Dòng ${r.row}: mã bài <b>${escapeHtml(r.id)}</b> chưa có trên web.`);
+      const t = asTargets(r.to);
+      if (!t.length) issues.push(`Dòng ${r.row}: chưa ghi <b>Giao cho</b> (ALL hoặc tên học viên).`);
+      if (!asForAll(t)) t.filter(x=>!names.has(x)).forEach(x=>issues.push(`Dòng ${r.row}: không tìm thấy học viên <b>${escapeHtml(x)}</b>.`));
+      if (r.from && r.due && r.from > r.due) issues.push(`Dòng ${r.row}: ngày mở (${asDay(r.from)}) sau hạn nộp (${asDay(r.due)}).`);
+    });
+    warn.innerHTML = issues.length ? `<div class="as-warn">${ic('alert')} <b>Cần xem lại tab BaiTap:</b><br>${issues.join('<br>')}</div>` : '';
+
+    const today = asToday();
+    let ids = [...new Set(assignRows.map(r=>r.id))].filter(id=>EX_CATALOG[id]);
+    // lọc Unit
+    const unitSel = document.getElementById('as-unit');
+    const units = [...new Set(ids.map(id=>EX_CATALOG[id].unit))].sort((a,b)=>a-b);
+    const cur = unitSel.value;
+    unitSel.innerHTML = `<option value="">Tất cả Unit</option>` + units.map(u=>`<option value="${u}"${u===cur?' selected':''}>Unit ${u}</option>`).join('');
+    if (cur) ids = ids.filter(id=>EX_CATALOG[id].unit===cur);
+    if (document.getElementById('as-hide-old').checked)
+      ids = ids.filter(id=>assignRows.some(r=>r.id===id && (!r.due || r.due>=today)));
+    ids.sort((a,b)=>EX_CATALOG[a].unit-EX_CATALOG[b].unit || a.localeCompare(b));
+    if (!ids.length){ body.innerHTML = `<div class="empty" style="padding:30px;">Chưa giao bài nào${cur?' ở Unit '+cur:''}. Thêm dòng vào tab BaiTap để giao bài.</div>`; return; }
+
+    const q = (document.getElementById('as-search').value||'').trim().toLowerCase();
+    const rows = parsed.filter(p=>!p.isOut && (!q || p.username.toLowerCase().includes(q)))
+      .filter(p=>ids.some(id=>asCellInfo(p,id).kind!=='none'));
+
+    const head = ids.map(id=>{
+      const c = EX_CATALOG[id], infos = rows.map(p=>asCellInfo(p,id)).filter(x=>x.kind!=='none' && x.kind!=='soon');
+      const done = infos.filter(x=>x.kind==='done');
+      const avg = done.length ? Math.round(done.reduce((a,x)=>a+x.e.done.score/x.e.done.total,0)/done.length*100) : null;
+      const dues = [...new Set(assignRows.filter(r=>r.id===id && r.due).map(r=>r.due))].sort();
+      const pct = infos.length ? Math.round(done.length/infos.length*100) : 0;
+      return `<th><div class="as-col-id">${escapeHtml(id)} · Unit ${c.unit}</div><div class="as-col-t">${escapeHtml(c.label)} · ${escapeHtml(c.title)}</div>
+        <div class="as-col-m">${dues.length?'Hạn '+dues.map(asDay).join(', ')+' · ':''}${done.length}/${infos.length} đã nộp${avg!=null?' · TB '+avg+'%':''}</div>
+        <div class="as-col-bar"><i style="width:${pct}%"></i></div></th>`;
+    }).join('');
+
+    const total = id => { const c=EX_CATALOG[id]; return c.mcq + c.essay.length; };
+    const tr = rows.map(p=>{
+      // Đang làm gì: bài đang làm dở gần nhất
+      const doing = p.exercises.filter(e=>!e.done && e.answered>0 && e.id).sort((a,b)=>(b.startedAt||0)-(a.startedAt||0))[0];
+      const act = doing ? `<div class="as-stu-a doing">${ic('pen')} Đang làm ${escapeHtml(doing.id)} (${doing.answered}/${total(doing.id)})</div>` : '';
+      const tds = ids.map(id=>{
+        const x = asCellInfo(p,id), idx = parsed.indexOf(p);
+        const click = ` onclick="openAsModal(${idx},'${id}')"`;
+        if (x.kind==='none') return `<td><span class="cell none">—</span></td>`;
+        if (x.kind==='soon') return `<td><span class="cell soon">Mở ${asDay(x.w.from)}</span></td>`;
+        if (x.kind==='done'){
+          const d=x.e.done, low = d.score/d.total < 0.6;
+          return `<td><button class="cell done${low?' low':''}"${click}>${d.score}/${d.total}<small>${fmtDate(d.at)}</small>${x.late?'<span class="late">trễ</span>':''}</button></td>`;
+        }
+        if (x.kind==='doing') return `<td><button class="cell doing"${click}>${x.e.answered}/${total(id)}<small>đang làm</small></button></td>`;
+        if (x.kind==='opened') return `<td><button class="cell opened"${click}>Đã mở<small>chưa làm câu nào</small></button></td>`;
+        if (x.kind==='over') return `<td><button class="cell over"${click}>Quá hạn<small>hạn ${asDay(x.w.due)}</small></button></td>`;
+        return `<td><button class="cell todo"${click}>Chưa làm${x.w&&x.w.due?`<small>hạn ${asDay(x.w.due)}</small>`:''}</button></td>`;
+      }).join('');
+      return `<tr><td class="stu"><div class="as-stu-n">${escapeHtml(p.username)}</div><div class="as-stu-a">Vào: ${fmtDate(p.updatedAt)}</div>${act}</td>${tds}</tr>`;
+    }).join('');
+    body.innerHTML = rows.length
+      ? `<table class="as-grid"><thead><tr><th class="stu">Học viên</th>${head}</tr></thead><tbody>${tr}</tbody></table>`
+      : `<div class="empty" style="padding:30px;">Không có học viên phù hợp.</div>`;
+  }
+  function openAsModal(idx, id){
+    const p = parsed[idx], c = EX_CATALOG[id], x = asCellInfo(p, id), e = x.e, w = x.w;
+    const kv = [];
+    if (w){
+      kv.push(['Đợt giao', `${w.from?'Mở từ '+asDay(w.from):'Mở ngay'}${w.due?' · Hạn '+asDay(w.due):' · Không giới hạn'} <span style="color:var(--sub)">(dòng ${w.row} tab BaiTap)</span>`]);
+      if (w.note) kv.push(['Lời dặn', escapeHtml(w.note)]);
+    }
+    const label = { done:ic('checkCircle')+' Đã nộp', doing:ic('pen')+' Đang làm', opened:ic('eye')+' Đã mở bài, chưa làm câu nào', todo:ic('hourglass')+' Chưa làm', over:ic('ban')+' Quá hạn, chưa nộp' }[x.kind] || '';
+    kv.push(['Trạng thái', label + (x.late?' <span class="late">nộp trễ</span>':'')]);
+    if (e && e.done){
+      const d = e.done;
+      kv.push(['Điểm', `<b>${d.score}/${d.total}</b> (${Math.round(d.score/d.total*100)}%) · Trắc nghiệm ${d.mcq}/${c.mcq} · Tự luận ${d.essay}/${c.essay.length}`]);
+      kv.push(['Nộp lúc', fmtDate(d.at)]);
+      if (d.duration!=null) kv.push(['Thời gian làm', fmtDur(d.duration)]);
+      if (d.tabSwitches!=null) kv.push(['Chuyển tab / rời trang', d.tabSwitches ? `<span style="color:var(--warn);font-weight:800;">${d.tabSwitches} lần</span> (tổng ${fmtDur(d.awayMs)})` : '0 lần']);
+    } else if (e){
+      kv.push(['Tiến độ', `${e.answered}/${c.mcq + c.essay.length} câu`]);
+      if (e.startedAt) kv.push(['Mở bài lúc', fmtDate(e.startedAt)]);
+      if (e.tabSwitches) kv.push(['Chuyển tab', e.tabSwitches + ' lần']);
+    }
+    kv.push(['Cập nhật gần nhất', fmtDate(p.updatedAt)]);
+    const essays = e ? c.essay.map((qq,i)=>{
+      const vals = e.essays[i]||[];
+      const lines = qq.fields.map((f,fi)=>{ const v = String(vals[fi]||'').trim(); return v ? (f?`<b>${escapeHtml(f)}:</b> `:'')+escapeHtml(v) : ''; }).filter(Boolean);
+      return `<div class="as-essay"><div class="q">Tự luận ${i+1}: ${escapeHtml(qq.q)}</div>${lines.length?lines.join('<br>'):'<i style="color:var(--sub)">(chưa viết)</i>'}</div>`;
+    }).join('') : '';
+    document.getElementById('as-box').innerHTML = `<button class="as-close" onclick="closeAsModal()">×</button>
+      <h3>${escapeHtml(p.username)}</h3><div class="sub">${escapeHtml(id)} · Unit ${c.unit} · ${escapeHtml(c.label)} · ${escapeHtml(c.title)}</div>
+      <div class="as-kv">${kv.map(r=>`<div>${r[0]}</div><div>${r[1]}</div>`).join('')}</div>
+      ${essays ? '<div style="font-weight:800;font-size:13px;margin-bottom:8px;">Bài viết tự luận</div>'+essays : ''}`;
+    document.getElementById('as-modal').classList.add('on');
+  }
+  function closeAsModal(){ document.getElementById('as-modal').classList.remove('on'); }
+  document.addEventListener('keydown', ev=>{ if (ev.key==='Escape') closeAsModal(); });
 
   function escapeHtml(s){
     return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
