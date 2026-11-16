@@ -1471,6 +1471,12 @@
         .exd-note { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: #4a5568; background: #f6f5ff; border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
         .exd-note .ic { color: var(--point-color); margin-top: 3px; flex: 0 0 auto; }
         .exh-pill { display: inline-flex; align-items: center; gap: 5px; }
+        .ex-hist { display: flex; flex-direction: column; gap: 6px; }
+        .ex-hist-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; background: #f8f9fc; border: 1px solid #eef1f6; border-radius: 10px; padding: 9px 12px; font-size: 13.5px; color: #4a5568; }
+        .ex-hist-row span { display: inline-flex; align-items: center; gap: 6px; }
+        .ex-hist-row .ic { width: 14px; height: 14px; color: #a0aec0; }
+        .ex-hist-row b { margin-left: auto; color: #1a202c; }
+        .ex-hist-row em { flex: 1 1 100%; font-style: normal; color: #718096; font-size: 12.5px; }
         .ex-opt.picked { border-color: var(--point-color); background: var(--point-light); font-weight: 700; }
         .ex-done-status.pending { background: #fff8eb; border-color: #f6d4a0; color: #9c4221; }
         /* ✍️ Kết quả giáo viên chấm */
@@ -2812,12 +2818,20 @@
             return _pStr(all.slice(-200));
         }
         if (k.indexOf('exercise_' + key + '_') === 0) { // Bài tập: giữ bản đã nộp, trừ khi máy này vừa bấm "Làm lại" sau đó
-            var le = _pParse(lv, {}), se = _pParse(sv, {});
+            var le = _pParse(lv, {}), se = _pParse(sv, {}), pick = lv;
             if (_pIsObj(se) && se.done && !(_pIsObj(le) && le.done)) {
-                return (_pIsObj(le) && _pNum(le.resetAt) > _pNum(se.done.at)) ? lv : sv; // chỉ khi thật sự bấm "Làm lại" sau lần nộp đó
+                pick = (_pIsObj(le) && _pNum(le.resetAt) > _pNum(se.done.at)) ? lv : sv; // chỉ khi thật sự bấm "Làm lại" sau lần nộp đó
+            } else if (_pIsObj(le) && le.done && !(_pIsObj(se) && se.done)) {
+                pick = (_pIsObj(se) && _pNum(se.resetAt) > _pNum(le.done.at)) ? sv : lv;  // máy khác vừa làm lại / chuyển lịch sử
+            } else if (_pIsObj(le) && le.done && _pIsObj(se) && se.done) pick = (_pNum(se.done.at) > _pNum(le.done.at)) ? sv : lv;
+            // Lịch sử các đợt trước: gộp từ cả 2 phía
+            var hl = (_pIsObj(le) && Array.isArray(le.history)) ? le.history : [], hs = (_pIsObj(se) && Array.isArray(se.history)) ? se.history : [];
+            if (hl.length || hs.length) {
+                var seenH = {}, hist = hl.concat(hs).filter(function (h) { if (!_pIsObj(h) || seenH[h.at]) return false; seenH[h.at] = 1; return true; });
+                hist.sort(function (a, b) { return _pNum(a.at) - _pNum(b.at); });
+                var po = _pParse(pick, {}); if (_pIsObj(po)) { po.history = hist.slice(-20); return _pStr(po); }
             }
-            if (_pIsObj(le) && le.done && _pIsObj(se) && se.done) return (_pNum(se.done.at) > _pNum(le.done.at)) ? sv : lv;
-            return lv;
+            return pick;
         }
         return lv; // còn lại: giữ bản trên máy
     }
@@ -3422,6 +3436,7 @@
                 }
             }
             const st = _exState(unit, ex.key);
+            if (win && !preview) _exArchiveIfOld(unit, ex, st, win);
             const total = ex.mcq.length + ex.essay.length;
             const answered = Object.keys(st.picks || {}).length +
                 ex.essay.filter((e, ei) => (st.essays[ei] || []).some(v => String(v || '').trim())).length;
@@ -3440,7 +3455,7 @@
     function exNoticeRead() { try { const v = JSON.parse(localStorage.getItem(exNoticeStoreKey())); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
     function exNoticeId(i, graded) {
         if (graded || i.gradedNotice) return 'G|' + i.ex.id + '|' + (i.grade ? i.grade.sentAt : '');
-        return i.ex.id + '|' + (i.win.from || '') + '|' + (i.win.due || '');
+        return i.win.batch ? i.ex.id + '|' + i.win.batch : i.ex.id + '|' + (i.win.from || '') + '|' + (i.win.due || '');
     }
     function exNoticeItems() {
         const read = new Set(exNoticeRead());
@@ -3501,12 +3516,31 @@
     //                                  đúng/sai, điểm hay đáp án gợi ý.
     function exNeedsTeacher(ex) { return !!(ex && ex.essay && ex.essay.length); }
 
-    // ✍️ Kết quả giáo viên đã chấm & GỬI (status RETURNED). Chấm cho lần nộp đầu tiên.
+    // ✍️ Kết quả giáo viên chấm (mọi trạng thái) — đọc thô
+    function _exGradeRaw(unit, key) {
+        try { return JSON.parse(localStorage.getItem('exGrade_' + getStudentKey() + '_' + unit + '|' + key) || 'null'); } catch (e) { return null; }
+    }
+    // Kết quả đã GỬI cho đúng lần nộp hiện tại (lần nộp đầu của đợt đang làm)
     function _exGradeOf(unit, key) {
-        try {
-            const g = JSON.parse(localStorage.getItem('exGrade_' + getStudentKey() + '_' + unit + '|' + key) || 'null');
-            return g && g.status === 'RETURNED' ? g : null;
-        } catch (e) { return null; }
+        const g = _exGradeRaw(unit, key);
+        if (!g || g.status !== 'RETURNED') return null;
+        const st = _exState(unit, key), off = st.first || st.done;
+        if (!off || (g.submittedAt && Math.abs(g.submittedAt - off.at) > 1000)) return null;
+        return g;
+    }
+    // Giáo viên giao lại bài ở ĐỢT MỚI mà học viên đã nộp từ đợt trước -> làm lại từ đầu,
+    // bài nộp cũ (kèm kết quả chấm nếu có) lưu vào lịch sử để cả học viên lẫn giáo viên xem lại.
+    function _exArchiveIfOld(unit, ex, st, win) {
+        const off = st.first || st.done;
+        if (!off || !win.at || off.at >= win.at) return;
+        const g = _exGradeRaw(unit, ex.key);
+        const entry = { at: off.at, first: st.first || st.done, last: st.done || null, attempts: st.attempts || [],
+            grade: g && g.status === 'RETURNED' && (!g.submittedAt || Math.abs(g.submittedAt - off.at) <= 1000) ? g : null };
+        const hist = (st.history || []).filter(h => h.at !== entry.at).concat([entry]).slice(-20);
+        Object.keys(st).forEach(k => delete st[k]);
+        Object.assign(st, { picks: {}, essays: {}, done: null, history: hist, resetAt: Date.now(), tabSwitches: 0, awayMs: 0 });
+        try { localStorage.setItem(_exStoreKey(unit + '|' + ex.key), JSON.stringify(st)); } catch (e) {}
+        scheduleProgressPush(800);
     }
     function _exNum(v) { return String(Math.round((Number(v) || 0) * 100) / 100).replace('.', ','); }
 
@@ -3698,6 +3732,10 @@
         const content = document.getElementById('exercise-content');
         const all = exAssignedList(), items = all.filter(i => !i.preview), previews = all.filter(i => i.preview);
         const gvNote = isTeacherAccount ? `<div class="exd-note">${ic('eye')}<span><b>Chế độ giáo viên:</b> hiện toàn bộ kho bài. Học viên chỉ thấy bài được giao.</span></div>` : '';
+        if (!Object.keys(EXERCISE_DATA).length) {   // không tải được assets/exercise-data.js
+            content.innerHTML = `<div class="exh-empty"><div class="exh-empty-ic">${ic('alert')}</div><b>Không tải được nội dung bài tập.</b><span>Vui lòng tải lại trang. Nếu vẫn lỗi, vui lòng báo giáo viên.</span></div>`;
+            return;
+        }
         if (!all.length) {
             content.innerHTML = `<div class="exh-empty"><div class="exh-empty-ic">${ic('inbox')}</div><b>Chưa có bài tập.</b></div>`;
             return;
@@ -3940,6 +3978,12 @@
                 (grade && grade.essays && grade.essays[ei] ? `<div class="ex-tnote">${ic('pen')}<span><b>Giáo viên chấm: ${_exNum(grade.essays[ei].score)}/1</b>${grade.essays[ei].note ? ' — ' + _escHtml(grade.essays[ei].note) : ''}</span></div>` : '') +
                 '</div>';
         });
+        if (st.history && st.history.length) {
+            html += '<div class="ex-block-title">Lần làm trước</div><div class="ex-hist">' + st.history.slice().reverse().map(h => {
+                const f = h.first || {}, sc = h.grade ? `${_exNum(h.grade.total)}/${h.grade.max}` : (needT ? 'chưa có kết quả' : `${f.score}/${f.total}`);
+                return `<div class="ex-hist-row"><span>${ic('flag')} Nộp ${_fmtDoneAt(h.at)}</span><b>${sc}</b>${h.grade && h.grade.comment ? `<em>${_escHtml(h.grade.comment)}</em>` : ''}</div>`;
+            }).join('') + '</div>';
+        }
         if (!fin) html += `<div class="ex-submit-wrap"><button class="btn btn-primary ex-submit-btn" onclick="submitExercise()">Nộp bài</button>` +
             `<div class="ex-submit-note">${needT ? 'Kết quả và đáp án gợi ý có sau khi giáo viên chấm.' : 'Đáp án gợi ý hiện sau khi nộp bài.'}</div></div>`;
         document.getElementById('exercise-content').innerHTML = html;

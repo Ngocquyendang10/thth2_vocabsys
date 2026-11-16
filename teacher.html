@@ -506,6 +506,8 @@
   .rv-btns .btn{width:100%;}
   .rv-btns .btn:disabled{opacity:.5; cursor:default;}
   .rv-danger{color:var(--bad) !important;}
+  .rv-hist{margin-top:14px; border-top:1px dashed var(--line); padding-top:6px;}
+  .rv-hrow{display:flex; justify-content:space-between; gap:8px; font-size:12.5px; padding:5px 0; color:var(--text2);}
   .rv-msg{font-size:12.5px; color:var(--sub); margin-top:8px; min-height:16px; text-align:center;}
   @media (max-width:1000px){ .rv-grid{grid-template-columns:1fr;} .rv-side{position:static;} .rv-opts{grid-template-columns:1fr;} }
 </style>
@@ -1111,11 +1113,13 @@
     closeAsModal();
     const p = parsed[idx], ex = exFull(id), e = p && p.exercises.find(x => x.id === id);
     if (!p || !ex || !e) { openAsModal(idx, id, batchId); return; }
-    const off = e.first || e.done;                                   // lần nộp chính thức (đầu tiên)
+    const bb = findBatch(batchId);
+    let off = e.first || e.done;                                     // lần nộp chính thức (đầu tiên)
+    if (off && bb && bb.at && off.at < bb.at) off = null;            // nộp ở đợt trước -> xem trong lịch sử
     const sameAsCur = e.done && (!e.first || e.first.at === e.done.at);
     const picks = (off && off.picks) || (!off || sameAsCur ? e.cur.picks : null) || {};
     const essays = (off && off.essays) || (!off || sameAsCur ? e.cur.essays : null) || {};
-    const g = e.grade || null;
+    const g = gradeFor(e, off);
     const gEss = {};
     ex.essay.forEach((es, i) => {
       const saved = g && g.essays && g.essays[i];
@@ -1187,6 +1191,14 @@
 
     // ---------- Bảng chấm ----------
     const total = mcqOk + rvEssayScore();
+    // Các đợt trước (bài nộp cũ được lưu lại)
+    const hist = (e.cur.history || []).slice().reverse();
+    const ex0 = e.first || e.done;
+    if (ex0 && !off && !hist.some(h=>h.at===ex0.at)) hist.unshift({ at: ex0.at, first: ex0, grade: gradeFor(e, ex0) });
+    const histHtml = hist.length ? `<div class="rv-hist"><div class="rv-lab">Lần nộp ở đợt trước</div>` + hist.map(h=>{
+      const f = h.first || {}, gg = h.grade;
+      return `<div class="rv-hrow"><span>${fmtDate(h.at)}</span><b>${gg ? num(gg.total)+'/'+gg.max+' · đã chấm' : (f.score!=null ? f.score+'/'+f.total+' · máy' : '—')}</b></div>`;
+    }).join('') + `</div>` : '';
     const side = `<div class="rv-side">
         <div class="rv-who"><b>${escapeHtml(p.username)}</b><span>${escapeHtml(c.label)} · ${escapeHtml(c.title)} · Unit ${c.unit}</span></div>
         ${st}
@@ -1200,7 +1212,8 @@
           <button class="btn btn-ghost" ${off ? '' : 'disabled'} onclick="rvSave(false)">${ic('save')} Lưu nháp</button>
           ${rv.grade && rv.grade.status === 'RETURNED' ? `<button class="btn btn-ghost rv-danger" onclick="rvSave(false, true)">Thu hồi kết quả</button>` : ''}
         </div>
-        <div class="rv-msg" id="rv-msg">${off ? '' : 'Học viên chưa nộp bài.'}</div>
+        <div class="rv-msg" id="rv-msg">${off ? '' : 'Học viên chưa nộp bài trong đợt này.'}</div>
+        ${histHtml}
       </div>`;
 
     document.getElementById('review-view').innerHTML = `
@@ -1366,6 +1379,7 @@
       b.units = [...new Set(b.ids.map(id=>EX_CATALOG[id] ? EX_CATALOG[id].unit : '?'))].sort((x,y)=>x-y);
       b.targets = asTargets(b.to); b.all = asForAll(b.targets);
       b.state = (b.from && b.from > today) ? 'soon' : (b.due && b.due < today) ? 'past' : 'open';
+      b.at = b.rows.reduce((m, r) => Math.max(m, Number(r.at) || 0), 0);   // thời điểm tạo đợt
     });
     return list;
   }
@@ -1381,14 +1395,24 @@
   // Trạng thái 1 bài của 1 học viên trong 1 đợt. Điểm chính thức = lần nộp ĐẦU TIÊN.
   function cellOf(p, id, b){
     const e = p.exercises.find(x=>x.id===id) || null;
-    const off = e ? (e.first || e.done) : null;
+    let off = e ? (e.first || e.done) : null;
+    // Bài nộp TRƯỚC khi tạo đợt này thuộc đợt cũ (đã nằm trong lịch sử) — đợt này coi như chưa nộp
+    const prev = !!(off && b.at && off.at < b.at);
+    if (prev) off = null;
     const redo = e ? (e.attempts||[]).length : 0;   // mỗi lần bấm "Làm lại" lưu 1 lượt đã nộp vào attempts
-    if (off) return { kind:'done', e, off, redo, late: !!(b.due && off.at > asDueEnd(b.due)) };
+    if (off) return { kind:'done', e, off, redo, late: !!(b.due && off.at > asDueEnd(b.due)), grade: gradeFor(e, off) };
     if (b.state==='soon') return { kind:'soon', e };
-    if (b.state==='past') return { kind:'over', e };
+    if (b.state==='past') return { kind:'over', e, prev };
+    if (prev) return { kind:'todo', e, prev };
     if (e && e.answered>0) return { kind:'doing', e };
     if (e && e.started) return { kind:'opened', e };
     return { kind:'todo', e };
+  }
+  // Kết quả chấm chỉ áp cho đúng lần nộp đó (đợt mới chấm lại từ đầu)
+  function gradeFor(e, off){
+    const g = e && e.grade;
+    if (!g || !off) return null;
+    return (!g.submittedAt || Math.abs(g.submittedAt - off.at) <= 1000) ? g : null;
   }
   function cellHtml(x, id, b, idx){
     const canReview = x.kind==='done' || x.kind==='doing' || x.kind==='opened';
@@ -1396,7 +1420,7 @@
     if (x.kind==='soon') return `<span class="cell soon">Mở ${asDay(b.from)}</span>`;
     if (x.kind==='done'){
       const low = x.off.score/x.off.total < 0.6;
-      const g = x.e && x.e.grade;
+      const g = x.grade;
       const needs = EX_CATALOG[id] && EX_CATALOG[id].essay.length > 0;   // thuần trắc nghiệm: máy đã chấm, không cần chờ
       const gtag = g ? (g.status === 'RETURNED' ? '<span class="gd sent">đã gửi</span>' : '<span class="gd">nháp</span>') : (needs ? '<span class="gd wait">chờ chấm</span>' : '');
       const tags = gtag + (x.late ? '<span class="late">trễ</span>' : '') + (x.redo ? `<span class="redo">+${x.redo}</span>` : '');
@@ -1407,7 +1431,7 @@
     if (x.kind==='doing') return `<button class="cell doing"${click}>${x.e.answered}/${exTotal(id)}<small>đang làm</small></button>`;
     if (x.kind==='opened') return `<button class="cell opened"${click}>Đã mở<small>0/${exTotal(id)}</small></button>`;
     if (x.kind==='over') return `<button class="cell over"${click}>Quá hạn</button>`;
-    return `<button class="cell todo"${click}>Chưa làm</button>`;
+    return `<button class="cell todo"${click}>Chưa làm${x.prev ? '<small>đã nộp đợt trước</small>' : ''}</button>`;
   }
   function batchStats(b){
     const stu = batchStudents(b);
@@ -1460,7 +1484,7 @@
     else if (b.due){ const l = asDaysLeft(b.due); state = `<span class="bt-state ${l<=1?'warn':'open'}">${l===0?'Hạn là hôm nay':l===1?'Còn 1 ngày':'Còn '+l+' ngày'}</span>`; }
     else state = `<span class="bt-state open">Đang mở</span>`;
     const pct = st.stu.length ? Math.round(st.full/st.stu.length*100) : 0;
-    const waiting = st.stu.reduce((a,p)=>a + b.ids.filter(id=>{ const x = cellOf(p,id,b); return x.kind==='done' && !(x.e && x.e.grade) && EX_CATALOG[id] && EX_CATALOG[id].essay.length > 0; }).length, 0);
+    const waiting = st.stu.reduce((a,p)=>a + b.ids.filter(id=>{ const x = cellOf(p,id,b); return x.kind==='done' && !x.grade && EX_CATALOG[id] && EX_CATALOG[id].essay.length > 0; }).length, 0);
     let html = `<div class="bt-card${open?' open':''}${b.state==='past'?' past':''}">
       <div class="bt-head" onclick="toggleBatch('${b.id}')">
         <div class="bt-no"><small>Đợt</small><b>${b.no}</b></div>
@@ -1486,7 +1510,8 @@
         let d = 0;
         const tds = b.ids.map(id=>{ const x = cellOf(p,id,b); if (x.kind==='done') d++; return `<td>${cellHtml(x,id,b,idx)}</td>`; }).join('');
         const cls = d===b.ids.length ? 'full' : d ? 'part' : '';
-        const seen = b.ids.every(id=>p.noticeRead.has(id+'|'+(b.from||'')+'|'+(b.due||'')) || cellOf(p,id,b).kind==='done');
+        // Chỉ tính "đã đọc" khi học viên tick đọc thông báo của ĐÚNG đợt này (nộp bài ở đợt cũ không tính)
+        const seen = b.ids.every(id=>p.noticeRead.has(id+'|'+b.id) || p.noticeRead.has(id+'|'+(b.from||'')+'|'+(b.due||'')));
         return `<tr><td class="stu"><b>${escapeHtml(p.username)}</b><div class="as-stu-a">${seen ? '<span class="seen on">Đã đọc thông báo</span>' : '<span class="seen">Chưa đọc thông báo</span>'} · Vào ${fmtDate(p.updatedAt)}</div></td>${tds}<td><span class="bt-done ${cls}">${d}/${b.ids.length}</span></td></tr>`;
       }).join('');
       html += `<div class="bt-body">
