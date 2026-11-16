@@ -3877,6 +3877,12 @@
     function submitExercise() {
         const ex = _exCurrent(), st = _exState();
         if (!ex || st.done) return;
+        // Để trang mở qua giờ hạn nộp -> không cho nộp nữa
+        const info = exOpen ? _exInfoOf(exOpen.unit, exOpen.key) : null;
+        if (!info || info.expired) {
+            _exDialog(() => alert('Bài tập này đã quá hạn nộp. Vui lòng liên hệ giáo viên nếu cần mở lại.'));
+            renderExerciseMode(false); return;
+        }
         const left = ex.mcq.length - Object.keys(st.picks).length;
         if (left > 0) { _exDialog(() => alert(`Bạn còn ${left} câu trắc nghiệm chưa làm. Vui lòng hoàn thành trước khi nộp bài.`)); return; }
         const emptyEssay = ex.essay.some((e, ei) => e.fields.some((f, fi) => !String((st.essays[ei] || [])[fi] || '').trim()));
@@ -3885,7 +3891,9 @@
         const essay = ex.essay.filter((e, ei) => _gradeEssay(e, st.essays[ei])).length;
         const now = Date.now();
         st.done = { mcq, essay, score: mcq + essay, total: ex.mcq.length + ex.essay.length, at: now,
-            duration: now - (st.startedAt || now), tabSwitches: st.tabSwitches || 0, awayMs: st.awayMs || 0 };
+            duration: now - (st.startedAt || now), tabSwitches: st.tabSwitches || 0, awayMs: st.awayMs || 0,
+            essays: JSON.parse(JSON.stringify(st.essays || {})) };   // lưu kèm bài viết để giáo viên xem lại
+        if (!st.first) st.first = Object.assign({}, st.done);   // lần nộp đầu tiên = điểm chính thức
         _exSave();
         scheduleProgressPush(500); // 📤 gửi kết quả cho giáo viên ngay
         renderExerciseMode(false);
@@ -3895,9 +3903,12 @@
 
     function resetExercise() {
         const st = _exState();
-        if (st.done && !_exDialog(() => confirm('Làm lại sẽ xoá kết quả bài đã nộp. Bạn có chắc không?'))) return;
+        if (st.done && !_exDialog(() => confirm('Làm lại sẽ bắt đầu một lượt làm bài mới. Điểm của lần nộp đầu tiên vẫn được giáo viên ghi nhận. Bạn có muốn tiếp tục?'))) return;
         if (exOpen && exOpen.locked) return; // đã hết hạn: không làm lại được
-        exerciseState[_exKey()] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0 };
+        // Làm lại: GIỮ lịch sử — lần nộp đầu (first) + các lần đã nộp (attempts) để giáo viên vẫn thấy
+        const old = st || {};
+        exerciseState[_exKey()] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0,
+            first: old.first || old.done || null, attempts: (old.attempts || []).concat(old.done ? [old.done] : []) };
         _exSave();
         renderExerciseMode(false);
     }
@@ -4025,13 +4036,20 @@
     }
 
     // Hội thoại trong List từ vựng: "A: ... B: ..." -> người B (C...) xuống dòng
-    function dialogBreak(html) { return String(html).replace(/\s+(?=[A-Z]\s?[:：])/g, '<br>'); }
+    // Nhãn người nói trong hội thoại — Sheet ghi theo 3 kiểu: "A: / B:", "A. / B.", "가: / 나:"
+    const SPK_LABEL = '(?:[A-Z]\\s?[:：]|[A-Z]\\.(?=\\s)|[가나다라마]\\s?[:：])';
+    const SPK_ANY = new RegExp('(?:^|\\s)' + SPK_LABEL, 'g');
+    const SPK_BEFORE = new RegExp('\\s+(?=' + SPK_LABEL + ')', 'g');
+    const SPK_SPLIT = new RegExp('(?:^|\\s+)' + SPK_LABEL + '\\s*');
+    function isDialogue(text) { return (String(text || '').match(SPK_ANY) || []).length >= 2; }
+    // Hội thoại -> người sau (B, 나...) xuống dòng. sep = '<br>' (HTML) hoặc '\n' (innerText)
+    function dialogBreak(html, sep) { return isDialogue(html) ? String(html).replace(SPK_BEFORE, sep || '<br>') : String(html); }
 
     // Tách hội thoại "A: ... B: ..." thành từng lượt, bỏ nhãn A/B (để giọng đọc không đọc chữ "A", "B")
     function _dialogueTurns(text) {
         const t = String(text || '');
-        if (!/(^|\s)[A-Z]\s?[:：]/.test(t)) return null;
-        const parts = t.split(/(?:^|\s+)[A-Z]\s?[:：]\s*/).map(x => x.trim()).filter(Boolean);
+        if (!isDialogue(t)) return null;
+        const parts = t.split(SPK_SPLIT).map(x => x.trim()).filter(Boolean);
         return parts.length ? parts : null;
     }
 
@@ -6947,7 +6965,7 @@
 
     // Hội thoại "A: ... B: ..." -> người B (C...) xuống dòng. Nhận chuỗi THÔ, tự escape.
     function wsDialogHtml(text) {
-        return wsEsc(text).replace(/\s+(?=[A-Z]\s?[:：])/g, '<br>');
+        return dialogBreak(wsEsc(text));
     }
 
     // Gợi ý chữ cái đầu (cho chiều Hàn -> Việt): "Chủ nhà hàng" -> "C.. n.. h..."
@@ -6965,7 +6983,7 @@
     function wsKoFrameHint(text) {
         const toks = String(text || '').trim().split(/\s+/).filter(Boolean);
         return toks.map((t, i) => {
-            if (/^[A-Z]\s*[:：]$/.test(t)) return t;                 // nhãn hội thoại A: / B:
+            if (/^(?:[A-Z][:：.]|[가나다라마][:：])$/.test(t)) return t;   // nhãn hội thoại A: / A. / 가:
             const m = t.match(/^(.*?)([.,!?…~"”']*)$/), core = m[1], punct = m[2];
             if (/[.!?]/.test(punct) || i === toks.length - 1) return t; // vị ngữ cuối câu giữ nguyên
             const pt = WS_PARTICLES.find(x => core.length > x.length && core.endsWith(x));
@@ -7523,7 +7541,7 @@
         btn.dataset.opt = optValue;
         const badge = document.createElement('span'); badge.className = 'opt-badge'; badge.innerText = letter;
         const txt = document.createElement('span'); txt.className = 'opt-text';
-        txt.innerText = String(optValue).replace(/\s+(?=[A-Z]\s?[:：])/g, '\n'); // hội thoại: người B xuống dòng
+        txt.innerText = dialogBreak(optValue, '\n'); // hội thoại: người B xuống dòng
         btn.appendChild(badge); btn.appendChild(txt);
         return btn;
     }
@@ -9351,12 +9369,13 @@
     // Hội thoại trong đáp án trên WEB: A và B luôn là hai dòng riêng, thẳng cột.
     function ctFormatOption(raw) {
         const text = String(raw == null ? '' : raw).trim();
-        const m = text.match(/^A:\s*([\s\S]*?)\s+B:\s*([\s\S]*)$/);
-        if (!m) return examEsc(text);
-        return '<span class="ct-dialogue">'
-            + '<span class="ct-dline"><b class="ct-speaker">A:</b><span>' + examEsc(m[1]) + '</span></span>'
-            + '<span class="ct-dline"><b class="ct-speaker">B:</b><span>' + examEsc(m[2]) + '</span></span>'
-            + '</span>';
+        if (!isDialogue(text)) return examEsc(text);
+        const lines = text.replace(SPK_BEFORE, '\n').split('\n').map(x => x.trim()).filter(Boolean);
+        return '<span class="ct-dialogue">' + lines.map(l => {
+            const mm = l.match(new RegExp('^(' + SPK_LABEL + ')\\s*([\\s\\S]*)$'));
+            return mm ? '<span class="ct-dline"><b class="ct-speaker">' + examEsc(mm[1]) + '</b><span>' + examEsc(mm[2]) + '</span></span>'
+                      : '<span class="ct-dline"><span>' + examEsc(l) + '</span></span>';
+        }).join('') + '</span>';
     }
 
     function ctFormatSpellPrompt(raw) {

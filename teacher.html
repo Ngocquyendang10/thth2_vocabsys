@@ -211,6 +211,120 @@
   .as-essay{background:var(--bg); border-radius:12px; padding:10px 12px; margin-bottom:8px; font-size:13.5px; line-height:1.6;}
   .as-essay .q{font-size:12px; font-weight:800; color:var(--sub); margin-bottom:4px;}
   .as-close{float:right; border:none; background:var(--bg); border-radius:10px; width:34px; height:34px; font-size:18px; cursor:pointer; box-shadow:var(--neu-sm);}
+  /* ===== Giao bài mới ===== */
+  .btn-main{background:var(--point); color:#fff; box-shadow:0 6px 16px rgba(97,76,255,.28);}
+  .btn-main:hover{filter:brightness(1.05);}
+  .btn .ic{width:16px; height:16px;}
+  .ga-box{max-width:860px; padding:0; display:flex; flex-direction:column; max-height:92vh; overflow:hidden;}
+  .ga-head{display:flex; align-items:center; justify-content:space-between; padding:18px 22px 12px; border-bottom:1px solid var(--line);}
+  .ga-head h3{margin:0; font-size:18px;}
+  .ga-body{overflow:auto; padding:6px 22px 18px;}
+  .ga-sec{padding:16px 0; border-bottom:1px dashed var(--line);}
+  .ga-sec:last-child{border-bottom:none;}
+  .ga-sec-h{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .ga-num{width:24px; height:24px; border-radius:50%; background:var(--point); color:#fff; font-size:12px; font-weight:800; display:flex; align-items:center; justify-content:center; flex:0 0 auto;}
+  .ga-sec-h b{font-size:15px;}
+  .ga-sec-h .meta{margin-left:auto; font-size:12.5px; color:var(--sub); font-weight:700;}
+  .ga-groups{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px;}
+  .ga-chip{display:inline-flex; align-items:center; gap:6px; border:1.5px solid var(--line); background:var(--card); border-radius:999px; padding:6px 12px; font-size:13px; font-weight:700; color:var(--text); cursor:pointer; font-family:inherit;}
+  .ga-chip .ic{width:14px; height:14px;}
+  .ga-chip.on{background:var(--point); border-color:var(--point); color:#fff;}
+  .ga-chip .del{opacity:.55; margin-left:2px; display:inline-flex;} .ga-chip .del:hover{opacity:1;}
+  .ga-chip.dashed{border-style:dashed; color:var(--point);}
+  .ga-stu{display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:8px;}
+  .ga-check{display:flex; align-items:center; gap:9px; padding:9px 11px; border:1.5px solid var(--line); border-radius:12px; cursor:pointer; font-size:13.5px; font-weight:700; background:var(--card); user-select:none;}
+  .ga-check input{width:16px; height:16px; accent-color:var(--point); margin:0;}
+  .ga-check.on{border-color:var(--point); background:var(--point-light);}
+  .ga-check .sub{display:block; font-size:11.5px; color:var(--sub); font-weight:600; margin-top:1px;}
+  .ga-unit{margin-bottom:12px;}
+  .ga-unit-h{font-size:12px; font-weight:800; color:var(--sub); text-transform:uppercase; letter-spacing:.4px; margin:0 0 8px 2px;}
+  .ga-ex{display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:8px;}
+  .ga-dates{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  .ga-field label{display:block; font-size:12px; font-weight:800; color:var(--sub); margin-bottom:6px;}
+  .ga-field input[type=date], .ga-field input[type=text]{width:100%; padding:10px 12px; border:1.5px solid var(--line); border-radius:11px; font-size:14px; font-family:inherit; background:var(--card); color:var(--text);}
+  .ga-quick{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  .ga-quick button{border:none; background:var(--bg); border-radius:8px; padding:5px 10px; font-size:12px; font-weight:700; color:var(--point); cursor:pointer; font-family:inherit;}
+  .ga-foot{display:flex; align-items:center; gap:12px; padding:14px 22px; border-top:1px solid var(--line); background:#fbfbfe;}
+  .ga-sum{flex:1; font-size:13.5px; color:var(--sub);}
+  .ga-sum b{color:var(--text);}
+  .ga-msg{font-size:13px; font-weight:700; color:var(--bad); margin-top:6px; min-height:18px;}
+  .ga-search{width:100%; padding:9px 12px; border:1.5px solid var(--line); border-radius:11px; font-size:13.5px; font-family:inherit; margin-bottom:10px;}
+  /* ===== Theo đợt ===== */
+  .seg{display:inline-flex; background:var(--bg); border-radius:12px; padding:4px; box-shadow:var(--neu-concave);}
+  .seg button{border:none; background:transparent; padding:7px 13px; border-radius:9px; font-size:13px; font-weight:800; color:var(--sub); cursor:pointer; font-family:inherit;}
+  .seg button.on{background:var(--card); color:var(--point); box-shadow:var(--neu-sm);}
+  .bt-card{background:var(--card); border:1px solid var(--line); border-radius:18px; margin-bottom:12px; box-shadow:0 1px 2px rgba(26,32,44,.04),0 4px 14px rgba(26,32,44,.04); overflow:hidden;}
+  .bt-head{display:flex; align-items:center; gap:16px; padding:14px 18px; cursor:pointer;}
+  .bt-head:hover{background:#fafbff;}
+  .bt-no{flex:0 0 auto; width:54px; height:54px; border-radius:14px; background:var(--point-light); color:var(--point); display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:800; line-height:1.05;}
+  .bt-no small{font-size:10px; text-transform:uppercase; letter-spacing:.5px;}
+  .bt-no b{font-size:20px;}
+  .bt-card.past .bt-no{background:#eef0f4; color:#8a94a6;}
+  .bt-main{flex:1 1 auto; min-width:0;}
+  .bt-title{font-size:16px; font-weight:800; color:var(--text);}
+  .bt-meta{display:flex; flex-wrap:wrap; gap:4px 14px; margin-top:5px; font-size:12.5px; color:var(--sub);}
+  .bt-meta span{display:inline-flex; align-items:center; gap:5px;}
+  .bt-meta .ic{width:14px; height:14px; color:#a0aec0;}
+  .bt-state{font-size:11.5px; font-weight:800; padding:3px 9px; border-radius:99px;}
+  .bt-state.open{background:#e9f9ee; color:#2f855a;} .bt-state.warn{background:#fff4e5; color:#c05621;}
+  .bt-state.past{background:#edf0f5; color:#718096;} .bt-state.soon{background:var(--point-light); color:var(--point);}
+  .bt-prog{flex:0 0 190px; text-align:right;}
+  .bt-prog b{font-size:15px;} .bt-prog small{display:block; font-size:11.5px; color:var(--sub); font-weight:700; margin-top:2px;}
+  .bt-bar{height:6px; border-radius:99px; background:#e9edf5; overflow:hidden; margin-top:6px;}
+  .bt-bar i{display:block; height:100%; background:var(--ok);}
+  .bt-chev{flex:0 0 auto; color:var(--sub); transition:transform .2s;}
+  .bt-card.open .bt-chev{transform:rotate(90deg);}
+  .bt-body{border-top:1px solid var(--line); padding:12px 18px 16px;}
+  .bt-note{display:flex; gap:8px; font-size:13px; color:#4a5568; background:#f6f5ff; border-radius:10px; padding:8px 12px; margin-bottom:12px;}
+  .bt-note .ic{color:var(--point); margin-top:2px;}
+  .bt-acts{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; align-items:center;}
+  .bt-acts button{border:none; background:var(--bg); border-radius:10px; padding:7px 12px; font-size:12.5px; font-weight:700; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:6px; color:var(--text);}
+  .bt-acts button .ic{width:14px; height:14px;}
+  .bt-acts button.danger{color:var(--bad); margin-left:auto;}
+  .bt-acts input[type=date]{padding:6px 9px; border:1.5px solid var(--line); border-radius:9px; font-family:inherit; font-size:13px;}
+  .bt-scroll{overflow-x:auto;}
+  table.bt-t{border-collapse:separate; border-spacing:0; width:100%;}
+  .bt-t th,.bt-t td{padding:8px 10px; border-bottom:1px solid var(--line); text-align:center; font-size:13px;}
+  .bt-t th{font-size:11.5px; color:var(--sub); font-weight:800; vertical-align:bottom;}
+  .bt-t th .t{display:block; color:var(--text); font-size:12.5px; text-transform:none; max-width:170px; margin:2px auto 0;}
+  .bt-t th .rm{border:none; background:none; color:#c3cad6; cursor:pointer; padding:0 0 0 4px; vertical-align:-2px;}
+  .bt-t th .rm:hover{color:var(--bad);} .bt-t th .rm .ic{width:13px; height:13px;}
+  .bt-t td.stu,.bt-t th.stu{text-align:left; position:sticky; left:0; background:var(--card); min-width:150px;}
+  .bt-t tr:last-child td{border-bottom:none;}
+  .bt-done{font-weight:800; font-size:12.5px; padding:4px 9px; border-radius:99px; background:#f3f4f8; color:#8a94a6; white-space:nowrap;}
+  .bt-done.full{background:#e8f7ee; color:#1c7c43;} .bt-done.part{background:#fff4e5; color:#c05621;}
+  .redo{display:inline-block; font-size:10px; background:var(--point-light); color:var(--point); padding:0 6px; border-radius:99px; margin-top:1px; font-weight:800;}
+  /* ===== Theo học viên ===== */
+  .sv-row{display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--line); border-radius:16px; padding:12px 16px; margin-bottom:10px;}
+  .sv-name{flex:0 0 190px; min-width:0; cursor:pointer;}
+  .sv-name b{font-size:14px;} .sv-name small{display:block; font-size:11.5px; color:var(--sub); margin-top:2px;}
+  .sv-name:hover b{color:var(--point);}
+  .sv-chips{flex:1 1 auto; display:flex; flex-wrap:wrap; gap:6px;}
+  .sv-chip{border:none; font-family:inherit; font-size:12px; font-weight:800; padding:5px 10px; border-radius:99px; cursor:pointer; background:#f3f4f8; color:#8a94a6;}
+  .sv-chip.full{background:#e8f7ee; color:#1c7c43;} .sv-chip.part{background:#fff4e5; color:#c05621;}
+  .sv-chip.over{background:#fdecec; color:#c53030;} .sv-chip.soon{background:var(--point-light); color:var(--point);}
+  .sv-total{flex:0 0 auto; text-align:right; font-size:12.5px; color:var(--sub); font-weight:700;}
+  .sv-total b{display:block; font-size:16px; color:var(--text);}
+  .sv-batch{margin-bottom:14px;}
+  .sv-batch h4{margin:0 0 6px; font-size:13.5px;} .sv-batch h4 small{color:var(--sub); font-weight:600;}
+  .sv-ex{display:flex; align-items:center; justify-content:space-between; gap:10px; padding:7px 10px; background:var(--bg); border-radius:10px; margin-bottom:6px; font-size:13px;}
+  @media (max-width:760px){ .bt-head{flex-wrap:wrap;} .bt-prog{flex:1 1 100%; text-align:left;} .sv-row{flex-wrap:wrap;} .sv-name{flex:1 1 100%;} }
+  /* Các đợt đã giao */
+  .rd-wrap{margin-top:22px;}
+  .rd-h{display:flex; align-items:center; gap:8px; font-size:15px; font-weight:800; margin:0 0 10px 2px;}
+  .rd-h .ic{color:var(--point);}
+  table.rd{width:100%; border-collapse:collapse; font-size:13px; background:var(--card); border-radius:14px; overflow:hidden; box-shadow:var(--neu-sm);}
+  .rd th{background:#f8f9fd; text-align:left; font-size:11.5px; text-transform:uppercase; letter-spacing:.3px; color:var(--sub); padding:9px 12px;}
+  .rd td{padding:10px 12px; border-top:1px solid var(--line); vertical-align:middle;}
+  .rd .id{font-weight:800; color:var(--point);}
+  .rd .muted{color:var(--sub);}
+  .rd .past{color:var(--bad); font-weight:700;}
+  .rd-act{display:flex; gap:6px; justify-content:flex-end; align-items:center;}
+  .rd-act button{border:none; background:var(--bg); border-radius:9px; padding:6px 10px; font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; display:inline-flex; align-items:center; gap:5px; color:var(--text);}
+  .rd-act button .ic{width:14px; height:14px;}
+  .rd-act button.danger{color:var(--bad);}
+  .rd-act input[type=date]{padding:5px 8px; border:1.5px solid var(--line); border-radius:9px; font-family:inherit; font-size:12.5px;}
+  @media (max-width:640px){ .ga-dates{grid-template-columns:1fr;} .rd-hide-sm{display:none;} }
   @media (max-width:640px){ .as-kv{grid-template-columns:1fr;} .as-kv div:nth-child(odd){margin-top:6px;} }
 </style>
 </head>
@@ -251,26 +365,32 @@
     <!-- 📝 BÀI TẬP ĐƯỢC GIAO -->
     <div id="view-assign" style="display:none;">
       <div class="as-tools">
-        <a class="btn btn-ghost" id="as-sheet-link" target="_blank" rel="noopener" style="display:none;"><i data-ic="edit"></i> Giao bài trong Google Sheet</a>
+        <button class="btn btn-main" onclick="openGiaoBai()"><i data-ic="plus"></i> Giao bài mới</button>
+        <a class="btn btn-ghost" id="as-sheet-link" target="_blank" rel="noopener" style="display:none;"><i data-ic="external"></i> Mở tab BaiTap</a>
+        <div class="seg" id="as-mode">
+          <button data-m="batch" onclick="setAsMode('batch')">Theo đợt</button><button data-m="student" onclick="setAsMode('student')">Theo học viên</button>
+        </div>
+        <select id="as-status" onchange="renderAssign()"><option value="active">Đang mở và sắp mở</option><option value="all">Tất cả các đợt</option><option value="past">Đã hết hạn</option></select>
         <select id="as-unit" onchange="renderAssign()"></select>
-        <label class="row-check" style="margin:0;"><input type="checkbox" id="as-hide-old" onchange="renderAssign()"> Ẩn bài đã hết hạn</label>
         <div class="grow"></div>
         <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><input type="search" id="as-search" placeholder="Tìm học viên…" oninput="renderAssign()"></div>
       </div>
-      <div class="as-help">Giao bài: thêm 1 dòng vào tab <code>BaiTap</code> — Mã bài · Giao cho (<code>ALL</code> hoặc tên đăng nhập, cách nhau dấu phẩy) · Mở từ ngày · Hạn nộp · Lời dặn. Học sinh thấy bài trong vòng 2 phút. Bấm vào ô để xem chi tiết bài làm.</div>
+      <div class="as-help">Mỗi lần bấm <b>Giao bài mới</b> tạo ra 1 đợt gồm một hoặc nhiều bài. Học viên thấy bài trong vòng 2 phút. Bấm vào từng ô để xem chi tiết bài làm.</div>
       <div id="as-warn"></div>
-      <div class="as-scroll"><div id="as-body"></div></div>
-      <div class="as-legend">
+      <div id="as-body"></div>
+      <div class="as-legend" id="as-legend">
         <span class="cell done">11/12</span>Đã nộp
         <span class="cell doing">5/12</span>Đang làm
         <span class="cell opened">Đã mở</span>Mở bài, chưa làm câu nào
         <span class="cell todo">Chưa làm</span>
         <span class="cell over">Quá hạn</span>
         <span class="cell soon">Mở 20/11</span>Chưa tới ngày mở
-        <span class="cell none">—</span>Không giao
+        <span class="late">trễ</span>Nộp sau hạn
+        <span class="redo">làm lại 2</span>Số lần làm lại (điểm tính theo lần nộp đầu)
       </div>
     </div>
     <div class="as-modal" id="as-modal" onclick="if(event.target===this)closeAsModal()"><div class="as-box" id="as-box"></div></div>
+    <div class="as-modal" id="ga-modal" onclick="if(event.target===this)closeGiaoBai()"><div class="as-box ga-box" id="ga-box"></div></div>
 
     <div id="view-progress">
     <!-- Thẻ tổng quan -->
@@ -319,7 +439,16 @@
     checkCircle: '<circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/>',
     eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
     hourglass: '<path d="M6 2h12M6 22h12M7 2v4a5 5 0 0 0 10 0V2M7 22v-4a5 5 0 0 1 10 0v4"/>',
-    ban: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>'
+    ban: '<circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    users: '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+    trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+    x: '<path d="M18 6 6 18M6 6l12 12"/>',
+    external: '<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14 21 3"/>',
+    save: '<path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/>',
+    chevron: '<path d="M9 18l6-6-6-6"/>',
+    message: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>'
   };
   function ic(name){ const p = ICON_PATHS[name]; return p ? `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>` : ''; }
   document.addEventListener('DOMContentLoaded', ()=>document.querySelectorAll('i[data-ic]').forEach(el=>{ el.outerHTML = ic(el.getAttribute('data-ic')); }));
@@ -427,6 +556,7 @@
       students = data.students || [];
       parsed = students.map(parseStudent);
       assignRows = Array.isArray(data.assignments) ? data.assignments : null;
+      teacherGroups = (data.groups && typeof data.groups === 'object') ? data.groups : {};
       const link = document.getElementById('as-sheet-link');
       if (data.assignSheetUrl){ link.href = data.assignSheetUrl; link.style.display = ''; } else link.style.display = 'none';
       currentPage = 1;
@@ -480,6 +610,7 @@
       const st = readJson(k);
       if (!st) return;
       exercises.push({ unit, tab, id: exIdOf(unit, tab), done: st.done || null, started: !!st.startedAt,
+        first: st.first || null, attempts: Array.isArray(st.attempts) ? st.attempts : [],
         startedAt: st.startedAt || null, essays: st.essays || {}, tabSwitches: st.tabSwitches || 0,
         answered: Object.keys(st.picks||{}).length
           + Object.keys(st.essays||{}).filter(k=>(st.essays[k]||[]).some(v=>String(v||'').trim())).length });
@@ -738,8 +869,13 @@
     pager.innerHTML = btns;
   }
 
-  /* ================= 📝 BÀI TẬP ĐƯỢC GIAO ================= */
+  /* ================= 📝 BÀI TẬP ĐƯỢC GIAO — theo ĐỢT ================= */
+  // Mỗi lần "Giao bài mới" = 1 đợt (cùng Mã đợt ở cột F tab BaiTap), gồm một hoặc nhiều bài.
   let assignRows = null;   // các dòng tab BaiTap (null = backend chưa có / chưa tạo tab)
+  let asMode = 'batch';    // 'batch' (theo đợt) | 'student' (theo học viên)
+  const openBatches = new Set();
+  let openBatchesInit = false;
+
   function setView(v){
     document.getElementById('view-assign').style.display = v==='assign' ? '' : 'none';
     document.getElementById('view-progress').style.display = v==='assign' ? 'none' : '';
@@ -748,142 +884,416 @@
     try { localStorage.setItem('thth2_teacher_view', v); } catch(e){}
     if (v==='assign') renderAssign();
   }
+  function setAsMode(m){ asMode = m; try { localStorage.setItem('thth2_teacher_asmode', m); } catch(e){} renderAssign(); }
+  try { asMode = localStorage.getItem('thth2_teacher_asmode') || 'batch'; } catch(e){}
+
   function asToday(){ const d=new Date(), p=n=>String(n).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
   function asDay(s){ if(!s) return ''; const a=String(s).split('-'); return a[2]+'/'+a[1]; }
   function asTargets(raw){ return String(raw||'').split(/[,;\n]+/).map(x=>x.trim().toLowerCase()).filter(Boolean); }
   function asForAll(t){ return t.some(x=>x==='all'||x==='*'||x==='tất cả'||x==='cả lớp'); }
   function asDueEnd(due){ const a=due.split('-').map(Number); return new Date(a[0],a[1]-1,a[2],23,59,59,999).getTime(); }
-  // Đợt giao áp dụng cho (học viên, mã bài): đang mở > đã hết hạn gần nhất > sắp mở
-  function asWindow(user, id){
-    const u = String(user).toLowerCase(), today = asToday();
-    const ws = (assignRows||[]).filter(r=>r.id===id && (asForAll(asTargets(r.to)) || asTargets(r.to).includes(u)));
-    if (!ws.length) return null;
-    const live = ws.filter(w=>(!w.from||w.from<=today) && (!w.due||w.due>=today));
-    if (live.length) return Object.assign({ state:'open' }, live.sort((a,b)=>(b.due||'9999').localeCompare(a.due||'9999'))[0]);
-    const past = ws.filter(w=>w.due && w.due<today).sort((a,b)=>b.due.localeCompare(a.due));
-    if (past.length) return Object.assign({ state:'past' }, past[0]);
-    return Object.assign({ state:'soon' }, ws.sort((a,b)=>(a.from||'').localeCompare(b.from||''))[0]);
+  function asDaysLeft(due){ const a=due.split('-').map(Number), t=new Date(); t.setHours(0,0,0,0); return Math.round((new Date(a[0],a[1]-1,a[2]) - t)/86400000); }
+
+  // Gom các dòng tab BaiTap thành đợt (cũ nhất = Đợt 1)
+  function asBatches(){
+    const map = new Map();
+    (assignRows||[]).forEach(r=>{
+      const k = r.batch || ('row' + r.row);
+      if (!map.has(k)) map.set(k, { id:k, rows:[], name:r.batchName||'', group:r.group||'', to:r.to, from:r.from, due:r.due, note:r.note, minRow:r.row });
+      const b = map.get(k); b.rows.push(r); b.minRow = Math.min(b.minRow, r.row);
+    });
+    const list = [...map.values()].sort((a,b)=>a.minRow-b.minRow);
+    const today = asToday();
+    list.forEach((b,i)=>{
+      b.no = i+1;
+      b.ids = [...new Set(b.rows.map(r=>r.id))];
+      b.units = [...new Set(b.ids.map(id=>EX_CATALOG[id] ? EX_CATALOG[id].unit : '?'))].sort((x,y)=>x-y);
+      b.targets = asTargets(b.to); b.all = asForAll(b.targets);
+      b.state = (b.from && b.from > today) ? 'soon' : (b.due && b.due < today) ? 'past' : 'open';
+    });
+    return list;
   }
-  function asCellInfo(p, id){
-    const w = asWindow(p.username, id);
+  function batchStudents(b){ return parsed.filter(p=>!p.isOut && (b.all || b.targets.includes(p.username.toLowerCase()))); }
+  function batchWho(b){
+    if (b.all) return 'Tất cả học viên';
+    if (b.group) return b.group;
+    return b.targets.length > 2 ? b.targets.slice(0,2).join(', ') + ' +' + (b.targets.length-2) : b.targets.join(', ');
+  }
+  function batchTitle(b){ return b.name || ('Unit ' + b.units.join(', ')); }
+  function exTotal(id){ const c=EX_CATALOG[id]; return c ? c.mcq + c.essay.length : 0; }
+
+  // Trạng thái 1 bài của 1 học viên trong 1 đợt. Điểm chính thức = lần nộp ĐẦU TIÊN.
+  function cellOf(p, id, b){
     const e = p.exercises.find(x=>x.id===id) || null;
-    if (!w && !(e && e.done)) return { kind:'none', w, e };
-    if (e && e.done){
-      const late = !!(w && w.due && e.done.at > asDueEnd(w.due));
-      return { kind:'done', w, e, late };
-    }
-    if (w && w.state==='soon') return { kind:'soon', w, e };
-    if (w && w.state==='past') return { kind:'over', w, e };
-    if (e && e.answered>0) return { kind:'doing', w, e };
-    if (e && e.started) return { kind:'opened', w, e };
-    return { kind:'todo', w, e };
+    const off = e ? (e.first || e.done) : null;
+    const redo = e ? (e.attempts||[]).length : 0;   // mỗi lần bấm "Làm lại" lưu 1 lượt đã nộp vào attempts
+    if (off) return { kind:'done', e, off, redo, late: !!(b.due && off.at > asDueEnd(b.due)) };
+    if (b.state==='soon') return { kind:'soon', e };
+    if (b.state==='past') return { kind:'over', e };
+    if (e && e.answered>0) return { kind:'doing', e };
+    if (e && e.started) return { kind:'opened', e };
+    return { kind:'todo', e };
   }
+  function cellHtml(x, id, b, idx){
+    const click = ` onclick="openAsModal(${idx},'${id}','${b.id}')"`;
+    if (x.kind==='soon') return `<span class="cell soon">Mở ${asDay(b.from)}</span>`;
+    if (x.kind==='done'){
+      const low = x.off.score/x.off.total < 0.6;
+      return `<button class="cell done${low?' low':''}"${click}>${x.off.score}/${x.off.total}<small>${fmtDate(x.off.at)}</small>`
+        + (x.late?'<span class="late">trễ</span>':'') + (x.redo?`<span class="redo">làm lại ${x.redo}</span>`:'') + `</button>`;
+    }
+    if (x.kind==='doing') return `<button class="cell doing"${click}>${x.e.answered}/${exTotal(id)}<small>đang làm</small></button>`;
+    if (x.kind==='opened') return `<button class="cell opened"${click}>Đã mở<small>chưa làm câu nào</small></button>`;
+    if (x.kind==='over') return `<button class="cell over"${click}>Quá hạn<small>chưa nộp</small></button>`;
+    return `<button class="cell todo"${click}>Chưa làm</button>`;
+  }
+  function batchStats(b){
+    const stu = batchStudents(b);
+    let full = 0, sum = 0, n = 0;
+    stu.forEach(p=>{
+      let d = 0;
+      b.ids.forEach(id=>{ const x = cellOf(p,id,b); if (x.kind==='done'){ d++; sum += x.off.score/x.off.total; n++; } });
+      if (d === b.ids.length) full++;
+    });
+    return { stu, full, avg: n ? Math.round(sum/n*100) : null };
+  }
+
   function renderAssign(){
     const body = document.getElementById('as-body'), warn = document.getElementById('as-warn');
+    document.querySelectorAll('#as-mode button').forEach(bt=>bt.classList.toggle('on', bt.dataset.m===asMode));
     if (assignRows===null){
       warn.innerHTML = '';
-      body.innerHTML = `<div class="empty" style="padding:30px;">Chưa có tab <b>BaiTap</b> trong Google Sheet (hoặc backend chưa được triển khai bản mới).<br>Khi chưa có tab này, học sinh thấy mọi bài tập như trước.</div>`;
+      body.innerHTML = `<div class="empty" style="padding:30px;">Chưa có tab <b>BaiTap</b> trong Google Sheet (hoặc backend chưa được triển khai bản mới).<br>Bấm <b>Giao bài mới</b> để tạo đợt giao đầu tiên.</div>`;
       return;
     }
-    // ⚠️ Kiểm tra lỗi gõ trong Sheet: mã bài chưa có / tên học viên không tồn tại
-    const names = new Set(parsed.map(p=>p.username.toLowerCase()));
-    const issues = [];
+    // ⚠️ Lỗi gõ tay trong Sheet
+    const names = new Set(parsed.map(p=>p.username.toLowerCase())), issues = [];
     assignRows.forEach(r=>{
       if (!EX_CATALOG[r.id]) issues.push(`Dòng ${r.row}: mã bài <b>${escapeHtml(r.id)}</b> chưa có trên web.`);
       const t = asTargets(r.to);
-      if (!t.length) issues.push(`Dòng ${r.row}: chưa ghi <b>Giao cho</b> (ALL hoặc tên học viên).`);
+      if (!t.length) issues.push(`Dòng ${r.row}: chưa ghi <b>Giao cho</b>.`);
       if (!asForAll(t)) t.filter(x=>!names.has(x)).forEach(x=>issues.push(`Dòng ${r.row}: không tìm thấy học viên <b>${escapeHtml(x)}</b>.`));
       if (r.from && r.due && r.from > r.due) issues.push(`Dòng ${r.row}: ngày mở (${asDay(r.from)}) sau hạn nộp (${asDay(r.due)}).`);
     });
     warn.innerHTML = issues.length ? `<div class="as-warn">${ic('alert')} <b>Cần xem lại tab BaiTap:</b><br>${issues.join('<br>')}</div>` : '';
 
-    const today = asToday();
-    let ids = [...new Set(assignRows.map(r=>r.id))].filter(id=>EX_CATALOG[id]);
-    // lọc Unit
-    const unitSel = document.getElementById('as-unit');
-    const units = [...new Set(ids.map(id=>EX_CATALOG[id].unit))].sort((a,b)=>a-b);
-    const cur = unitSel.value;
+    // Lọc theo trạng thái + Unit
+    let batches = asBatches();
+    const unitSel = document.getElementById('as-unit'), cur = unitSel.value;
+    const units = [...new Set(batches.flatMap(b=>b.units))].filter(u=>u!=='?').sort((a,b)=>a-b);
     unitSel.innerHTML = `<option value="">Tất cả Unit</option>` + units.map(u=>`<option value="${u}"${u===cur?' selected':''}>Unit ${u}</option>`).join('');
-    if (cur) ids = ids.filter(id=>EX_CATALOG[id].unit===cur);
-    if (document.getElementById('as-hide-old').checked)
-      ids = ids.filter(id=>assignRows.some(r=>r.id===id && (!r.due || r.due>=today)));
-    ids.sort((a,b)=>EX_CATALOG[a].unit-EX_CATALOG[b].unit || a.localeCompare(b));
-    if (!ids.length){ body.innerHTML = `<div class="empty" style="padding:30px;">Chưa giao bài nào${cur?' ở Unit '+cur:''}. Thêm dòng vào tab BaiTap để giao bài.</div>`; return; }
-
-    const q = (document.getElementById('as-search').value||'').trim().toLowerCase();
-    const rows = parsed.filter(p=>!p.isOut && (!q || p.username.toLowerCase().includes(q)))
-      .filter(p=>ids.some(id=>asCellInfo(p,id).kind!=='none'));
-
-    const head = ids.map(id=>{
-      const c = EX_CATALOG[id], infos = rows.map(p=>asCellInfo(p,id)).filter(x=>x.kind!=='none' && x.kind!=='soon');
-      const done = infos.filter(x=>x.kind==='done');
-      const avg = done.length ? Math.round(done.reduce((a,x)=>a+x.e.done.score/x.e.done.total,0)/done.length*100) : null;
-      const dues = [...new Set(assignRows.filter(r=>r.id===id && r.due).map(r=>r.due))].sort();
-      const pct = infos.length ? Math.round(done.length/infos.length*100) : 0;
-      return `<th><div class="as-col-id">${escapeHtml(id)} · Unit ${c.unit}</div><div class="as-col-t">${escapeHtml(c.label)} · ${escapeHtml(c.title)}</div>
-        <div class="as-col-m">${dues.length?'Hạn '+dues.map(asDay).join(', ')+' · ':''}${done.length}/${infos.length} đã nộp${avg!=null?' · TB '+avg+'%':''}</div>
-        <div class="as-col-bar"><i style="width:${pct}%"></i></div></th>`;
-    }).join('');
-
-    const total = id => { const c=EX_CATALOG[id]; return c.mcq + c.essay.length; };
-    const tr = rows.map(p=>{
-      // Đang làm gì: bài đang làm dở gần nhất
-      const doing = p.exercises.filter(e=>!e.done && e.answered>0 && e.id).sort((a,b)=>(b.startedAt||0)-(a.startedAt||0))[0];
-      const act = doing ? `<div class="as-stu-a doing">${ic('pen')} Đang làm ${escapeHtml(doing.id)} (${doing.answered}/${total(doing.id)})</div>` : '';
-      const tds = ids.map(id=>{
-        const x = asCellInfo(p,id), idx = parsed.indexOf(p);
-        const click = ` onclick="openAsModal(${idx},'${id}')"`;
-        if (x.kind==='none') return `<td><span class="cell none">—</span></td>`;
-        if (x.kind==='soon') return `<td><span class="cell soon">Mở ${asDay(x.w.from)}</span></td>`;
-        if (x.kind==='done'){
-          const d=x.e.done, low = d.score/d.total < 0.6;
-          return `<td><button class="cell done${low?' low':''}"${click}>${d.score}/${d.total}<small>${fmtDate(d.at)}</small>${x.late?'<span class="late">trễ</span>':''}</button></td>`;
-        }
-        if (x.kind==='doing') return `<td><button class="cell doing"${click}>${x.e.answered}/${total(id)}<small>đang làm</small></button></td>`;
-        if (x.kind==='opened') return `<td><button class="cell opened"${click}>Đã mở<small>chưa làm câu nào</small></button></td>`;
-        if (x.kind==='over') return `<td><button class="cell over"${click}>Quá hạn<small>hạn ${asDay(x.w.due)}</small></button></td>`;
-        return `<td><button class="cell todo"${click}>Chưa làm${x.w&&x.w.due?`<small>hạn ${asDay(x.w.due)}</small>`:''}</button></td>`;
-      }).join('');
-      return `<tr><td class="stu"><div class="as-stu-n">${escapeHtml(p.username)}</div><div class="as-stu-a">Vào: ${fmtDate(p.updatedAt)}</div>${act}</td>${tds}</tr>`;
-    }).join('');
-    body.innerHTML = rows.length
-      ? `<table class="as-grid"><thead><tr><th class="stu">Học viên</th>${head}</tr></thead><tbody>${tr}</tbody></table>`
-      : `<div class="empty" style="padding:30px;">Không có học viên phù hợp.</div>`;
+    const status = document.getElementById('as-status').value;
+    batches = batches.filter(b=>(!cur || b.units.includes(cur)) &&
+      (status==='all' || (status==='past' ? b.state==='past' : b.state!=='past')));
+    if (!openBatchesInit){ openBatchesInit = true; const firstOpen = batches.slice().reverse().find(b=>b.state!=='past'); if (firstOpen) openBatches.add(firstOpen.id); }
+    if (!batches.length){ body.innerHTML = `<div class="empty" style="padding:30px;">Không có đợt giao nào phù hợp bộ lọc.</div>`; return; }
+    body.innerHTML = asMode==='student' ? renderByStudent(batches) : batches.slice().reverse().map(renderBatchCard).join('');
   }
-  function openAsModal(idx, id){
-    const p = parsed[idx], c = EX_CATALOG[id], x = asCellInfo(p, id), e = x.e, w = x.w;
-    const kv = [];
-    if (w){
-      kv.push(['Đợt giao', `${w.from?'Mở từ '+asDay(w.from):'Mở ngay'}${w.due?' · Hạn '+asDay(w.due):' · Không giới hạn'} <span style="color:var(--sub)">(dòng ${w.row} tab BaiTap)</span>`]);
-      if (w.note) kv.push(['Lời dặn', escapeHtml(w.note)]);
+
+  function renderBatchCard(b){
+    const st = batchStats(b), open = openBatches.has(b.id);
+    let state;
+    if (b.state==='soon') state = `<span class="bt-state soon">Mở ${asDay(b.from)}</span>`;
+    else if (b.state==='past') state = `<span class="bt-state past">Đã hết hạn</span>`;
+    else if (b.due){ const l = asDaysLeft(b.due); state = `<span class="bt-state ${l<=1?'warn':'open'}">${l===0?'Hạn là hôm nay':l===1?'Còn 1 ngày':'Còn '+l+' ngày'}</span>`; }
+    else state = `<span class="bt-state open">Đang mở</span>`;
+    const pct = st.stu.length ? Math.round(st.full/st.stu.length*100) : 0;
+    let html = `<div class="bt-card${open?' open':''}${b.state==='past'?' past':''}">
+      <div class="bt-head" onclick="toggleBatch('${b.id}')">
+        <div class="bt-no"><small>Đợt</small><b>${b.no}</b></div>
+        <div class="bt-main">
+          <div class="bt-title">${escapeHtml(batchTitle(b))}</div>
+          <div class="bt-meta"><span>${ic('users')}${escapeHtml(batchWho(b))}</span><span>${ic('clipboard')}${b.ids.length} bài</span>
+            <span>${ic('calendar')}Mở ${b.from?asDay(b.from):'ngay'}</span><span>${ic('timer')}${b.due?'Hạn '+asDay(b.due):'Không hạn'}</span>${state}</div>
+        </div>
+        <div class="bt-prog"><b>${st.full}/${st.stu.length}</b> nộp đủ<small>${st.avg!=null?'Điểm TB '+st.avg+'%':'Chưa có bài nộp'}</small><div class="bt-bar"><i style="width:${pct}%"></i></div></div>
+        <span class="bt-chev">${ic('chevron')}</span>
+      </div>`;
+    if (open){
+      const q = (document.getElementById('as-search').value||'').trim().toLowerCase();
+      const stu = st.stu.filter(p=>!q || p.username.toLowerCase().includes(q));
+      const head = b.ids.map(id=>{
+        const c = EX_CATALOG[id];
+        return `<th>${escapeHtml(id)}<button class="rm" title="Gỡ bài này khỏi đợt" onclick="btRemoveEx('${b.id}','${id}')">${ic('x')}</button>`
+          + `<span class="t">${c ? escapeHtml(c.label+' · '+c.title) : 'Chưa có trên web'}</span></th>`;
+      }).join('');
+      const rows = stu.map(p=>{
+        const idx = parsed.indexOf(p);
+        let d = 0;
+        const tds = b.ids.map(id=>{ const x = cellOf(p,id,b); if (x.kind==='done') d++; return `<td>${cellHtml(x,id,b,idx)}</td>`; }).join('');
+        const cls = d===b.ids.length ? 'full' : d ? 'part' : '';
+        return `<tr><td class="stu"><b>${escapeHtml(p.username)}</b><div class="as-stu-a">Vào: ${fmtDate(p.updatedAt)}</div></td>${tds}<td><span class="bt-done ${cls}">${d}/${b.ids.length}</span></td></tr>`;
+      }).join('');
+      html += `<div class="bt-body">
+        ${b.note ? `<div class="bt-note">${ic('message')}<span>${escapeHtml(b.note)}</span></div>` : ''}
+        <div class="bt-scroll"><table class="bt-t"><thead><tr><th class="stu">Học viên</th>${head}<th>Hoàn thành</th></tr></thead>
+        <tbody>${rows || `<tr><td colspan="${b.ids.length+2}" class="muted">Không có học viên phù hợp.</td></tr>`}</tbody></table></div>
+        <div class="bt-acts" id="bt-acts-${b.id}">
+          <button onclick="btEditDue('${b.id}')">${ic('calendar')} Đổi hạn</button>
+          <button onclick="btRename('${b.id}')">${ic('edit')} Đổi tên đợt</button>
+          <button onclick="openGiaoBai('${b.id}')">${ic('plus')} Thêm bài vào đợt</button>
+          <button class="danger" onclick="btDelete('${b.id}')">${ic('trash')} Xoá đợt</button>
+        </div></div>`;
     }
-    const label = { done:ic('checkCircle')+' Đã nộp', doing:ic('pen')+' Đang làm', opened:ic('eye')+' Đã mở bài, chưa làm câu nào', todo:ic('hourglass')+' Chưa làm', over:ic('ban')+' Quá hạn, chưa nộp' }[x.kind] || '';
+    return html + `</div>`;
+  }
+  function toggleBatch(id){ openBatches.has(id) ? openBatches.delete(id) : openBatches.add(id); renderAssign(); }
+  function findBatch(id){ return asBatches().find(b=>b.id===id); }
+  async function btCall(body, okMsg){
+    const r = await teacherPost(body).catch(()=>null);
+    if (r && r.success){ await loadReport(); return true; }
+    alert((r && r.message) || 'Không thực hiện được. Vui lòng kiểm tra kết nối và thử lại.');
+    return false;
+  }
+  function btEditDue(id){
+    const b = findBatch(id);
+    document.getElementById('bt-acts-'+id).innerHTML = `<span class="muted" style="font-size:12.5px;font-weight:700;">Hạn nộp mới:</span>`
+      + `<input type="date" id="bt-due-${id}" value="${b.due || gaDate(7)}">`
+      + `<button onclick="btSaveDue('${id}')">${ic('save')} Lưu</button><button onclick="btSaveDue('${id}', true)">Không hạn</button><button onclick="renderAssign()">Huỷ</button>`;
+  }
+  function btSaveDue(id, none){ const v = none ? '' : document.getElementById('bt-due-'+id).value; btCall({ op:'updateBatch', batch:id, due:v }); }
+  function btRename(id){
+    const b = findBatch(id), v = prompt('Tên đợt (ví dụ: Buổi 12 – Unit 12):', b.name || '');
+    if (v === null) return;
+    btCall({ op:'updateBatch', batch:id, name:v.trim() });
+  }
+  function btRemoveEx(id, ex){
+    const b = findBatch(id);
+    if (b.ids.length === 1) return btDelete(id);
+    if (!confirm(`Gỡ bài ${ex} khỏi Đợt ${b.no}? Học viên sẽ không còn thấy bài này trong đợt. Kết quả đã nộp vẫn được giữ.`)) return;
+    btCall({ op:'removeFromBatch', batch:id, id:ex });
+  }
+  function btDelete(id){
+    const b = findBatch(id);
+    if (!confirm(`Xoá Đợt ${b.no} (${b.ids.length} bài, giao cho ${batchWho(b)})?\nHọc viên sẽ không còn thấy các bài này. Kết quả đã nộp vẫn được giữ.`)) return;
+    openBatches.delete(id);
+    btCall({ op:'deleteBatch', batch:id });
+  }
+
+  // ---------- Theo học viên ----------
+  function renderByStudent(batches){
+    const q = (document.getElementById('as-search').value||'').trim().toLowerCase();
+    const rows = parsed.filter(p=>!p.isOut && (!q || p.username.toLowerCase().includes(q))).map(p=>{
+      const mine = batches.filter(b=>b.all || b.targets.includes(p.username.toLowerCase()));
+      if (!mine.length) return '';
+      let done = 0, total = 0, sum = 0, n = 0;
+      const chips = mine.slice().reverse().map(b=>{
+        let d = 0;
+        b.ids.forEach(id=>{ const x = cellOf(p,id,b); total++; if (x.kind==='done'){ d++; done++; sum += x.off.score/x.off.total; n++; } });
+        const cls = b.state==='soon' ? 'soon' : d===b.ids.length ? 'full' : (b.state==='past' ? 'over' : d ? 'part' : '');
+        return `<button class="sv-chip ${cls}" title="${escapeHtml(batchTitle(b))}" onclick="openStudentModal(${parsed.indexOf(p)})">Đợt ${b.no} · ${d}/${b.ids.length}</button>`;
+      }).join('');
+      return `<div class="sv-row"><div class="sv-name" onclick="openStudentModal(${parsed.indexOf(p)})"><b>${escapeHtml(p.username)}</b><small>Vào: ${fmtDate(p.updatedAt)}</small></div>
+        <div class="sv-chips">${chips}</div>
+        <div class="sv-total"><b>${done}/${total}</b>${n ? 'TB ' + Math.round(sum/n*100) + '%' : 'chưa nộp bài'}</div></div>`;
+    }).join('');
+    return rows || `<div class="empty" style="padding:30px;">Không có học viên phù hợp.</div>`;
+  }
+  function openStudentModal(idx){
+    const p = parsed[idx], batches = asBatches().filter(b=>b.all || b.targets.includes(p.username.toLowerCase())).reverse();
+    const html = batches.map(b=>`<div class="sv-batch"><h4>Đợt ${b.no} · ${escapeHtml(batchTitle(b))} <small>· ${b.due ? 'hạn ' + asDay(b.due) : 'không hạn'}</small></h4>`
+      + b.ids.map(id=>{ const c = EX_CATALOG[id]; return `<div class="sv-ex"><span>${escapeHtml(id)} · ${c ? escapeHtml(c.label+' · '+c.title) : ''}</span>${cellHtml(cellOf(p,id,b), id, b, idx)}</div>`; }).join('')
+      + `</div>`).join('');
+    document.getElementById('as-box').innerHTML = `<button class="as-close" onclick="closeAsModal()">×</button>
+      <h3>${escapeHtml(p.username)}</h3><div class="sub">Tất cả bài được giao · bấm vào ô để xem chi tiết</div>${html || '<div class="muted">Chưa được giao bài nào.</div>'}`;
+    document.getElementById('as-modal').classList.add('on');
+  }
+
+  // ---------- Chi tiết 1 bài của 1 học viên ----------
+  function openAsModal(idx, id, batchId){
+    const p = parsed[idx], c = EX_CATALOG[id] || { unit:'?', label:'', title:'', mcq:0, essay:[] };
+    const b = findBatch(batchId), x = cellOf(p, id, b), e = x.e;
+    const kv = [];
+    kv.push(['Đợt giao', `Đợt ${b.no} · ${escapeHtml(batchTitle(b))} · ${b.from?'mở '+asDay(b.from):'mở ngay'} · ${b.due?'hạn '+asDay(b.due):'không hạn'}`]);
+    if (b.note) kv.push(['Lời dặn', escapeHtml(b.note)]);
+    const label = { done:ic('checkCircle')+' Đã nộp', doing:ic('pen')+' Đang làm', opened:ic('eye')+' Đã mở bài, chưa làm câu nào', todo:ic('hourglass')+' Chưa làm', over:ic('ban')+' Quá hạn, chưa nộp', soon:'Chưa tới ngày mở' }[x.kind] || '';
     kv.push(['Trạng thái', label + (x.late?' <span class="late">nộp trễ</span>':'')]);
-    if (e && e.done){
-      const d = e.done;
-      kv.push(['Điểm', `<b>${d.score}/${d.total}</b> (${Math.round(d.score/d.total*100)}%) · Trắc nghiệm ${d.mcq}/${c.mcq} · Tự luận ${d.essay}/${c.essay.length}`]);
+    let essaysOf = e ? e.essays : null;
+    if (x.kind==='done'){
+      const d = x.off;
+      kv.push(['Điểm chính thức', `<b>${d.score}/${d.total}</b> (${Math.round(d.score/d.total*100)}%) · Trắc nghiệm ${d.mcq}/${c.mcq} · Tự luận ${d.essay}/${c.essay.length}`]);
       kv.push(['Nộp lúc', fmtDate(d.at)]);
       if (d.duration!=null) kv.push(['Thời gian làm', fmtDur(d.duration)]);
       if (d.tabSwitches!=null) kv.push(['Chuyển tab / rời trang', d.tabSwitches ? `<span style="color:var(--warn);font-weight:800;">${d.tabSwitches} lần</span> (tổng ${fmtDur(d.awayMs)})` : '0 lần']);
+      if (x.redo){
+        // các lượt nộp SAU lần đầu (lần đầu = điểm chính thức, không liệt kê lại)
+        const tries = (e.attempts||[]).concat(e.done ? [e.done] : []).filter(t=>t && (!e.first || t.at !== e.first.at));
+        const list = tries.map(t=>`${t.score}/${t.total} (${fmtDate(t.at)})`).join(' · ');
+        kv.push(['Làm lại', `${x.redo} lần${list ? ' · ' + list : ''}${e.done ? '' : ' · <b>đang làm lại</b>'}`]);
+      }
+      if (d.essays) essaysOf = d.essays;
     } else if (e){
-      kv.push(['Tiến độ', `${e.answered}/${c.mcq + c.essay.length} câu`]);
+      kv.push(['Tiến độ', `${e.answered}/${exTotal(id)} câu`]);
       if (e.startedAt) kv.push(['Mở bài lúc', fmtDate(e.startedAt)]);
       if (e.tabSwitches) kv.push(['Chuyển tab', e.tabSwitches + ' lần']);
     }
     kv.push(['Cập nhật gần nhất', fmtDate(p.updatedAt)]);
-    const essays = e ? c.essay.map((qq,i)=>{
-      const vals = e.essays[i]||[];
+    const essays = essaysOf ? c.essay.map((qq,i)=>{
+      const vals = essaysOf[i]||[];
       const lines = qq.fields.map((f,fi)=>{ const v = String(vals[fi]||'').trim(); return v ? (f?`<b>${escapeHtml(f)}:</b> `:'')+escapeHtml(v) : ''; }).filter(Boolean);
       return `<div class="as-essay"><div class="q">Tự luận ${i+1}: ${escapeHtml(qq.q)}</div>${lines.length?lines.join('<br>'):'<i style="color:var(--sub)">(chưa viết)</i>'}</div>`;
     }).join('') : '';
     document.getElementById('as-box').innerHTML = `<button class="as-close" onclick="closeAsModal()">×</button>
       <h3>${escapeHtml(p.username)}</h3><div class="sub">${escapeHtml(id)} · Unit ${c.unit} · ${escapeHtml(c.label)} · ${escapeHtml(c.title)}</div>
       <div class="as-kv">${kv.map(r=>`<div>${r[0]}</div><div>${r[1]}</div>`).join('')}</div>
-      ${essays ? '<div style="font-weight:800;font-size:13px;margin-bottom:8px;">Bài viết tự luận</div>'+essays : ''}`;
+      ${essays ? '<div style="font-weight:800;font-size:13px;margin-bottom:8px;">Bài viết tự luận' + (x.kind==='done' ? ' (lần nộp chính thức)' : '') + '</div>' + essays : ''}`;
     document.getElementById('as-modal').classList.add('on');
   }
   function closeAsModal(){ document.getElementById('as-modal').classList.remove('on'); }
-  document.addEventListener('keydown', ev=>{ if (ev.key==='Escape') closeAsModal(); });
+  document.addEventListener('keydown', ev=>{ if (ev.key==='Escape'){ closeAsModal(); closeGiaoBai(); } });
+
+  /* ================= ➕ GIAO BÀI MỚI / THÊM BÀI VÀO ĐỢT ================= */
+  let teacherGroups = {};   // nhóm lớp đã lưu: { "Lớp tối T3-T5": ["thiai", ...] }
+  const ga = { all:false, users:new Set(), ids:new Set(), from:'', due:'', note:'', name:'', addTo:null, busy:false, msg:'' };
+  function gaDate(n){ const d=new Date(); d.setDate(d.getDate()+n); const p=v=>String(v).padStart(2,'0'); return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate()); }
+  function gaNextSunday(){ const d=new Date(); return gaDate(((7-d.getDay())%7) || 7); }
+  function activeStudents(){ return parsed.filter(p=>!p.isOut).map(p=>p.username).sort((a,b)=>a.localeCompare(b)); }
+  async function teacherPost(body){
+    const res = await fetch(SCRIPT_URL, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify(Object.assign({ action:'teacherAssign', key: teacherKey }, body)) });
+    return res.json();
+  }
+  // Nhóm đang khớp ĐÚNG lựa chọn hiện tại (để ghi tên nhóm vào đợt)
+  function gaMatchedGroup(){
+    const sel = [...ga.users].sort().join('|');
+    return Object.keys(teacherGroups).find(g=>(teacherGroups[g]||[]).filter(u=>activeStudents().includes(u)).sort().join('|') === sel) || '';
+  }
+  function openGiaoBai(addTo){
+    Object.assign(ga, { all:false, users:new Set(), ids:new Set(), from:asToday(), due:gaDate(7), note:'', name:'', addTo: addTo || null, busy:false, msg:'' });
+    renderGiaoBai();
+    document.getElementById('ga-modal').classList.add('on');
+  }
+  function closeGiaoBai(){ document.getElementById('ga-modal').classList.remove('on'); }
+  function gaToggleAll(){ ga.all = !ga.all; ga.users = ga.all ? new Set(activeStudents()) : new Set(); renderGiaoBai(); }
+  function gaPickGroup(name){
+    const g = (teacherGroups[name]||[]).filter(u=>activeStudents().includes(u));
+    const allIn = g.length && g.every(u=>ga.users.has(u));
+    ga.all = false; g.forEach(u=> allIn ? ga.users.delete(u) : ga.users.add(u));
+    renderGiaoBai();
+  }
+  function gaToggleUser(u){ ga.all = false; ga.users.has(u) ? ga.users.delete(u) : ga.users.add(u); renderGiaoBai(); }
+  function gaToggleEx(id){ ga.ids.has(id) ? ga.ids.delete(id) : ga.ids.add(id); renderGiaoBai(); }
+  function gaSearch(v){
+    v = String(v||'').trim().toLowerCase();
+    document.querySelectorAll('#ga-stu .ga-check').forEach(el=>{ el.style.display = !v || el.dataset.u.includes(v) ? '' : 'none'; });
+  }
+  async function gaSaveGroup(){
+    if (!ga.users.size) return;
+    const name = (prompt('Đặt tên cho nhóm học viên này (ví dụ: Lớp tối T3-T5):') || '').trim();
+    if (!name) return;
+    const r = await teacherPost({ op:'groups', groups: Object.assign({}, teacherGroups, { [name]: [...ga.users] }) }).catch(()=>null);
+    if (r && r.success){ teacherGroups = r.groups; renderGiaoBai(); }
+    else alert((r && r.message) || 'Không lưu được nhóm. Vui lòng thử lại.');
+  }
+  async function gaDeleteGroup(name, ev){
+    ev.stopPropagation();
+    if (!confirm(`Xoá nhóm "${name}"? Các bài đã giao không bị ảnh hưởng.`)) return;
+    const g = Object.assign({}, teacherGroups); delete g[name];
+    const r = await teacherPost({ op:'groups', groups:g }).catch(()=>null);
+    if (r && r.success){ teacherGroups = r.groups; renderGiaoBai(); } else alert((r && r.message) || 'Không xoá được nhóm.');
+  }
+  function gaField(k, v){ ga[k] = v; if (k==='due' || k==='from') renderGiaoBai(); else gaRenderFoot(); }
+  function gaRenderFoot(){
+    const f = document.getElementById('ga-foot'); if (!f) return;
+    let ok, sum;
+    if (ga.addTo){
+      const b = findBatch(ga.addTo);
+      ok = ga.ids.size > 0;
+      sum = ga.ids.size ? `Thêm <b>${ga.ids.size} bài</b> vào Đợt ${b.no}` : 'Chưa chọn bài tập';
+    } else {
+      const g = ga.all ? '' : gaMatchedGroup();
+      const who = ga.all ? '<b>tất cả học viên</b>' : g ? `nhóm <b>${escapeHtml(g)}</b>` : `<b>${ga.users.size} học viên</b>`;
+      ok = (ga.all || ga.users.size) && ga.ids.size && !(ga.due && ga.from && ga.due < ga.from);
+      sum = (ga.ids.size ? `Giao <b>${ga.ids.size} bài</b> cho ${who}` : 'Chưa chọn bài tập')
+        + ` · mở ${ga.from ? asDay(ga.from) : 'ngay'} · ${ga.due ? 'hạn <b>' + asDay(ga.due) + '</b>' : 'không hạn'}`;
+    }
+    const warnTxt = ga.msg || (!ga.addTo && ga.due && ga.from && ga.due < ga.from ? 'Hạn nộp đang trước ngày mở bài.' : '');
+    f.innerHTML = `<div class="ga-sum">${sum}<div class="ga-msg">${escapeHtml(warnTxt)}</div></div>`
+      + `<button class="btn btn-ghost" onclick="closeGiaoBai()">Huỷ</button>`
+      + `<button class="btn btn-main" onclick="gaSubmit()" ${ok && !ga.busy ? '' : 'disabled style="opacity:.5;cursor:default;"'}>${ga.busy ? 'Đang lưu…' : ic('check') + (ga.addTo ? ' Thêm vào đợt' : ' Giao bài')}</button>`;
+  }
+  function renderGiaoBai(){
+    const students = activeStudents(), groups = Object.keys(teacherGroups);
+    const addB = ga.addTo ? findBatch(ga.addTo) : null;
+    const units = [...new Set(Object.values(EX_CATALOG).map(c=>c.unit))].sort((a,b)=>b-a);
+    const assignedInfo = id => {
+      const bs = asBatches().filter(b=>b.ids.includes(id));
+      return bs.length ? 'Đã giao ở Đợt ' + bs.map(b=>b.no).join(', ') : 'Chưa giao lần nào';
+    };
+    const q = v => JSON.stringify(v).replace(/"/g,'&quot;');
+    const grpChips = groups.map(g=>{
+      const mem = (teacherGroups[g]||[]).filter(u=>students.includes(u));
+      const on = !ga.all && mem.length && mem.every(u=>ga.users.has(u));
+      return `<button class="ga-chip${on?' on':''}" onclick="gaPickGroup(${q(g)})">${ic('users')} ${escapeHtml(g)} <span style="opacity:.7">(${mem.length})</span>`
+        + `<span class="del" title="Xoá nhóm" onclick="gaDeleteGroup(${q(g)}, event)">${ic('x')}</span></button>`;
+    }).join('');
+    const stu = students.map(u=>{
+      const on = ga.users.has(u), p = parsed.find(x=>x.username===u);
+      return `<label class="ga-check${on?' on':''}" data-u="${escapeHtml(u.toLowerCase())}"><input type="checkbox" ${on?'checked':''} onchange="gaToggleUser(${q(u)})">`
+        + `<span>${escapeHtml(u)}<span class="sub">Vào: ${fmtDate(p && p.updatedAt)}</span></span></label>`;
+    }).join('');
+    const exHtml = units.map(u=>{
+      const ids = Object.keys(EX_CATALOG).filter(id=>EX_CATALOG[id].unit===u && !(addB && addB.ids.includes(id)));
+      if (!ids.length) return '';
+      return `<div class="ga-unit"><div class="ga-unit-h">Unit ${u}</div><div class="ga-ex">` + ids.map(id=>{
+        const c = EX_CATALOG[id], on = ga.ids.has(id);
+        return `<label class="ga-check${on?' on':''}"><input type="checkbox" ${on?'checked':''} onchange="gaToggleEx('${id}')">`
+          + `<span>${escapeHtml(c.label)} · ${escapeHtml(c.title)}<span class="sub">${id} · ${exTotal(id)} câu · ${assignedInfo(id)}</span></span></label>`;
+      }).join('') + `</div></div>`;
+    }).join('') || '<div class="muted">Không còn bài nào để thêm.</div>';
+    let n = 0;
+    const secStudents = addB ? '' : `
+        <div class="ga-sec">
+          <div class="ga-sec-h"><span class="ga-num">${++n}</span><b>Học viên</b><span class="meta">${ga.all ? 'Tất cả học viên (kể cả học viên thêm sau)' : ga.users.size + ' đã chọn'}</span></div>
+          <div class="ga-groups">
+            ${grpChips}
+            <button class="ga-chip${ga.all?' on':''}" onclick="gaToggleAll()">${ic('users')} Tất cả học viên</button>
+            ${!ga.all && ga.users.size && !gaMatchedGroup() ? `<button class="ga-chip dashed" onclick="gaSaveGroup()">${ic('save')} Lưu thành nhóm</button>` : ''}
+          </div>
+          ${students.length > 8 ? `<input class="ga-search" placeholder="Tìm học viên…" oninput="gaSearch(this.value)">` : ''}
+          <div class="ga-stu" id="ga-stu">${stu || '<span class="muted">Chưa có học viên.</span>'}</div>
+        </div>`;
+    const secEx = `
+        <div class="ga-sec">
+          <div class="ga-sec-h"><span class="ga-num">${++n}</span><b>Bài tập</b><span class="meta">${ga.ids.size} bài đã chọn</span></div>
+          ${exHtml}
+        </div>`;
+    const secTime = addB ? '' : `
+        <div class="ga-sec">
+          <div class="ga-sec-h"><span class="ga-num">${++n}</span><b>Tên đợt, thời gian và lời dặn</b></div>
+          <div class="ga-field" style="margin-bottom:14px;"><label>Tên đợt (không bắt buộc)</label><input type="text" value="${escapeHtml(ga.name)}" placeholder="Ví dụ: Buổi 12 – Unit 12" oninput="gaField('name', this.value)"></div>
+          <div class="ga-dates">
+            <div class="ga-field"><label>Mở từ ngày</label><input type="date" value="${ga.from}" onchange="gaField('from', this.value)">
+              <div class="ga-quick"><button onclick="gaField('from', asToday())">Hôm nay</button><button onclick="gaField('from', gaDate(1))">Ngày mai</button></div></div>
+            <div class="ga-field"><label>Hạn nộp (làm được đến hết ngày)</label><input type="date" value="${ga.due}" onchange="gaField('due', this.value)">
+              <div class="ga-quick"><button onclick="gaField('due', gaDate(3))">+3 ngày</button><button onclick="gaField('due', gaDate(7))">+7 ngày</button><button onclick="gaField('due', gaNextSunday())">Chủ nhật này</button><button onclick="gaField('due', '')">Không hạn</button></div></div>
+          </div>
+          <div class="ga-field" style="margin-top:14px;"><label>Lời dặn (không bắt buộc)</label><input type="text" value="${escapeHtml(ga.note)}" placeholder="Ví dụ: Nghe bài đọc 2 lần trước khi làm." oninput="gaField('note', this.value)"></div>
+        </div>`;
+    const title = addB ? `Thêm bài vào Đợt ${addB.no} · ${escapeHtml(batchTitle(addB))}` : 'Giao bài mới';
+    document.getElementById('ga-box').innerHTML = `
+      <div class="ga-head"><h3>${title}</h3><button class="as-close" style="float:none" onclick="closeGiaoBai()">×</button></div>
+      <div class="ga-body">${addB ? `<div class="as-help" style="margin:12px 0 0;">Bài thêm vào sẽ dùng chung học viên, ngày mở, hạn nộp và lời dặn của Đợt ${addB.no}.</div>` : ''}${secStudents}${secEx}${secTime}</div>
+      <div class="ga-foot" id="ga-foot"></div>`;
+    gaRenderFoot();
+  }
+  async function gaSubmit(){
+    if (ga.busy || !ga.ids.size) return;
+    let body;
+    if (ga.addTo) body = { op:'addToBatch', batch: ga.addTo, ids:[...ga.ids] };
+    else {
+      if (!(ga.all || ga.users.size)) return;
+      body = { op:'create', ids:[...ga.ids], to: ga.all ? 'ALL' : [...ga.users].join(', '),
+        group: ga.all ? '' : gaMatchedGroup(), name: ga.name, from: ga.from, due: ga.due, note: ga.note };
+    }
+    ga.busy = true; ga.msg = ''; gaRenderFoot();
+    const r = await teacherPost(body).catch(()=>null);
+    ga.busy = false;
+    if (r && r.success){
+      if (r.batch) openBatches.add(r.batch); else if (ga.addTo) openBatches.add(ga.addTo);
+      closeGiaoBai(); await loadReport();
+    } else { ga.msg = (r && r.message) || 'Không lưu được. Vui lòng kiểm tra kết nối và thử lại.'; gaRenderFoot(); }
+  }
 
   function escapeHtml(s){
     return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
