@@ -482,7 +482,8 @@
   .rv-key{margin:8px 0 0 34px; font-size:13.5px; color:var(--text2);}
   .rv-key summary{cursor:pointer; font-weight:700; color:var(--point);}
   .rv-key div{margin-top:6px; line-height:1.6;}
-  .rv-grade{display:flex; align-items:center; gap:8px; margin:10px 0 0 34px;}
+  .rv-grade{display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0 0 34px;}
+  @media (max-width:600px){ .rv-grade{margin-left:0;} .rv-paper{overflow:hidden;} }
   .rv-grade label{font-size:12.5px; font-weight:800; color:var(--text2);}
   .rv-steps{display:inline-flex; background:#eef0f5; border-radius:9px; padding:3px;}
   .rv-steps button{border:none; background:transparent; height:28px; min-width:40px; border-radius:7px; font-weight:800; font-size:13px; cursor:pointer; font-family:inherit; color:var(--text2);}
@@ -506,8 +507,13 @@
   .rv-btns .btn{width:100%;}
   .rv-btns .btn:disabled{opacity:.5; cursor:default;}
   .rv-danger{color:var(--bad) !important;}
-  .rv-hist{margin-top:14px; border-top:1px dashed var(--line); padding-top:6px;}
-  .rv-hrow{display:flex; justify-content:space-between; gap:8px; font-size:12.5px; padding:5px 0; color:var(--text2);}
+  .rv-hist{display:flex; flex-direction:column; gap:4px; margin:4px 0 8px;}
+  .rv-hist .rv-lab{margin:6px 0 2px;}
+  .rv-hrow{display:flex; justify-content:space-between; align-items:center; gap:8px; width:100%; font:inherit; font-size:12.5px; padding:7px 10px; color:var(--text2); background:#f8f9fc; border:1px solid var(--line); border-radius:9px; cursor:pointer; text-align:left;}
+  .rv-hrow:hover{border-color:var(--point);}
+  .rv-hrow.on{background:var(--point-light); border-color:var(--point); color:var(--point);}
+  .rv-hrow b{white-space:nowrap;}
+  .gd.old{background:#edf2f7; color:#4a5568;}
   .rv-msg{font-size:12.5px; color:var(--sub); margin-top:8px; min-height:16px; text-align:center;}
   @media (max-width:1000px){ .rv-grid{grid-template-columns:1fr;} .rv-side{position:static;} .rv-opts{grid-template-columns:1fr;} }
 </style>
@@ -1109,23 +1115,39 @@
   let rv = null;                       // bài đang mở
   const inkStore = new Map();          // nét vẽ theo từng bài (giữ trong phiên)
 
-  function openReview(idx, id, batchId){
+  // Các lần nộp ở đợt trước (mới nhất trước). Gồm cả bài chưa được chuyển vào lịch sử
+  // (học viên chưa mở trang kể từ khi có đợt mới).
+  function histOf(e, b){
+    const hist = (e.cur.history || []).slice().reverse().map(h => h.grade || !(e.grade && e.grade.submittedAt) ? h : Object.assign({}, h, { grade: gradeFor(e, h.first || h) }));
+    const ex0 = e.first || e.done;
+    if (ex0 && isPrev(ex0, b) && !hist.some(h=>h.at===ex0.at)) hist.unshift({ at: ex0.at, first: ex0, grade: gradeFor(e, ex0) });
+    return hist;
+  }
+  function openReview(idx, id, batchId, histAt){
     closeAsModal();
     const p = parsed[idx], ex = exFull(id), e = p && p.exercises.find(x => x.id === id);
     if (!p || !ex || !e) { openAsModal(idx, id, batchId); return; }
     const bb = findBatch(batchId);
-    let off = e.first || e.done;                                     // lần nộp chính thức (đầu tiên)
-    if (off && bb && bb.at && off.at < bb.at) off = null;            // nộp ở đợt trước -> xem trong lịch sử
-    const sameAsCur = e.done && (!e.first || e.first.at === e.done.at);
-    const picks = (off && off.picks) || (!off || sameAsCur ? e.cur.picks : null) || {};
-    const essays = (off && off.essays) || (!off || sameAsCur ? e.cur.essays : null) || {};
-    const g = gradeFor(e, off);
+    let off = e.first || e.done, picks, essays, g, h = null;          // lần nộp chính thức (đầu tiên)
+    if (histAt != null) {                                             // xem lại bài nộp ở đợt trước (chỉ xem)
+      h = histOf(e, bb).find(x => x.at === histAt);
+      if (!h) return openReview(idx, id, batchId);
+      off = h.first || h.last; picks = off.picks || {}; essays = off.essays || {}; g = h.grade || null;
+    } else {
+      const prevOnly = isPrev(off, bb);                              // nộp ở đợt trước -> xem trong lịch sử
+      if (prevOnly) off = null;
+      const sameAsCur = e.done && (!e.first || e.first.at === e.done.at);
+      // Học viên chưa mở trang kể từ đợt mới: bài làm trong máy vẫn là bài cũ -> đợt này để trống
+      picks = prevOnly ? {} : (off && off.picks) || (!off || sameAsCur ? e.cur.picks : null) || {};
+      essays = prevOnly ? {} : (off && off.essays) || (!off || sameAsCur ? e.cur.essays : null) || {};
+      g = gradeFor(e, off);
+    }
     const gEss = {};
     ex.essay.forEach((es, i) => {
       const saved = g && g.essays && g.essays[i];
       gEss[i] = { score: saved ? Number(saved.score) : (autoEssay(es, essays[i]) ? 1 : 0), note: saved ? saved.note || '' : '' };
     });
-    rv = { idx, id, batchId, p, e, ex, off, picks, essays, essays_g: gEss, qnotes: Object.assign({}, g && g.qnotes || {}),
+    rv = { idx, id, batchId, histAt: h ? h.at : null, p, e, ex, off, picks, essays, essays_g: gEss, qnotes: Object.assign({}, g && g.qnotes || {}),
            comment: g ? g.comment || '' : '', grade: g, inkKey: p.username + '|' + id };
     document.getElementById('view-assign').style.display = 'none';
     document.querySelector('.view-tabs').style.display = 'none';
@@ -1149,7 +1171,8 @@
     const { p, e, ex, off, picks, essays } = rv, c = EX_CATALOG[rv.id];
     const b = findBatch(rv.batchId);
     const needs = ex.essay.length > 0;
-    const st = rv.grade ? (rv.grade.status === 'RETURNED' ? '<span class="rv-st sent">Đã gửi kết quả</span>' : '<span class="rv-st draft">Đã chấm · chưa gửi</span>')
+    const old = rv.histAt != null;
+    const st = old ? '<span class="rv-st">Bài nộp đợt trước · chỉ xem</span>' : rv.grade ? (rv.grade.status === 'RETURNED' ? '<span class="rv-st sent">Đã gửi kết quả</span>' : '<span class="rv-st draft">Đã chấm · chưa gửi</span>')
                         : (!off ? '<span class="rv-st">Chưa nộp</span>' : needs ? '<span class="rv-st wait">Chờ chấm · học viên chưa thấy điểm</span>' : '<span class="rv-st sent">Máy đã chấm · học viên đã thấy điểm</span>');
     const meta = [];
     if (off){
@@ -1158,8 +1181,10 @@
       if (off.tabSwitches) meta.push(`<span class="rv-warn">Rời trang ${off.tabSwitches} lần</span>`);
       if (b && b.due && off.at > asDueEnd(b.due)) meta.push('<span class="rv-warn">Nộp trễ</span>');
       const redo = (e.attempts || []).length;
-      if (redo) meta.push(`Làm lại ${redo} lần${e.done && e.done.at !== off.at ? ' · lần gần nhất ' + e.done.score + '/' + e.done.total : (e.done ? '' : ' · đang làm lại')}`);
-    } else meta.push(`Đang làm · ${e.answered}/${rvMax()} câu`);
+      if (redo && !old) meta.push(`Làm lại ${redo} lần${e.done && e.done.at !== off.at ? ' · lần gần nhất ' + e.done.score + '/' + e.done.total : (e.done ? '' : ' · đang làm lại')}`);
+      if (old && !off.picks) meta.push('<span class="rv-warn">Bản nộp này không lưu chi tiết câu trả lời</span>');
+    } else { const n = Object.keys(picks).length + Object.values(essays).filter(v => (v || []).some(x => String(x || '').trim())).length;
+      meta.push(n ? `Đang làm · ${n}/${rvMax()} câu` : 'Chưa làm trong đợt này'); }
 
     // ---------- Đề + bài làm ----------
     let paper = `<div class="rv-sec">Bài đọc</div>` + ex.passages.map(ps =>
@@ -1182,6 +1207,7 @@
       const vals = essays[ei] || [], auto = autoEssay(es, vals), gs = rv.essays_g[ei];
       paper += `<div class="rv-q"><div class="rv-qh"><span class="rv-n">${ei + 1}</span><span class="rv-qt">${escapeHtml(stripTags(es.q))}</span>`
         + `<span class="rv-res ${auto ? 'ok' : 'bad'}" title="Máy chấm theo từ khoá">Máy: ${auto ? 'Đạt' : 'Chưa đạt'}</span></div>`
+        + (es.hint ? `<div class="rv-sub">${escapeHtml(es.hint)}</div>` : '')
         + es.fields.map((f, fi) => `${f ? `<div class="rv-flab">${escapeHtml(f)}</div>` : ''}<div class="rv-ans${String(vals[fi] || '').trim() ? '' : ' empty'}">${String(vals[fi] || '').trim() ? escapeHtml(vals[fi]) : '(bỏ trống)'}</div>`).join('')
         + `<details class="rv-key"><summary>Đáp án gợi ý</summary><div>${es.answer || ''}</div></details>`
         + `<div class="rv-grade"><label>Điểm</label><div class="rv-steps">${[0, 0.5, 1].map(v => `<button class="${Number(gs.score) === v ? 'on' : ''}" onclick="rvSetScore(${ei}, ${v})">${num(v)}</button>`).join('')}</div>`
@@ -1192,28 +1218,29 @@
     // ---------- Bảng chấm ----------
     const total = mcqOk + rvEssayScore();
     // Các đợt trước (bài nộp cũ được lưu lại)
-    const hist = (e.cur.history || []).slice().reverse();
-    const ex0 = e.first || e.done;
-    if (ex0 && !off && !hist.some(h=>h.at===ex0.at)) hist.unshift({ at: ex0.at, first: ex0, grade: gradeFor(e, ex0) });
-    const histHtml = hist.length ? `<div class="rv-hist"><div class="rv-lab">Lần nộp ở đợt trước</div>` + hist.map(h=>{
-      const f = h.first || {}, gg = h.grade;
-      return `<div class="rv-hrow"><span>${fmtDate(h.at)}</span><b>${gg ? num(gg.total)+'/'+gg.max+' · đã chấm' : (f.score!=null ? f.score+'/'+f.total+' · máy' : '—')}</b></div>`;
-    }).join('') + `</div>` : '';
+    const hist = histOf(e, b);
+    const args = `${rv.idx},'${rv.id}','${rv.batchId}'`;
+    const histHtml = hist.length ? `<div class="rv-hist"><div class="rv-lab">Các lần nộp</div>`
+      + `<button class="rv-hrow${old ? '' : ' on'}" onclick="openReview(${args})"><span>Đợt này</span><b>${off && !old ? fmtDate(off.at) : (!old ? 'chưa nộp' : '')}</b></button>`
+      + hist.map(h=>{
+        const f = h.first || {}, gg = h.grade;
+        return `<button class="rv-hrow${rv.histAt === h.at ? ' on' : ''}" onclick="openReview(${args},${h.at})"><span>Đợt trước · ${fmtDate(h.at)}</span><b>${gg ? num(gg.total)+'/'+gg.max : (f.score!=null && !(EX_CATALOG[rv.id] && EX_CATALOG[rv.id].essay.length) ? f.score+'/'+f.total : 'chưa chấm')}</b></button>`;
+      }).join('') + `</div>` : '';
     const side = `<div class="rv-side">
         <div class="rv-who"><b>${escapeHtml(p.username)}</b><span>${escapeHtml(c.label)} · ${escapeHtml(c.title)} · Unit ${c.unit}</span></div>
         ${st}
+        ${histHtml}
         <div class="rv-kv"><span>Trắc nghiệm (máy chấm)</span><b>${mcqOk}/${ex.mcq.length}</b></div>
         ${needs ? `<div class="rv-kv"><span>Tự luận</span><b id="rv-ess">${num(rvEssayScore())}/${ex.essay.length}</b></div>` : ''}
         <div class="rv-total"><b id="rv-total">${num(total)}</b><small>/ ${rvMax()}</small></div>
-        <label class="rv-lab">Nhận xét chung</label>
-        <textarea class="rv-ta" rows="4" placeholder="Nhận xét gửi học viên" oninput="rv.comment=this.value">${escapeHtml(rv.comment)}</textarea>
-        <div class="rv-btns">
+        ${old ? (rv.comment ? `<label class="rv-lab">Nhận xét chung</label><div class="rv-sub" style="margin:4px 0 0">${escapeHtml(rv.comment)}</div>` : '') : `<label class="rv-lab">Nhận xét chung</label>
+        <textarea class="rv-ta" rows="4" placeholder="Nhận xét gửi học viên" oninput="rv.comment=this.value">${escapeHtml(rv.comment)}</textarea>`}
+        <div class="rv-btns"${old ? ' style="display:none"' : ''}>
           <button class="btn btn-main" ${off ? '' : 'disabled'} onclick="rvSave(true)">${ic('check')} ${needs ? 'Lưu và gửi kết quả' : 'Gửi ghi chú cho học viên'}</button>
           <button class="btn btn-ghost" ${off ? '' : 'disabled'} onclick="rvSave(false)">${ic('save')} Lưu nháp</button>
           ${rv.grade && rv.grade.status === 'RETURNED' ? `<button class="btn btn-ghost rv-danger" onclick="rvSave(false, true)">Thu hồi kết quả</button>` : ''}
         </div>
-        <div class="rv-msg" id="rv-msg">${off ? '' : 'Học viên chưa nộp bài trong đợt này.'}</div>
-        ${histHtml}
+        <div class="rv-msg" id="rv-msg">${old ? 'Bài nộp đợt trước chỉ để xem lại.' : off ? '' : 'Học viên chưa nộp bài trong đợt này.'}</div>
       </div>`;
 
     document.getElementById('review-view').innerHTML = `
@@ -1397,7 +1424,7 @@
     const e = p.exercises.find(x=>x.id===id) || null;
     let off = e ? (e.first || e.done) : null;
     // Bài nộp TRƯỚC khi tạo đợt này thuộc đợt cũ (đã nằm trong lịch sử) — đợt này coi như chưa nộp
-    const prev = !!(off && b.at && off.at < b.at);
+    const prev = isPrev(off, b);
     if (prev) off = null;
     const redo = e ? (e.attempts||[]).length : 0;   // mỗi lần bấm "Làm lại" lưu 1 lượt đã nộp vào attempts
     if (off) return { kind:'done', e, off, redo, late: !!(b.due && off.at > asDueEnd(b.due)), grade: gradeFor(e, off) };
@@ -1409,13 +1436,20 @@
     return { kind:'todo', e };
   }
   // Kết quả chấm chỉ áp cho đúng lần nộp đó (đợt mới chấm lại từ đầu)
+  // Bài nộp thuộc đợt trước đợt b? Ưu tiên mã đợt ghi lúc nộp, bài cũ thì so thời gian tạo đợt.
+  function isPrev(off, b){
+    if (!off || !b) return false;
+    if (off.batch && b.id) return off.batch !== b.id;
+    return !!(b.at && off.at < b.at);
+  }
   function gradeFor(e, off){
     const g = e && e.grade;
     if (!g || !off) return null;
     return (!g.submittedAt || Math.abs(g.submittedAt - off.at) <= 1000) ? g : null;
   }
   function cellHtml(x, id, b, idx){
-    const canReview = x.kind==='done' || x.kind==='doing' || x.kind==='opened';
+    const hasHist = !!(x.prev || (x.e && x.e.cur && (x.e.cur.history || []).length));
+    const canReview = x.kind==='done' || x.kind==='doing' || x.kind==='opened' || hasHist;
     const click = canReview ? ` onclick="openReview(${idx},'${id}','${b.id}')"` : ` onclick="openAsModal(${idx},'${id}','${b.id}')"`;
     if (x.kind==='soon') return `<span class="cell soon">Mở ${asDay(b.from)}</span>`;
     if (x.kind==='done'){
@@ -1423,7 +1457,7 @@
       const g = x.grade;
       const needs = EX_CATALOG[id] && EX_CATALOG[id].essay.length > 0;   // thuần trắc nghiệm: máy đã chấm, không cần chờ
       const gtag = g ? (g.status === 'RETURNED' ? '<span class="gd sent">đã gửi</span>' : '<span class="gd">nháp</span>') : (needs ? '<span class="gd wait">chờ chấm</span>' : '');
-      const tags = gtag + (x.late ? '<span class="late">trễ</span>' : '') + (x.redo ? `<span class="redo">+${x.redo}</span>` : '');
+      const tags = gtag + (x.late ? '<span class="late">trễ</span>' : '') + (x.redo ? `<span class="redo">+${x.redo}</span>` : '') + (hasHist ? '<span class="gd old" title="Có bài nộp ở đợt trước">bài cũ</span>' : '');
       const sc = g ? num(g.total) + '/' + g.max : x.off.score + '/' + x.off.total;
       return `<button class="cell done${low?' low':''}"${click} title="Nộp ${fmtDate(x.off.at)}${x.redo ? ' · làm lại ' + x.redo + ' lần' : ''}">${sc}`
         + (tags ? `<span class="tags">${tags}</span>` : `<small>${fmtDate(x.off.at)}</small>`) + `</button>`;
