@@ -1471,6 +1471,45 @@
         .exd-note { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: #4a5568; background: #f6f5ff; border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
         .exd-note .ic { color: var(--point-color); margin-top: 3px; flex: 0 0 auto; }
         .exh-pill { display: inline-flex; align-items: center; gap: 5px; }
+        .ex-opt.picked { border-color: var(--point-color); background: var(--point-light); font-weight: 700; }
+        .ex-done-status.pending { background: #fff8eb; border-color: #f6d4a0; color: #9c4221; }
+        /* ✍️ Kết quả giáo viên chấm */
+        .ex-graded { background: #effaf3; border: 1px solid #c6ecd4; border-radius: var(--radius-md); padding: 12px 16px; margin-bottom: 14px; }
+        .ex-graded-top { display: flex; align-items: center; gap: 8px; font-weight: 800; color: #1c7c43; }
+        .ex-graded-top .ic { width: 18px; height: 18px; }
+        .ex-graded-score { margin-left: auto; font-size: 22px; color: #1c7c43; }
+        .ex-graded-score small { font-size: 13px; color: #4a7f5d; }
+        .ex-graded-cmt { margin-top: 8px; font-size: 14px; color: #2d3748; line-height: 1.6; white-space: pre-wrap; }
+        .ex-tnote { display: flex; gap: 8px; align-items: flex-start; margin-top: 8px; padding: 8px 12px; border-radius: 10px; background: #fff8e6; border: 1px solid #f3d27a; font-size: 13.5px; color: #4a3a00; line-height: 1.5; white-space: pre-wrap; }
+        .ex-tnote .ic { width: 15px; height: 15px; margin-top: 2px; color: #b7791f; flex: 0 0 auto; }
+        /* 🔔 Thông báo bài tập mới */
+        .exn-badge { display: inline-flex; align-items: center; justify-content: center; min-width: 18px; height: 18px; padding: 0 5px; margin-left: auto; border-radius: 999px; background: #e53e3e; color: #fff; font-size: 11px; font-weight: 800; line-height: 1; }
+        .exn-card { position: relative; background: #fff; border: 1.5px solid var(--point-color); border-radius: var(--radius-md); padding: 12px 12px 10px; animation: exnGlow 1.8s ease-in-out infinite; }
+        @keyframes exnGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(97,76,255,.45); } 50% { box-shadow: 0 0 0 7px rgba(97,76,255,0); } }
+        .exn-head { display: flex; align-items: center; gap: 8px; }
+        .exn-bell { width: 28px; height: 28px; border-radius: 9px; background: var(--point-color); color: #fff; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; animation: exnBell 2.4s ease-in-out infinite; transform-origin: 50% 10%; }
+        .exn-bell .ic { width: 15px; height: 15px; }
+        @keyframes exnBell { 0%, 70%, 100% { transform: rotate(0); } 75% { transform: rotate(14deg); } 80% { transform: rotate(-12deg); } 85% { transform: rotate(8deg); } 90% { transform: rotate(-4deg); } }
+        .exn-title { font-size: 13px; font-weight: 800; color: #1a202c; flex: 1; line-height: 1.2; }
+        .exn-count { font-size: 11px; font-weight: 800; color: #fff; background: #e53e3e; border-radius: 999px; padding: 2px 7px; line-height: 1.2; }
+        .exn-list { margin: 8px 0 0; display: flex; flex-direction: column; gap: 6px; }
+        .exn-item { font-size: 12px; line-height: 1.35; color: #4a5568; background: var(--point-light); border-radius: 8px; padding: 6px 8px; }
+        .exn-item b { display: block; color: #1a202c; font-size: 12.5px; }
+        .exn-item .due { color: #c05621; font-weight: 700; }
+        .exn-actions { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 10px; }
+        .exn-read { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: #4a5568; cursor: pointer; user-select: none; }
+        .exn-read input { width: 15px; height: 15px; accent-color: var(--point-color); margin: 0; }
+        .exn-go { border: none; background: var(--point-color); color: #fff; font-size: 12px; font-weight: 800; padding: 7px 12px; border-radius: 9px; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 5px; }
+        .exn-go .ic { width: 13px; height: 13px; }
+        .exn-pop { max-width: 460px; width: 92%; text-align: left; }
+        .exn-pop h3 { margin: 6px 0 4px; text-align: center; }
+        .exn-pop .exn-pop-sub { text-align: center; font-size: 13px; color: var(--sub-text); margin-bottom: 14px; }
+        .exn-pop .exn-item { font-size: 13px; padding: 10px 12px; }
+        .exn-pop .exn-item b { font-size: 14px; }
+        .exn-pop .exn-item .note { display: block; margin-top: 3px; color: #4a5568; }
+        .exn-pop-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        .exn-pop-actions .btns { display: flex; gap: 8px; margin-left: auto; }
+        @media (prefers-reduced-motion: reduce) { .exn-card, .exn-bell { animation: none; } }
         /* Icon SVG dùng chung */
         .ic { width: 1em; height: 1em; vertical-align: -0.14em; flex: 0 0 auto; }
         @media (max-width: 600px) {
@@ -1672,7 +1711,7 @@
                     <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>Ngữ pháp<span class="lock-badge" id="grammar-lock-badge" style="display:none;"><i data-ic="lock"></i></span></a>
                 </li>
                 <li class="menu-item" id="menu-exercise" onclick="showAppMode('exercise')"><a href="#">
-                    <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>Bài tập</a>
+                    <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm-2 14l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>Bài tập<span class="exn-badge" id="exn-badge" style="display:none;"></span></a>
                 </li>
                 <li class="menu-item" id="menu-review" onclick="showAppMode('review')"><a href="#">
                     <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm0 16H5V8h14v11z"/></svg>Ôn lại từ vựng</a>
@@ -2239,6 +2278,9 @@
         </button>
     </div>
 
+    <!-- 🔔 THÔNG BÁO BÀI TẬP MỚI (chớp nhẹ tới khi học viên tick "Đã đọc thông báo") -->
+    <div id="ex-notice-card" class="exn-card" style="display:none;"></div>
+
     <!-- 🌟 KHỐI 1: KHUNG THÀNH TỰU (THỜI GIAN & TRẠNG THÁI REALTIME) — gọn 1 hàng -->
     <div style="background: #ffffff; padding: 8px 10px; border-radius: var(--radius-md); box-shadow: var(--neu-convex); border: 1px solid rgba(255,255,255,0.8); display: flex; align-items: center; gap: 8px;">
         <div style="background: var(--point-light); width: 26px; height: 26px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: var(--neu-convex); flex: 0 0 auto;">
@@ -2397,6 +2439,11 @@
     </div>
 </div>
 
+<!-- POPUP BÀI TẬP MỚI -->
+<div class="bounce-popup-overlay" id="ex-notice-popup" onclick="if(event.target===this)closeExNoticePopup()">
+    <div class="bounce-popup-box exn-pop" id="exn-pop-body"></div>
+</div>
+
 <!-- POPUP HOÀN THÀNH BÀI TẬP (Đọc, ...) -->
 <div class="bounce-popup-overlay" id="ex-done-popup">
     <div class="bounce-popup-box ex-done-box" id="ex-done-card">
@@ -2406,9 +2453,9 @@
         <div class="ex-done-lesson" id="ex-done-lesson"></div>
         <div class="ex-done-score"><span class="ex-done-score-label">Điểm</span><span id="ex-done-score"></span></div>
         <div class="ex-done-sheet" id="ex-done-sheet"></div>
-        <p class="ex-done-note">Vui lòng chụp lại kết quả và gửi cho giáo viên.</p>
+        <p class="ex-done-note" id="ex-done-note">Vui lòng chụp lại kết quả và gửi cho giáo viên.</p>
         <div class="ex-done-actions">
-            <button class="btn btn-primary" onclick="captureExerciseResult(this)"><i data-ic="camera"></i> Chụp màn hình</button>
+            <button class="btn btn-primary" id="ex-done-capture" onclick="captureExerciseResult(this)"><i data-ic="camera"></i> Chụp màn hình</button>
             <button class="btn" onclick="closeExerciseDonePopup()">Đóng</button>
         </div>
     </div>
@@ -2517,6 +2564,7 @@
     </div>
 </div>
 
+<script src="assets/exercise-data.js?v=20261117"></script>
 <script>
     // ===================================================================
     // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
@@ -2631,7 +2679,8 @@
             'completed_units_' + key, 'today_secs_' + key, 'total_secs_' + key,
             'study_date_' + key, 'starred_' + key + '_QuyenClass', 'notes_' + key + '_QuyenClass',
             'quizState_' + key, 'writeSentenceState_' + key, 'quizHard_' + key,
-            'sumLog_' + key   // 📊 lịch sử bài kiểm tra / luyện tập Tổng hợp
+            'sumLog_' + key,  // 📊 lịch sử bài kiểm tra / luyện tập Tổng hợp
+            'exNotice_' + key // 🔔 thông báo bài tập đã đọc
         ];
     }
     function snapshotProgress(sess) {
@@ -2751,6 +2800,10 @@
         if (k === 'quizState_' + key) return _pStr(_pMergeState(_pParse(lv, {}), _pParse(sv, {}), 3));
         if (k === 'writeSentenceState_' + key) return _pStr(_pMergeState(_pParse(lv, {}), _pParse(sv, {}), 2));
         if (k === 'quizHard_' + key) return (lv === '1' || sv === '1') ? '1' : lv;
+        if (k === 'exNotice_' + key) { // đã đọc ở máy nào cũng tính là đã đọc
+            var u = {}; [].concat(_pParse(lv, []), _pParse(sv, [])).forEach(function (x) { if (typeof x === 'string') u[x] = 1; });
+            return _pStr(Object.keys(u).slice(-300));
+        }
         if (k === 'sumLog_' + key) { // gộp lịch sử Tổng hợp theo thời điểm nộp, giữ 200 lần gần nhất
             var seenAt = {}, all = [].concat(_pParse(lv, []), _pParse(sv, [])).filter(function (x) {
                 if (!_pIsObj(x) || seenAt[x.at]) return false; seenAt[x.at] = 1; return true;
@@ -2800,9 +2853,12 @@
         var server = {};
         if (blob) { var o = _pParse(blob, null); if (_pIsObj(o)) server = o; }
         var allow = progressKeysForStudent(key), vmPref = 'vocabMastered_' + key + '_u', exPref = 'exercise_' + key + '_';
+        var grPref = 'exGrade_' + key + '_';
         var clean = {};
         Object.keys(server).forEach(function (k) {
             if ((allow.indexOf(k) > -1 || k.indexOf(vmPref) === 0 || k.indexOf(exPref) === 0) && server[k] != null) clean[k] = server[k];
+            // ✍️ kết quả giáo viên chấm: bản server luôn đúng
+            if (k.indexOf(grPref) === 0 && server[k] != null) { try { localStorage.setItem(k, server[k]); } catch (e) {} }
         });
         var merged = mergeProgressObjects(key, snapshotProgress(sess), clean);
         Object.keys(merged).forEach(function (k) {
@@ -2879,6 +2935,7 @@
     // Vẽ lại những phần đọc từ bộ nhớ máy (không đụng bài đang làm dở trên màn hình)
     function onProgressRefreshed() {
         try { if (typeof exerciseState === 'object') Object.keys(exerciseState).forEach(function (k) { delete exerciseState[k]; }); } catch (e) {}
+        try { renderExNotice(true); } catch (e) {}   // giáo viên vừa giao bài mới -> báo ngay
         try {
             var ex = document.getElementById('mode-exercise-section');
             if (ex && ex.style.display !== 'none') renderExerciseMode(false);
@@ -2958,6 +3015,7 @@
         pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
         star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
         tag: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/>',
+        bell: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',
         speakerOff: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M23 9l-6 6M17 9l6 6"/>',
         playSolid: '<path d="M7 4v16l13-8z" fill="currentColor" stroke="none"/>',
         diamond: '<path d="M12 4l8 8-8 8-8-8z" fill="currentColor" stroke="none"/>',
@@ -3301,87 +3359,8 @@
 
     // ===== 📝 BÀI TẬP THEO UNIT =====
     // Mỗi unit có danh sách tab bài tập (Đọc, ...). Unit chưa có thì hiện "chưa có bài tập".
-    const EXERCISE_DATA = {
-        11: [
-            {
-                id: 'U11-DOC',                       // mã bài — dùng trong tab "BaiTap" của Google Sheet
-                key: 'reading',
-                label: 'Đọc',
-                title: 'Kế hoạch du lịch của 3 người',
-                audio: 'assets/doc/unit11-doc.mp3', // file nghe bài đọc (đọc cả 3 đoạn)
-                passages: [
-                    // segs: [bắt đầu, kết thúc (giây trong file nghe), câu/vế] -> chữ chạy highlight theo audio
-                    { name: '남', start: 0, segs: [
-                        [0, 2.4, '저는 이번 방학에 배낭여행을 할 겁니다.'],
-                        [3.15, 6.0, '그래서 지난 1년 동안 열심히 아르바이트를 했습니다.'],
-                        [7.0, 8.8, '배낭여행은 한국으로 갈 겁니다.'],
-                        [9.6, 11.2, '먼저 서울을 구경하고,'], [11.65, 13.35, '경주와 부산에도 갈 겁니다.'],
-                        [14.35, 17.0, '경주에서는 불국사에서 사진을 많이 찍고,'], [17.6, 19.45, '부산에서는 유람선을 탈 겁니다.'],
-                        [20.55, 24.75, '내년에는 더 열심히 아르바이트를 해서 유럽으로 배낭여행을 갈 겁니다.'] ] },
-                    { name: '박수빈', start: 25.9, segs: [
-                        [26.0, 28.85, '저는 다음 연휴에 후에에 갈 겁니다.'],
-                        [29.4, 33.7, '다낭도 좋지만, 후에는 다낭보다 사람들이 많지 않습니다.'],
-                        [34.45, 38.0, '후에는 하노이에서 비행기로 1시간 정도 걸립니다.'],
-                        [39.05, 43.1, '첫째 날에는 옛 왕궁을 보고, 호텔에서 쉴 겁니다.'],
-                        [44.05, 47.8, '둘째 날에는 시내를 구경하고 시장에도 갈 겁니다.'],
-                        [48.85, 53.6, '마지막 날에는 바다에 가서 물놀이도 하고 생선 요리를 먹을 겁니다.'] ] },
-                    { name: '풍', start: 54.5, segs: [
-                        [54.66, 56.64, '저는 5년 후에 결혼할 겁니다.'],
-                        [57.04, 59.18, '신혼여행은 싱가포르로 갈 겁니다.'],
-                        [59.64, 61.6, '싱가포르에서 낮에는 쇼핑을 하고'], [61.94, 63.78, '밤에는 센토사 섬에 갈 겁니다.'],
-                        [64.2, 65.6, '섬에서 쇼를 볼 겁니다.'],
-                        [66.1, 68.9, '아내와 맛있는 음식을 먹고 맥주도 마실 겁니다.'],
-                        [69.34, 70.74, '사진도 많이 찍을 겁니다.'] ] }
-                ],
-                // Từ vựng / biểu hiện cần lưu ý (img: hình minh hoạ cho danh từ chỉ sự vật)
-                notes: [
-                    { ko: '아르바이트를 하다', vi: 'làm thêm, làm việc bán thời gian', ex: '지난 1년 동안 열심히 아르바이트를 했습니다.' },
-                    { ko: '유람선', vi: 'du thuyền, tàu du lịch', ex: '부산에서는 유람선을 탈 겁니다.', img: 'assets/doc/u11_yuramseon.svg' },
-                    { ko: '먼저 / 첫째 / 둘째 / 마지막', vi: 'trước tiên / thứ nhất / thứ hai / cuối cùng (kể trình tự)', ex: '첫째 날에는 … 둘째 날에는 … 마지막 날에는 …' },
-                    { ko: '물놀이', vi: 'vui chơi dưới nước, tắm biển', ex: '바다에 가서 물놀이도 하고 …' },
-                    { ko: '낮 – 밤', vi: 'ban ngày – ban đêm', ex: '낮에는 쇼핑을 하고 밤에는 센토사 섬에 갈 겁니다.' },
-                    { ko: '섬', vi: 'đảo, hòn đảo', ex: '센토사 섬에 갈 겁니다.', img: 'assets/doc/u11_seom.svg' },
-                    { ko: '쇼', vi: 'show, buổi biểu diễn', ex: '섬에서 쇼를 볼 겁니다.' },
-                    { ko: '맥주', vi: 'bia', ex: '맥주도 마실 겁니다.', img: 'assets/doc/u11_maekju.svg' }
-                ],
-                // Rê chuột / chạm vào từ trong bài đọc để xem nghĩa (khớp cụm dài nhất trước)
-                glossary: {
-                    '이번': 'lần này', '방학': 'kỳ nghỉ (của học sinh, sinh viên)', '배낭여행': 'du lịch ba lô, du lịch bụi',
-                    '할 겁니다': 'sẽ làm', '그래서': 'vì vậy', '지난 1년 동안': 'suốt 1 năm qua', '열심히': 'chăm chỉ',
-                    '아르바이트': 'việc làm thêm', '했습니다': 'đã làm', '한국': 'Hàn Quốc', '갈 겁니다': 'sẽ đi',
-                    '먼저': 'trước tiên', '서울': 'Seoul', '구경하고': 'ngắm cảnh, tham quan … rồi', '경주': 'Gyeongju (cố đô của Hàn Quốc)',
-                    '부산': 'Busan', '불국사': 'chùa Bulguksa', '사진': 'ảnh, bức ảnh', '많이': 'nhiều', '찍고': 'chụp … rồi', '찍을 겁니다': 'sẽ chụp',
-                    '유람선': 'du thuyền', '탈 겁니다': 'sẽ đi (phương tiện)', '내년': 'năm sau', '더': 'hơn, thêm', '해서': 'làm … rồi / nên',
-                    '유럽': 'châu Âu', '다음': 'tới, sau', '연휴': 'kỳ nghỉ dài (nhiều ngày nghỉ liền nhau)', '후에': 'Huế',
-                    '다낭': 'Đà Nẵng', '좋지만': 'tốt nhưng', '다낭보다': 'so với Đà Nẵng', '사람들': 'mọi người, người ta',
-                    '많지 않습니다': 'không nhiều', '하노이': 'Hà Nội', '비행기로': 'bằng máy bay', '1시간 정도': 'khoảng 1 tiếng',
-                    '걸립니다': 'mất (thời gian)', '첫째 날': 'ngày thứ nhất', '옛 왕궁': 'hoàng cung xưa (Đại Nội)', '보고': 'xem … rồi',
-                    '호텔': 'khách sạn', '쉴 겁니다': 'sẽ nghỉ ngơi', '둘째 날': 'ngày thứ hai', '시내': 'nội thành, trung tâm thành phố',
-                    '시장': 'chợ', '마지막 날': 'ngày cuối cùng', '바다': 'biển',
-                    '가서': 'đi đến … rồi', '물놀이': 'vui chơi dưới nước', '생선 요리': 'món cá', '먹을 겁니다': 'sẽ ăn',
-                    '5년 후에': 'sau 5 năm nữa', '결혼할 겁니다': 'sẽ kết hôn', '신혼여행': 'tuần trăng mật', '싱가포르': 'Singapore',
-                    '낮': 'ban ngày', '쇼핑': 'mua sắm', '밤': 'ban đêm', '센토사 섬': 'đảo Sentosa', '섬': 'đảo', '쇼': 'show, buổi biểu diễn',
-                    '볼 겁니다': 'sẽ xem', '아내': 'vợ', '맛있는 음식': 'món ăn ngon', '먹고': 'ăn … rồi', '맥주': 'bia', '마실 겁니다': 'sẽ uống'
-                },
-                mcq: [
-                    { q: 'Chọn từ vựng đúng để điền vào chỗ trống.', sub: '남 씨는 지난 1년 동안 돈을 모아서 이번 방학에 한국으로 __________을/를 갈 겁니다.', opts: ['가족 여행', '신혼여행', '배낭여행', '국내 여행'], ans: 2 },
-                    { q: 'Chọn câu đúng với kế hoạch của 풍 씨.', sub: '풍 씨의 계획에 대한 설명으로 맞는 것을 고르십시오.', opts: ['풍 씨는 지금 싱가포르에 가고 있습니다.', '풍 씨는 5년 후에 싱가포르로 신혼여행을 갈 겁니다.', '풍 씨는 싱가포르에 가 본 적이 있습니다.', '풍 씨는 낮에 센토사 섬에서 쇼를 볼 겁니다.'], ans: 1 },
-                    { q: 'Dựa vào bài đọc, lý do nào có thể giải thích việc 수빈 씨 chọn Huế thay vì Đà Nẵng?', opts: ['후에는 다낭보다 관광지가 더 많기 때문입니다.', '후에는 다낭보다 사람이 적기 때문입니다.', '후에는 하노이에서 기차로 1시간 정도 걸리기 때문입니다.', '후에는 다낭보다 호텔이 더 좋기 때문입니다.'], ans: 1 },
-                    { q: 'Điền cụm từ phù hợp với ngữ pháp -거나.', sub: '수빈 씨는 마지막 날에 바다에 가서 __________ 생선 요리를 먹을 겁니다.', opts: ['물놀이를 하거나', '물놀이를 하고 있고', '물놀이를 한 적이 있거나', '물놀이를 하지 않거나'], ans: 0 },
-                    { q: 'Nam dự định làm gì tại 경주?', opts: ['유람선을 탈 겁니다.', '불국사에서 사진을 찍을 겁니다.', '시장에서 쇼핑을 할 겁니다.', '호텔에서 쉴 겁니다.'], ans: 1 },
-                    { q: 'Chọn câu có ngữ pháp và nội dung phù hợp nhất với bài đọc.', opts: ['남 씨는 서울을 구경하고 경주와 부산에도 갈 겁니다.', '남 씨는 서울을 구경하거나 경주와 부산에도 갈 겁니다.', '남 씨는 서울을 구경하고 있거나 경주에 갔습니다.', '남 씨는 서울을 구경한 적이 없거나 부산에 갑니다.'], ans: 0 },
-                    { q: 'Chọn nội dung đúng với lịch trình du lịch của 남 씨.', sub: '남 씨의 여행 일정에 맞는 것을 고르십시오.', opts: ['서울을 구경하기 전에 부산에 먼저 갈 겁니다.', '부산에서 유람선을 탈 겁니다.', '경주에서는 유람선을 타고 사진을 찍을 겁니다.', '이번 방학에 유럽으로 배낭여행을 갈 겁니다.'], ans: 1 },
-                    { q: 'Điền từ vựng phù hợp vào chỗ trống.', sub: '수빈 씨는 첫째 날에 옛 왕궁을 구경한 후에 __________에서 쉴 겁니다.', opts: ['여행사', '관광지', '호텔', '콘도'], ans: 2 },
-                    { q: 'Chọn câu có nội dung đúng với bài đọc.', opts: ['후에는 다낭보다 사람이 더 많습니다.', '풍 씨는 싱가포르에서 낮에 쇼핑을 할 겁니다.', '남 씨는 작년에 유럽으로 배낭여행을 다녀왔습니다.', '풍 씨는 5년 후에 결혼한 적이 있습니다.'], ans: 1 },
-                    { q: 'Dựa vào bài đọc, có thể hiểu như thế nào về kế hoạch du lịch của 남 씨?', opts: ['남 씨는 한국 여행을 다녀온 후에 여행을 안 할 겁니다.', '남 씨는 한국 여행을 먼저 하고, 나중에 유럽 여행도 할 계획입니다.', '남 씨는 유럽 여행을 위해 한국에서 아르바이트를 할 겁니다.', '남 씨는 한국과 유럽을 같은 해에 여행할 겁니다.'], ans: 1 }
-                ],
-                essay: [
-                    { q: '남 씨는 부산에서 무엇을 할 겁니까?', hint: 'Gợi ý: Trả lời bằng câu hoàn chỉnh với cấu trúc -(으)ㄹ 겁니다.', fields: [''], check: [['유람선', '타|탈|탑']], answer: '부산에서 유람선을 탈 겁니다.' },
-                    { q: '풍 dự định làm gì ở Singapore vào ban ngày và ban đêm?', fields: ['Ban ngày (낮)', 'Ban đêm (밤)'], check: [['쇼핑'], ['센토사|쇼(?!핑)']], answer: '낮: 쇼핑을 할 겁니다.<br>밤: 센토사 섬에 갈 겁니다. / 섬에서 쇼를 볼 겁니다.<br><i style="color:var(--sub-text);font-size:12px;">Phần buổi tối chấp nhận cả hai cách trả lời vì đều đúng với bài đọc.</i>' }
-                ]
-            }
-        ]
-    };
+    // Nội dung bài tập nằm ở assets/exercise-data.js (dùng chung với teacher.html)
+    const EXERCISE_DATA = window.EXERCISE_DATA || {};
     const EX_CIRCLED = ['①', '②', '③', '④'];
     let currentExerciseTab = null;
     // 📝 Bài đang mở trong tab Bài tập: { unit, key } — null = đang ở danh sách bài được giao
@@ -3448,10 +3427,89 @@
                 ex.essay.filter((e, ei) => (st.essays[ei] || []).some(v => String(v || '').trim())).length;
             if (preview) expired = false;
             const status = st.done ? 'done' : expired ? 'expired' : answered > 0 ? 'doing' : 'todo';
-            out.push({ unit: String(unit), ex, win: preview ? {} : (win || {}), expired: preview ? false : expired, preview, status, st, total, answered });
+            out.push({ unit: String(unit), ex, win: preview ? {} : (win || {}), expired: preview ? false : expired, preview, status, st, total, answered,
+                grade: _exGradeOf(unit, ex.key) });
         }));
         return out;
     }
+    /* ---------- 🔔 THÔNG BÁO BÀI TẬP MỚI ----------
+       Bài đang mở, chưa nộp, học viên chưa tick "Đã đọc thông báo" -> popup lúc vào trang
+       + thẻ chớp ở cột phải + huy hiệu số ở menu. Trạng thái đã đọc đồng bộ lên server
+       (giáo viên thấy được ai đã đọc). Mã 1 thông báo = mã bài | ngày mở | hạn nộp. */
+    function exNoticeStoreKey() { return 'exNotice_' + getStudentKey(); }
+    function exNoticeRead() { try { const v = JSON.parse(localStorage.getItem(exNoticeStoreKey())); return Array.isArray(v) ? v : []; } catch (e) { return []; } }
+    function exNoticeId(i, graded) {
+        if (graded || i.gradedNotice) return 'G|' + i.ex.id + '|' + (i.grade ? i.grade.sentAt : '');
+        return i.ex.id + '|' + (i.win.from || '') + '|' + (i.win.due || '');
+    }
+    function exNoticeItems() {
+        const read = new Set(exNoticeRead());
+        const list = exAssignedList().filter(i => !i.preview);
+        const fresh = exAssignments === null ? [] : list.filter(i => (i.status === 'todo' || i.status === 'doing') && !read.has(exNoticeId(i)));
+        // ✍️ bài vừa được giáo viên chấm & gửi kết quả
+        const graded = list.filter(i => i.grade && !read.has(exNoticeId(i, true))).map(i => Object.assign({}, i, { gradedNotice: true }));
+        return fresh.concat(graded);
+    }
+    const _exNoticeShown = new Set();   // đã bật popup cho thông báo nào trong phiên này
+    function markExNoticeRead() {
+        const all = [...new Set(exNoticeRead().concat(exNoticeItems().map(exNoticeId)))].slice(-300);
+        try { localStorage.setItem(exNoticeStoreKey(), JSON.stringify(all)); } catch (e) {}
+        scheduleProgressPush(500);
+        closeExNoticePopup();
+        renderExNotice(false);
+    }
+    function _exNoticeLine(i, full) {
+        if (i.gradedNotice) return `<div class="exn-item"><b>${_escHtml(i.ex.label)} · ${_escHtml(i.ex.title || '')}</b>Unit ${i.unit} · <span class="due" style="color:#2f855a">Đã có kết quả: ${_exNum(i.grade.total)}/${i.grade.max}</span></div>`;
+        const left = _exDaysLeft(i.win.due);
+        const due = i.win.due ? ` · <span class="due">hạn ${_exDay(i.win.due)}${left != null && left <= 1 ? ' (' + _exLeftText(left) + ')' : ''}</span>` : '';
+        return `<div class="exn-item"><b>${_escHtml(i.ex.label)} · ${_escHtml(i.ex.title || '')}</b>Unit ${i.unit}${due}`
+            + (full && i.win.note ? `<span class="note">${ic('message')} ${_escHtml(i.win.note)}</span>` : '') + `</div>`;
+    }
+    function renderExNotice(allowPopup) {
+        const card = document.getElementById('ex-notice-card'), badge = document.getElementById('exn-badge');
+        if (!card) return;
+        let items = [];
+        try { items = exNoticeItems(); } catch (e) {}
+        if (badge) { badge.style.display = items.length ? '' : 'none'; badge.innerText = items.length; }
+        if (!items.length) { card.style.display = 'none'; card.innerHTML = ''; return; }
+        card.style.display = '';
+        card.innerHTML = `<div class="exn-head"><span class="exn-bell">${ic('bell')}</span><span class="exn-title">${items.every(i => i.gradedNotice) ? 'Đã có kết quả' : 'Bài tập mới'}</span><span class="exn-count">${items.length}</span></div>`
+            + `<div class="exn-list">${items.slice(0, 3).map(i => _exNoticeLine(i, false)).join('')}${items.length > 3 ? `<div class="exn-item">+${items.length - 3} bài khác</div>` : ''}</div>`
+            + `<div class="exn-actions"><label class="exn-read"><input type="checkbox" onchange="if(this.checked) markExNoticeRead()">Đã đọc thông báo</label>`
+            + `<button class="exn-go" onclick="openExNoticeTarget()">Xem${ic('arrowRight')}</button></div>`;
+        if (allowPopup) {
+            const fresh = items.filter(i => !_exNoticeShown.has(exNoticeId(i)));
+            if (fresh.length) { items.forEach(i => _exNoticeShown.add(exNoticeId(i))); openExNoticePopup(items); }
+        }
+    }
+    function openExNoticePopup(items) {
+        const body = document.getElementById('exn-pop-body');
+        if (!body) return;
+        const nNew = items.filter(i => !i.gradedNotice).length, nG = items.length - nNew;
+        body.innerHTML = `<div class="popup-icon-animate">${ic('bell')}</div><h3>${nNew ? 'Bài tập mới' : 'Đã có kết quả'}</h3>`
+            + `<div class="exn-pop-sub">${[nNew ? nNew + ' bài vừa được giao' : '', nG ? nG + ' bài đã được chấm' : ''].filter(Boolean).join(' · ')}</div>`
+            + `<div class="exn-list">${items.map(i => _exNoticeLine(i, true)).join('')}</div>`
+            + `<div class="exn-pop-actions"><label class="exn-read"><input type="checkbox" onchange="if(this.checked) markExNoticeRead()">Đã đọc thông báo</label>`
+            + `<span class="btns"><button class="btn" onclick="closeExNoticePopup()">Để sau</button><button class="btn btn-primary" onclick="openExNoticeTarget()">Xem bài tập</button></span></div>`;
+        document.getElementById('ex-notice-popup').classList.add('active');
+    }
+    function closeExNoticePopup() { const p = document.getElementById('ex-notice-popup'); if (p) p.classList.remove('active'); }
+    function openExNoticeTarget() { closeExNoticePopup(); showAppMode('exercise'); }
+
+    // 2 loại bài: THUẦN TRẮC NGHIỆM -> máy chấm, biết điểm ngay khi nộp.
+    //             CÓ TỰ LUẬN       -> giáo viên chấm & gửi kết quả; trước đó học viên KHÔNG thấy
+    //                                  đúng/sai, điểm hay đáp án gợi ý.
+    function exNeedsTeacher(ex) { return !!(ex && ex.essay && ex.essay.length); }
+
+    // ✍️ Kết quả giáo viên đã chấm & GỬI (status RETURNED). Chấm cho lần nộp đầu tiên.
+    function _exGradeOf(unit, key) {
+        try {
+            const g = JSON.parse(localStorage.getItem('exGrade_' + getStudentKey() + '_' + unit + '|' + key) || 'null');
+            return g && g.status === 'RETURNED' ? g : null;
+        } catch (e) { return null; }
+    }
+    function _exNum(v) { return String(Math.round((Number(v) || 0) * 100) / 100).replace('.', ','); }
+
     function _exInfoOf(unit, key) { return exAssignedList().find(i => i.unit === String(unit) && i.ex.key === key) || null; }
     let exerciseState = {}; // "unit|tab" -> { picks: {qIdx: optIdx} }
 
@@ -3634,6 +3692,7 @@
     // 📋 Danh sách bài được giao: Cần làm / Đã nộp / Hết hạn
     function renderExerciseHome() {
         stopExerciseAudio();
+        renderExNotice(false);
         document.getElementById('exercise-main-title').innerText = 'Bài tập';
         document.getElementById('exercise-subtitle').innerText = '';
         const content = document.getElementById('exercise-content');
@@ -3649,7 +3708,9 @@
         const done = items.filter(i => i.status === 'done');
         const todo = items.filter(i => i.status === 'todo' || i.status === 'doing');
         const soon = todo.filter(i => { const l = _exDaysLeft(i.win.due); return l != null && l <= 1; });
-        const avg = done.length ? Math.round(done.reduce((a, i) => a + i.st.done.score / i.st.done.total, 0) / done.length * 100) : null;
+        // Điểm trung bình: bài máy chấm + bài giáo viên đã gửi kết quả (bài đang chờ chấm chưa tính)
+        const scored = done.map(i => i.grade ? i.grade.total / (i.grade.max || 1) : (exNeedsTeacher(i.ex) ? null : i.st.done.score / i.st.done.total)).filter(v => v != null);
+        const avg = scored.length ? Math.round(scored.reduce((a, v) => a + v, 0) / scored.length * 100) : null;
         const pct = items.length ? Math.round(done.length / items.length * 100) : 0;
 
         let html = gvNote + (!items.length ? '' : `<div class="exh-summary">
@@ -3680,8 +3741,9 @@
             facts.push(`<span class="exh-fact">${ic('list')}${i.total} câu</span>`);
             let foot = '';
             if (i.status === 'done') {
-                const d = i.st.done;
-                foot = `<div class="exh-result"><span class="exh-score"><b>${d.score}</b>/${d.total} điểm</span><span class="exh-sub">Nộp ${_fmtDoneAt(d.at)}</span></div>`
+                const d = i.st.first || i.st.done, g = i.grade;
+                foot = (!g && exNeedsTeacher(ex) ? `<div class="exh-result"><span class="exh-score" style="color:#c05621">Chờ giáo viên chấm</span><span class="exh-sub">Nộp ${_fmtDoneAt(d.at)}</span></div>` : g ? `<div class="exh-result"><span class="exh-score"><b>${_exNum(g.total)}</b>/${g.max || d.total} điểm</span><span class="exh-sub">Giáo viên đã chấm</span></div>`
+                          : `<div class="exh-result"><span class="exh-score"><b>${d.score}</b>/${d.total} điểm</span><span class="exh-sub">Nộp ${_fmtDoneAt(d.at)}</span></div>`)
                      + `<span class="exh-go ghost">Xem lại</span>`;
             } else if (i.status === 'expired') {
                 foot = `<span class="exh-sub">Liên hệ giáo viên để mở lại.</span>`;
@@ -3695,7 +3757,7 @@
             return `<div class="exh-card s-${i.status}"${click}>
                 <div class="exh-ic">${ic(TYPE_IC[ex.label] || 'clipboard')}</div>
                 <div class="exh-main">
-                  <div class="exh-top"><span class="exh-over">Unit ${i.unit} · ${_escHtml(ex.label)}</span><span class="exh-chip ${i.preview ? 'expired' : i.status}">${i.preview ? 'Xem trước · chưa giao' : STATUS[i.status]}</span></div>
+                  <div class="exh-top"><span class="exh-over">Unit ${i.unit} · ${_escHtml(ex.label)}</span><span class="exh-chip ${i.preview ? 'expired' : i.status}">${i.preview ? 'Xem trước · chưa giao' : (i.grade ? 'Đã chấm' : (i.status === 'done' && exNeedsTeacher(ex) ? 'Chờ chấm' : STATUS[i.status]))}</span></div>
                   <div class="exh-title">${_escHtml(ex.title || ex.label)}${isNew ? '<span class="exh-new">Mới</span>' : ''}</div>
                   <div class="exh-facts">${facts.join('')}</div>
                   ${w.note && open ? `<div class="exh-note">${ic('message')}<span>${_escHtml(w.note)}</span></div>` : ''}
@@ -3800,10 +3862,20 @@
                 `<span class="ex-info-pop"><span>${ic('timer')} Thời gian làm bài: <b>${_fmtDuration(fin.duration)}</b></span>` +
                 `<span>${ic('swap')} Chuyển tab / rời trang: <b class="${fin.tabSwitches ? 'ex-warn' : ''}">${fin.tabSwitches} lần</b>` +
                 (fin.tabSwitches ? ` (tổng ${_fmtDuration(fin.awayMs)})` : '') + '</span></span></span>';
-            html += `<div class="ex-done-status"><span class="ex-done-status-text">${ic('checkCircle')} Đã hoàn thành lúc <b>${_fmtDoneAt(fin.at)}</b>` +
-                `<span class="ex-done-status-sep">·</span>Điểm: <b>${fin.score}/${fin.total}</b>${info}</span>` +
-                `<span class="ex-done-status-btns"><button class="ex-done-view" onclick="showExerciseDonePopup()">Xem kết quả</button>` +
-                (exOpen && exOpen.locked ? '' : `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button>`) + `</span></div>`;
+            const gNow = exOpen ? _exGradeOf(exOpen.unit, exOpen.key) : null, pend = exNeedsTeacher(ex) && !gNow;
+            html += `<div class="ex-done-status${pend ? ' pending' : ''}"><span class="ex-done-status-text">${ic(pend ? 'hourglass' : 'checkCircle')} Đã nộp lúc <b>${_fmtDoneAt(fin.at)}</b>` +
+                `<span class="ex-done-status-sep">·</span>${pend ? '<b>Chờ giáo viên chấm</b>' : `Điểm: <b>${gNow ? _exNum(gNow.total) + '/' + gNow.max : fin.score + '/' + fin.total}</b>`}${info}</span>` +
+                `<span class="ex-done-status-btns"><button class="ex-done-view" onclick="showExerciseDonePopup()">${pend ? 'Chi tiết' : 'Xem kết quả'}</button>` +
+                (exOpen && exOpen.locked || pend ? '' : `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button>`) + `</span></div>`;
+        }
+        const grade = exOpen ? _exGradeOf(exOpen.unit, exOpen.key) : null;
+        const needT = exNeedsTeacher(ex), hideRes = needT && !grade;   // bài có tự luận, chưa có kết quả -> ẩn đúng/sai
+        const tnote = k => grade && grade.qnotes && grade.qnotes[k] ? `<div class="ex-tnote">${ic('message')}<span><b>Giáo viên:</b> ${_escHtml(grade.qnotes[k])}</span></div>` : '';
+        if (grade) {
+            const redo = st.first && st.done !== st.first && (st.attempts || []).length;
+            html += `<div class="ex-graded"><div class="ex-graded-top">${ic('checkCircle')}<span>Giáo viên đã chấm${redo ? ' (lần nộp đầu tiên)' : ''}</span>`
+                + `<b class="ex-graded-score">${_exNum(grade.total)}<small>/${grade.max}</small></b></div>`
+                + (grade.comment ? `<div class="ex-graded-cmt">${_escHtml(grade.comment)}</div>` : '') + `</div>`;
         }
         html += '<div class="ex-block-title">Bài đọc</div>';
         if (ex.audio) {
@@ -3840,33 +3912,36 @@
                 (m.sub ? `<div class="ex-q-sub">${m.sub}</div>` : '') + '<div class="ex-opts">' +
                 m.opts.map((o, oi) => {
                     let cls = 'ex-opt';
-                    if (done && oi === m.ans) cls += ' correct';
+                    if (hideRes) { if (oi === pick) cls += ' picked'; }
+                    else if (done && oi === m.ans) cls += ' correct';
                     else if (done && oi === pick) cls += ' wrong';
-                    return `<button class="${cls}" ${done || fin ? 'disabled' : ''} onclick="pickExerciseOption(${qi}, ${oi})">${EX_CIRCLED[oi]} ${o}</button>`;
+                    const lock = hideRes ? !!fin : (done || fin);   // chưa có kết quả: được đổi đáp án tới khi nộp
+                    return `<button class="${cls}" ${lock ? 'disabled' : ''} onclick="pickExerciseOption(${qi}, ${oi})">${EX_CIRCLED[oi]} ${o}</button>`;
                 }).join('') + '</div>' +
-                (done ? (pick === m.ans ? '<div class="ex-fb ok">' + ic('check') + ' Chính xác!</div>' : `<div class="ex-fb no">${ic('x')} Chưa đúng — đáp án là ${EX_CIRCLED[m.ans]}</div>`) : '') +
-                '</div>';
+                (done && !hideRes ? (pick === m.ans ? '<div class="ex-fb ok">' + ic('check') + ' Chính xác!</div>' : `<div class="ex-fb no">${ic('x')} Chưa đúng — đáp án là ${EX_CIRCLED[m.ans]}</div>`) : '') +
+                tnote('m' + qi) + '</div>';
         });
         const answered = Object.keys(st.picks).length;
         const correct = Object.entries(st.picks).filter(([qi, oi]) => ex.mcq[qi].ans === oi).length;
-        html += `<div class="ex-score-bar"><span>Đã làm ${answered}/${ex.mcq.length} câu · Đúng ${correct} câu</span>` +
-            (exOpen && exOpen.locked ? '' : `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button>`) + `</div>`;
+        html += `<div class="ex-score-bar"><span>Đã làm ${answered}/${ex.mcq.length} câu${hideRes ? '' : ` · Đúng ${correct} câu`}</span>` +
+            (exOpen && exOpen.locked || (hideRes && fin) ? '' : `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button>`) + `</div>`;
 
-        html += '<div class="ex-block-title">Phần 2. Tự luận</div>';
+        if (ex.essay.length) html += '<div class="ex-block-title">Phần 2. Tự luận</div>';
         ex.essay.forEach((e, ei) => {
             const vals = st.essays[ei] || [];
-            const ok = fin ? _gradeEssay(e, vals) : null;
+            const ok = fin && !hideRes ? _gradeEssay(e, vals) : null;
             html += `<div class="ex-q"><div class="ex-q-head">Câu ${ei + 1}. ${e.q}</div>` +
                 (e.hint ? `<div class="ex-hint">${e.hint}</div>` : '') +
                 e.fields.map((f, fi) => (f ? `<label class="ex-input-label">${f}:</label>` : '') +
                     `<textarea class="ex-input" rows="1" placeholder="Câu trả lời..." ${fin ? 'readonly' : ''} ` +
                     `oninput="saveExerciseEssay(${ei}, ${fi}, this.value)">${_escHtml(vals[fi])}</textarea>`).join('') +
-                (fin ? (ok ? '<div class="ex-fb ok">' + ic('check') + ' Đạt</div>' : '<div class="ex-fb no">' + ic('x') + ' Chưa đạt — xem đáp án gợi ý</div>') +
-                    `<div class="ex-answer show">${e.answer}</div>` : '') +
+                (fin && !hideRes ? (grade ? '' : (ok ? '<div class="ex-fb ok">' + ic('check') + ' Đạt</div>' : '<div class="ex-fb no">' + ic('x') + ' Chưa đạt — xem đáp án gợi ý</div>')) +
+                    `<div class="ex-answer show"><b>Đáp án gợi ý:</b> ${e.answer}</div>` : '') +
+                (grade && grade.essays && grade.essays[ei] ? `<div class="ex-tnote">${ic('pen')}<span><b>Giáo viên chấm: ${_exNum(grade.essays[ei].score)}/1</b>${grade.essays[ei].note ? ' — ' + _escHtml(grade.essays[ei].note) : ''}</span></div>` : '') +
                 '</div>';
         });
         if (!fin) html += `<div class="ex-submit-wrap"><button class="btn btn-primary ex-submit-btn" onclick="submitExercise()">Nộp bài</button>` +
-            `<div class="ex-submit-note">Đáp án gợi ý hiện sau khi nộp bài.</div></div>`;
+            `<div class="ex-submit-note">${needT ? 'Kết quả và đáp án gợi ý có sau khi giáo viên chấm.' : 'Đáp án gợi ý hiện sau khi nộp bài.'}</div></div>`;
         document.getElementById('exercise-content').innerHTML = html;
     }
 
@@ -3879,7 +3954,8 @@
 
     function pickExerciseOption(qi, oi) {
         const st = _exState();
-        if (st.picks[qi] !== undefined || st.done) return;
+        const canChange = exNeedsTeacher(_exCurrent()) && !(exOpen && _exGradeOf(exOpen.unit, exOpen.key));
+        if (st.done || (st.picks[qi] !== undefined && !canChange)) return;
         st.picks[qi] = oi;
         _exSave();
         const y = window.scrollY;
@@ -3905,7 +3981,8 @@
         const now = Date.now();
         st.done = { mcq, essay, score: mcq + essay, total: ex.mcq.length + ex.essay.length, at: now,
             duration: now - (st.startedAt || now), tabSwitches: st.tabSwitches || 0, awayMs: st.awayMs || 0,
-            essays: JSON.parse(JSON.stringify(st.essays || {})) };   // lưu kèm bài viết để giáo viên xem lại
+            essays: JSON.parse(JSON.stringify(st.essays || {})),     // lưu kèm bài viết + đáp án đã chọn
+            picks: Object.assign({}, st.picks || {}) };             //   để giáo viên xem lại đúng bài đã nộp
         if (!st.first) st.first = Object.assign({}, st.done);   // lần nộp đầu tiên = điểm chính thức
         _exSave();
         scheduleProgressPush(500); // 📤 gửi kết quả cho giáo viên ngay
@@ -3934,12 +4011,17 @@
         const name = (document.getElementById('student-display-name') || {}).innerText || '';
         document.getElementById('ex-done-name').innerText = name;
         document.getElementById('ex-done-lesson').innerText = `Unit ${exOpen.unit} · ${ex.label} · ${ex.title || ''}`;
-        document.getElementById('ex-done-score').innerHTML = `<b>${d.score}</b>/${d.total}`;
+        const pend = exNeedsTeacher(ex) && !_exGradeOf(exOpen.unit, exOpen.key);
+        const gNow = _exGradeOf(exOpen.unit, exOpen.key);
+        document.getElementById('ex-done-score').innerHTML = pend ? '<b style="font-size:20px">Chờ chấm</b>' : (gNow ? `<b>${_exNum(gNow.total)}</b>/${gNow.max}` : `<b>${d.score}</b>/${d.total}`);
+        document.getElementById('ex-done-note').innerText = pend ? 'Bài đã được gửi tới giáo viên. Kết quả sẽ có sau khi giáo viên chấm.' : 'Vui lòng chụp lại kết quả và gửi cho giáo viên.';
+        document.getElementById('ex-done-capture').style.display = pend ? 'none' : '';
         // Bảng kết quả đầy đủ cho giáo viên theo dõi (cũng là phần được chụp lại)
         const row = (icon, label, val, cls = '', sub = '') => `<div class="ex-sheet-row ${cls}"><span class="ex-sheet-label">${icon} ${label}</span>` +
             `<span class="ex-sheet-val"><span>${val}</span>${sub ? `<small>${sub}</small>` : ''}</span></div>`;
-        let rows = row(ic('list'), 'Trắc nghiệm', `<b>${d.mcq}/${ex.mcq.length}</b> câu đúng`) +
-            row(ic('pen'), 'Tự luận', `<b>${d.essay}/${ex.essay.length}</b> câu đạt`);
+        const wrote = ex.essay.filter((e, ei) => ((d.essays || {})[ei] || []).some(v => String(v || '').trim())).length;
+        let rows = (ex.mcq.length ? row(ic('list'), 'Trắc nghiệm', pend ? `<b>${Object.keys(d.picks || {}).length}/${ex.mcq.length}</b> câu đã làm` : `<b>${d.mcq}/${ex.mcq.length}</b> câu đúng`) : '') +
+            (ex.essay.length ? row(ic('pen'), 'Tự luận', pend ? `<b>${wrote}/${ex.essay.length}</b> câu đã viết` : (gNow ? `<b>${_exNum(gNow.total - gNow.mcq)}/${ex.essay.length}</b> điểm` : `<b>${d.essay}/${ex.essay.length}</b> câu đạt`)) : '');
         if (d.duration != null) {
             rows += row(ic('play'), 'Bắt đầu làm', _fmtDoneAt(d.at - d.duration)) +
                 row(ic('flag'), 'Nộp bài', _fmtDoneAt(d.at)) +
@@ -4209,6 +4291,7 @@
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
                 useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản (chỉ Unit được mở)
                 await parseAndInitApp(data.allowedUnits);
+                setTimeout(() => renderExNotice(true), 600); // 🔔 bài tập mới
             } else if (data.disabled) {
                 forceAccountDisabled(); // tài khoản có nhưng đã bị khoá (Status = OUT)
             } else {
@@ -8140,6 +8223,7 @@
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
                     useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản
                     await parseAndInitApp(data.allowedUnits);
+                    setTimeout(() => renderExNotice(true), 600); // 🔔 bài tập mới
                 } else if (data.disabled) {
                     forceAccountDisabled(); // tài khoản đã bị khoá (Status = OUT)
                 } else {
@@ -8150,6 +8234,7 @@
                 markProgressOfflineLogin();   // ⛔ chưa kéo được tiến độ server -> chưa cho đẩy, sẽ thử lại khi có mạng
                 loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
                 loadExerciseAssignments(sessionUser); // 📝 bài tập được giao đã lưu (offline)
+                setTimeout(() => renderExNotice(false), 1500);
                 loadTeacherRole(sessionUser); // 👩‍🏫 khôi phục quyền tải đề đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
                               || localStorage.getItem('historyUnits_QuyenClass');
