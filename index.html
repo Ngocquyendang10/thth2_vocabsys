@@ -738,6 +738,9 @@
         .ws-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
         .ws-counter { font-size: 12px; font-weight: 800; color: var(--sub-text); }
         .ws-toggles { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        .ws-auto { width: 32px; height: 32px; border-radius: 999px; border: 1.5px solid #e2e8f0; background: #fff; color: #a0aec0; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; padding: 0; }
+        .ws-auto .ic { width: 16px; height: 16px; }
+        .ws-auto.on { color: var(--point-color); border-color: var(--point-color); background: var(--point-light); }
         .ws-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: var(--sub-text); cursor: pointer; user-select: none; }
         .ws-switch { position: relative; width: 32px; height: 18px; border-radius: 999px; background: #cbd5e0; transition: background .2s; flex: 0 0 auto; }
         .ws-switch.on { background: var(--point-color); }
@@ -1619,19 +1622,19 @@
         <p>Nền tảng ôn luyện từ vựng & ngữ pháp</p>
     </div>
     <div class="login-right-form">
-        <h2>Xin chào các bạn học viên</h2>
-        <p class="info-p">Vui lòng đăng nhập tài khoản lớp học để tiếp tục bài ôn tập.</p>
+        <h2>Xin chào</h2>
+        <p class="info-p">Đăng nhập để tiếp tục.</p>
         <div class="form-group">
-            <label>Tên đăng nhập / Mã học sinh</label>
-            <input type="text" class="input-field" id="login-username" placeholder="Nhập mã học viên của bạn...">
+            <label>Tên đăng nhập</label>
+            <input type="text" class="input-field" id="login-username" placeholder="Tên đăng nhập">
         </div>
         <div class="form-group">
-            <label>Mật khẩu truy cập</label>
+            <label>Mật khẩu</label>
             <input type="password" class="input-field" id="login-password" placeholder="Nhập mật khẩu..." onkeydown="if(event.key==='Enter') executeStudentLogin()">
         </div>
         <div class="remember-row">
             <input type="checkbox" id="login-remember-me" checked>
-            <label for="login-remember-me">Ghi nhớ thông tin đăng nhập tự động</label>
+            <label for="login-remember-me">Ghi nhớ đăng nhập</label>
         </div>
         <div class="remember-row" style="align-items: flex-start;">
             <input type="checkbox" id="login-policy-agree" style="margin-top: 2px;">
@@ -1800,7 +1803,7 @@
                         <div class="lesson-locked-msg" id="lecture-locked-msg" style="display: none;">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                             <p class="lesson-locked-title">Bài giảng của Unit này chưa được mở khoá</p>
-                            <p class="lesson-locked-sub">Phần bài giảng chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn có thể luyện tập đầy đủ ở các mục <b>List từ vựng, Flashcard và Quiz</b>. Nếu cần mở bài giảng, vui lòng liên hệ giáo viên.</p>
+                            <p class="lesson-locked-sub">Bài giảng chỉ mở cho các buổi đã tham gia trên lớp. <b>List từ vựng, Flashcard và Quiz</b> vẫn luyện tập bình thường.</p>
                         </div>
 
                         <!-- Iframe thêm sự kiện onload để tự báo hiệu cho JavaScript ẩn bộ khung xương -->
@@ -1845,7 +1848,7 @@
                     <svg style="width:14px; height:14px; fill:currentColor; vertical-align:middle; margin-right:4px;" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                     <span>Từ khó</span>
                 </button>
-                <span id="star-hint-pop" class="star-hint-pop" style="display:none;">Click ngôi sao với những từ bạn thấy khó nhớ<button class="star-hint-ok" onclick="dismissStarHint(event)" title="Đã hiểu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><polyline points="20 6 9 17 4 12"></polyline></svg></button></span>
+                <span id="star-hint-pop" class="star-hint-pop" style="display:none;">Đánh dấu từ khó nhớ<button class="star-hint-ok" onclick="dismissStarHint(event)" title="Đã hiểu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><polyline points="20 6 9 17 4 12"></polyline></svg></button></span>
             </div>
         </div>
 
@@ -1864,7 +1867,7 @@
                     <th style="width: 20%;">Tiếng Hàn <button id="th-eye-ko" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('ko')"></button></th>
                     <th style="width: 17%;">Tiếng Việt <button id="th-eye-vi" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('vi')"></button></th>
                     <th id="th-vocab-ex" style="width: 43%;">Ví dụ <button id="th-eye-ex" class="th-eye-btn" title="Ẩn/hiện cột" onclick="toggleVocabColumn('ex')"></button></th>
-                    <th style="width: 160px;">Ghi chú của bạn</th>
+                    <th style="width: 160px;">Ghi chú</th>
                 </tr>
             </thead>
             <tbody id="vocab-table-index-body"></tbody>
@@ -1891,11 +1894,11 @@
                                         <button class="audio-inline-btn" onclick="triggerKoreanVoice(document.getElementById('fc-ko').innerText, false); event.stopPropagation();"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>여</button>
                                     </div>
                                 </div>
-                                <div class="card-hint">BẤM VÀO THẺ ĐỂ XEM NGHĨA</div>
+                                <div class="card-hint">CHẠM ĐỂ LẬT THẺ</div>
                             </div>
                             <div class="card-face card-back" onclick="toggleFlip()">
                                 <div class="vi-text" id="fc-vi">...</div>
-                                <div class="card-hint">BẤM VÀO THẺ ĐỂ XEM TỪ GỐC</div>
+                                <div class="card-hint">CHẠM ĐỂ LẬT THẺ</div>
                             </div>
                         </div>
                     </div>
@@ -1916,7 +1919,7 @@
                                 <span class="typing-sheet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#614CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></span>
                                 <div>
                                     <h3>Viết từ</h3>
-                                    <p id="typing-sheet-sub">Hãy nhập cụm từ Tiếng Hàn tương ứng với từ vựng tiếng Việt bên dưới.</p>
+                                    <p id="typing-sheet-sub">Viết từ tiếng Hàn tương ứng.</p>
                                 </div>
                             </div>
                             <button type="button" class="typing-dir-btn" id="typing-dir-btn" onclick="toggleTypingDirection()">⇄ Đổi hướng: Việt → Hàn</button>
@@ -1961,7 +1964,7 @@
                         <button class="hint-btn-bottom-right" id="guess-hint-btn" onclick="toggleListenHint(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></button>
                         <div class="text-hint-display" id="guess-hint-text"></div>
                     </div>
-                    <div class="quiz-question" id="guess-question">Cụm từ bạn nghe được mang nghĩa là gì?</div>
+                    <div class="quiz-question" id="guess-question">Nghĩa của từ vừa nghe?</div>
                     <div class="quiz-options" id="guess-opts"></div>
                 </div>
 
@@ -1975,7 +1978,7 @@
                         </div>
                         <button class="hint-btn-bottom-right" id="visual-hint-btn" onclick="toggleVisualHint(this)" title="Gợi ý: câu minh hoạ cho hình"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></button>
                     </div>
-                    <div class="quiz-question" id="visual-question">Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:</div>
+                    <div class="quiz-question" id="visual-question">Chọn từ phù hợp với hình</div>
                     <div class="quiz-options" id="visual-opts"></div>
                 </div>
 
@@ -2037,7 +2040,7 @@
             <div class="work-workspace-container" style="justify-content: flex-start;">
                 <div class="workspace-header">
                     <h1 style="color:#ed8936;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:0.9em;height:0.9em;vertical-align:-0.1em;"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg> Ôn tập Tổng hợp</h1>
-                    <p id="summary-subtitle">Tổng hợp toàn bộ từ vựng của các Unit bạn đã mở khóa để ôn luyện.</p>
+                    <p id="summary-subtitle">Từ vựng của các Unit đã mở.</p>
                 </div>
 
                 <!-- 2 tab lớn: List từ vựng & Quiz -->
@@ -2076,7 +2079,7 @@
             <div class="work-workspace-container" style="justify-content: flex-start;">
                 <div class="workspace-header">
                     <h1 style="color:#ed8936;">Ôn tập Ngữ pháp Tổng hợp <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:0.9em;height:0.9em;vertical-align:-0.1em;"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6" fill="currentColor" stroke="none"/></svg></h1>
-                    <p id="gsum-subtitle">Tổng hợp ngữ pháp của các Unit bạn đã mở khóa.</p>
+                    <p id="gsum-subtitle">Ngữ pháp của các Unit đã mở.</p>
                 </div>
 
                 <div class="workspace-tabs" id="gsum-main-tabs">
@@ -2112,7 +2115,7 @@
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; min-height:320px; color:var(--sub-text); text-align:center;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:52px;height:52px; color:#cbd5e0;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
                         <div style="font-size:16px; font-weight:800; color:#1a202c;">Tính năng đang phát triển</div>
-                        <div style="font-size:13px;">Bài quiz ngữ pháp tổng hợp sẽ sớm được cập nhật. Cảm ơn bạn đã kiên nhẫn chờ đợi.</div>
+                        <div style="font-size:13px;">Sẽ sớm được cập nhật.</div>
                     </div>
                 </div>
             </div>
@@ -2124,14 +2127,14 @@
                 <div class="workspace-header">
                     <!-- Thêm id="grammar-main-title" và đổi chữ mặc định lại cho đồng bộ -->
                     <h1 id="grammar-main-title">Ngoc Quyen's Classroom</h1>
-                    <p id="grammar-subtitle">Vui lòng chọn Unit ở trên để tải danh sách bài học ngữ pháp tương ứng.</p>
+                    <p id="grammar-subtitle">Chọn Unit để xem ngữ pháp.</p>
                 </div>
 
                 <!-- 🔒 Khoá ngữ pháp: unit không nằm trong cột UnlockLesson -->
                 <div class="lesson-locked-msg" id="grammar-locked-msg" style="display: none;">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     <p class="lesson-locked-title">Ngữ pháp của Unit này chưa được mở khoá</p>
-                    <p class="lesson-locked-sub">Phần ngữ pháp chỉ mở cho những buổi bạn có tham gia học trên lớp. Bạn vẫn có thể luyện tập từ vựng đầy đủ ở mục <b>Từ vựng</b>. Nếu cần mở ngữ pháp, vui lòng liên hệ giáo viên.</p>
+                    <p class="lesson-locked-sub">Ngữ pháp chỉ mở cho các buổi đã tham gia trên lớp. Mục <b>Từ vựng</b> vẫn luyện tập bình thường.</p>
                 </div>
 
                 <div class="grammar-two-column-layout" id="grammar-main-wrapper" style="display: none;">
@@ -2142,7 +2145,7 @@
                     <div class="grammar-main-content" id="grammar-detail-view">
                         <div class="grammar-empty-state" id="grammar-empty-msg">
                             <span style="font-size: 32px; margin-bottom: 8px; color: var(--point-color);"><i data-ic="arrowLeft"></i></span>
-                            <span>Vui lòng chọn một cấu trúc ngữ pháp ở cột bên trái để xem chi tiết bài học.</span>
+                            <span>Chọn một cấu trúc ngữ pháp để xem chi tiết.</span>
                         </div>
                         
 <!-- Khung chứa dữ liệu thật (Cập nhật Lưu ý & Bảng So Sánh) -->
@@ -2180,7 +2183,7 @@
             <div class="work-workspace-container" style="justify-content: flex-start;">
                 <div class="workspace-header">
                     <h1 id="exercise-main-title">Bài tập</h1>
-                    <p id="exercise-subtitle">Vui lòng chọn Unit ở trên để xem bài tập tương ứng.</p>
+                    <p id="exercise-subtitle"></p>
                 </div>
                 <div class="workspace-tabs" id="exercise-tabs-nav" style="display: none;"></div>
                 <div id="exercise-content"></div>
@@ -2192,7 +2195,7 @@
             <div class="work-workspace-container" style="justify-content: flex-start;">
                 <div class="workspace-header">
                     <h1>Sổ Tay Từ Vựng <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:0.85em;height:0.85em;vertical-align:-0.1em;"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></h1>
-                    <p>Danh sách lưu trữ tự động những từ vựng bạn đã làm chưa đúng để rèn luyện thêm.</p>
+                    <p>Các từ làm sai được lưu tự động tại đây.</p>
                     <div style="margin-top:10px;">
                         <button class="btn" onclick="clearNotebookAll()" style="padding:8px 14px; font-size:12px; display:inline-flex; align-items:center; gap:6px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6M14 11v6M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"></path></svg>Xoá sạch sổ tay</button>
                     </div>
@@ -2207,7 +2210,7 @@
                                 <th>Ví dụ</th>
                                 <th>Dịch ví dụ</th>
                                 <th>Ngày chưa thuộc</th>
-                                <th>Bạn đã nhớ chưa?</th>
+                                <th>Đã thuộc</th>
                             </tr>
                         </thead>
                         <tbody id="review-table-body"></tbody>
@@ -2292,7 +2295,7 @@
                 &nbsp;·&nbsp;
                 <svg viewBox="0 0 24 24" fill="#f6b73c" style="width:1em;height:1em;vertical-align:-0.12em;"><path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77 5.82 21l1.18-6.88-5-4.87 6.91-1.01z"/></svg> Đã dấu: <b id="dash-count-starred" style="color:#1a202c;">0</b>
             </div>
-            <button onclick="handleReviewNowAction()" style="flex:0 0 auto; padding: 7px 13px; background: #f56565; color: white; border: none; border-radius: var(--radius-sm); font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245, 101, 101, 0.2); transition: all 0.2s;" onmouseover="this.style.background='#e53e3e'" onmouseout="this.style.background='#f56565'">Ôn tập ngay ➔</button>
+            <button onclick="handleReviewNowAction()" style="flex:0 0 auto; padding: 7px 13px; background: #f56565; color: white; border: none; border-radius: var(--radius-sm); font-size: 11.5px; font-weight: 700; cursor: pointer; box-shadow: 0 4px 12px rgba(245, 101, 101, 0.2); transition: all 0.2s;" onmouseover="this.style.background='#e53e3e'" onmouseout="this.style.background='#f56565'">Ôn tập</button>
         </div>
     </div>
 
@@ -2389,7 +2392,7 @@
     <div class="bounce-popup-box">
         <div class="popup-icon-animate"><i data-ic="sparkles"></i></div>
         <h3 id="popup-title">Hoàn thành</h3>
-        <p id="popup-message">Bài học mới đã được mở cho tài khoản của bạn.</p>
+        <p id="popup-message">Bài học mới đã được mở.</p>
         <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px;" onclick="closeCustomBouncePopup()">Bắt đầu học</button>
     </div>
 </div>
@@ -2398,12 +2401,12 @@
 <div class="bounce-popup-overlay" id="ex-done-popup">
     <div class="bounce-popup-box ex-done-box" id="ex-done-card">
         <div class="popup-icon-animate"><i data-ic="sparkles"></i></div>
-        <h3>Chúc mừng bạn đã hoàn thành bài tập!</h3>
+        <h3>Hoàn thành bài tập</h3>
         <div class="ex-done-name" id="ex-done-name"></div>
         <div class="ex-done-lesson" id="ex-done-lesson"></div>
         <div class="ex-done-score"><span class="ex-done-score-label">Điểm</span><span id="ex-done-score"></span></div>
         <div class="ex-done-sheet" id="ex-done-sheet"></div>
-        <p class="ex-done-note">Để giáo viên có thể ghi nhận kết quả và theo dõi tiến độ học tập, bạn vui lòng chụp lại màn hình kết quả này và gửi cho giáo viên. Trân trọng cảm ơn!</p>
+        <p class="ex-done-note">Vui lòng chụp lại kết quả và gửi cho giáo viên.</p>
         <div class="ex-done-actions">
             <button class="btn btn-primary" onclick="captureExerciseResult(this)"><i data-ic="camera"></i> Chụp màn hình</button>
             <button class="btn" onclick="closeExerciseDonePopup()">Đóng</button>
@@ -2415,8 +2418,8 @@
 <div class="bounce-popup-overlay" id="tab-done-popup">
     <div class="bounce-popup-box">
         <div class="popup-icon-animate" style="color:#f6b73c;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:44px;height:44px;"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 4H4v2a3 3 0 0 0 3 3M17 4h3v2a3 3 0 0 1-3 3"/></svg></div>
-        <h3 id="tab-done-title">Chúc mừng hoàn thành!</h3>
-        <p id="tab-done-message">Bạn đã hoàn thành toàn bộ bài luyện tập.</p>
+        <h3 id="tab-done-title">Hoàn thành</h3>
+        <p id="tab-done-message">Đã hoàn thành toàn bộ bài luyện tập.</p>
         <div id="tab-done-score" style="display:flex; justify-content:center; gap:10px; margin: 14px 0 4px 0; flex-wrap: wrap;"></div>
         <div style="display:flex; justify-content:center; gap:10px; margin-top:16px; flex-wrap: wrap;">
             <button class="btn btn-primary" onclick="restartCurrentTabFromPopup()" style="padding: 10px 24px; font-size: 13px; display:inline-flex; align-items:center; justify-content:center; gap:7px; line-height:1;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px;flex:0 0 auto;display:block;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>Làm lại</button>
@@ -2456,7 +2459,7 @@
             <p>Ngoc Quyen's Classroom tin rằng, với tinh thần siêng năng, tự giác và sự tôn trọng lẫn nhau, mỗi học viên sẽ đạt được những thành tựu tiếng Hàn ý nghĩa.</p>
             <p>Chúc các bạn có những giờ phút học tập thật nhiều niềm vui và năng lượng!</p>
         </div>
-        <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px; margin-top: 14px; flex-shrink: 0;" onclick="closePolicyModal()">Đã hiểu, đóng lại</button>
+        <button class="btn btn-primary" style="padding: 10px 24px; font-size: 13px; margin-top: 14px; flex-shrink: 0;" onclick="closePolicyModal()">Đóng</button>
     </div>
 </div>
 
@@ -2465,7 +2468,7 @@
     <div class="bounce-popup-box change-pw-box">
         <button class="policy-modal-close-btn" onclick="closeChangePwModal()" aria-label="Đóng">&times;</button>
         <h3 style="margin-bottom: 2px;"><i data-ic="key"></i> Đổi mật khẩu</h3>
-        <p style="font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 16px;">Đặt mật khẩu mới cho tài khoản của bạn. Vui lòng ghi nhớ mật khẩu để sử dụng cho lần đăng nhập sau.</p>
+        <p style="font-size: 12px; color: var(--sub-text); font-style: italic; margin-bottom: 16px;">Mật khẩu mới áp dụng từ lần đăng nhập sau.</p>
         <div class="pw-field">
             <label for="pw-old">Mật khẩu hiện tại</label>
             <input type="password" id="pw-old" autocomplete="current-password" placeholder="Nhập mật khẩu đang dùng">
@@ -2566,7 +2569,7 @@
         _verBannerShown = true;
         const bar = document.createElement('div');
         bar.id = 'app-update-bar';
-        bar.innerHTML = '<span>' + ic('sparkles') + ' Đã có phiên bản mới của web!</span><button type="button">Cập nhật ngay</button>';
+        bar.innerHTML = '<span>' + ic('sparkles') + ' Đã có phiên bản mới.</span><button type="button">Cập nhật ngay</button>';
         bar.querySelector('button').onclick = () => applyAppUpdate(buildTime, true);
         document.body.appendChild(bar);
     }
@@ -2955,6 +2958,7 @@
         pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
         star: '<path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/>',
         tag: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8z"/><circle cx="7" cy="7" r="1.5"/>',
+        speakerOff: '<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M23 9l-6 6M17 9l6 6"/>',
         playSolid: '<path d="M7 4v16l13-8z" fill="currentColor" stroke="none"/>',
         diamond: '<path d="M12 4l8 8-8 8-8-8z" fill="currentColor" stroke="none"/>',
         arrowLeft: '<path d="M19 12H5M12 19l-7-7 7-7"/>',
@@ -3128,12 +3132,12 @@
         const total = state.indices.length;
         const label = TAB_DONE_LABELS[tabName] || tabName;
 
-        document.getElementById('tab-done-title').innerText = "Chúc mừng hoàn thành!";
+        document.getElementById('tab-done-title').innerText = "Hoàn thành";
         const scoreBox = document.getElementById('tab-done-score');
 
         if (tabName === 'flashcard') {
             document.getElementById('tab-done-message').innerText =
-                `Bạn đã xem hết ${total} thẻ từ vựng của phần "${label}" — Unit ${currentUnit}.`;
+                `${label} · Unit ${currentUnit} · ${total} thẻ`;
             scoreBox.innerHTML = `<span class="counter" style="box-shadow:none;">${total} / ${total} thẻ</span>`;
         } else {
             // Viết từ: "đúng" = số ô đang đúng (xanh), "sai" = số ô đang để đỏ (chưa sửa).
@@ -3146,7 +3150,7 @@
                 logSummaryResult({ kind: 'practice', units: sumPracticeUnits, types: [tabName], right: right, total: total });
             }
             document.getElementById('tab-done-message').innerText =
-                `Bạn đã hoàn thành ${total}/${total} câu của phần "${label}" — Unit ${currentUnit}.`;
+                `${label} · Unit ${currentUnit} · ${total}/${total} câu`;
             scoreBox.innerHTML =
                 `<span class="counter" style="box-shadow:none; color:var(--success-color); font-weight:800;">✓ Đúng: ${right}</span>` +
                 `<span class="counter" style="box-shadow:none; color:var(--error-color); font-weight:800;">✕ Sai: ${wrong}</span>` +
@@ -3174,7 +3178,7 @@
     function restartCurrentTab() {
         if (!QUIZ_SUBTABS.includes(currentTab)) return;
         if (currentTab === 'typing' && hasTypingProgress() &&
-            !confirm("Làm lại sẽ xoá hết đáp án bạn đã nhập ở phần Viết từ. Bạn có chắc không?")) return;
+            !confirm("Xoá các đáp án đã nhập và làm lại?")) return;
         restartTab(currentTab);
     }
 
@@ -3238,7 +3242,7 @@
                 if (localStorage.getItem('saved_pass_QuyenClass') != null) localStorage.setItem('saved_pass_QuyenClass', newPass);
                 setSyncPass(newPass);   // 🔐 nếu không cập nhật, server sẽ từ chối lưu tiến độ vì sai mật khẩu
                 if (typeof __authPass !== 'undefined') __authPass = newPass;
-                setPwMsg('Đổi mật khẩu thành công. Vui lòng sử dụng mật khẩu mới cho lần đăng nhập sau.', 'success');
+                setPwMsg('Đã đổi mật khẩu.', 'success');
                 if (btn) { btn.textContent = 'Đã đổi ✓'; }
                 setTimeout(closeChangePwModal, 1800);
             } else {
@@ -3265,7 +3269,7 @@
         }
 
         if (starList.length === 0) {
-            showCustomBouncePopup('Đã hoàn thành ôn tập', 'Hiện không còn từ vựng nào cần ôn tập lại. Chúc bạn tiếp tục học tập hiệu quả.');
+            showCustomBouncePopup('Đã hoàn thành ôn tập', 'Không còn từ vựng cần ôn.');
             return;
         }
 
@@ -3419,26 +3423,32 @@
     }
     // Danh sách bài học sinh thấy, kèm đợt giao đang áp dụng + trạng thái làm bài.
     function exAssignedList() {
-        const today = _exToday(), showAll = exAssignments === null || isTeacherAccount, out = [];
+        // Tài khoản giáo viên (Role GV) thấy TOÀN BỘ kho bài để xem trước; bài chưa giao đánh dấu preview
+        const today = _exToday(), showAll = exAssignments === null, out = [];
         Object.keys(EXERCISE_DATA).sort((a, b) => a - b).forEach(unit => (EXERCISE_DATA[unit] || []).forEach(ex => {
-            let win = null, expired = false;
+            let win = null, expired = false, preview = false;
             if (!showAll) {
                 const ws = exAssignments.filter(a => String(a.id || '').toUpperCase() === ex.id);
-                if (!ws.length) return;                                   // chưa giao -> ẩn
+                if (!ws.length && isTeacherAccount) preview = true;       // giáo viên: xem trước bài chưa giao
+                else if (!ws.length) return;                              // chưa giao -> ẩn
+            }
+            if (!showAll && !preview) {
+                const ws = exAssignments.filter(a => String(a.id || '').toUpperCase() === ex.id);
                 const live = ws.filter(w => (!w.from || w.from <= today) && (!w.due || w.due >= today));
                 if (live.length) win = live.sort((a, b) => (b.due || '9999').localeCompare(a.due || '9999'))[0];
                 else {
                     const past = ws.filter(w => w.due && w.due < today);
-                    if (!past.length) return;                             // chỉ có đợt chưa tới ngày mở -> ẩn
-                    win = past.sort((a, b) => b.due.localeCompare(a.due))[0]; expired = true;
+                    if (!past.length) { if (!isTeacherAccount) return; preview = true; } // chỉ có đợt chưa tới ngày mở
+                    else { win = past.sort((a, b) => b.due.localeCompare(a.due))[0]; expired = true; }
                 }
             }
             const st = _exState(unit, ex.key);
             const total = ex.mcq.length + ex.essay.length;
             const answered = Object.keys(st.picks || {}).length +
                 ex.essay.filter((e, ei) => (st.essays[ei] || []).some(v => String(v || '').trim())).length;
+            if (preview) expired = false;
             const status = st.done ? 'done' : expired ? 'expired' : answered > 0 ? 'doing' : 'todo';
-            out.push({ unit: String(unit), ex, win: win || {}, expired, status, st, total, answered });
+            out.push({ unit: String(unit), ex, win: preview ? {} : (win || {}), expired: preview ? false : expired, preview, status, st, total, answered });
         }));
         return out;
     }
@@ -3624,37 +3634,38 @@
     // 📋 Danh sách bài được giao: Cần làm / Đã nộp / Hết hạn
     function renderExerciseHome() {
         stopExerciseAudio();
-        document.getElementById('exercise-main-title').innerText = 'Bài tập của bạn';
-        document.getElementById('exercise-subtitle').innerText = 'Giáo viên giao bài sau mỗi buổi học. Vui lòng hoàn thành trước hạn nộp và gửi ảnh chụp kết quả cho giáo viên.';
+        document.getElementById('exercise-main-title').innerText = 'Bài tập';
+        document.getElementById('exercise-subtitle').innerText = '';
         const content = document.getElementById('exercise-content');
-        const items = exAssignedList();
-        if (!items.length) {
-            content.innerHTML = `<div class="exh-empty"><div class="exh-empty-ic">${ic('inbox')}</div><b>Hiện chưa có bài tập nào được giao.</b><span>Giáo viên sẽ giao bài sau buổi học. Vui lòng quay lại sau.</span></div>`;
+        const all = exAssignedList(), items = all.filter(i => !i.preview), previews = all.filter(i => i.preview);
+        const gvNote = isTeacherAccount ? `<div class="exd-note">${ic('eye')}<span><b>Chế độ giáo viên:</b> hiện toàn bộ kho bài. Học viên chỉ thấy bài được giao.</span></div>` : '';
+        if (!all.length) {
+            content.innerHTML = `<div class="exh-empty"><div class="exh-empty-ic">${ic('inbox')}</div><b>Chưa có bài tập.</b></div>`;
             return;
         }
-        const units = [...new Set(items.map(i => i.unit))];
+        const units = [...new Set(all.map(i => i.unit))];
         if (exFilterUnit && !units.includes(exFilterUnit)) exFilterUnit = null;
-        const shown = items.filter(i => !exFilterUnit || i.unit === exFilterUnit);
+        const shown = all.filter(i => !exFilterUnit || i.unit === exFilterUnit);
         const done = items.filter(i => i.status === 'done');
         const todo = items.filter(i => i.status === 'todo' || i.status === 'doing');
         const soon = todo.filter(i => { const l = _exDaysLeft(i.win.due); return l != null && l <= 1; });
         const avg = done.length ? Math.round(done.reduce((a, i) => a + i.st.done.score / i.st.done.total, 0) / done.length * 100) : null;
-        const pct = Math.round(done.length / items.length * 100);
+        const pct = items.length ? Math.round(done.length / items.length * 100) : 0;
 
-        let html = `<div class="exh-summary">
+        let html = gvNote + (!items.length ? '' : `<div class="exh-summary">
             <div class="exh-ring" style="--p:${pct}"><b>${done.length}/${items.length}</b><small>đã nộp</small></div>
             <div class="exh-sum-txt">
-              <div class="exh-sum-main">${todo.length ? `Bạn còn <b>${todo.length}</b> bài cần làm` : 'Bạn đã làm hết bài được giao!'}</div>
+              <div class="exh-sum-main">${todo.length ? `<b>${todo.length}</b> bài cần làm` : 'Đã hoàn thành tất cả bài.'}</div>
               <div class="exh-sum-chips">
                 ${soon.length ? `<span class="exh-pill warn">${ic('clock')} ${soon.length} bài sắp hết hạn</span>` : ''}
                 ${avg != null ? `<span class="exh-pill ok">${ic('chart')} Điểm trung bình ${avg}%</span>` : ''}
                 ${items.some(i => i.status === 'expired') ? `<span class="exh-pill bad">${ic('hourglass')} ${items.filter(i => i.status === 'expired').length} bài đã hết hạn</span>` : ''}
               </div>
             </div>
-          </div>`;
+          </div>`);
         if (units.length > 1) {
-            html += `<div class="exh-filter"><button class="exh-fchip${!exFilterUnit ? ' on' : ''}" onclick="setExerciseFilter(null)">Tất cả <span>${items.length}</span></button>`
-                + units.map(u => `<button class="exh-fchip${exFilterUnit === u ? ' on' : ''}" onclick="setExerciseFilter('${u}')">Unit ${u} <span>${items.filter(i => i.unit === u).length}</span></button>`).join('')
+            html += `<div class="exh-filter"><button class="exh-fchip${!exFilterUnit ? ' on' : ''}" onclick="setExerciseFilter(null)">Tất cả <span>${all.length}</span></button>`
+                + units.map(u => `<button class="exh-fchip${exFilterUnit === u ? ' on' : ''}" onclick="setExerciseFilter('${u}')">Unit ${u} <span>${all.filter(i => i.unit === u).length}</span></button>`).join('')
                 + `</div>`;
         }
         // Thẻ bài: [icon dạng bài] | Unit · Dạng + trạng thái / Tên bài / ngày giao · hạn · số câu / lời dặn | chân thẻ: tiến độ hoặc điểm + nút
@@ -3673,7 +3684,7 @@
                 foot = `<div class="exh-result"><span class="exh-score"><b>${d.score}</b>/${d.total} điểm</span><span class="exh-sub">Nộp ${_fmtDoneAt(d.at)}</span></div>`
                      + `<span class="exh-go ghost">Xem lại</span>`;
             } else if (i.status === 'expired') {
-                foot = `<span class="exh-sub">Vui lòng liên hệ giáo viên nếu cần mở lại bài này.</span>`;
+                foot = `<span class="exh-sub">Liên hệ giáo viên để mở lại.</span>`;
             } else {
                 foot = (i.status === 'doing'
                         ? `<div class="exh-prog"><span class="exh-bar"><i style="width:${Math.round(i.answered / i.total * 100)}%"></i></span><span>${i.answered}/${i.total} câu</span></div>`
@@ -3684,7 +3695,7 @@
             return `<div class="exh-card s-${i.status}"${click}>
                 <div class="exh-ic">${ic(TYPE_IC[ex.label] || 'clipboard')}</div>
                 <div class="exh-main">
-                  <div class="exh-top"><span class="exh-over">Unit ${i.unit} · ${_escHtml(ex.label)}</span><span class="exh-chip ${i.status}">${STATUS[i.status]}</span></div>
+                  <div class="exh-top"><span class="exh-over">Unit ${i.unit} · ${_escHtml(ex.label)}</span><span class="exh-chip ${i.preview ? 'expired' : i.status}">${i.preview ? 'Xem trước · chưa giao' : STATUS[i.status]}</span></div>
                   <div class="exh-title">${_escHtml(ex.title || ex.label)}${isNew ? '<span class="exh-new">Mới</span>' : ''}</div>
                   <div class="exh-facts">${facts.join('')}</div>
                   ${w.note && open ? `<div class="exh-note">${ic('message')}<span>${_escHtml(w.note)}</span></div>` : ''}
@@ -3695,9 +3706,11 @@
         const byDue = (a, b) => (a.win.due || '9999').localeCompare(b.win.due || '9999') || a.unit - b.unit;
         const sec = (icon, name, list, sort) => list.length
             ? `<div class="exh-sec"><div class="exh-sec-hd">${icon} ${name} <span>${list.length}</span></div>${list.slice().sort(sort).map(card).join('')}</div>` : '';
-        html += sec(ic('clipboard'), 'Cần làm', shown.filter(i => i.status === 'todo' || i.status === 'doing'), byDue)
-             + sec(ic('checkCircle'), 'Đã nộp', shown.filter(i => i.status === 'done'), (a, b) => b.st.done.at - a.st.done.at)
-             + sec(ic('hourglass'), 'Đã hết hạn', shown.filter(i => i.status === 'expired'), byDue);
+        const real = shown.filter(i => !i.preview);
+        html += sec(ic('clipboard'), 'Cần làm', real.filter(i => i.status === 'todo' || i.status === 'doing'), byDue)
+             + sec(ic('checkCircle'), 'Đã nộp', real.filter(i => i.status === 'done'), (a, b) => b.st.done.at - a.st.done.at)
+             + sec(ic('hourglass'), 'Đã hết hạn', real.filter(i => i.status === 'expired'), byDue)
+             + sec(ic('eye'), 'Kho bài · xem trước (chưa giao)', shown.filter(i => i.preview), (a, b) => a.unit - b.unit);
         content.innerHTML = html;
     }
 
@@ -3809,7 +3822,7 @@
             ex.passages.map(p => `<div class="ex-passage"><div class="ex-passage-name">${p.name}` +
                 (ex.audio && p.start != null ? ` <button class="ex-passage-play" title="Nghe đoạn của ${p.name}" onclick="jumpExerciseAudio(${p.start})">${ic('headphones')}</button>` : '') +
                 `</div><p>${p.segs.map(sg => _renderSeg(sg, ex.glossary)).join(' ')}</p></div>`).join('') + '</div>';
-        if (ex.glossary) html += '<div class="ex-gloss-tip">' + ic('bulb') + ' Rê chuột (hoặc chạm) vào từ có gạch chân để xem nghĩa.</div>';
+        if (ex.glossary) html += '<div class="ex-gloss-tip">' + ic('bulb') + ' Chạm vào từ gạch chân để xem nghĩa.</div>';
 
         if (ex.notes && ex.notes.length) {
             html += '<div class="ex-block-title">Từ vựng / biểu hiện cần lưu ý</div><div class="ex-notes">' +
@@ -3846,14 +3859,14 @@
             html += `<div class="ex-q"><div class="ex-q-head">Câu ${ei + 1}. ${e.q}</div>` +
                 (e.hint ? `<div class="ex-hint">${e.hint}</div>` : '') +
                 e.fields.map((f, fi) => (f ? `<label class="ex-input-label">${f}:</label>` : '') +
-                    `<textarea class="ex-input" rows="1" placeholder="Viết câu trả lời của bạn..." ${fin ? 'readonly' : ''} ` +
+                    `<textarea class="ex-input" rows="1" placeholder="Câu trả lời..." ${fin ? 'readonly' : ''} ` +
                     `oninput="saveExerciseEssay(${ei}, ${fi}, this.value)">${_escHtml(vals[fi])}</textarea>`).join('') +
-                (fin ? (ok ? '<div class="ex-fb ok">' + ic('check') + ' Đạt</div>' : '<div class="ex-fb no">' + ic('x') + ' Chưa đạt — xem đáp án gợi ý bên dưới</div>') +
+                (fin ? (ok ? '<div class="ex-fb ok">' + ic('check') + ' Đạt</div>' : '<div class="ex-fb no">' + ic('x') + ' Chưa đạt — xem đáp án gợi ý</div>') +
                     `<div class="ex-answer show">${e.answer}</div>` : '') +
                 '</div>';
         });
         if (!fin) html += `<div class="ex-submit-wrap"><button class="btn btn-primary ex-submit-btn" onclick="submitExercise()">Nộp bài</button>` +
-            `<div class="ex-submit-note">Đáp án gợi ý của phần tự luận sẽ hiện sau khi nộp bài.</div></div>`;
+            `<div class="ex-submit-note">Đáp án gợi ý hiện sau khi nộp bài.</div></div>`;
         document.getElementById('exercise-content').innerHTML = html;
     }
 
@@ -3880,13 +3893,13 @@
         // Để trang mở qua giờ hạn nộp -> không cho nộp nữa
         const info = exOpen ? _exInfoOf(exOpen.unit, exOpen.key) : null;
         if (!info || info.expired) {
-            _exDialog(() => alert('Bài tập này đã quá hạn nộp. Vui lòng liên hệ giáo viên nếu cần mở lại.'));
+            _exDialog(() => alert('Đã quá hạn nộp. Liên hệ giáo viên để mở lại.'));
             renderExerciseMode(false); return;
         }
         const left = ex.mcq.length - Object.keys(st.picks).length;
-        if (left > 0) { _exDialog(() => alert(`Bạn còn ${left} câu trắc nghiệm chưa làm. Vui lòng hoàn thành trước khi nộp bài.`)); return; }
+        if (left > 0) { _exDialog(() => alert(`Còn ${left} câu trắc nghiệm chưa làm.`)); return; }
         const emptyEssay = ex.essay.some((e, ei) => e.fields.some((f, fi) => !String((st.essays[ei] || [])[fi] || '').trim()));
-        if (emptyEssay && !_exDialog(() => confirm('Bạn chưa viết đủ phần tự luận. Vẫn nộp bài chứ?'))) return;
+        if (emptyEssay && !_exDialog(() => confirm('Phần tự luận chưa hoàn thành. Vẫn nộp bài?'))) return;
         const mcq = Object.entries(st.picks).filter(([qi, oi]) => ex.mcq[qi].ans === oi).length;
         const essay = ex.essay.filter((e, ei) => _gradeEssay(e, st.essays[ei])).length;
         const now = Date.now();
@@ -3903,7 +3916,7 @@
 
     function resetExercise() {
         const st = _exState();
-        if (st.done && !_exDialog(() => confirm('Làm lại sẽ bắt đầu một lượt làm bài mới. Điểm của lần nộp đầu tiên vẫn được giáo viên ghi nhận. Bạn có muốn tiếp tục?'))) return;
+        if (st.done && !_exDialog(() => confirm('Bắt đầu lượt làm mới? Điểm lần nộp đầu vẫn được giữ.'))) return;
         if (exOpen && exOpen.locked) return; // đã hết hạn: không làm lại được
         // Làm lại: GIỮ lịch sử — lần nộp đầu (first) + các lần đã nộp (attempts) để giáo viên vẫn thấy
         const old = st || {};
@@ -3972,7 +3985,7 @@
                 setTimeout(() => URL.revokeObjectURL(a.href), 2000);
             }
         } catch (e) {
-            alert('Không chụp được tự động. Vui lòng tự chụp màn hình bằng phím chụp màn hình của thiết bị.');
+            alert('Không chụp tự động được. Vui lòng chụp màn hình thủ công.');
         }
         btn.disabled = false; btn.innerHTML = old;
     }
@@ -4053,18 +4066,28 @@
         return parts.length ? parts : null;
     }
 
+    // Tốc độ đọc của lượt phát hiện tại (1 = bình thường) + audio đang phát (để dừng khi phát câu mới)
+    let _voiceRate = 1, _curVoiceAudio = null;
+    function _stopVoice() {
+        try { if (_curVoiceAudio) _curVoiceAudio.pause(); } catch (_) {}
+        try { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); } catch (_) {}
+        _curVoiceAudio = null;
+    }
+
     function _playFemaleVoice(clean, onDone) {
         let url = "https://texttospeech.responsivevoice.org/v1/text:synthesize?text=" +
                   encodeURIComponent(clean) +
                   "&lang=ko&engine=g3&name=Korean%20Female&pitch=0.5&rate=0.45&volume=1";
         let audio = new Audio(url);
+        audio.defaultPlaybackRate = audio.playbackRate = _voiceRate;
+        _curVoiceAudio = audio;
         if (onDone) audio.addEventListener('ended', onDone);
         audio.load();
         audio.play().catch(function () {
             try {
                 if ('speechSynthesis' in window) {
                     let u = new SpeechSynthesisUtterance(clean);
-                    u.lang = 'ko-KR'; u.rate = 0.9;
+                    u.lang = 'ko-KR'; u.rate = 0.9 * _voiceRate;
                     if (onDone) { u.onend = onDone; u.onerror = onDone; }
                     window.speechSynthesis.cancel();
                     window.speechSynthesis.speak(u);
@@ -4077,6 +4100,8 @@
     function _playBase64Mp3(b64, onDone) {
         try {
             let a = new Audio("data:audio/mpeg;base64," + b64);
+            a.defaultPlaybackRate = a.playbackRate = _voiceRate;
+            _curVoiceAudio = a;
             if (onDone) { a.addEventListener('ended', onDone); a.addEventListener('error', onDone); }
             a.play().catch(function () { if (onDone) onDone(); });
             return a;
@@ -4095,8 +4120,11 @@
 
     // Hội thoại: đọc từng lượt, nghỉ ~0,8 giây giữa 2 người. Bấm loa khác thì chuỗi cũ dừng.
     let _voiceSeq = 0;
-    function triggerKoreanVoice(text, isMale, speakerBtn) {
+    // opts.rate: tốc độ đọc (vd 0.8). Phát câu mới thì dừng câu đang đọc dở.
+    function triggerKoreanVoice(text, isMale, speakerBtn, opts) {
         const seq = ++_voiceSeq;
+        _stopVoice();
+        _voiceRate = (opts && opts.rate) || 1;
         const turns = _dialogueTurns(text);
         if (!turns || turns.length < 2) { _speakKorean(turns ? turns[0] : text, isMale, speakerBtn); return; }
         let i = 0;
@@ -4141,7 +4169,7 @@
         const rememberMe = document.getElementById('login-remember-me').checked;
         
         if(!user || !pass) { 
-            alert("Vui lòng điền đầy đủ tài khoản và mật khẩu!"); 
+            alert("Vui lòng nhập tên đăng nhập và mật khẩu."); 
             return; 
         }
 
@@ -4154,7 +4182,7 @@
         document.getElementById('main-app-layout').style.display = 'grid';
         document.body.classList.add('app-active');
         document.getElementById('loading-area').style.display = 'block';
-        document.getElementById('loading-text').innerText = "Đang xác thực thông tin học viên...";
+        document.getElementById('loading-text').innerText = "Đang đăng nhập...";
         
         const targetUrl = `${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}${hasFreshBundle(user) ? '&nb=1' : ''}`;
         
@@ -4184,11 +4212,11 @@
             } else if (data.disabled) {
                 forceAccountDisabled(); // tài khoản có nhưng đã bị khoá (Status = OUT)
             } else {
-                alert(data.locked ? "Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút." : "Tài khoản hoặc mật khẩu chưa chính xác!");
+                alert(data.locked ? "Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau 15 phút." : "Tên đăng nhập hoặc mật khẩu không đúng.");
                 window.location.reload();
             }
         } catch(e) {
-            alert("Lỗi kết nối máy chủ đồng bộ!");
+            alert("Không kết nối được máy chủ.");
             window.location.reload();
         }
     }
@@ -4210,7 +4238,7 @@
        Giáo viên điền cột E (Status) = "OUT" hoặc xoá dòng học viên
        trong tab Students -> học viên bị đăng xuất ngay và không vào lại được.
        ============================================================ */
-    const ACCOUNT_DISABLED_MSG = "Tài khoản của bạn đã vô hiệu hoá. Vui lòng liên hệ giáo viên để được hỗ trợ đăng nhập lại.";
+    const ACCOUNT_DISABLED_MSG = "Tài khoản đã bị vô hiệu hoá. Vui lòng liên hệ giáo viên.";
     let __authUser = null, __authPass = null, __statusPollTimer = null;
 
     function startStatusWatch(user, pass) {
@@ -4408,11 +4436,11 @@
     }
 
     function handleUnitClick(unitNum, isUnlocked, isBrandNew) {
-        if(!isUnlocked) { alert("Bài học này chưa được mở khóa cho tài khoản của bạn."); return; }
+        if(!isUnlocked) { alert("Bài học này chưa được mở khoá."); return; }
         if(isBrandNew) {
             showCustomBouncePopup(
                 `Unit ${unitNum} đã sẵn sàng`, 
-                `Unit ${unitNum} đã được mở cho tài khoản của bạn. Chúc bạn ôn tập hiệu quả.`
+                `Unit ${unitNum} đã được mở.`
             );
             renderUnitGrid([]); 
         }
@@ -4452,7 +4480,7 @@
                     initTabIndices();
                     activateMainUI();
                 }
-            } catch(e) { alert("Không thể kết nối dữ liệu!"); }
+            } catch(e) { alert("Không tải được dữ liệu."); }
             document.getElementById('loading-area').style.display = 'none';
         }
     }
@@ -4974,7 +5002,7 @@
         bank.innerHTML = '';
         pgSelected = null;
         const left = st.order.filter(i => !st.done[i]);
-        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">' + ic('sparkles') + ' Bạn đã ghép xong toàn bộ từ vựng!</span>'; return; }
+        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">' + ic('sparkles') + ' Đã ghép xong toàn bộ từ vựng.</span>'; return; }
         left.forEach(i => {
             const chip = document.createElement('div');
             chip.className = 'sm-chip';
@@ -5054,7 +5082,7 @@
         });
         bank.innerHTML = '';
         const left = st.order.filter(i => !st.done[i]);
-        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">' + ic('sparkles') + ' Bạn đã phân loại xong toàn bộ thẻ!</span>'; return; }
+        if (left.length === 0) { bank.innerHTML = '<span class="pg-bank-done">' + ic('sparkles') + ' Đã phân loại xong.</span>'; return; }
         left.forEach(i => {
             const card = document.createElement('div');
             card.dataset.i = i;
@@ -5432,7 +5460,7 @@
         if (currentTab === 'writesentence') { wsPrev(); return; }
         // Bảng Viết từ hiển thị cả danh sách nên không có "từ trước đó" — nút này quay lại màn hình trước
         if (currentTab === 'typing') {
-            if (hasTypingProgress() && !confirm("Bạn đang làm dở phiếu Viết từ. Rời khỏi màn hình này chứ?")) return;
+            if (hasTypingProgress() && !confirm("Phiếu Viết từ chưa hoàn thành. Rời khỏi trang này?")) return;
             switchTab('listen');
             return;
         }
@@ -5448,7 +5476,7 @@
         let state = tabState[currentTab];
         if (!state || !state.indices || state.indices.length === 0) return;
         if (currentTab === 'typing' && hasTypingProgress() &&
-            !confirm("Chế độ ngẫu nhiên sẽ xoá hết đáp án bạn đã nhập. Bạn có chắc không?")) return;
+            !confirm("Xáo trộn sẽ xoá các đáp án đã nhập. Tiếp tục?")) return;
         // Xáo lại từ đầu = bắt đầu vòng mới -> xoá tiến độ đã lưu của dạng này.
         restartTab(currentTab);
     }
@@ -5469,7 +5497,7 @@
 
     // Xoá sạch sổ tay của TÀI KHOẢN hiện tại (cả trên máy lẫn trên server) — dùng để dọn dữ liệu lẫn cũ.
     function clearNotebookAll() {
-        if (!confirm('Xoá toàn bộ sổ tay "Ôn lại từ vựng" của tài khoản này?')) return;
+        if (!confirm('Xoá toàn bộ sổ tay?')) return;
         wrongWordsList = [];
         saveWrongWords();                                   // lưu rỗng theo tài khoản + hẹn đẩy lên server
         if (typeof flushProgressNow === 'function') flushProgressNow(); // đẩy NGAY để xoá luôn trên server
@@ -6423,7 +6451,7 @@
             if (m.remain <= 0) {
                 const ok = m.wrong === 0;
                 if (!ok) recordWrongWord();
-                finishQuizQuestion(ok, ok ? '' : `Bạn ghép sai <b>${m.wrong}</b> lần. Vui lòng xem lại các cặp bên dưới.`);
+                finishQuizQuestion(ok, ok ? '' : `Ghép sai <b>${m.wrong}</b> lần.`);
             }
         } else {
             m.wrong++;
@@ -6484,7 +6512,7 @@
         const pool = document.getElementById('qorder-pool');
         slot.classList.toggle('empty', o.placed.length === 0);
         slot.innerHTML = o.placed.length === 0
-            ? 'Bấm các từ bên dưới để xếp thành câu...'
+            ? 'Chọn từ để xếp câu'
             : o.placed.map((k, i) => `<button type="button" class="${cls} inslot" onclick="quizOrderUnplace(${i})">${o.pool[k]}</button>`).join('');
         pool.innerHTML = o.pool.map((w, k) =>
             `<button type="button" class="${cls}${o.placed.indexOf(k) >= 0 ? ' used' : ''}" onclick="quizOrderPlace(${k})">${w}</button>`).join('');
@@ -6603,7 +6631,7 @@
 
         // Đáp án của chiều cũ không còn đúng ở chiều mới, nên phải làm lại từ đầu
         if (hasTypingProgress() &&
-            !confirm(`Bạn đang làm mode ${dangLam}. Bạn có muốn bắt đầu lại từ đầu với mode ${sapSang} không?`)) {
+            !confirm(`Chuyển sang ${sapSang} sẽ làm lại từ đầu. Tiếp tục?`)) {
             return;
         }
 
@@ -6629,8 +6657,8 @@
         const isViToKo = state.direction === 'vi-to-ko';
         document.getElementById('typing-dir-btn').innerText = isViToKo ? '⇄ Đổi hướng: Việt → Hàn' : '⇄ Đổi hướng: Hàn → Việt';
         document.getElementById('typing-sheet-sub').innerText = isViToKo
-            ? 'Hãy nhập cụm từ Tiếng Hàn tương ứng với từ vựng tiếng Việt bên dưới.'
-            : 'Hãy nhập nghĩa Tiếng Việt tương ứng với từ vựng tiếng Hàn bên dưới.';
+            ? 'Viết từ tiếng Hàn tương ứng.'
+            : 'Viết nghĩa tiếng Việt tương ứng.';
         document.getElementById('typing-th-word').innerText = isViToKo ? 'Từ vựng (Tiếng Việt)' : 'Từ vựng (Tiếng Hàn)';
         document.getElementById('typing-th-input').innerText = isViToKo ? 'Nhập đáp án (Tiếng Hàn)' : 'Nhập đáp án (Tiếng Việt)';
 
@@ -6786,7 +6814,7 @@
             if (!state.seen.includes(rowIdx)) state.seen.push(rowIdx);
             recordWrongWord(vocabIdx);
             // Vẫn CHO chuyển sang câu khác dù đang sai (giữ ô đỏ). Trừ điểm chỉ khi giữ sai đến cuối.
-            setFeedback("Chưa chính xác. Từ này đã được lưu vào mục 'Ôn lại từ vựng' cho bạn.", "error");
+            setFeedback("Chưa chính xác. Đã lưu vào Ôn lại từ vựng.", "error");
             updateTypingProgress();
             advanceTypingAfterSubmit(rowIdx);
         }
@@ -6801,10 +6829,10 @@
         const bad = countTypingBad();
         if (bad > 0) {
             const firstBad = findNextBadTypingRow(rowIdx);
-            setFeedback(`Bạn đã làm hết ${state.indices.length} câu. Còn ${bad} ô đỏ — sửa lại rồi Enter, hoặc bấm Thoát để giữ nguyên (tính là sai).`, "error");
+            setFeedback(`Đã làm hết ${state.indices.length} câu. Còn ${bad} ô sai — sửa rồi nhấn Enter, hoặc để nguyên (tính là sai).`, "error");
             if (firstBad !== -1) focusTypingRow(firstBad, true);
         } else {
-            setFeedback("Bạn đã hoàn thành toàn bộ danh sách từ vựng.", "success");
+            setFeedback("Đã hoàn thành toàn bộ danh sách.", "success");
         }
         // Chỉ bật popup 1 lần ở thời điểm vừa làm xong hết (tránh bật lại mỗi lần sửa)
         if (!state.donePopupShown) {
@@ -7094,10 +7122,21 @@
     }
     function wsToggleAnswer() { tabState.writesentence.showAnswer = !tabState.writesentence.showAnswer; wsRender(); }
     function wsToggleGrammar() { tabState.writesentence.showGrammar = !tabState.writesentence.showGrammar; wsRender(); }
+    // Tự đọc câu tiếng Hàn khi sang câu mới (0.8x). Tắt bằng nút loa — nhớ theo máy.
+    const WS_RATE = 0.8;
+    function wsAutoOn() { try { return localStorage.getItem('wsAutoRead') !== '0'; } catch (e) { return true; } }
+    function wsToggleAuto() {
+        const on = !wsAutoOn();
+        try { localStorage.setItem('wsAutoRead', on ? '1' : '0'); } catch (e) {}
+        if (!on) _stopVoice();
+        const b = document.getElementById('ws-auto-btn');
+        if (b) { b.classList.toggle('on', on); b.innerHTML = ic(on ? 'speaker' : 'speakerOff'); b.title = on ? 'Tự đọc câu: bật' : 'Tự đọc câu: tắt'; }
+        if (on) wsSpeak();
+    }
     function wsSpeak() {
         const ws = tabState.writesentence;
         const s = wsSentenceAt(ws.indices[ws.current]);
-        triggerKoreanVoice(s.ko, false);
+        triggerKoreanVoice(s.ko, false, null, { rate: WS_RATE });
     }
 
     function wsCheck() {
@@ -7228,7 +7267,7 @@
         if (checked && ws.match) {
             const m = ws.match;
             const matches = m.matched + m.typoN;
-            const verdict = m.clean ? ic('sparkles') + ' Chính xác hoàn toàn!' : (m.ok ? ic('checkCircle') + ' Đạt yêu cầu' : ic('edit') + ' Có lỗi cần sửa');
+            const verdict = m.clean ? ic('sparkles') + ' Chính xác hoàn toàn' : (m.ok ? ic('checkCircle') + ' Đạt yêu cầu' : ic('edit') + ' Có lỗi cần sửa');
             const vColor = m.ok ? '#2f855a' : '#c05621';
             fbHtml = `
               <div class="ws-fb">
@@ -7258,6 +7297,7 @@
             <div class="ws-top">
               <span class="ws-counter">Câu ${pos + 1}/${total}</span>
               <div class="ws-toggles">
+                ${sourceIsKo ? `<button type="button" id="ws-auto-btn" class="ws-auto${wsAutoOn() ? ' on' : ''}" onclick="wsToggleAuto()" title="Tự đọc câu: ${wsAutoOn() ? 'bật' : 'tắt'}">${ic(wsAutoOn() ? 'speaker' : 'speakerOff')}</button>` : ''}
                 <label class="ws-toggle" onclick="wsToggleAnswer()"><span class="ws-switch${ws.showAnswer ? ' on' : ''}"><span class="knob"></span></span>Gợi ý câu đúng</label>
                 <label class="ws-toggle" onclick="wsToggleGrammar()"><span class="ws-switch${ws.showGrammar ? ' on' : ''}"><span class="knob"></span></span>Gợi ý ngữ pháp/từ</label>
               </div>
@@ -7275,6 +7315,12 @@
           </div>`;
 
         if (!checked) setTimeout(() => { const el = document.getElementById('ws-input'); if (el) el.focus(); }, 30);
+        // Câu mới (chiều Hàn -> Việt): tự đọc 1 lần
+        const spokenKey = ws.mode + ':' + id + ':' + pos;
+        if (!checked && sourceIsKo && wsAutoOn() && ws._spokenFor !== spokenKey && currentTab === 'writesentence') {
+            ws._spokenFor = spokenKey;
+            setTimeout(() => { if (currentTab === 'writesentence') wsSpeak(); }, 250);
+        }
     }
 
     // Huy hiệu "Mới" tự tắt sau 30 ngày kể từ ngày ra mắt.
@@ -7382,8 +7428,8 @@
 
         const isSentence = state.mode === 'sentence';
         document.getElementById('guess-question').innerText = isSentence
-            ? 'Câu bạn nghe được có nghĩa là gì?'
-            : 'Cụm từ bạn nghe được mang nghĩa là gì?';
+            ? 'Nghĩa của câu vừa nghe?'
+            : 'Nghĩa của từ vừa nghe?';
 
         // Chế độ "Nghe câu" nhưng Unit không có câu ví dụ nào
         if (isSentence && state.indices.length === 0) {
@@ -7485,7 +7531,7 @@
         // Dạng "Chọn câu": chọn câu tiếng Hàn mô tả đúng ảnh (từ thiếu câu/thiếu câu nhiễu -> hỏi từ như cũ)
         const picQ = state.mode === 'sentence' ? buildPicSentenceQuestion(currentItem, 'ko') : null;
         const qEl = document.getElementById('visual-question');
-        if (qEl) qEl.innerText = picQ ? 'Câu nào mô tả đúng tình huống trong ảnh?' : 'Nhìn tình huống ảnh trên và lựa chọn đáp án đúng:';
+        if (qEl) qEl.innerText = picQ ? 'Chọn câu mô tả đúng hình' : 'Chọn từ phù hợp với hình';
         if (vHintBtn) vHintBtn.style.display = picQ ? 'none' : ''; // gợi ý = chính đáp án -> ẩn
         let correctAnswer, allChoices;
         if (picQ) {
@@ -7830,7 +7876,7 @@
             return;
         }
         
-        subtitle.innerText = `Thành công mở khoá các cấu trúc ngữ pháp của Unit ${currentUnit}.`;
+        subtitle.innerText = `Ngữ pháp Unit ${currentUnit}`;
         mainWrapper.style.display = "flex";
         
         grammarDataCache.forEach((g, index) => {
@@ -8845,7 +8891,7 @@
                         completedUnits.push(String(currentUnit));
                         localStorage.setItem(`completed_units_${studentKey}`, JSON.stringify(completedUnits));
                         renderDashboardUnitGrid();
-                        showCustomBouncePopup("Thành Tựu Mới!", `Bạn đã hoàn thành mốc 15 phút rèn luyện nghiêm túc và làm chủ hoàn toàn kiến thức Unit ${currentUnit}!`);
+                        showCustomBouncePopup("Đạt mốc mới", `Đã đạt mốc 15 phút luyện tập của Unit ${currentUnit}.`);
                     }
                 }
             }
@@ -8987,7 +9033,7 @@
         const units = getSummaryUnits();
         document.getElementById('summary-subtitle').innerText = units.length
             ? 'Tổng hợp từ vựng của những unit đã mở khoá'
-            : 'Bạn chưa mở khóa Unit nào có từ vựng.';
+            : 'Chưa có Unit nào được mở.';
         let sk = getStudentKey();
         let starList = JSON.parse(localStorage.getItem(`starred_${sk}_QuyenClass`)) || [];
         body.innerHTML = '';
@@ -9167,7 +9213,7 @@
         const units = [...sumSelUnits].sort((a,b) => parseInt(a) - parseInt(b));
         if (units.length === 0) { alert('Vui lòng chọn ít nhất 1 Unit để ôn tập.'); return; }
         const mixed = buildMixedVocab(units);
-        if (mixed.length < 4) { alert('Cần ít nhất 4 từ. Hãy chọn thêm Unit.'); return; }
+        if (mixed.length < 4) { alert('Cần ít nhất 4 từ. Vui lòng chọn thêm Unit.'); return; }
         vocabData = mixed;
         currentUnit = 'SUM';
         sumPracticeUnits = units;
@@ -9177,7 +9223,7 @@
         document.getElementById('main-tabs-nav').style.display = 'flex';
         document.getElementById('footer-controls').style.visibility = 'visible';
         document.getElementById('vocab-main-title').innerHTML = SVG.target + ' Ôn tập Tổng hợp';
-        document.getElementById('main-subtitle').innerText = 'Kết hợp từ vựng Unit ' + units.join(', ') + '. Bấm nút Tổng hợp để quay lại cài đặt.';
+        document.getElementById('main-subtitle').innerText = 'Kết hợp từ vựng Unit ' + units.join(', ') + '.';
         switchTab(type);
         updateDashboardStats();
     }
@@ -9216,11 +9262,11 @@
 
     async function startCombinedTest() {
         const units = [...sumSelUnits].sort((a,b) => parseInt(a) - parseInt(b));
-        if (units.length === 0) { alert('Hãy chọn ít nhất 1 Unit.'); return; }
+        if (units.length === 0) { alert('Vui lòng chọn ít nhất 1 Unit.'); return; }
         let types = [...sumTypes];
-        if (types.length === 0) { alert('Hãy chọn ít nhất 1 dạng quiz.'); return; }
+        if (types.length === 0) { alert('Vui lòng chọn ít nhất 1 dạng quiz.'); return; }
         const pool = buildMixedVocab(units);
-        if (pool.length < 4) { alert('Cần ít nhất 4 từ để tạo đề. Hãy chọn thêm Unit.'); return; }
+        if (pool.length < 4) { alert('Cần ít nhất 4 từ để tạo đề. Vui lòng chọn thêm Unit.'); return; }
 
         // 🖼️ Dạng "Nhìn hình chọn từ": chỉ dùng từ có ảnh thật trong kho assets
         let visualSet = new Set();
@@ -9401,7 +9447,7 @@
                 } else if (q.type === 'guess') {
                     inner += `<div class="ct-prompt-sub">${q.sub === 'sentence' ? 'Cụm từ bạn nghe được mang nghĩa gì?' : 'Từ bạn nghe được mang nghĩa gì?'}</div>`;
                 } else {
-                    inner += `<div class="ct-prompt-sub">Chọn từ bạn nghe được:</div>`;
+                    inner += `<div class="ct-prompt-sub">Chọn từ vừa nghe:</div>`;
                 }
             } else if (q.sub === 'match') {
                 inner += `<div class="ct-prompt-sub">Bấm 1 từ tiếng Hàn rồi bấm nghĩa tương ứng để nối (bấm lại để gỡ).</div><div id="ct-body-${i}"></div>`;
@@ -9491,7 +9537,7 @@
         if (!box) return;
         const cls = (q.dirLang === 'vi' ? 'ct-ow vi' : 'ct-ow');
         const slot = q.placed.length === 0
-            ? 'Bấm các từ bên dưới để xếp thành câu...'
+            ? 'Chọn từ để xếp câu'
             : q.placed.map((k, pos) => `<button type="button" class="${cls} inslot" onclick="ctOrderUnplace(${i},${pos})">${q.wordPool[k]}</button>`).join('');
         const pool = q.wordPool.map((w, k) =>
             `<button type="button" class="${cls}${q.placed.indexOf(k) >= 0 ? ' used' : ''}" onclick="ctOrderPlace(${i},${k})">${w}</button>`).join('');
@@ -9535,7 +9581,7 @@
     function submitCombinedTest() {
         if (!sumTest || sumTest.graded) return;
         const unanswered = sumTest.questions.filter(q => q.userAnswer == null || String(q.userAnswer).trim() === '').length;
-        if (unanswered > 0 && !confirm(`Bạn còn ${unanswered} câu chưa làm. Vẫn nộp bài chứ?`)) return;
+        if (unanswered > 0 && !confirm(`Còn ${unanswered} câu chưa làm. Vẫn nộp bài?`)) return;
         sumTest.graded = true;
         let correct = 0;
         sumTest.questions.forEach((q, i) => {
@@ -9573,7 +9619,7 @@
             `<div style="font-size:13px;font-weight:800;color:var(--sub-text);text-transform:uppercase;letter-spacing:1px;">Kết quả bài kiểm tra tổng hợp</div>` +
             `<div style="font-size:44px;font-weight:800;color:var(--point-color);margin:6px 0;">${correct}/${sumTest.questions.length}</div>` +
             `<div style="font-size:16px;font-weight:700;color:#1a202c;">Chính xác ${pct}%</div>` +
-            `<div style="font-size:12px;color:var(--sub-text);margin-top:8px;">Các câu sai đã được lưu vào Sổ tay từ vựng để bạn ôn lại. Kéo xuống để xem chi tiết từng câu.</div>` +
+            `<div style="font-size:12px;color:var(--sub-text);margin-top:8px;">Câu sai đã được lưu vào Sổ tay từ vựng.</div>` +
             `<button class="btn" style="margin-top:14px;padding:10px 22px;font-size:13px;" onclick="closeCombinedTest()">Thoát ra</button>`;
         document.getElementById('ct-submit-zone').style.display = 'none';
         const sc = document.querySelector('.ct-scroll'); if (sc) sc.scrollTop = 0;

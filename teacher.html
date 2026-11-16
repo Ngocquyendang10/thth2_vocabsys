@@ -333,7 +333,7 @@
 <!-- ĐĂNG NHẬP GIÁO VIÊN -->
 <div id="login-box">
   <h1>Bảng điều khiển giáo viên</h1>
-  <p>NQ Korean 2 — Nhập <b>mật mã giáo viên</b> để xem tiến độ làm bài của tất cả học viên.</p>
+  <p>NQ Korean 2</p>
   <input type="password" id="key-input" placeholder="Mật mã giáo viên" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
   <label class="row-check"><input type="checkbox" id="remember-key" checked> Ghi nhớ trên thiết bị này</label>
   <button class="btn btn-primary" id="login-btn" onclick="doLogin()">Xem tiến độ lớp học</button>
@@ -375,7 +375,6 @@
         <div class="grow"></div>
         <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg><input type="search" id="as-search" placeholder="Tìm học viên…" oninput="renderAssign()"></div>
       </div>
-      <div class="as-help">Mỗi lần bấm <b>Giao bài mới</b> tạo ra 1 đợt gồm một hoặc nhiều bài. Học viên thấy bài trong vòng 2 phút. Bấm vào từng ô để xem chi tiết bài làm.</div>
       <div id="as-warn"></div>
       <div id="as-body"></div>
       <div class="as-legend" id="as-legend">
@@ -689,7 +688,7 @@
 
     const totalActive = parsed.filter(p=>p.unitsWithActivity>0).length;
     document.getElementById('summary-line').textContent =
-      `${parsed.length} học viên · ${totalActive} bạn đã bắt đầu làm bài · nhấn "Chi tiết" để xem điểm từng bài.`;
+      `${parsed.length} học viên · ${totalActive} đã bắt đầu`;
   }
 
   function renderStats(){
@@ -1042,7 +1041,7 @@
   async function btCall(body, okMsg){
     const r = await teacherPost(body).catch(()=>null);
     if (r && r.success){ await loadReport(); return true; }
-    alert((r && r.message) || 'Không thực hiện được. Vui lòng kiểm tra kết nối và thử lại.');
+    alert((r && r.message) || 'Không thực hiện được. Vui lòng thử lại.');
     return false;
   }
   function btEditDue(id){
@@ -1060,12 +1059,12 @@
   function btRemoveEx(id, ex){
     const b = findBatch(id);
     if (b.ids.length === 1) return btDelete(id);
-    if (!confirm(`Gỡ bài ${ex} khỏi Đợt ${b.no}? Học viên sẽ không còn thấy bài này trong đợt. Kết quả đã nộp vẫn được giữ.`)) return;
+    if (!confirm(`Gỡ bài ${ex} khỏi Đợt ${b.no}? Kết quả đã nộp vẫn được giữ.`)) return;
     btCall({ op:'removeFromBatch', batch:id, id:ex });
   }
   function btDelete(id){
     const b = findBatch(id);
-    if (!confirm(`Xoá Đợt ${b.no} (${b.ids.length} bài, giao cho ${batchWho(b)})?\nHọc viên sẽ không còn thấy các bài này. Kết quả đã nộp vẫn được giữ.`)) return;
+    if (!confirm(`Xoá Đợt ${b.no} (${b.ids.length} bài, giao cho ${batchWho(b)})?\nKết quả đã nộp vẫn được giữ.`)) return;
     openBatches.delete(id);
     btCall({ op:'deleteBatch', batch:id });
   }
@@ -1179,7 +1178,7 @@
   }
   async function gaSaveGroup(){
     if (!ga.users.size) return;
-    const name = (prompt('Đặt tên cho nhóm học viên này (ví dụ: Lớp tối T3-T5):') || '').trim();
+    const name = (prompt('Tên nhóm (ví dụ: Lớp tối T3-T5):') || '').trim();
     if (!name) return;
     const r = await teacherPost({ op:'groups', groups: Object.assign({}, teacherGroups, { [name]: [...ga.users] }) }).catch(()=>null);
     if (r && r.success){ teacherGroups = r.groups; renderGiaoBai(); }
@@ -1244,7 +1243,7 @@
     let n = 0;
     const secStudents = addB ? '' : `
         <div class="ga-sec">
-          <div class="ga-sec-h"><span class="ga-num">${++n}</span><b>Học viên</b><span class="meta">${ga.all ? 'Tất cả học viên (kể cả học viên thêm sau)' : ga.users.size + ' đã chọn'}</span></div>
+          <div class="ga-sec-h"><span class="ga-num">${++n}</span><b>Học viên</b><span class="meta">${ga.all ? 'Tất cả học viên' : ga.users.size + ' đã chọn'}</span></div>
           <div class="ga-groups">
             ${grpChips}
             <button class="ga-chip${ga.all?' on':''}" onclick="gaToggleAll()">${ic('users')} Tất cả học viên</button>
@@ -1273,7 +1272,7 @@
     const title = addB ? `Thêm bài vào Đợt ${addB.no} · ${escapeHtml(batchTitle(addB))}` : 'Giao bài mới';
     document.getElementById('ga-box').innerHTML = `
       <div class="ga-head"><h3>${title}</h3><button class="as-close" style="float:none" onclick="closeGiaoBai()">×</button></div>
-      <div class="ga-body">${addB ? `<div class="as-help" style="margin:12px 0 0;">Bài thêm vào sẽ dùng chung học viên, ngày mở, hạn nộp và lời dặn của Đợt ${addB.no}.</div>` : ''}${secStudents}${secEx}${secTime}</div>
+      <div class="ga-body">${addB ? `<div class="as-help" style="margin:12px 0 0;">Dùng chung học viên, ngày mở, hạn nộp và lời dặn của Đợt ${addB.no}.</div>` : ''}${secStudents}${secEx}${secTime}</div>
       <div class="ga-foot" id="ga-foot"></div>`;
     gaRenderFoot();
   }
@@ -1292,7 +1291,7 @@
     if (r && r.success){
       if (r.batch) openBatches.add(r.batch); else if (ga.addTo) openBatches.add(ga.addTo);
       closeGiaoBai(); await loadReport();
-    } else { ga.msg = (r && r.message) || 'Không lưu được. Vui lòng kiểm tra kết nối và thử lại.'; gaRenderFoot(); }
+    } else { ga.msg = (r && r.message) || 'Không lưu được. Vui lòng thử lại.'; gaRenderFoot(); }
   }
 
   function escapeHtml(s){
