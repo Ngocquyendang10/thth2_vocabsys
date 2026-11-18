@@ -156,6 +156,12 @@ window.EXERCISE_DATA = {
                 '저녁': 'bữa tối', '먹고': 'ăn … rồi', '연주회장': 'nhà hát, hội trường hòa nhạc', '들어갔어요': 'đã đi vào', '자리': 'chỗ ngồi',
                 '앉으면서': 'vừa ngồi xuống', '껐어요': 'đã tắt', '소리가 나면 안 되니까요': 'vì không được phát ra tiếng'
             },
+            // Bước 2: sau khi nghe, mỗi đoạn 1 câu hỏi nghe hiểu (p = đoạn). Luyện tập, không tính vào điểm bài.
+            listenQ: [
+                { p: 0, q: '미술관에서 하면 안 되는 것은 무엇입니까?', opts: ['휴대전화를 사용해요.', '차를 마셔요.', '그림에 손을 대요.', '쉬어요.'], ans: 2 },
+                { p: 1, q: '민재 씨는 지금 어디에 있습니까?', opts: ['미술관', '병원', '연주회장', '집'], ans: 1 },
+                { p: 2, q: '지난 주말에 친구와 어디에 갔습니까?', opts: ['미술관', '병원', '피아노 연주회', '식당'], ans: 2 }
+            ],
             // ox: true = câu Đúng/Sai trong sách (p = đoạn số mấy). Các câu còn lại: câu hỏi bổ sung.
             mcq: [
                 { ox: true, p: 0, q: '미술관에서 사진을 찍어도 됩니다.', why: '사진도 찍으면 안 되니까 절대로 찍지 마세요.', opts: ['O · Đúng', 'X · Sai'], ans: 1 },
