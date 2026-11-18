@@ -1795,6 +1795,29 @@
         }
         @media (max-width: 1024px) { #exercise-content .s3-player { padding-right: 58px; } #exercise-content .stg-head { padding-right: 60px; } }   /* chừa chỗ nút menu cố định góc phải */
         @media (max-width: 560px) { #exercise-content .stg-head { position: static; } #exercise-content .s3-player .ex-marks { display: none; } }   /* điện thoại: chỉ trình phát dính, đỡ chiếm màn hình */
+        /* Bước 2: popup câu hỏi kiểm tra cuối mỗi đoạn */
+        .s2-modal { position: fixed; inset: 0; z-index: 3000; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(26,32,44,0.55); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); opacity: 0; transition: opacity .2s; }
+        .s2-modal.show { opacity: 1; }
+        .s2-modal-card { width: min(480px, 100%); background: #fff; border-radius: var(--radius-lg); padding: 22px 20px 18px; box-shadow: 0 20px 50px rgba(0,0,0,0.25); transform: translateY(8px) scale(.98); transition: transform .2s; }
+        .s2-modal.show .s2-modal-card { transform: none; }
+        .s2-modal-q { font-family: 'Gowun Dodum','Apple SD Gothic Neo','Malgun Gothic',sans-serif; font-size: 21px; font-weight: 700; color: #1a202c; line-height: 1.5; margin: 4px 0 16px; word-break: keep-all; }
+        .s2-modal-opts { display: flex; flex-direction: column; gap: 8px; }
+        .s2-modal-opt { display: flex; align-items: center; gap: 10px; text-align: left; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; font: 600 15px/1.4 inherit; font-family: inherit; color: var(--text-color); cursor: pointer; transition: border-color .15s, background .15s; }
+        .s2-modal-opt:hover:not(:disabled) { border-color: var(--point-color); background: var(--point-light); }
+        .s2-modal-opt .ic { width: 16px; height: 16px; margin-left: auto; }
+        .s2-modal-opt.wrong { border-color: var(--error-color); background: rgba(245,101,101,0.08); color: #c53030; opacity: .75; cursor: default; animation: s2shake .3s; }
+        .s2-modal-opt.correct { border-color: var(--success-color); background: rgba(72,187,120,0.12); color: #2f855a; }
+        .s2-modal-fb { min-height: 22px; margin-top: 12px; font-size: 14px; font-weight: 700; text-align: center; }
+        .s2-modal-fb.ok { color: #2f855a; } .s2-modal-fb.no { color: #c53030; }
+        @keyframes s2shake { 0%,100% { transform: none; } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        body.s2-modal-open #mobile-dash-toggle { visibility: hidden; }
+        @media (max-width: 560px) {   /* điện thoại: tranh lớn, vuốt ngang, tự chuyển theo đoạn đang phát */
+            #exercise-content .s2-card { padding: 14px 0 18px; }
+            #exercise-content .s2-scenes { display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding: 2px 9% 4px; scrollbar-width: none; }
+            #exercise-content .s2-scenes::-webkit-scrollbar { display: none; }
+            #exercise-content .s2-scene { flex: 0 0 82%; scroll-snap-align: center; }
+            #exercise-content .s2-player { padding: 0 14px; }
+        }
         .q1-head { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; color: var(--sub-text); margin-bottom: 10px; }
         .q1-bar { flex: 1; height: 6px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
         .q1-bar i { display: block; height: 100%; background: var(--point-color); transition: width .3s; }
@@ -2881,7 +2904,7 @@
     </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261118d"></script>
+<script src="assets/exercise-data.js?v=20261119a"></script>
 <script>
     // ===================================================================
     // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
@@ -4051,7 +4074,7 @@
     // 📋 Danh sách bài được giao: Cần làm / Đã nộp / Hết hạn
     function renderExerciseHome() {
         stopExerciseAudio();
-        if (typeof _recStop === 'function') { _recStop(); _takeStop(); }   // rời bài khi đang thu âm -> tắt micro
+        if (typeof _recStop === 'function') { _recStop(); _takeStop(); _s2Abort(); }   // rời bài khi đang thu âm -> tắt micro
         renderExNotice(false);
         document.getElementById('exercise-main-title').innerText = 'Bài tập';
         document.getElementById('exercise-subtitle').innerText = '';
@@ -4463,7 +4486,7 @@
     function _stgShuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
     function _stgStepDone(ex, st, n) {
         if (n === 1) return !!(st.s1 && st.s1.done);
-        if (n === 2) return !!st.listened && (ex.listenQ || []).every((q, i) => st.s2 && st.s2[i] !== undefined);
+        if (n === 2) return !!st.listened && (ex.listenQ || []).every((q, i) => (st.s2ok || {})[i]);
         if (n === 3) return Object.keys(st.picks || {}).length >= ex.mcq.length;
         return !!st.done;
     }
@@ -4477,7 +4500,7 @@
     function exGoStage(n) {
         const ex = _exCurrent(), st = _exState();
         if (!ex || n > _stgMax(ex, st)) return;
-        _recStop(); _takeStop();
+        _recStop(); _takeStop(); _s2Abort();
         stopExerciseAudio(); _exStopAt = null; _exRangeDone = null;
         try { if (exAudio.currentTime) exAudio.currentTime = 0; } catch (e) {}   // xoá vệt tô chữ của bước trước
         st.stage = n; _exSave();
@@ -4709,6 +4732,9 @@
         renderExerciseMode(false);
     }
     document.addEventListener('keydown', e => {
+        if (_s2Ask && /^[1-4]$/.test(e.key)) { e.preventDefault(); s2Answer(Number(e.key) - 1); }
+    });
+    document.addEventListener('keydown', e => {
         if (s1View !== 'quiz' || !s1Quiz || !document.querySelector('.q1')) return;
         const q = s1Quiz.items[s1Quiz.pos];
         if (q.type !== 'match' && /^[1-4]$/.test(e.key) && s1Quiz.picked == null) { e.preventDefault(); s1Pick(Number(e.key) - 1); }
@@ -4745,12 +4771,15 @@
         const ex = _exCurrent(), st = _exState(); if (!ex || !isTeacherAccount || st.done) return;
         const cur = _stgCur(ex, st);
         if (cur === 1) { st.s1 = { done: true, first: ex.vocab.length, total: ex.vocab.length, missed: [], ok: [], at: Date.now() }; s1Quiz = null; s1View = 'result'; }
-        else if (cur === 2) { stopExerciseAudio(); st.listened = true; st.s2 = {}; (ex.listenQ || []).forEach((q, i) => st.s2[i] = q.ans); }
+        else if (cur === 2) { stopExerciseAudio(); _s2Abort(); st.listened = true; st.s2 = {}; st.s2ok = {}; (ex.listenQ || []).forEach((q, i) => { st.s2[i] = q.ans; st.s2ok[i] = true; }); }
         else if (cur === 3) { st.picks = {}; ex.mcq.forEach((q, i) => st.picks[i] = q.ans); }
         _exSave(); renderExerciseMode(false);
     }
 
-    // ---------- BƯỚC 2: NGHE 1 LẦN (tốc độ cố định, chưa hiện chữ) ----------
+    // ---------- BƯỚC 2: NGHE (tốc độ cố định, chưa hiện chữ) ----------
+    // Hết mỗi đoạn: audio tự dừng, nền mờ, hiện 1 câu hỏi kiểm tra (hỏi tiếng Hàn, đáp tiếng Việt).
+    // Đúng mới nghe tiếp; sai thì chọn lại đến khi đúng. st.s2 = lựa chọn đầu tiên (thống kê), st.s2ok = đã trả lời đúng.
+    let _s2Ask = null, _s2Raf = 0;   // _s2Ask: { qi, wrong: [], ok: false }
     function _s2Render(ex, st) {
         return `<div class="s2" id="s2-root"><div class="stg-ask">Hãy nghe kỹ nội dung sau đây và quan sát bức tranh.</div><div class="s2-card">`
             + `<div class="s2-scenes">` + ex.passages.map((p, i) => `<div class="s2-scene" data-i="${i}">`
@@ -4758,42 +4787,74 @@
             + `<div class="s2-player"><button class="s2-play" id="s2-play" onclick="s2Toggle()"></button>`
             + `<div class="s2-track"><i id="s2-fill"></i></div><span class="s2-time" id="s2-time">0:00</span></div>`
             + `</div>`
-            + (st.listened ? _s2QuestionsHtml(ex, st) : '')
             + _stgNav(1, `<button class="stg-btn" id="s2-next" ${_stgStepDone(ex, st, 2) ? '' : 'disabled'} onclick="exGoStage(3)">Tiếp tục ${ic('arrowRight')}</button>`)
             + `</div>`;
     }
-    // Câu hỏi nghe hiểu (mỗi đoạn 1 câu) — hiện sau khi nghe hết 1 lần, chấm ngay, không tính vào điểm bài
-    function _s2QuestionsHtml(ex, st) {
-        const qs = ex.listenQ || []; if (!qs.length) return '';
-        const picks = st.s2 || {};
-        return `<div class="stg-ask">Hãy chọn đáp án đúng.</div>` + qs.map((q, qi) => {
-            const pick = picks[qi], done = pick !== undefined;
-            return `<div class="ex-q"><div class="s2-q-tag">${_escHtml(ex.passages[q.p].name)}</div><div class="ex-q-head">${_escHtml(q.q)}</div><div class="ex-opts">`
-                + q.opts.map((o, oi) => {
-                    let c = 'ex-opt';
-                    if (done && oi === q.ans) c += ' correct'; else if (done && oi === pick) c += ' wrong';
-                    return `<button class="${c}" ${done ? 'disabled' : ''} onclick="s2Pick(${qi}, ${oi})">${EX_CIRCLED[oi]} ${_escHtml(o)}</button>`;
-                }).join('') + `</div>`
-                + (done ? `<div class="ex-fb ${pick === q.ans ? 'ok' : 'no'}">${pick === q.ans ? ic('check') + ' Chính xác!' : ic('x') + ' Chưa đúng.'}</div>` : '')
-                + `</div>`;
-        }).join('');
+    function _s2AllOk(ex, st) { return (ex.listenQ || []).every((q, i) => (st.s2ok || {})[i]); }
+    // Kiểm tra đã tới cuối đoạn có câu hỏi chưa trả lời -> dừng audio, mở popup
+    function _s2Gate(ended) {
+        if (_s2Ask || !document.getElementById('s2-root')) return false;
+        const ex = _exCurrent(), st = _exState(); if (!ex || exAudio.getAttribute('src') !== ex.audio) return false;
+        const t = exAudio.currentTime, ok = st.s2ok || {};
+        const qi = (ex.listenQ || []).findIndex((q, i) => !ok[i] && (ended || t >= ex.passages[q.p].end));
+        if (qi < 0) return false;
+        exAudio.pause();
+        _s2Ask = { qi, wrong: [], ok: false };
+        _s2ModalShow();
+        return true;
     }
-    function s2Pick(qi, oi) {
-        const ex = _exCurrent(), st = _exState();
-        if (!ex || !st.listened) return;
-        st.s2 = st.s2 || {};
-        if (st.s2[qi] !== undefined) return;
-        st.s2[qi] = oi; _exSave();
-        try { const a = new Audio(oi === ex.listenQ[qi].ans ? SND_CORRECT : SND_WRONG); a.volume = 0.5; a.play().catch(() => {}); } catch (e) {}
-        const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
+    function _s2Loop() {
+        if (!document.getElementById('s2-root') || exAudio.paused) { _s2Raf = 0; return; }
+        if (_s2Gate(false)) { _s2Raf = 0; return; }
+        _s2Raf = requestAnimationFrame(_s2Loop);
     }
+    function _s2ModalShow() {
+        const ex = _exCurrent(); if (!ex || !_s2Ask) return;
+        const q = ex.listenQ[_s2Ask.qi], a = _s2Ask;
+        let m = document.getElementById('s2-modal');
+        if (!m) { m = document.createElement('div'); m.id = 's2-modal'; m.className = 's2-modal'; m.setAttribute('role', 'dialog'); m.setAttribute('aria-modal', 'true'); document.body.appendChild(m); }
+        m.innerHTML = `<div class="s2-modal-card"><div class="s2-q-tag">${_escHtml(ex.passages[q.p].name)}</div>`
+            + `<div class="s2-modal-q">${_escHtml(q.q)}</div><div class="s2-modal-opts">`
+            + q.opts.map((o, oi) => {
+                const bad = a.wrong.includes(oi), good = a.ok && oi === q.ans;
+                return `<button class="s2-modal-opt${bad ? ' wrong' : ''}${good ? ' correct' : ''}" ${bad || a.ok ? 'disabled' : ''} onclick="s2Answer(${oi})">`
+                    + `<span class="q1-k">${oi + 1}</span>${_escHtml(o)}${good ? ic('check') : bad ? ic('x') : ''}</button>`;
+            }).join('') + `</div>`
+            + `<div class="s2-modal-fb${a.ok ? ' ok' : a.wrong.length ? ' no' : ''}">${a.ok ? 'Chính xác!' : a.wrong.length ? 'Chưa đúng. Hãy chọn lại.' : ''}</div></div>`;
+        requestAnimationFrame(() => m.classList.add('show'));
+        document.body.classList.add('s2-modal-open');
+    }
+    function _s2ModalHide() {
+        const m = document.getElementById('s2-modal'); if (m) m.remove();
+        document.body.classList.remove('s2-modal-open');
+    }
+    function s2Answer(oi) {
+        const ex = _exCurrent(), st = _exState(), a = _s2Ask; if (!ex || !a || a.ok) return;
+        const q = ex.listenQ[a.qi], right = oi === q.ans;
+        st.s2 = st.s2 || {}; if (st.s2[a.qi] === undefined) st.s2[a.qi] = oi;   // lựa chọn đầu tiên
+        try { const s = new Audio(right ? SND_CORRECT : SND_WRONG); s.volume = 0.5; s.play().catch(() => {}); } catch (e) {}
+        if (!right) { a.wrong.push(oi); _exSave(); _s2ModalShow(); return; }
+        a.ok = true; st.s2ok = st.s2ok || {}; st.s2ok[a.qi] = true; _exSave(); _s2ModalShow();
+        setTimeout(() => {
+            if (_s2Ask !== a) return;
+            _s2Ask = null; _s2ModalHide();
+            if (!document.getElementById('s2-root')) return;
+            const last = ex.passages[ex.passages.length - 1];
+            if (exAudio.ended || exAudio.currentTime >= last.end) {   // hết bài
+                if (_s2AllOk(ex, st) && !st.listened) { st.listened = true; _exSave(); }
+                renderExerciseMode(false);
+            } else if (!_s2Gate(false)) { exAudio.playbackRate = ex.listenSpeed || 0.8; exAudio.play().catch(() => {}); }
+        }, 900);
+    }
+    // Rời bước 2 khi popup đang mở -> đóng popup (lần sau nghe tới đó sẽ hỏi lại)
+    function _s2Abort() { if (_s2Ask) { _s2Ask = null; _s2ModalHide(); } }
 
     function s2Toggle() {
-        const ex = _exCurrent(); if (!ex) return;
+        const ex = _exCurrent(); if (!ex || _s2Ask) return;
         _exStopAt = null;
         if (exAudio.getAttribute('src') !== ex.audio) exAudio.src = ex.audio;
         if (exAudio.paused) {
-            if (exAudio.ended) exAudio.currentTime = 0;
+            if (exAudio.ended || exAudio.currentTime >= (exAudio.duration || 1e9) - 0.05) exAudio.currentTime = 0;
             exAudio.playbackRate = ex.listenSpeed || 0.8;
             exAudio.play().catch(() => {});
         } else exAudio.pause();
@@ -4803,7 +4864,12 @@
         const ex = _exCurrent(), st = _exState(); if (!ex) return;
         const mine = exAudio.getAttribute('src') === ex.audio, t = mine ? exAudio.currentTime : 0, d = (mine && exAudio.duration) || 0;
         const playing = mine && !exAudio.paused && !exAudio.ended;
-        if (ev === 'ended' && mine && !st.listened) { st.listened = true; _exSave(); renderExerciseMode(false); return; }
+        if (mine && ev === 'play' && !_s2Raf) _s2Raf = requestAnimationFrame(_s2Loop);
+        if (mine && ev === 'timeupdate' && playing && _s2Gate(false)) return;   // dự phòng khi trình duyệt dừng rAF (tab nền, tắt màn hình)
+        if (mine && ev === 'ended') {
+            if (_s2Gate(true)) return;
+            if (!st.listened && _s2AllOk(ex, st)) { st.listened = true; _exSave(); renderExerciseMode(false); return; }
+        }
         const btn = document.getElementById('s2-play');
         if (btn.dataset.state !== String(playing)) {
             btn.dataset.state = String(playing);
@@ -4812,10 +4878,21 @@
         }
         document.getElementById('s2-fill').style.width = (d ? t / d * 100 : 0) + '%';
         document.getElementById('s2-time').innerText = _fmtTime(t) + (d ? ' / ' + _fmtTime(d) : '');
+        const ok = st.s2ok || {};
         root.querySelectorAll('.s2-scene').forEach((el, i) => {
-            const p = ex.passages[i], now = playing && t >= p.start && t <= p.end + 1, heard = st.listened || t > p.end;
+            const p = ex.passages[i], now = playing && t >= p.start && t <= p.end + 1;
+            const qi = (ex.listenQ || []).findIndex(q => q.p === i), heard = st.listened || (qi >= 0 ? !!ok[qi] : t > p.end);
+            if (now && !el.classList.contains('now')) {   // điện thoại: cuộn ngang tới tranh của đoạn đang phát
+                const box = el.parentElement;
+                if (box.scrollWidth > box.clientWidth + 4) {   // tắt snap trong lúc cuộn (cập nhật thanh thời gian làm khung bật về chỗ cũ)
+                    box.style.scrollSnapType = 'none';
+                    box.scrollTo({ left: box.scrollLeft + el.getBoundingClientRect().left - box.getBoundingClientRect().left - (box.clientWidth - el.offsetWidth) / 2, behavior: 'smooth' });
+                    clearTimeout(box._snapT); box._snapT = setTimeout(() => { box.style.scrollSnapType = ''; }, 700);
+                }
+            }
             el.classList.toggle('now', now); el.classList.toggle('heard', heard && !now);
-            el.querySelector('.s2-scene-s').innerHTML = heard && !now ? ic('check') : '';
+            const mk = el.querySelector('.s2-scene-s'), want = heard && !now ? '1' : '';
+            if (mk.dataset.on !== want) { mk.dataset.on = want; mk.innerHTML = want ? ic('check') : ''; }   // chỉ đổi khi cần (đổi DOM liên tục làm khung vuốt bật về vị trí cũ)
         });
         document.getElementById('s2-next').disabled = !_stgStepDone(ex, st, 2);
     }
@@ -5168,12 +5245,12 @@
     }
     function _stgDoneRows(ex, d, row) {
         return (d.s1 ? row(ic('sparkles'), 'Quiz biểu hiện', `<b>${d.s1.first}/${d.s1.total}</b> câu đúng`) : '')
-            + (d.s2 ? row(ic('headphones'), 'Nghe hiểu', `<b>${d.s2.ok}/${d.s2.total}</b> câu đúng`) : '')
+            + (d.s2 ? row(ic('headphones'), 'Nghe hiểu', `<b>${d.s2.ok}/${d.s2.total}</b> đúng lần đầu`) : '')
             + (d.rec ? row(ic('mic'), 'Luyện đọc', `<b>${_escHtml(d.rec.name)}</b>`, '', _fmtTime(d.rec.dur)) : row(ic('mic'), 'Luyện đọc', 'Chưa thu âm', 'warn'));
     }
 
     function showAppMode(modeName) {
-        if (modeName !== 'exercise') { _recStop(); _takeStop(); }   // rời mục Bài tập khi đang thu âm -> tắt micro
+        if (modeName !== 'exercise') { _recStop(); _takeStop(); _s2Abort(); }   // rời mục Bài tập khi đang thu âm -> tắt micro
         // Chuyển menu -> luôn thoát chế độ Tổng hợp
         summaryActive = false;
         document.getElementById('mode-summary-section').style.display = 'none';
