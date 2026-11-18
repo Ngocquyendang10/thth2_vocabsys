@@ -971,7 +971,7 @@
             body.app-active .dashboard-layout {
                 display: flex !important; flex-direction: column !important; width: 100% !important; max-width: 100% !important;
                 height: auto !important; min-height: 100vh; min-height: 100dvh;
-                padding: calc(8px + env(safe-area-inset-top, 0px)) 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important; gap: 8px; overflow-x: hidden !important;
+                padding: calc(8px + env(safe-area-inset-top, 0px)) 8px calc(8px + env(safe-area-inset-bottom, 0px)) !important; gap: 8px; overflow-x: hidden !important; overflow-x: clip !important;   /* clip: chặn tràn ngang mà không biến khung thành vùng cuộn riêng (giữ thanh dính hoạt động) */
             }
             .sidebar-left { display: flex !important; flex-direction: column !important; align-items: flex-start !important; padding: 12px !important; height: auto !important; border-radius: var(--radius-md); gap: 8px; }
             .brand-logo-area { margin-bottom: 4px !important; padding-left: 4px !important; width: 100%; justify-content: flex-start; gap: 5px; flex-direction: row; flex-wrap: nowrap; align-items: center; }
@@ -1732,6 +1732,69 @@
         .voc-ex .ic { width: 11px; height: 11px; flex-shrink: 0; margin-top: 5px; color: var(--point-color); }
         .voc-ex:hover { background: var(--point-light); }
         .q1 { max-width: 560px; margin: 0 auto; }
+        /* Bước 1 — danh sách dạng cột */
+        .vl { display: flex; flex-direction: column; gap: 10px; max-width: 960px; }
+        .vl-row { display: flex; gap: 16px; align-items: stretch; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px; background: #fff; }
+        .vl-img { width: 132px; flex-shrink: 0; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: #edf2f7; }
+        .vl-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .vl-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; justify-content: center; }
+        .vl-top { display: flex; align-items: center; gap: 10px; }
+        .vl-n { font-size: 11px; font-weight: 800; color: #a0aec0; letter-spacing: .5px; }
+        .vl-ko { font-size: 21px; font-weight: 800; color: var(--point-color); line-height: 1.3; word-break: keep-all; }
+        .vl-vi { font-size: 14.5px; color: var(--text-color); line-height: 1.45; }
+        .vl-ex { display: flex; align-items: center; gap: 8px; margin-top: 6px; background: var(--bg-color); border-radius: 10px; padding: 6px 6px 6px 8px; }
+        .vl-ex-t { flex: 1; font-size: 15px; line-height: 1.55; word-break: keep-all; }
+        .vl-play, .vl-bulb { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; border: none; background: #fff; color: var(--point-color); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .vl-play .ic { width: 12px; height: 12px; } .vl-bulb .ic { width: 16px; height: 16px; }
+        .vl-play:hover { background: var(--point-color); color: #fff; }
+        .vl-bulb { color: #a0aec0; } .vl-bulb:hover { color: #d69e2e; }
+        .vl-bulb.on { background: #fefcbf; color: #b7791f; }
+        .vl-ex-vi { display: none; font-size: 14px; color: #744210; background: #fffff0; border-radius: 8px; padding: 6px 10px; line-height: 1.5; }
+        .vl-main.show-vi .vl-ex-vi { display: block; }
+        .stg-quick { margin-left: auto; align-self: center; display: inline-flex; align-items: center; gap: 5px; border: 1px dashed var(--point-color); background: var(--point-light); color: var(--point-color); border-radius: 99px; padding: 4px 11px; font: 700 12px/1.4 inherit; font-family: inherit; cursor: pointer; }
+        .stg-quick .ic { width: 13px; height: 13px; }
+        .q1-pic { width: min(260px, 70%); aspect-ratio: 1; margin: 12px auto 18px; border-radius: 14px; overflow: hidden; background: #edf2f7; }
+        .q1-pic img { width: 100%; height: 100%; object-fit: contain; display: block; }
+        .q1-prompt.fill { font-size: 19px; font-weight: 600; line-height: 1.8; word-break: keep-all; }
+        .q1-blank { display: inline-block; min-width: 110px; border-bottom: 2px solid var(--point-color); color: var(--point-color); font-weight: 800; padding: 0 6px; }
+        .q1-sp { height: 14px; }
+        .q1-match { display: grid; grid-template-rows: repeat(4, auto); grid-auto-flow: column; grid-auto-columns: 1fr; gap: 8px 10px; margin-top: 16px; }
+        .q1-col { display: contents; }
+        .q1-m { text-align: left; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; font-size: 14.5px; line-height: 1.4; font-family: inherit; color: var(--text-color); cursor: pointer; min-height: 52px; }
+        .q1-m.ko { font-size: 17px; font-weight: 700; }
+        .q1-m:hover:not(:disabled) { border-color: var(--point-color); }
+        .q1-m.sel { border-color: var(--point-color); background: var(--point-light); }
+        .q1-m.correct { border-color: var(--success-color); background: rgba(72,187,120,0.12); cursor: default; }
+        .q1-m.wrong { border-color: var(--error-color); background: rgba(245,101,101,0.1); }
+        .q1-rv { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+        .q1-rv-row { display: flex; align-items: center; gap: 12px; border: 1.5px solid #e2e8f0; border-radius: var(--radius-md); padding: 10px; background: #fff; cursor: pointer; }
+        .q1-rv-row.on { border-color: var(--success-color); background: rgba(72,187,120,0.06); }
+        .q1-rv-row img { width: 64px; height: 64px; border-radius: 10px; object-fit: contain; background: #edf2f7; flex-shrink: 0; }
+        .q1-rv-t { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+        .q1-rv-t b { font-size: 17px; color: var(--point-color); }
+        .q1-rv-t span { font-size: 13.5px; }
+        .q1-rv-t small { font-size: 13px; color: var(--sub-text); word-break: keep-all; }
+        .q1-rv-ck { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--sub-text); flex-shrink: 0; }
+        .q1-rv-ck input { position: absolute; opacity: 0; pointer-events: none; }
+        .q1-rv-ck i { width: 22px; height: 22px; border-radius: 6px; border: 1.5px solid #cbd5e0; display: inline-flex; align-items: center; justify-content: center; color: transparent; }
+        .q1-rv-ck i .ic { width: 14px; height: 14px; }
+        .q1-rv-row.on .q1-rv-ck { color: #2f855a; }
+        .q1-rv-row.on .q1-rv-ck i { background: var(--success-color); border-color: var(--success-color); color: #fff; }
+        .vl { container-type: inline-size; }
+        .vl-img { align-self: flex-start; }
+        @container (max-width: 560px) {
+            .vl-row { display: grid; grid-template-columns: 76px 1fr; column-gap: 12px; row-gap: 4px; padding: 10px; }
+            .vl-img { width: 76px; grid-row: 1 / span 2; }
+            .vl-main { display: contents; }
+            .vl-top { align-self: end; } .vl-vi { align-self: start; }
+            .vl-ex, .vl-ex-vi { grid-column: 1 / -1; }
+            .vl-ko { font-size: 18px; }
+        }
+        @media (max-width: 640px) {
+            .q1-match { gap: 6px; } .q1-m { padding: 10px 8px; font-size: 13.5px; } .q1-m.ko { font-size: 15px; }
+        }
+        @media (max-width: 1024px) { #exercise-content .s3-player { padding-right: 58px; } #exercise-content .stg-head { padding-right: 60px; } }   /* chừa chỗ nút menu cố định góc phải */
+        @media (max-width: 560px) { #exercise-content .stg-head { position: static; } #exercise-content .s3-player .ex-marks { display: none; } }   /* điện thoại: chỉ trình phát dính, đỡ chiếm màn hình */
         .q1-head { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; color: var(--sub-text); margin-bottom: 10px; }
         .q1-bar { flex: 1; height: 6px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
         .q1-bar i { display: block; height: 100%; background: var(--point-color); transition: width .3s; }
@@ -2818,7 +2881,7 @@
     </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261118c"></script>
+<script src="assets/exercise-data.js?v=20261118d"></script>
 <script>
     // ===================================================================
     // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
@@ -3972,6 +4035,7 @@
     }
 
     function openExercise(unit, key) {
+        if (!exOpen || exOpen.unit !== String(unit) || exOpen.key !== key) { s1View = 'learn'; s1Quiz = null; s4Pick = null; _s4MsgText = ''; }
         exOpen = { unit: String(unit), key: key };
         currentExerciseTab = key;
         renderExerciseMode(true);
@@ -3987,6 +4051,7 @@
     // 📋 Danh sách bài được giao: Cần làm / Đã nộp / Hết hạn
     function renderExerciseHome() {
         stopExerciseAudio();
+        if (typeof _recStop === 'function') { _recStop(); _takeStop(); }   // rời bài khi đang thu âm -> tắt micro
         renderExNotice(false);
         document.getElementById('exercise-main-title').innerText = 'Bài tập';
         document.getElementById('exercise-subtitle').innerText = '';
@@ -4389,7 +4454,7 @@
        → Bước 4 Luyện đọc 1 đoạn, thu âm → Nộp bài. Chỉ mở bước sau khi xong bước trước.
        Đáp án đúng/sai + bản dịch chỉ hiện SAU KHI NỘP.
        State bài: stage, s1 {done, first, total, missed}, listened, recTakes [{id,p,dur,at,mime}], recPick.
-       File thu âm lưu trong IndexedDB của máy học viên (không gửi lên server). */
+       File thu âm lưu trong IndexedDB của máy học viên; bản chọn nộp được gửi lên Drive riêng của giáo viên khi nộp bài. */
     const STG_NAMES = ['Biểu hiện mới', 'Nghe', 'Đọc hiểu', 'Luyện đọc'];
     var _exStopAt = null, _exRangeRaf = 0, _exRangeDone = null;
     let _stgLastView = '';
@@ -4416,7 +4481,7 @@
         stopExerciseAudio(); _exStopAt = null; _exRangeDone = null;
         try { if (exAudio.currentTime) exAudio.currentTime = 0; } catch (e) {}   // xoá vệt tô chữ của bước trước
         st.stage = n; _exSave();
-        if (n === 1 && s1View === 'result' && !(st.s1 && st.s1.done)) s1View = 'learn';
+        if (n === 1 && s1View === 'result' && !st.s1) s1View = 'learn';
         _s4MsgText = '';
         renderExerciseMode(false);
         const c = document.getElementById('exercise-content');
@@ -4455,6 +4520,7 @@
         const cur = _stgCur(ex, st), max = _stgMax(ex, st);
         const doneCount = [1, 2, 3, 4].filter(n => _stgStepDone(ex, st, n)).length;
         let h = `<div class="stg-head"><div class="stg-head-top"><span class="stg-kicker">Bước ${cur}/4</span><b class="stg-title">${STG_NAMES[cur - 1]}</b>`
+            + (isTeacherAccount && !st.done && cur < 4 ? `<button class="stg-quick" onclick="stgQuickFill()" title="Chỉ tài khoản giáo viên">${ic('zap')} Điền nhanh đáp án</button>` : '')
             + `</div>`
             + `<div class="stg-bar"><i style="width:${doneCount / 4 * 100}%"></i></div><div class="stg-steps">`
             + STG_NAMES.map((name, i) => {
@@ -4470,7 +4536,7 @@
     function _stgAfterRender(ex) {
         const st = _exState(), cur = _stgCur(ex, st);
         if (cur === 2) _s2Sync();
-        if (cur === 3) { const hd = document.querySelector('.stg-head'), pl = document.querySelector('.s3-player'); if (hd && pl) pl.style.top = (hd.offsetHeight + 4) + 'px'; } // trình phát dính ngay dưới thanh tiến độ
+        if (cur === 3) { const hd = document.querySelector('.stg-head'), pl = document.querySelector('.s3-player'); if (hd && pl) pl.style.top = (getComputedStyle(hd).position === 'sticky' ? hd.offsetHeight - 1 : 0) + 'px'; } // trình phát dính ngay dưới thanh tiến độ
         if (cur === 4) { _s4SyncModel(); _s4RefreshRecUI(); }
         // Bài đã nộp nhưng bản thu chưa gửi được (mất mạng, đóng trang…) -> tự gửi lại 1 lần mỗi lần mở trang
         if (st.done && !(st.recUp && st.recUp.ok && st.recUp.take === st.recPick) && !_recUpTried[_exKey()]) { _recUpTried[_exKey()] = 1; setTimeout(_recUpload, 800); }
@@ -4484,87 +4550,204 @@
     }
 
     // ---------- BƯỚC 1: BIỂU HIỆN MỚI + QUIZ ----------
+    // Danh sách dạng cột: hình minh hoạ | biểu hiện + nghĩa | câu ví dụ (nghe + bóng đèn mở bản dịch)
     function _s1Render(ex, st) {
         if (s1View === 'quiz' && s1Quiz) return _s1QuizHtml(ex);
-        if (s1View === 'result' && st.s1 && st.s1.done) return _s1ResultHtml(ex, st);
-        const n = ex.vocab.length;
-        let h = `<div class="stg-ask">Hãy đọc và ghi nhớ các biểu hiện sau.</div>`;
-        h += `<div class="voc-grid">` + ex.vocab.map((v, i) => `<div class="voc-card">`
-            + `<div class="voc-top"><span class="voc-n">${String(i + 1).padStart(2, '0')}</span>`
+        if (s1View === 'result' && st.s1) return _s1ResultHtml(ex, st);
+        let h = `<div class="stg-ask">Hãy đọc và ghi nhớ các biểu hiện sau.</div><div class="vl">`;
+        h += ex.vocab.map((v, i) => `<div class="vl-row">`
+            + (v.img ? `<div class="vl-img"><img src="${v.img}" alt="" loading="lazy"></div>` : '')
+            + `<div class="vl-main"><div class="vl-top"><span class="vl-n">${String(i + 1).padStart(2, '0')}</span>`
+            + `<b class="vl-ko">${_escHtml(v.ko)}</b>`
             + `<button class="voc-say" title="Nghe phát âm" onclick="_s1Say(${i}, this)">${ic('speaker')}</button></div>`
-            + `<div class="voc-ko">${_escHtml(v.ko)}</div><div class="voc-vi">${_escHtml(v.vi)}</div>`
-            + (v.ex ? `<button class="voc-ex" onclick="_s1Ctx(${i})" title="Nghe">${ic('playSolid')}<span>${_stgMark(v.ex, v.hl)}</span></button>` : '')
-            + `</div>`).join('') + `</div>`;
-        const done = st.s1 && st.s1.done;
+            + `<div class="vl-vi">${_escHtml(v.vi)}</div>`
+            + (v.ex ? `<div class="vl-ex"><button class="vl-play" title="Nghe" onclick="_s1Ctx(${i})">${ic('playSolid')}</button>`
+                + `<span class="vl-ex-t">${_stgMark(v.ex, v.hl)}</span>`
+                + (v.exVi ? `<button class="vl-bulb" title="Xem nghĩa" onclick="s1Bulb(this)">${ic('bulb')}</button>` : '') + `</div>`
+                + (v.exVi ? `<div class="vl-ex-vi">${_escHtml(v.exVi)}</div>` : '') : '')
+            + `</div></div>`).join('') + `</div>`;
+        const s1 = st.s1;
         h += _stgNav(0, `<div class="stg-nav-r">`
-            + `<button class="stg-btn${done ? ' ghost' : ''}" onclick="s1StartQuiz()">${done ? 'Kiểm tra lại' : 'Kiểm tra'}${done ? '' : ' ' + ic('arrowRight')}</button>`
-            + (done ? `<button class="stg-btn" onclick="exGoStage(2)">Tiếp tục ${ic('arrowRight')}</button>` : '') + `</div>`);
+            + (s1 ? `<button class="stg-btn ghost" onclick="s1View='result';renderExerciseMode(false)">Xem kết quả</button>` : '')
+            + (s1Quiz ? `<button class="stg-btn" onclick="s1View='quiz';renderExerciseMode(false)">Tiếp tục kiểm tra ${ic('arrowRight')}</button>`
+                : `<button class="stg-btn${s1 && s1.done ? ' ghost' : ''}" onclick="s1StartQuiz()">${s1 ? 'Kiểm tra lại' : 'Kiểm tra ' + ic('arrowRight')}</button>`)
+            + (s1 && s1.done ? `<button class="stg-btn" onclick="exGoStage(2)">Tiếp tục ${ic('arrowRight')}</button>` : '') + `</div>`);
         return h;
+    }
+    function s1Bulb(btn) {
+        const row = btn.closest('.vl-main'); if (!row) return;
+        const on = row.classList.toggle('show-vi'); btn.classList.toggle('on', on);
     }
     function _s1Say(i, btn) { const v = _exCurrent().vocab[i]; triggerKoreanVoice(v.ko.replace(/\s*\+.*$/, ''), false, btn); }
     function _s1Ctx(i) { const v = _exCurrent().vocab[i]; if (v.t) exPlayRange(v.t[0], v.t[1] + 0.15, 0.8); }
-    function _s1MakeQ(ex, i, type) {
-        const others = _stgShuffle(ex.vocab.map((_, j) => j).filter(j => j !== i)).slice(0, 3);
-        return { i, type, opts: _stgShuffle([i, ...others]) };
+
+    // Quiz: mỗi biểu hiện được hỏi đúng 1 lần, trộn nhiều dạng câu; sai không hỏi lại
+    const S1_CAT = { mus: 'bảo tàng', hos: 'bệnh viện', con: 'buổi hòa nhạc' };
+    function _s1Others(ex, i, n, pred) {
+        return _stgShuffle(ex.vocab.map((_, j) => j).filter(j => j !== i && (!pred || pred(ex.vocab[j])))).slice(0, n);
+    }
+    function _s1BuildQuiz(ex) {
+        const V = ex.vocab, idx = _stgShuffle(V.map((_, i) => i)), items = [];
+        // 1 câu nối (4 biểu hiện)
+        const match = idx.splice(0, 4);
+        // 2 câu "khác nhóm" cho từ có nhóm chủ đề
+        const oddIds = idx.filter(i => V[i].cat && V.filter(v => v.cat && v.cat !== V[i].cat).length >= 3).slice(0, 2);
+        oddIds.forEach(i => { idx.splice(idx.indexOf(i), 1); items.push({ type: 'odd', i }); });
+        const types = _stgShuffle(['img', 'img', 'img', 'fill', 'fill', 'fill', 'vi2ko', 'vi2ko', 'ko2vi', 'ko2vi']);
+        idx.forEach((i, k) => {
+            let t = types[k % types.length];
+            if (t === 'img' && !V[i].img) t = 'vi2ko';
+            if (t === 'fill' && !V[i].fill) t = 'ko2vi';
+            items.push({ type: t, i });
+        });
+        items.forEach(q => {
+            const i = q.i, v = V[i];
+            if (q.type === 'fill') { q.opts = _stgShuffle(v.fill.opts); q.ans = v.fill.opts[0]; }
+            else if (q.type === 'odd') {
+                const cats = _stgShuffle([...new Set(V.filter(x => x.cat && x.cat !== v.cat).map(x => x.cat))]).filter(c => V.filter(x => x.cat === c).length >= 3);
+                q.grp = cats[0];
+                q.opts = _stgShuffle([i, ..._s1Others(ex, i, 3, x => x.cat === q.grp)]);
+            } else q.opts = _stgShuffle([i, ..._s1Others(ex, i, 3)]);
+        });
+        // Xếp thứ tự: tránh 2 câu cùng dạng liền nhau (ưu tiên dạng còn nhiều câu)
+        let pool = _stgShuffle(items), list = [];
+        while (pool.length) {
+            const prev = list.length ? list[list.length - 1].type : null, cnt = {};
+            pool.forEach(x => cnt[x.type] = (cnt[x.type] || 0) + 1);
+            const ok = pool.filter(x => x.type !== prev);
+            const pick = ok.length ? ok.reduce((a, b) => cnt[b.type] > cnt[a.type] ? b : a) : pool[0];
+            list.push(pick); pool.splice(pool.indexOf(pick), 1);
+        }
+        list.splice(Math.min(list.length, 3 + Math.floor(Math.random() * 6)), 0, { type: 'match', ids: match, right: _stgShuffle(match), sel: null, done: [], bad: null });
+        return list;
     }
     function s1StartQuiz() {
         const ex = _exCurrent();
-        s1Quiz = { queue: _stgShuffle(ex.vocab.map((_, i) => i)).map((i, k) => _s1MakeQ(ex, i, k % 2 ? 'vi2ko' : 'ko2vi')),
-            pos: 0, picked: null, wrong: new Set(), total: ex.vocab.length };
+        s1Quiz = { items: _s1BuildQuiz(ex), pos: 0, picked: null, wrong: new Set(), total: ex.vocab.length };
         s1View = 'quiz'; stopExerciseAudio();
         renderExerciseMode(false);
     }
+    function _s1Correct(q) { return q.type === 'fill' ? q.opts.indexOf(q.ans) : q.opts.indexOf(q.i); }
     function _s1QuizHtml(ex) {
-        const q = s1Quiz.queue[s1Quiz.pos], v = ex.vocab[q.i], ko2vi = q.type === 'ko2vi';
-        const answered = s1Quiz.picked != null, ok = answered && q.opts[s1Quiz.picked] === q.i;
-        const pct = Math.round(s1Quiz.pos / s1Quiz.queue.length * 100);
-        let h = `<div class="q1"><div class="q1-head"><span>Câu ${s1Quiz.pos + 1}/${s1Quiz.queue.length}</span><div class="q1-bar"><i style="width:${pct}%"></i></div>`
-            + `<button class="q1-link" onclick="s1View='learn';renderExerciseMode(false)">Xem lại</button></div>`
-            + `<div class="q1-card"><div class="q1-ask">${ko2vi ? 'Chọn nghĩa đúng' : 'Chọn biểu hiện đúng'}</div>`
-            + `<div class="q1-prompt ${ko2vi ? 'ko' : 'vi'}">${_escHtml(ko2vi ? v.ko : v.vi)}</div><div class="q1-opts">`
-            + q.opts.map((j, oi) => {
-                let c = 'q1-opt' + (ko2vi ? '' : ' ko');
-                if (answered && j === q.i) c += ' correct'; else if (answered && oi === s1Quiz.picked) c += ' wrong';
-                return `<button class="${c}" ${answered ? 'disabled' : ''} onclick="s1Pick(${oi})"><span class="q1-k">${oi + 1}</span>${_escHtml(ko2vi ? ex.vocab[j].vi : ex.vocab[j].ko)}</button>`;
-            }).join('') + `</div>`;
-        if (answered) h += `<div class="q1-fb ${ok ? 'ok' : 'no'}"><span>${ok ? ic('check') + ' Chính xác!' : ic('x') + ' Chưa đúng.'}</span>`
-            + `<span class="q1-ex">${_stgMark(v.ex, v.hl)}</span></div>`
-            + `<button class="stg-btn q1-next" id="q1-next" onclick="s1Next()">${s1Quiz.pos + 1 >= s1Quiz.queue.length ? 'Xem kết quả' : 'Câu tiếp theo'} ${ic('arrowRight')}</button>`;
+        const V = ex.vocab, q = s1Quiz.items[s1Quiz.pos], n = s1Quiz.items.length;
+        const pct = Math.round(s1Quiz.pos / n * 100);
+        let h = `<div class="q1"><div class="q1-head"><span>Câu ${s1Quiz.pos + 1}/${n}</span><div class="q1-bar"><i style="width:${pct}%"></i></div>`
+            + `<button class="q1-link" onclick="s1View='learn';renderExerciseMode(false)">Xem lại</button></div><div class="q1-card">`;
+        if (q.type === 'match') return h + _s1MatchHtml(ex, q) + `</div></div>`;
+        const answered = s1Quiz.picked != null, corr = _s1Correct(q), ok = answered && s1Quiz.picked === corr, v = V[q.i];
+        const ask = { ko2vi: 'Chọn nghĩa đúng', vi2ko: 'Chọn biểu hiện đúng', img: 'Chọn biểu hiện phù hợp với bức tranh', fill: 'Chọn biểu hiện điền vào chỗ trống', odd: 'Chọn biểu hiện khác nhóm với các biểu hiện còn lại' }[q.type];
+        h += `<div class="q1-ask">${ask}</div>`;
+        if (q.type === 'ko2vi') h += `<div class="q1-prompt">${_escHtml(v.ko)}</div>`;
+        else if (q.type === 'vi2ko') h += `<div class="q1-prompt vi">${_escHtml(v.vi)}</div>`;
+        else if (q.type === 'img') h += `<div class="q1-pic"><img src="${v.img}" alt=""></div>`;
+        else if (q.type === 'fill') h += `<div class="q1-prompt fill">${_escHtml(v.fill.q).replace('___', `<span class="q1-blank">${answered ? _escHtml(q.ans) : ''}</span>`)}</div>`;
+        else h += `<div class="q1-sp"></div>`;
+        const label = j => q.type === 'fill' ? j : q.type === 'ko2vi' ? V[j].vi : V[j].ko;
+        const isKo = q.type !== 'ko2vi';
+        h += `<div class="q1-opts">` + q.opts.map((j, oi) => {
+            let c = 'q1-opt' + (isKo ? ' ko' : '');
+            if (answered && oi === corr) c += ' correct'; else if (answered && oi === s1Quiz.picked) c += ' wrong';
+            return `<button class="${c}" ${answered ? 'disabled' : ''} onclick="s1Pick(${oi})"><span class="q1-k">${oi + 1}</span>${_escHtml(label(j))}</button>`;
+        }).join('') + `</div>`;
+        if (answered) {
+            h += `<div class="q1-fb ${ok ? 'ok' : 'no'}"><span>${ok ? ic('check') + ' Chính xác!' : ic('x') + ' Chưa đúng.'}</span>`
+                + (q.type === 'odd' ? `<span class="q1-ex">${_escHtml(v.ko)}: ${S1_CAT[v.cat]}. Các biểu hiện còn lại: ${S1_CAT[q.grp]}.</span>`
+                    : `<span class="q1-ex">${_escHtml(v.ko)} · ${_escHtml(v.vi)}</span>`) + `</div>`
+                + `<button class="stg-btn q1-next" id="q1-next" onclick="s1Next()">${s1Quiz.pos + 1 >= n ? 'Xem kết quả' : 'Câu tiếp theo'} ${ic('arrowRight')}</button>`;
+        }
         return h + `</div></div>`;
+    }
+    function _s1MatchHtml(ex, q) {
+        const V = ex.vocab, all = q.done.length === q.ids.length;
+        let h = `<div class="q1-ask">Nối biểu hiện với nghĩa đúng</div><div class="q1-match">`
+            + `<div class="q1-col">` + q.ids.map(i => {
+                const d = q.done.includes(i);
+                return `<button class="q1-m ko${d ? ' correct' : ''}${q.sel === i ? ' sel' : ''}${q.bad && q.bad[0] === i ? ' wrong' : ''}" ${d || all ? 'disabled' : ''} onclick="s1MatchL(${i})">${_escHtml(V[i].ko)}</button>`;
+            }).join('') + `</div><div class="q1-col">` + q.right.map(i => {
+                const d = q.done.includes(i);
+                return `<button class="q1-m${d ? ' correct' : ''}${q.bad && q.bad[1] === i ? ' wrong' : ''}" ${d || all ? 'disabled' : ''} onclick="s1MatchR(${i})">${_escHtml(V[i].vi)}</button>`;
+            }).join('') + `</div></div>`;
+        if (all) h += `<div class="q1-fb ${q.ids.some(i => s1Quiz.wrong.has(i)) ? 'no' : 'ok'}"><span>${q.ids.some(i => s1Quiz.wrong.has(i)) ? ic('check') + ' Hoàn thành.' : ic('check') + ' Chính xác!'}</span></div>`
+            + `<button class="stg-btn q1-next" id="q1-next" onclick="s1Next()">${s1Quiz.pos + 1 >= s1Quiz.items.length ? 'Xem kết quả' : 'Câu tiếp theo'} ${ic('arrowRight')}</button>`;
+        return h;
+    }
+    function s1MatchL(i) {
+        const q = s1Quiz && s1Quiz.items[s1Quiz.pos]; if (!q || q.type !== 'match' || q.done.includes(i)) return;
+        q.sel = q.sel === i ? null : i; q.bad = null; renderExerciseMode(false);
+    }
+    function s1MatchR(j) {
+        const q = s1Quiz && s1Quiz.items[s1Quiz.pos]; if (!q || q.type !== 'match' || q.sel == null || q.done.includes(j)) return;
+        const ok = q.sel === j;
+        if (ok) { q.done.push(j); q.bad = null; }
+        else { s1Quiz.wrong.add(q.sel); q.bad = [q.sel, j]; }
+        q.sel = null;
+        try { const a = new Audio(ok ? SND_CORRECT : SND_WRONG); a.volume = 0.5; a.play().catch(() => {}); } catch (e) {}
+        renderExerciseMode(false);
+        const nb = document.getElementById('q1-next'); if (nb) nb.focus({ preventScroll: true });
     }
     function s1Pick(oi) {
         if (!s1Quiz || s1Quiz.picked != null) return;
-        const ex = _exCurrent(), q = s1Quiz.queue[s1Quiz.pos];
+        const q = s1Quiz.items[s1Quiz.pos]; if (q.type === 'match') return;
         s1Quiz.picked = oi;
-        const ok = q.opts[oi] === q.i;
-        if (!ok) { s1Quiz.wrong.add(q.i); s1Quiz.queue.push(_s1MakeQ(ex, q.i, q.type === 'ko2vi' ? 'vi2ko' : 'ko2vi')); }
+        const ok = oi === _s1Correct(q);
+        if (!ok) s1Quiz.wrong.add(q.i);
         try { const a = new Audio(ok ? SND_CORRECT : SND_WRONG); a.volume = 0.5; a.play().catch(() => {}); } catch (e) {}
         renderExerciseMode(false);
         const nb = document.getElementById('q1-next'); if (nb) nb.focus({ preventScroll: true });
     }
     function s1Next() {
-        if (!s1Quiz || s1Quiz.picked == null) return;
+        if (!s1Quiz) return;
+        const q = s1Quiz.items[s1Quiz.pos];
+        if (q.type === 'match' ? q.done.length < q.ids.length : s1Quiz.picked == null) return;
         s1Quiz.pos++; s1Quiz.picked = null;
-        if (s1Quiz.pos >= s1Quiz.queue.length) {
-            const ex = _exCurrent(), st = _exState();
-            st.s1 = { done: true, first: s1Quiz.total - s1Quiz.wrong.size, total: s1Quiz.total, missed: [...s1Quiz.wrong].map(i => ex.vocab[i].ko), at: Date.now() };
+        if (s1Quiz.pos >= s1Quiz.items.length) {
+            const ex = _exCurrent(), st = _exState(), missed = [...s1Quiz.wrong].map(i => ex.vocab[i].ko);
+            const wasDone = !!(st.s1 && st.s1.done);   // làm lại quiz: không khoá lại các bước đã mở
+            st.s1 = { done: wasDone || !missed.length, first: s1Quiz.total - missed.length, total: s1Quiz.total, missed, ok: [], at: Date.now() };
             _exSave(); s1Quiz = null; s1View = 'result';
         }
         renderExerciseMode(false);
     }
     document.addEventListener('keydown', e => {
         if (s1View !== 'quiz' || !s1Quiz || !document.querySelector('.q1')) return;
-        if (/^[1-4]$/.test(e.key) && s1Quiz.picked == null) { e.preventDefault(); s1Pick(Number(e.key) - 1); }
-        else if (e.key === 'Enter' && s1Quiz.picked != null) { e.preventDefault(); s1Next(); }
+        const q = s1Quiz.items[s1Quiz.pos];
+        if (q.type !== 'match' && /^[1-4]$/.test(e.key) && s1Quiz.picked == null) { e.preventDefault(); s1Pick(Number(e.key) - 1); }
+        else if (e.key === 'Enter' && document.getElementById('q1-next')) { e.preventDefault(); s1Next(); }
     });
+    // Kết quả: điểm + danh sách biểu hiện sai, học viên đánh dấu "Đã nhớ" hết mới qua bước 2
     function _s1ResultHtml(ex, st) {
-        const r = st.s1, pct = Math.round(r.first / r.total * 100);
-        return `<div class="q1-res"><div class="exh-ring" style="--p:${pct}"><b>${r.first}/${r.total}</b><small>câu đúng</small></div>`
+        const r = st.s1, pct = Math.round(r.first / r.total * 100), miss = r.missed || [], okL = r.ok || [];
+        const left = miss.filter(k => !okL.includes(k)).length;
+        let h = `<div class="q1-res"><div class="exh-ring" style="--p:${pct}"><b>${r.first}/${r.total}</b><small>câu đúng</small></div>`
             + `<div class="q1-res-t"><b>${pct >= 80 ? 'Rất tốt!' : 'Hoàn thành!'}</b>`
-            + (r.missed && r.missed.length ? `<div class="q1-miss"><small>Cần ôn lại:</small>${r.missed.map(k => `<span>${_escHtml(k)}</span>`).join('')}</div>` : '')
-            + `</div></div>`
-            + _stgNav(0, `<div class="stg-nav-r"><button class="stg-btn ghost" onclick="s1View='learn';renderExerciseMode(false)">Xem lại</button>`
-            + `<button class="stg-btn" onclick="exGoStage(2)">Tiếp tục ${ic('arrowRight')}</button></div>`);
+            + (miss.length ? `<span>Hãy ôn lại các biểu hiện sau và đánh dấu khi đã nhớ.</span>` : '') + `</div></div>`;
+        if (miss.length) h += `<div class="q1-rv">` + miss.map(k => {
+            const v = ex.vocab.find(x => x.ko === k) || { ko: k, vi: '' }, on = okL.includes(k);
+            return `<label class="q1-rv-row${on ? ' on' : ''}">`
+                + (v.img ? `<img src="${v.img}" alt="">` : '')
+                + `<span class="q1-rv-t"><b>${_escHtml(v.ko)}</b><span>${_escHtml(v.vi)}</span>${v.ex ? `<small>${_stgMark(v.ex, v.hl)}</small>` : ''}</span>`
+                + `<span class="q1-rv-ck"><input type="checkbox" ${on ? 'checked' : ''} onchange="s1Ack(${JSON.stringify(k).replace(/"/g, '&quot;')}, this.checked)"><i>${ic('check')}</i>Đã nhớ</span></label>`;
+        }).join('') + `</div>`;
+        return h + _stgNav(0, `<div class="stg-nav-r"><button class="stg-btn ghost" onclick="s1View='learn';renderExerciseMode(false)">Xem lại</button>`
+            + `<button class="stg-btn" ${left ? 'disabled' : ''} onclick="exGoStage(2)">Tiếp tục ${ic('arrowRight')}</button></div>`);
+    }
+    function s1Ack(k, on) {
+        const st = _exState(); if (!st.s1) return;
+        const okL = new Set(st.s1.ok || []); on ? okL.add(k) : okL.delete(k);
+        st.s1.ok = [...okL];
+        st.s1.done = !!st.s1.done || (st.s1.missed || []).every(m => okL.has(m));
+        _exSave();
+        const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
+    }
+
+    // Tài khoản giáo viên: điền nhanh đáp án đúng của bước hiện tại để thử bước sau
+    function stgQuickFill() {
+        const ex = _exCurrent(), st = _exState(); if (!ex || !isTeacherAccount || st.done) return;
+        const cur = _stgCur(ex, st);
+        if (cur === 1) { st.s1 = { done: true, first: ex.vocab.length, total: ex.vocab.length, missed: [], ok: [], at: Date.now() }; s1Quiz = null; s1View = 'result'; }
+        else if (cur === 2) { stopExerciseAudio(); st.listened = true; st.s2 = {}; (ex.listenQ || []).forEach((q, i) => st.s2[i] = q.ans); }
+        else if (cur === 3) { st.picks = {}; ex.mcq.forEach((q, i) => st.picks[i] = q.ans); }
+        _exSave(); renderExerciseMode(false);
     }
 
     // ---------- BƯỚC 2: NGHE 1 LẦN (tốc độ cố định, chưa hiện chữ) ----------
@@ -4737,6 +4920,7 @@
     function s4Choose(i) { if (_rec) return; _takeStop(); stopExerciseAudio(); _exStopAt = null; s4Pick = i; _s4MsgText = ''; renderExerciseMode(false); }
     function s4SetRate(r) { s4Rate = r; document.querySelectorAll('.s4-model .ex-speed-btn').forEach(b => b.classList.toggle('active', b.textContent === r + 'x')); }
     function s4PlayModel() {
+        if (_rec) return;
         const ex = _exCurrent(), p = ex.passages[s4Pick];
         if (_exStopAt != null && !exAudio.paused) { exAudio.pause(); _exStopAt = null; _exRangeDone = null; return; }
         exPlayRange(p.segs[0][0], p.segs[p.segs.length - 1][1] + 0.2, s4Rate);
@@ -4774,7 +4958,7 @@
         const mime = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg'].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
         let mr;
         try { mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined); } catch (e) { mr = new MediaRecorder(stream); }
-        const r = _rec = { mr, stream, chunks: [], t0: Date.now(), p: s4Pick, mime: mr.mimeType || mime || 'audio/webm', levels: [] };
+        const r = _rec = { mr, stream, chunks: [], t0: Date.now(), p: s4Pick, k: _exKey(), mime: mr.mimeType || mime || 'audio/webm', levels: [] };
         mr.ondataavailable = e => { if (e.data && e.data.size) r.chunks.push(e.data); };
         mr.onstop = () => _recFinish(r);
         mr.start(250);
@@ -4828,11 +5012,10 @@
         document.getElementById('s4-rec-time').innerText = _fmtTime(on ? (Date.now() - _rec.t0) / 1000 : 0);
         if (!on) { const cv = document.getElementById('s4-meter'); if (cv) cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); }
     }
-    function _recId() { return _exStoreKey(_exKey()) + '|' + Date.now(); }
     async function _recFinish(r) {
         const blob = new Blob(r.chunks, { type: (r.mime || '').split(';')[0] || 'audio/webm' });
         if (r.dur < 1 || !blob.size) { _s4Msg('Bản thu quá ngắn. Vui lòng thu lại.'); return; }
-        const st = _exState(), id = _recId();
+        const [ku, kk] = r.k.split('|'), st = _exState(ku, kk), id = _exStoreKey(r.k) + '|' + Date.now();
         _recBlobs[id] = blob;
         await _recDbPut(id, blob);
         st.recTakes = (st.recTakes || []).concat([{ id, p: r.p, dur: Math.round(r.dur * 10) / 10, at: Date.now(), mime: blob.type }]);
@@ -4844,7 +5027,9 @@
             st.recTakes = st.recTakes.filter(t => !drop.includes(t));
         }
         if (!st.done) st.recPick = id;   // bản mới nhất tự thành bản nộp (có thể đổi)
-        _exSave();
+        try { localStorage.setItem(_exStoreKey(r.k), JSON.stringify(st)); } catch (e) {}
+        scheduleProgressPush();
+        if (_exKey() !== r.k) return;   // đã rời bài: chỉ lưu, không vẽ lại
         _s4MsgText = '';
         const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
     }
@@ -4882,6 +5067,7 @@
         _takeAudio.play().catch(() => {});
     }
     function s4Compare(id) {
+        if (_rec) return;
         const ex = _exCurrent(), t = (_exState().recTakes || []).find(x => x.id === id); if (!t) return;
         const p = ex.passages[t.p];
         exPlayRange(p.segs[0][0], p.segs[p.segs.length - 1][1] + 0.2, s4Rate, () => s4PlayTake(id));
@@ -4968,7 +5154,7 @@
 
     // ---------- Nộp bài ----------
     function _stgConfirmSubmit(ex, st) {
-        _recStop();
+        if (_rec) { _recStop(); _s4Msg('Đã dừng thu âm. Hãy nghe lại bản thu rồi bấm Nộp bài.'); return false; }
         if (!(st.recTakes || []).some(t => t.id === st.recPick))
             return _exDialog(() => confirm('Bạn chưa thu âm. Vẫn nộp bài?'));
         return _exDialog(() => confirm('Bạn có chắc muốn nộp bài?'));
@@ -4981,12 +5167,13 @@
                  rec: t ? { p: t.p, name: ex.passages[t.p].name, dur: t.dur } : null };
     }
     function _stgDoneRows(ex, d, row) {
-        return (d.s1 ? row(ic('sparkles'), 'Quiz biểu hiện', `<b>${d.s1.first}/${d.s1.total}</b> đúng lần đầu`) : '')
+        return (d.s1 ? row(ic('sparkles'), 'Quiz biểu hiện', `<b>${d.s1.first}/${d.s1.total}</b> câu đúng`) : '')
             + (d.s2 ? row(ic('headphones'), 'Nghe hiểu', `<b>${d.s2.ok}/${d.s2.total}</b> câu đúng`) : '')
             + (d.rec ? row(ic('mic'), 'Luyện đọc', `<b>${_escHtml(d.rec.name)}</b>`, '', _fmtTime(d.rec.dur)) : row(ic('mic'), 'Luyện đọc', 'Chưa thu âm', 'warn'));
     }
 
     function showAppMode(modeName) {
+        if (modeName !== 'exercise') { _recStop(); _takeStop(); }   // rời mục Bài tập khi đang thu âm -> tắt micro
         // Chuyển menu -> luôn thoát chế độ Tổng hợp
         summaryActive = false;
         document.getElementById('mode-summary-section').style.display = 'none';
