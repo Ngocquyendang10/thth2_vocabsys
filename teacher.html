@@ -516,6 +516,15 @@
   .gd.old{background:#edf2f7; color:#4a5568;}
   .rv-msg{font-size:12.5px; color:var(--sub); margin-top:8px; min-height:16px; text-align:center;}
   @media (max-width:1000px){ .rv-grid{grid-template-columns:1fr;} .rv-side{position:static;} .rv-opts{grid-template-columns:1fr;} }
+  /* 🎙️ Bản thu luyện đọc */
+  .rv-rec{margin:10px 0 4px; padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:#fafaff;}
+  .rv-rec-h{font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.4px; color:#614CFF; margin-bottom:4px;}
+  .rv-rec-s{font-size:12.5px; color:#718096;}
+  #rv-rec-box{margin-top:8px; display:flex; flex-direction:column; gap:6px;}
+  .rv-rec-btn{align-self:flex-start; display:inline-flex; align-items:center; gap:6px;}
+  .rv-rec-btn .ic{width:13px; height:13px;}
+  .rv-rec-audio{width:100%; height:38px;}
+  .rv-rec-dl{font-size:12.5px; font-weight:700; color:#614CFF;}
 </style>
 </head>
 <body>
@@ -619,10 +628,11 @@
   </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261117"></script>
+<script src="assets/exercise-data.js?v=20261118"></script>
 <script>
   // 🎨 Icon SVG phẳng 1 màu (không dùng emoji hệ thống)
   const ICON_PATHS = {
+    play: '<path d="M7 4v16l13-8z" fill="currentColor" stroke="none"/>',
     chart: '<path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 6-7"/>',
     clipboard: '<rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2M9 12h6M9 16h4"/>',
     edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4z"/>',
@@ -828,7 +838,8 @@
       const st = readJson(k);
       if (!st) return;
       let grade = null; try { grade = JSON.parse(blob['exGrade_'+key+'_'+unit+'|'+tab] || 'null'); } catch(e){}
-      exercises.push({ unit, tab, id: exIdOf(unit, tab), done: st.done || null, started: !!st.startedAt, cur: st, grade,
+      let recFile = null; try { recFile = JSON.parse(blob['exRec_'+key+'_'+unit+'|'+tab] || 'null'); } catch(e){}   // 🎙️ bản thu luyện đọc đã lưu trên Drive
+      exercises.push({ unit, tab, id: exIdOf(unit, tab), done: st.done || null, started: !!st.startedAt, cur: st, grade, recFile,
         first: st.first || null, attempts: Array.isArray(st.attempts) ? st.attempts : [],
         startedAt: st.startedAt || null, essays: st.essays || {}, tabSwitches: st.tabSwitches || 0,
         answered: Object.keys(st.picks||{}).length
@@ -1167,6 +1178,35 @@
   function rvEssayScore(){ return Object.values(rv.essays_g).reduce((a, x) => a + (Number(x.score) || 0), 0); }
   function rvMax(){ return rv.ex.mcq.length + rv.ex.essay.length; }
 
+  // 🎙️ Bản thu luyện đọc của học viên: file riêng tư trên Drive, chỉ lấy được bằng TEACHER_KEY
+  const recCache = {};
+  function rvRecHtml(e){
+    const f = e.recFile;
+    if (!f) return `<div class="rv-rec"><div class="rv-rec-h">Bản thu luyện đọc</div><div class="rv-rec-s">Học viên chưa gửi bản thu.</div></div>`;
+    const m = Math.floor((f.dur||0)/60), s = String(Math.round((f.dur||0)%60)).padStart(2,'0');
+    return `<div class="rv-rec"><div class="rv-rec-h">Bản thu luyện đọc</div>`
+      + `<div class="rv-rec-s">${escapeHtml(f.name || '')} · ${m}:${s} · gửi ${fmtDate(f.at)}</div>`
+      + `<div id="rv-rec-box"><button class="btn btn-ghost rv-rec-btn" onclick="rvLoadRec()">${ic('play')} Nghe bản thu</button></div></div>`;
+  }
+  async function rvLoadRec(){
+    const box = document.getElementById('rv-rec-box'); if (!box || !rv) return;
+    const exKey = EX_CATALOG[rv.id].unit + '|' + EX_CATALOG[rv.id].key, ck = rv.p.username + '|' + exKey + '|' + ((rv.e.recFile||{}).id || '');
+    const show = d => { box.innerHTML = `<audio class="rv-rec-audio" controls autoplay src="${d.url}"></audio>`
+      + `<a class="rv-rec-dl" href="${d.url}" download="${escapeHtml(d.name)}">Tải file</a>`; };
+    if (recCache[ck]) return show(recCache[ck]);
+    box.innerHTML = '<span class="rv-rec-s">Đang tải bản thu…</span>';
+    const r = await fetch(SCRIPT_URL, { method:'POST', headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action:'teacherGetRec', key:teacherKey, user:rv.p.username, exKey }) }).then(x => x.json()).catch(() => null);
+    if (!r || !r.success) {
+      box.innerHTML = `<span class="rv-rec-s rv-warn">${escapeHtml((r && r.message) || 'Không tải được bản thu. Vui lòng thử lại.')}</span> <button class="btn btn-ghost rv-rec-btn" onclick="rvLoadRec()">Thử lại</button>`;
+      return;
+    }
+    const bin = atob(r.data), u8 = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    recCache[ck] = { url: URL.createObjectURL(new Blob([u8], { type: r.mime || 'audio/mp4' })), name: r.name || 'ban-thu' };
+    show(recCache[ck]);
+  }
+
   function renderReview(){
     const { p, e, ex, off, picks, essays } = rv, c = EX_CATALOG[rv.id];
     const b = findBatch(rv.batchId);
@@ -1183,6 +1223,10 @@
       const redo = (e.attempts || []).length;
       if (redo && !old) meta.push(`Làm lại ${redo} lần${e.done && e.done.at !== off.at ? ' · lần gần nhất ' + e.done.score + '/' + e.done.total : (e.done ? '' : ' · đang làm lại')}`);
       if (old && !off.picks) meta.push('<span class="rv-warn">Bản nộp này không lưu chi tiết câu trả lời</span>');
+      if (ex.flow === 'staged') {   // bài nhiều bước: quiz biểu hiện + bản thu luyện đọc (file thu âm nằm trên máy học viên)
+        if (off.s1) meta.push(`Quiz biểu hiện ${off.s1.first}/${off.s1.total} đúng lần đầu`);
+        meta.push(off.rec ? `Đã thu âm ${escapeHtml(off.rec.name)} · ${Math.round(off.rec.dur)} giây` : '<span class="rv-warn">Chưa thu âm luyện đọc</span>');
+      }
     } else { const n = Object.keys(picks).length + Object.values(essays).filter(v => (v || []).some(x => String(x || '').trim())).length;
       meta.push(n ? `Đang làm · ${n}/${rvMax()} câu` : 'Chưa làm trong đợt này'); }
 
@@ -1231,6 +1275,7 @@
         ${st}
         ${histHtml}
         <div class="rv-kv"><span>Trắc nghiệm (máy chấm)</span><b>${mcqOk}/${ex.mcq.length}</b></div>
+        ${ex.flow === 'staged' ? rvRecHtml(e) : ''}
         ${needs ? `<div class="rv-kv"><span>Tự luận</span><b id="rv-ess">${num(rvEssayScore())}/${ex.essay.length}</b></div>` : ''}
         <div class="rv-total"><b id="rv-total">${num(total)}</b><small>/ ${rvMax()}</small></div>
         ${old ? (rv.comment ? `<label class="rv-lab">Nhận xét chung</label><div class="rv-sub" style="margin:4px 0 0">${escapeHtml(rv.comment)}</div>` : '') : `<label class="rv-lab">Nhận xét chung</label>

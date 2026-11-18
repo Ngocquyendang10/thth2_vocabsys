@@ -1667,6 +1667,233 @@
         .ex-note-ko { font-weight: 800; font-size: 15px; color: var(--point-color); }
         .ex-note-vi { font-size: 13px; color: var(--text-color); margin-top: 2px; }
         .ex-note-ex { font-size: 12px; color: var(--sub-text); margin-top: 4px; font-style: italic; }
+        /* ===== 🪜 Bài tập nhiều bước (flow: 'staged') ===== */
+        .stg-head { position: sticky; top: 0; z-index: 15; background: var(--card-color); border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px 14px 10px; margin: 4px 0 14px; box-shadow: 0 6px 18px rgba(97,76,255,0.06); }
+        .stg-head-top { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+        .stg-kicker { font-size: 11px; font-weight: 800; color: var(--point-color); text-transform: uppercase; letter-spacing: .5px; }
+        .stg-title { font-size: 17px; color: #1a202c; }
+        .stg-pct { margin-left: auto; font-size: 12px; font-weight: 700; color: var(--sub-text); }
+        .stg-bar { height: 6px; border-radius: 99px; background: #edf2f7; margin: 8px 0 10px; overflow: hidden; }
+        .stg-bar i { display: block; height: 100%; background: var(--point-color); border-radius: 99px; transition: width .4s ease; }
+        .stg-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .stg-step { display: flex; align-items: center; gap: 8px; min-width: 0; background: none; border: 1.5px solid transparent; border-radius: 12px; padding: 6px 8px; cursor: pointer; font-family: inherit; text-align: left; color: var(--sub-text); }
+        .stg-step:hover:not(:disabled) { background: var(--point-light); }
+        .stg-step:disabled { cursor: not-allowed; opacity: .55; }
+        .stg-step.on { border-color: var(--point-color); background: var(--point-light); color: var(--point-color); }
+        .stg-dot { width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; background: #edf2f7; color: var(--sub-text); }
+        .stg-dot .ic { width: 13px; height: 13px; }
+        .stg-step.on .stg-dot { background: var(--point-color); color: #fff; }
+        .stg-step.ok .stg-dot { background: var(--success-color); color: #fff; }
+        .stg-lbl { font-size: 12.5px; font-weight: 700; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; }
+        .stg-head, .s4-studio { container-type: inline-size; }
+        @container (max-width: 560px) {
+            .stg-steps { gap: 4px; }
+            .stg-step { flex-direction: column; gap: 4px; padding: 6px 2px; text-align: center; }
+            .stg-lbl { font-size: 10.5px; }
+            .stg-step:not(.on) .stg-lbl { display: none; }
+            .s4-take-acts { width: 100%; }
+        }
+        .stg-body { animation: stgIn .25s ease; }
+        @keyframes stgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        .stg-intro { display: flex; gap: 12px; align-items: flex-start; background: var(--point-light); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; }
+        .stg-intro-ic { width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px; background: var(--point-color); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
+        .stg-intro-ic .ic { width: 19px; height: 19px; }
+        .stg-intro b { display: block; font-size: 15px; color: #1a202c; }
+        .stg-intro span { font-size: 13.5px; color: var(--text-color); line-height: 1.55; }
+        .stg-intro span .ic { width: 13px; height: 13px; vertical-align: -2px; }
+        .stg-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 18px 0 6px; padding-top: 14px; border-top: 1px dashed #e2e8f0; }
+        .stg-nav-r { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-left: auto; justify-content: flex-end; }
+        .stg-note { font-size: 13px; font-weight: 700; color: var(--sub-text); display: inline-flex; align-items: center; gap: 5px; }
+        .stg-note .ic { width: 15px; height: 15px; color: var(--success-color); }
+        .stg-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--point-color); color: #fff; border: 1.5px solid var(--point-color); border-radius: 12px; padding: 10px 16px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; transition: background .15s, opacity .15s; }
+        .stg-btn .ic { width: 16px; height: 16px; }
+        .stg-btn:hover:not(:disabled) { background: var(--point-hover); }
+        .stg-btn:disabled { opacity: .45; cursor: not-allowed; }
+        .stg-btn.ghost { background: #fff; color: var(--point-color); }
+        .stg-btn.ghost:hover:not(:disabled) { background: var(--point-light); }
+        .stg-btn.submit { background: #2f855a; border-color: #2f855a; }
+        .stg-btn.submit:hover { background: #276749; }
+        mark { background: rgba(255, 214, 102, 0.55); color: inherit; border-radius: 3px; padding: 0 2px; }
+        /* Bước 1 */
+        .voc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+        .voc-card { border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px 14px; background: #fff; display: flex; flex-direction: column; gap: 4px; }
+        .voc-top { display: flex; align-items: center; justify-content: space-between; }
+        .voc-n { font-size: 11px; font-weight: 800; color: #a0aec0; letter-spacing: .5px; }
+        .voc-say { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--point-light); color: var(--point-color); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .voc-say:hover, .voc-say.is-playing { background: var(--point-color); color: #fff; }
+        .voc-say .ic { width: 16px; height: 16px; }
+        .voc-ko { font-size: 19px; font-weight: 800; color: var(--point-color); line-height: 1.3; }
+        .voc-vi { font-size: 14px; color: var(--text-color); line-height: 1.45; }
+        .voc-ex { display: flex; gap: 6px; align-items: flex-start; text-align: left; margin-top: 6px; background: var(--bg-color); border: none; border-radius: 10px; padding: 7px 9px; font-family: inherit; font-size: 13.5px; line-height: 1.5; color: var(--text-color); cursor: pointer; }
+        .voc-ex .ic { width: 11px; height: 11px; flex-shrink: 0; margin-top: 5px; color: var(--point-color); }
+        .voc-ex:hover { background: var(--point-light); }
+        .q1 { max-width: 560px; margin: 0 auto; }
+        .q1-head { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 800; color: var(--sub-text); margin-bottom: 10px; }
+        .q1-bar { flex: 1; height: 6px; background: #edf2f7; border-radius: 99px; overflow: hidden; }
+        .q1-bar i { display: block; height: 100%; background: var(--point-color); transition: width .3s; }
+        .q1-link { background: none; border: none; color: var(--point-color); font-weight: 700; font-size: 12.5px; cursor: pointer; font-family: inherit; }
+        .q1-card { border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 22px 20px; background: #fff; box-shadow: var(--neu-card-shadow); }
+        .q1-ask { font-size: 12.5px; font-weight: 800; color: var(--sub-text); text-transform: uppercase; letter-spacing: .4px; text-align: center; }
+        .q1-prompt { text-align: center; font-size: 26px; font-weight: 800; color: #1a202c; margin: 10px 0 18px; line-height: 1.35; }
+        .q1-prompt.vi { font-size: 19px; font-weight: 700; }
+        .q1-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .q1-opt { display: flex; align-items: center; gap: 10px; text-align: left; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 12px; font-size: 15px; line-height: 1.4; font-family: inherit; color: var(--text-color); cursor: pointer; transition: border-color .15s, background .15s; }
+        .q1-opt.ko { font-size: 17px; font-weight: 700; }
+        .q1-opt:hover:not(:disabled) { border-color: var(--point-color); background: var(--point-light); }
+        .q1-opt:disabled { cursor: default; }
+        .q1-opt.correct { border-color: var(--success-color); background: rgba(72,187,120,0.12); }
+        .q1-opt.wrong { border-color: var(--error-color); background: rgba(245,101,101,0.1); }
+        .q1-k { width: 22px; height: 22px; flex-shrink: 0; border-radius: 6px; background: #edf2f7; font-size: 11.5px; font-weight: 800; color: var(--sub-text); display: inline-flex; align-items: center; justify-content: center; }
+        .q1-fb { margin-top: 14px; font-weight: 700; font-size: 14.5px; display: flex; flex-direction: column; gap: 4px; }
+        .q1-fb .ic { width: 15px; height: 15px; vertical-align: -2px; }
+        .q1-fb.ok { color: #2f855a; } .q1-fb.no { color: #c53030; }
+        .q1-ex { font-weight: 500; color: var(--text-color); font-size: 14px; }
+        .q1-next { margin-top: 14px; width: 100%; justify-content: center; }
+        .q1-tip { text-align: center; font-size: 12px; color: var(--sub-text); margin-top: 10px; }
+        .q1-res { display: flex; gap: 18px; align-items: center; border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 20px; background: #fff; }
+        .q1-res .exh-ring { flex-shrink: 0; }
+        .q1-res-t b { display: block; font-size: 16px; color: #1a202c; margin-bottom: 4px; }
+        .q1-res-t > span { font-size: 13.5px; color: var(--text-color); }
+        .q1-miss { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 10px; }
+        .q1-miss small { font-size: 12px; font-weight: 700; color: var(--sub-text); }
+        .q1-miss span { background: rgba(245,101,101,0.1); color: #c53030; border-radius: 99px; padding: 3px 10px; font-size: 13px; font-weight: 700; }
+        /* Bước 2 */
+        .s2-card { border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 22px 20px; background: #fff; text-align: center; }
+        .s2-badge { display: inline-flex; align-items: center; gap: 6px; background: var(--point-light); color: var(--point-color); border-radius: 99px; padding: 5px 12px; font-size: 12.5px; font-weight: 800; }
+        .s2-badge .ic { width: 14px; height: 14px; }
+        .s2-card h3 { font-size: 19px; margin: 12px 0 4px; color: #1a202c; }
+        .s2-card > p { font-size: 14.5px; color: var(--text-color); margin: 0 0 16px; line-height: 1.6; }
+        .s2-scenes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+        .s2-scene { position: relative; border-radius: 14px; overflow: hidden; border: 2px solid transparent; background: var(--bg-color); transition: border-color .2s, transform .2s, opacity .2s; opacity: .7; }
+        .s2-scene img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+        .s2-scene-n { display: block; font-size: 13.5px; font-weight: 800; padding: 6px 4px 2px; color: #1a202c; }
+        .s2-scene-s { display: flex; align-items: center; justify-content: center; gap: 3px; min-height: 20px; padding-bottom: 6px; font-size: 11.5px; font-weight: 700; color: var(--sub-text); }
+        .s2-scene-s .ic { width: 12px; height: 12px; }
+        .s2-scene.now { border-color: var(--point-color); opacity: 1; transform: translateY(-2px); }
+        .s2-scene.now .s2-scene-s { color: var(--point-color); }
+        .s2-scene.heard { opacity: 1; }
+        .s2-scene.heard .s2-scene-s { color: #2f855a; }
+        .s2-player { display: flex; align-items: center; gap: 12px; max-width: 520px; margin: 0 auto; }
+        .s2-play { width: 56px; height: 56px; flex-shrink: 0; border-radius: 50%; border: none; background: var(--point-color); color: #fff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(97,76,255,0.3); }
+        .s2-play:hover { background: var(--point-hover); }
+        .s2-play .ic { width: 22px; height: 22px; }
+        .s2-track { flex: 1; height: 8px; border-radius: 99px; background: #edf2f7; overflow: hidden; }
+        .s2-track i { display: block; height: 100%; width: 0; background: var(--point-color); }
+        .s2-time { font-size: 12.5px; font-weight: 700; color: var(--sub-text); font-variant-numeric: tabular-nums; min-width: 78px; text-align: right; }
+        .s2-msg { margin-top: 14px; font-size: 13.5px; font-weight: 700; color: var(--sub-text); display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .s2-msg .ic { width: 16px; height: 16px; color: var(--success-color); }
+        /* Bước 3 */
+        .s3-player { position: sticky; top: 118px; z-index: 12; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .s3-pass { border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px; background: #fff; }
+        .s3-pass-main { display: flex; gap: 12px; align-items: flex-start; }
+        .s3-img { width: 132px; flex-shrink: 0; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
+        .s3-pass-main .ex-passage { flex: 1; min-width: 0; }
+        .s3-vi { display: flex; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(97,76,255,0.25); font-size: 14px; line-height: 1.6; color: var(--text-color); }
+        .s3-vi .ic { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; color: var(--point-color); }
+        .s3-ox { margin-top: 10px; display: grid; gap: 6px; }
+        .s3-ox-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 10px; border-radius: 12px; background: var(--bg-color); }
+        .s3-ox-row.ok { background: rgba(72,187,120,0.1); } .s3-ox-row.no { background: rgba(245,101,101,0.08); }
+        .s3-ox-n { font-size: 16px; color: var(--sub-text); }
+        .s3-ox-q { flex: 1; min-width: 180px; font-size: 16px; line-height: 1.5; color: #1a202c; }
+        .s3-ox-btns { display: inline-flex; gap: 6px; }
+        .ox-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #cbd5e0; background: #fff; font-family: inherit; font-size: 20px; font-weight: 800; color: var(--sub-text); cursor: pointer; transition: all .15s; }
+        .ox-btn:hover:not(:disabled) { border-color: var(--point-color); color: var(--point-color); }
+        .ox-btn:disabled { cursor: default; }
+        .ox-btn.picked { border-color: var(--point-color); background: var(--point-color); color: #fff; }
+        .ox-btn.correct { border-color: var(--success-color); background: var(--success-color); color: #fff; }
+        .ox-btn.wrong { border-color: var(--error-color); background: rgba(245,101,101,0.12); color: var(--error-color); }
+        .s3-why { flex-basis: 100%; font-size: 13.5px; font-weight: 700; color: var(--text-color); display: flex; align-items: flex-start; gap: 5px; flex-wrap: wrap; }
+        .s3-ox-row.ok .s3-why { color: #2f855a; } .s3-ox-row.no .s3-why { color: #c53030; }
+        .s3-why span { font-weight: 500; color: var(--text-color); }
+        .s3-why .ic { width: 14px; height: 14px; margin-top: 3px; }
+        .s3-why.plain { margin-top: 6px; font-weight: 500; color: var(--sub-text); }
+        /* Bước 4 */
+        .s4-picks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+        .s4-pick { position: relative; display: flex; flex-direction: column; text-align: left; border: 2px solid #e2e8f0; border-radius: 14px; background: #fff; padding: 0; overflow: hidden; cursor: pointer; font-family: inherit; transition: border-color .15s, box-shadow .15s; }
+        .s4-pick img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+        .s4-pick-t { padding: 8px 10px 10px; }
+        .s4-pick-t b { display: block; font-size: 14px; color: #1a202c; }
+        .s4-pick-t small { font-size: 12px; color: var(--sub-text); font-weight: 600; }
+        .s4-pick.on { border-color: var(--point-color); box-shadow: 0 6px 16px rgba(97,76,255,0.15); }
+        .s4-pick-radio { position: absolute; top: 8px; right: 8px; width: 20px; height: 20px; border-radius: 50%; background: #fff; border: 2px solid #cbd5e0; }
+        .s4-pick.on .s4-pick-radio { border: 6px solid var(--point-color); }
+        .s4-pick-badge { position: absolute; top: 8px; left: 8px; display: inline-flex; align-items: center; gap: 3px; background: rgba(26,32,44,0.75); color: #fff; font-size: 11px; font-weight: 800; border-radius: 99px; padding: 2px 8px; }
+        .s4-pick-badge .ic { width: 11px; height: 11px; }
+        .s4-studio { border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 16px; background: #fff; }
+        .s4-sec { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0 10px; }
+        .s4-sec:not(:first-child) { margin-top: 20px; }
+        .s4-sec b { font-size: 15px; color: #1a202c; }
+        .s4-step { width: 22px; height: 22px; border-radius: 50%; background: var(--point-color); color: #fff; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
+        .s4-sub { font-size: 12.5px; color: var(--sub-text); font-weight: 600; }
+        .s4-script p { font-size: 19px !important; line-height: 2 !important; }
+        .stg-body .ex-passage p, .voc-ex, .s3-ox-q, .q1-ex { word-break: keep-all; }
+        .s4-script .ex-seg { cursor: pointer; }
+        .s4-script .ex-seg:hover { background: rgba(97,76,255,0.08); }
+        .s4-model { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+        .s4-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--point-light); color: var(--point-color); border: none; border-radius: 12px; padding: 9px 14px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
+        .s4-btn:hover { background: rgba(97,76,255,0.15); }
+        .s4-btn .ic { width: 16px; height: 16px; }
+        .s4-rec { display: flex; align-items: center; gap: 14px; border: 1.5px dashed #cbd5e0; border-radius: 16px; padding: 12px 14px; transition: border-color .2s, background .2s; }
+        .s4-rec.on { border-color: #e53e3e; border-style: solid; background: rgba(229,62,62,0.04); }
+        .s4-mic { width: 64px; height: 64px; flex-shrink: 0; border-radius: 50%; border: none; background: #e53e3e; color: #fff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 6px 16px rgba(229,62,62,0.3); transition: transform .15s; }
+        .s4-mic:hover { transform: scale(1.05); }
+        .s4-mic .ic { width: 26px; height: 26px; }
+        .s4-mic.on { animation: recPulse 1.4s ease-in-out infinite; }
+        @keyframes recPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(229,62,62,0.45); } 50% { box-shadow: 0 0 0 12px rgba(229,62,62,0); } }
+        .s4-rec-mid { flex: 1; min-width: 0; }
+        .s4-rec-state { font-size: 13.5px; font-weight: 700; color: var(--text-color); display: flex; align-items: center; gap: 6px; }
+        .s4-dot { width: 9px; height: 9px; border-radius: 50%; background: #e53e3e; animation: recBlink 1s infinite; }
+        @keyframes recBlink { 50% { opacity: .2; } }
+        .s4-meter { display: block; width: 100%; height: 36px; margin-top: 4px; }
+        .s4-rec-time { font-size: 20px; font-weight: 800; color: #1a202c; font-variant-numeric: tabular-nums; }
+        .s4-msg { display: none; margin-top: 10px; font-size: 13.5px; font-weight: 600; color: var(--text-color); background: var(--bg-color); border-radius: 10px; padding: 8px 12px; }
+        .s4-msg.show { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .s4-msg .ic { width: 15px; height: 15px; color: var(--point-color); }
+        .s4-takes { display: grid; gap: 8px; }
+        .s4-take { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border: 1.5px solid #e2e8f0; border-radius: 14px; padding: 8px 10px; }
+        .s4-take.on { border-color: var(--success-color); background: rgba(72,187,120,0.06); }
+        .s4-take-play { width: 40px; height: 40px; flex-shrink: 0; border-radius: 50%; border: none; background: var(--point-color); color: #fff; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .s4-take-play .ic { width: 16px; height: 16px; }
+        .s4-take-t { flex: 1; min-width: 90px; }
+        .s4-take-t b { display: block; font-size: 14px; color: #1a202c; }
+        .s4-take-t small { font-size: 12px; color: var(--sub-text); font-weight: 600; }
+        .s4-take-acts { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+        .s4-chip { display: inline-flex; align-items: center; gap: 4px; background: #fff; border: 1.5px solid #e2e8f0; border-radius: 99px; padding: 5px 10px; font-size: 12.5px; font-weight: 700; color: var(--text-color); cursor: pointer; font-family: inherit; }
+        .s4-chip .ic { width: 13px; height: 13px; }
+        .s4-chip:hover { border-color: var(--point-color); color: var(--point-color); }
+        .s4-chip.sel { border-color: var(--success-color); background: var(--success-color); color: #fff; }
+        .s4-ico { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg-color); color: var(--sub-text); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+        .s4-ico:hover { background: var(--point-light); color: var(--point-color); }
+        .s4-ico .ic { width: 15px; height: 15px; }
+        .s4-privacy { display: flex !important; align-items: center; gap: 5px; margin-top: 6px; font-size: 12.5px !important; font-weight: 600; color: var(--sub-text) !important; }
+        .s4-privacy .ic { width: 13px; height: 13px; }
+        .rec-up { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; border-radius: 12px; padding: 9px 12px; margin: -4px 0 14px; font-size: 13.5px; font-weight: 700; background: var(--bg-color); color: var(--text-color); }
+        .rec-up .ic { width: 16px; height: 16px; flex-shrink: 0; }
+        .rec-up.ok { background: rgba(72,187,120,0.1); color: #276749; }
+        .rec-up.bad { background: rgba(237,137,54,0.1); color: #c05621; }
+        .rec-up .s4-chip { margin-left: auto; }
+        .rec-up-spin { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--point-light); border-top-color: var(--point-color); animation: recSpin .8s linear infinite; }
+        @keyframes recSpin { to { transform: rotate(360deg); } }
+        .s4-empty { font-size: 13.5px; color: var(--sub-text); background: var(--bg-color); border-radius: 12px; padding: 12px; text-align: center; }
+        @media (max-width: 640px) {
+            .stg-head { padding: 10px 10px 8px; }
+            .s3-player { top: 132px; }
+            .s3-pass-main { flex-direction: column; }
+            .s3-img { width: 100%; aspect-ratio: 16/9; }
+            .q1-opts { grid-template-columns: 1fr; }
+            .q1-prompt { font-size: 22px; }
+            .q1-res { flex-direction: column; text-align: center; }
+            .q1-miss { justify-content: center; }
+            .s2-scenes { gap: 6px; }
+            .s2-scene-n { font-size: 12px; }
+            .s4-picks { grid-template-columns: 1fr; }
+            .s4-pick { flex-direction: row; align-items: center; }
+            .s4-pick img { width: 84px; aspect-ratio: 1; }
+            .s4-pick-badge { left: auto; right: 36px; }
+            .s4-script p { font-size: 17px !important; }
+            .stg-nav .stg-btn { flex: 1; justify-content: center; }
+            .stg-nav-r { width: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -2584,7 +2811,7 @@
     </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261117"></script>
+<script src="assets/exercise-data.js?v=20261118"></script>
 <script>
     // ===================================================================
     // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
@@ -3048,6 +3275,11 @@
         playSolid: '<path d="M7 4v16l13-8z" fill="currentColor" stroke="none"/>',
         diamond: '<path d="M12 4l8 8-8 8-8-8z" fill="currentColor" stroke="none"/>',
         arrowLeft: '<path d="M19 12H5M12 19l-7-7 7-7"/>',
+        mic: '<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4M8 22h8"/>',
+        download: '<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>',
+        trash: '<path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>',
+        stopSolid: '<rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/>',
+        languages: '<path d="M4 5h8M8 3v2M6 5c0 4 3 7 6 8M10 5c-1 4-4 7-7 8M13 21l4-10 4 10M14.5 18h5"/>',
         arrowRight: '<path d="M5 12h14M12 5l7 7-7 7"/>',
         lock: '<rect x="4.5" y="11" width="15" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
         eye: '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',
@@ -3642,6 +3874,7 @@
     }
 
     function jumpExerciseAudio(t) {
+        _exStopAt = null;
         exAudio.currentTime = t;
         exAudio.playbackRate = exSpeed;
         exAudio.play().catch(() => {});
@@ -3700,6 +3933,7 @@
     }
 
     function _startExerciseAudio(src) {
+        _exStopAt = null;
         if (exAudio.getAttribute('src') !== src) exAudio.src = src;
         exAudio.currentTime = 0;
         exAudio.playbackRate = exSpeed;
@@ -3725,7 +3959,8 @@
             + (info.win.note ? `<div class="exd-note">${ic('message')}<span><b>Lời dặn của giáo viên:</b> ${_escHtml(info.win.note)}</span></div>` : '');
         document.getElementById('exercise-content').insertAdjacentHTML('afterbegin', bar);
         if (!ex.audio) stopExerciseAudio();
-        else if (autoplay) _startExerciseAudio(ex.audio);
+        else if (autoplay && ex.flow !== 'staged') _startExerciseAudio(ex.audio);
+        if (ex.flow === 'staged') _stgAfterRender(ex);
         syncExPlayerUI();
     }
 
@@ -3932,6 +4167,7 @@
                 `<div class="ex-res-btns"><button class="ex-done-view" onclick="showExerciseDonePopup()">${pend ? 'Chi tiết' : 'Xem kết quả'}</button>` +
                 (exOpen && exOpen.locked || pend ? '' : `<button class="ex-reset-btn" onclick="resetExercise()">Làm lại</button>`) + `</div></div>`;
         }
+        if (ex.flow === 'staged') { document.getElementById('exercise-content').innerHTML = html + _stgRender(ex, st); return; }
         const grade = exOpen ? _exGradeOf(exOpen.unit, exOpen.key) : null;
         const needT = exNeedsTeacher(ex), hideRes = needT && !grade;   // bài có tự luận, chưa có kết quả -> ẩn đúng/sai
         const tnote = k => grade && grade.qnotes && grade.qnotes[k] ? `<div class="ex-tnote">${ic('message')}<span><b>Giáo viên:</b> ${_escHtml(grade.qnotes[k])}</span></div>` : '';
@@ -4018,7 +4254,7 @@
 
     function pickExerciseOption(qi, oi) {
         const st = _exState();
-        const canChange = exNeedsTeacher(_exCurrent()) && !(exOpen && _exGradeOf(exOpen.unit, exOpen.key));
+        const canChange = (exNeedsTeacher(_exCurrent()) && !(exOpen && _exGradeOf(exOpen.unit, exOpen.key))) || (_exCurrent() || {}).flow === 'staged';
         if (st.done || (st.picks[qi] !== undefined && !canChange)) return;
         st.picks[qi] = oi;
         _exSave();
@@ -4038,6 +4274,7 @@
         }
         const left = ex.mcq.length - Object.keys(st.picks).length;
         if (left > 0) { _exDialog(() => alert(`Còn ${left} câu trắc nghiệm chưa làm.`)); return; }
+        if (ex.flow === 'staged' && !_stgConfirmSubmit(ex, st)) return;
         const emptyEssay = ex.essay.some((e, ei) => e.fields.some((f, fi) => !String((st.essays[ei] || [])[fi] || '').trim()));
         if (emptyEssay && !_exDialog(() => confirm('Phần tự luận chưa hoàn thành. Vẫn nộp bài?'))) return;
         const mcq = Object.entries(st.picks).filter(([qi, oi]) => ex.mcq[qi].ans === oi).length;
@@ -4047,6 +4284,7 @@
             duration: now - (st.startedAt || now), tabSwitches: st.tabSwitches || 0, awayMs: st.awayMs || 0,
             essays: JSON.parse(JSON.stringify(st.essays || {})),     // lưu kèm bài viết + đáp án đã chọn
             picks: Object.assign({}, st.picks || {}) };             //   để giáo viên xem lại đúng bài đã nộp
+        if (ex.flow === 'staged') { Object.assign(st.done, _stgDoneExtra(ex, st)); st.stage = 3; setTimeout(_recUpload, 300); }
         if (!st.first) st.first = Object.assign({}, st.done);   // lần nộp đầu tiên = điểm chính thức
         _exSave();
         scheduleProgressPush(500); // 📤 gửi kết quả cho giáo viên ngay
@@ -4064,6 +4302,7 @@
         exerciseState[_exKey()] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0,
             first: old.first || old.done || null, attempts: (old.attempts || []).concat(old.done ? [old.done] : []),
             history: old.history || [] };
+        if (old.s1) Object.assign(exerciseState[_exKey()], { s1: old.s1, listened: old.listened, stage: 3, recTakes: old.recTakes || [] }); // bài nhiều bước: không phải học lại biểu hiện
         _exSave();
         renderExerciseMode(false);
     }
@@ -4087,6 +4326,7 @@
         const wrote = ex.essay.filter((e, ei) => ((d.essays || {})[ei] || []).some(v => String(v || '').trim())).length;
         let rows = (ex.mcq.length ? row(ic('list'), 'Trắc nghiệm', pend ? `<b>${Object.keys(d.picks || {}).length}/${ex.mcq.length}</b> câu đã làm` : `<b>${d.mcq}/${ex.mcq.length}</b> câu đúng`) : '') +
             (ex.essay.length ? row(ic('pen'), 'Tự luận', pend ? `<b>${wrote}/${ex.essay.length}</b> câu đã viết` : (gNow ? `<b>${_exNum(gNow.total - gNow.mcq)}/${ex.essay.length}</b> điểm` : `<b>${d.essay}/${ex.essay.length}</b> câu đạt`)) : '');
+        if (ex.flow === 'staged') rows += _stgDoneRows(ex, d, row);
         if (d.duration != null) {
             rows += row(ic('play'), 'Bắt đầu làm', _fmtDoneAt(d.at - d.duration)) +
                 row(ic('flag'), 'Nộp bài', _fmtDoneAt(d.at)) +
@@ -4135,6 +4375,592 @@
             alert('Không chụp tự động được. Vui lòng chụp màn hình thủ công.');
         }
         btn.disabled = false; btn.innerHTML = old;
+    }
+
+    /* ===================== 🪜 BÀI TẬP NHIỀU BƯỚC (flow: 'staged' trong exercise-data.js) =====================
+       Bước 1 Biểu hiện mới (thẻ + quiz) → Bước 2 Nghe 1 lần (tốc độ cố định) → Bước 3 Đọc + O/X trong sách + câu bổ sung
+       → Bước 4 Luyện đọc 1 đoạn, thu âm → Nộp bài. Chỉ mở bước sau khi xong bước trước.
+       Đáp án đúng/sai + bản dịch chỉ hiện SAU KHI NỘP.
+       State bài: stage, s1 {done, first, total, missed}, listened, recTakes [{id,p,dur,at,mime}], recPick.
+       File thu âm lưu trong IndexedDB của máy học viên (không gửi lên server). */
+    const STG_NAMES = ['Biểu hiện mới', 'Nghe bài đọc', 'Đọc & trả lời', 'Luyện đọc & thu âm'];
+    var _exStopAt = null, _exRangeRaf = 0, _exRangeDone = null;
+    let s1View = 'learn', s1Quiz = null, s4Pick = null, s4Rate = 0.8, _s4MsgText = '';
+
+    function _stgShuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function _stgStepDone(ex, st, n) {
+        if (n === 1) return !!(st.s1 && st.s1.done);
+        if (n === 2) return !!st.listened;
+        if (n === 3) return Object.keys(st.picks || {}).length >= ex.mcq.length;
+        return !!st.done;
+    }
+    function _stgMax(ex, st) {
+        if (st.done || isTeacherAccount) return 4;
+        for (let n = 1; n <= 3; n++) if (!_stgStepDone(ex, st, n)) return n;
+        return 4;
+    }
+    function _stgCur(ex, st) { return Math.max(1, Math.min(st.stage || 1, _stgMax(ex, st))); }
+
+    function exGoStage(n) {
+        const ex = _exCurrent(), st = _exState();
+        if (!ex || n > _stgMax(ex, st)) return;
+        _recStop(); _takeStop();
+        stopExerciseAudio(); _exStopAt = null; _exRangeDone = null;
+        try { if (exAudio.currentTime) exAudio.currentTime = 0; } catch (e) {}   // xoá vệt tô chữ của bước trước
+        st.stage = n; _exSave();
+        if (n === 1 && s1View === 'result' && !(st.s1 && st.s1.done)) s1View = 'learn';
+        _s4MsgText = '';
+        renderExerciseMode(false);
+        const c = document.getElementById('exercise-content');
+        if (c) c.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+
+    // ▶️ Phát 1 khúc của file nghe (1 câu / 1 đoạn), tự dừng ở mốc kết thúc
+    function exPlayRange(s, e, rate, onDone) {
+        const ex = _exCurrent(); if (!ex || !ex.audio) return;
+        _takeStop();
+        if (exAudio.getAttribute('src') !== ex.audio) exAudio.src = ex.audio;
+        _exStopAt = e; _exRangeDone = onDone || null;
+        exAudio.currentTime = s;
+        exAudio.playbackRate = rate || exSpeed;
+        exAudio.play().catch(() => {});
+        _exRangeTick();
+    }
+    function _exRangeTick() {
+        cancelAnimationFrame(_exRangeRaf);
+        const tick = () => {
+            if (_exStopAt == null) return;
+            if (exAudio.currentTime >= _exStopAt) {
+                exAudio.pause(); _exStopAt = null;
+                const f = _exRangeDone; _exRangeDone = null; if (f) f();
+                return;
+            }
+            if (!exAudio.paused) _exRangeRaf = requestAnimationFrame(tick);
+        };
+        _exRangeRaf = requestAnimationFrame(tick);
+    }
+    exAudio.addEventListener('play', () => { if (_exStopAt != null) _exRangeTick(); });
+    ['play', 'pause', 'ended', 'timeupdate', 'loadedmetadata'].forEach(ev => exAudio.addEventListener(ev, () => { _s2Sync(ev); _s4SyncModel(); }));
+
+    // ---------- Khung chung: thanh tiến độ 4 bước ----------
+    function _stgRender(ex, st) {
+        const cur = _stgCur(ex, st), max = _stgMax(ex, st);
+        const doneCount = [1, 2, 3, 4].filter(n => _stgStepDone(ex, st, n)).length;
+        let h = `<div class="stg-head"><div class="stg-head-top"><span class="stg-kicker">Bước ${cur}/4</span><b class="stg-title">${STG_NAMES[cur - 1]}</b>`
+            + `<span class="stg-pct">${Math.round(doneCount / 4 * 100)}% hoàn thành</span></div>`
+            + `<div class="stg-bar"><i style="width:${doneCount / 4 * 100}%"></i></div><div class="stg-steps">`
+            + STG_NAMES.map((name, i) => {
+                const n = i + 1, ok = _stgStepDone(ex, st, n), lock = n > max;
+                return `<button class="stg-step${n === cur ? ' on' : ''}${ok ? ' ok' : ''}${lock ? ' lock' : ''}" ${lock ? 'disabled' : ''} onclick="exGoStage(${n})">`
+                    + `<span class="stg-dot">${ok ? ic('check') : lock ? ic('lock') : n}</span><span class="stg-lbl">${name}</span></button>`;
+            }).join('') + `</div></div>`;
+        if (st.done) h += _recUpHtml(st);
+        h += `<div class="stg-body">` + [_s1Render, _s2Render, _s3Render, _s4Render][cur - 1](ex, st) + `</div>`;
+        return h;
+    }
+    function _stgAfterRender(ex) {
+        const st = _exState(), cur = _stgCur(ex, st);
+        if (cur === 2) _s2Sync();
+        if (cur === 4) { _s4SyncModel(); _s4RefreshRecUI(); }
+        // Bài đã nộp nhưng bản thu chưa gửi được (mất mạng, đóng trang…) -> tự gửi lại 1 lần mỗi lần mở trang
+        if (st.done && !(st.recUp && st.recUp.ok && st.recUp.take === st.recPick) && !_recUpTried[_exKey()]) { _recUpTried[_exKey()] = 1; setTimeout(_recUpload, 800); }
+    }
+    function _stgNav(back, nextHtml) {
+        return `<div class="stg-nav">${back ? `<button class="stg-btn ghost" onclick="exGoStage(${back})">${ic('arrowLeft')} Bước ${back}</button>` : '<span></span>'}${nextHtml || ''}</div>`;
+    }
+    function _stgMark(text, hl) {
+        const t = _escHtml(text);
+        return hl ? t.replace(_escHtml(hl), '<mark>' + _escHtml(hl) + '</mark>') : t;
+    }
+
+    // ---------- BƯỚC 1: BIỂU HIỆN MỚI + QUIZ ----------
+    function _s1Render(ex, st) {
+        if (s1View === 'quiz' && s1Quiz) return _s1QuizHtml(ex);
+        if (s1View === 'result' && st.s1 && st.s1.done) return _s1ResultHtml(ex, st);
+        const n = ex.vocab.length;
+        let h = `<div class="stg-intro"><span class="stg-intro-ic">${ic('sparkles')}</span><div><b>Làm quen ${n} biểu hiện mới trong bài đọc</b>`
+            + `<span>Đọc nghĩa, bấm ${ic('speaker')} để nghe phát âm, bấm vào câu ví dụ để nghe câu đó trong bài. Sau đó làm quiz nhỏ để kiểm tra.</span></div></div>`;
+        h += `<div class="voc-grid">` + ex.vocab.map((v, i) => `<div class="voc-card">`
+            + `<div class="voc-top"><span class="voc-n">${String(i + 1).padStart(2, '0')}</span>`
+            + `<button class="voc-say" title="Nghe phát âm" onclick="_s1Say(${i}, this)">${ic('speaker')}</button></div>`
+            + `<div class="voc-ko">${_escHtml(v.ko)}</div><div class="voc-vi">${_escHtml(v.vi)}</div>`
+            + (v.ex ? `<button class="voc-ex" onclick="_s1Ctx(${i})" title="Nghe câu này trong bài">${ic('playSolid')}<span>${_stgMark(v.ex, v.hl)}</span></button>` : '')
+            + `</div>`).join('') + `</div>`;
+        const done = st.s1 && st.s1.done;
+        h += _stgNav(0, `<div class="stg-nav-r">${done ? `<span class="stg-note">${ic('checkCircle')} Quiz: đúng ngay lần đầu ${st.s1.first}/${st.s1.total}</span>` : ''}`
+            + `<button class="stg-btn${done ? ' ghost' : ''}" onclick="s1StartQuiz()">${done ? 'Làm lại quiz' : `Làm quiz kiểm tra · ${n} câu`} ${ic('arrowRight')}</button>`
+            + (done ? `<button class="stg-btn" onclick="exGoStage(2)">Tiếp: Nghe bài đọc ${ic('arrowRight')}</button>` : '') + `</div>`);
+        return h;
+    }
+    function _s1Say(i, btn) { const v = _exCurrent().vocab[i]; triggerKoreanVoice(v.ko.replace(/\s*\+.*$/, ''), false, btn); }
+    function _s1Ctx(i) { const v = _exCurrent().vocab[i]; if (v.t) exPlayRange(v.t[0], v.t[1] + 0.15, 0.8); }
+    function _s1MakeQ(ex, i, type) {
+        const others = _stgShuffle(ex.vocab.map((_, j) => j).filter(j => j !== i)).slice(0, 3);
+        return { i, type, opts: _stgShuffle([i, ...others]) };
+    }
+    function s1StartQuiz() {
+        const ex = _exCurrent();
+        s1Quiz = { queue: _stgShuffle(ex.vocab.map((_, i) => i)).map((i, k) => _s1MakeQ(ex, i, k % 2 ? 'vi2ko' : 'ko2vi')),
+            pos: 0, picked: null, wrong: new Set(), total: ex.vocab.length };
+        s1View = 'quiz'; stopExerciseAudio();
+        renderExerciseMode(false);
+    }
+    function _s1QuizHtml(ex) {
+        const q = s1Quiz.queue[s1Quiz.pos], v = ex.vocab[q.i], ko2vi = q.type === 'ko2vi';
+        const answered = s1Quiz.picked != null, ok = answered && q.opts[s1Quiz.picked] === q.i;
+        const pct = Math.round(s1Quiz.pos / s1Quiz.queue.length * 100);
+        let h = `<div class="q1"><div class="q1-head"><span>Câu ${s1Quiz.pos + 1}/${s1Quiz.queue.length}</span><div class="q1-bar"><i style="width:${pct}%"></i></div>`
+            + `<button class="q1-link" onclick="s1View='learn';renderExerciseMode(false)">Xem lại thẻ</button></div>`
+            + `<div class="q1-card"><div class="q1-ask">${ko2vi ? 'Chọn nghĩa đúng của biểu hiện' : 'Chọn biểu hiện tiếng Hàn đúng'}</div>`
+            + `<div class="q1-prompt ${ko2vi ? 'ko' : 'vi'}">${_escHtml(ko2vi ? v.ko : v.vi)}</div><div class="q1-opts">`
+            + q.opts.map((j, oi) => {
+                let c = 'q1-opt' + (ko2vi ? '' : ' ko');
+                if (answered && j === q.i) c += ' correct'; else if (answered && oi === s1Quiz.picked) c += ' wrong';
+                return `<button class="${c}" ${answered ? 'disabled' : ''} onclick="s1Pick(${oi})"><span class="q1-k">${oi + 1}</span>${_escHtml(ko2vi ? ex.vocab[j].vi : ex.vocab[j].ko)}</button>`;
+            }).join('') + `</div>`;
+        if (answered) h += `<div class="q1-fb ${ok ? 'ok' : 'no'}"><span>${ok ? ic('check') + ' Chính xác!' : ic('x') + ' Chưa đúng. Câu này sẽ được hỏi lại ở cuối.'}</span>`
+            + `<span class="q1-ex">${_stgMark(v.ex, v.hl)}</span></div>`
+            + `<button class="stg-btn q1-next" id="q1-next" onclick="s1Next()">${s1Quiz.pos + 1 >= s1Quiz.queue.length ? 'Xem kết quả' : 'Câu tiếp theo'} ${ic('arrowRight')}</button>`;
+        return h + `</div><div class="q1-tip">Mẹo: dùng phím 1–4 để chọn, Enter để qua câu.</div></div>`;
+    }
+    function s1Pick(oi) {
+        if (!s1Quiz || s1Quiz.picked != null) return;
+        const ex = _exCurrent(), q = s1Quiz.queue[s1Quiz.pos];
+        s1Quiz.picked = oi;
+        const ok = q.opts[oi] === q.i;
+        if (!ok) { s1Quiz.wrong.add(q.i); s1Quiz.queue.push(_s1MakeQ(ex, q.i, q.type === 'ko2vi' ? 'vi2ko' : 'ko2vi')); }
+        try { const a = new Audio(ok ? SND_CORRECT : SND_WRONG); a.volume = 0.5; a.play().catch(() => {}); } catch (e) {}
+        renderExerciseMode(false);
+        const nb = document.getElementById('q1-next'); if (nb) nb.focus({ preventScroll: true });
+    }
+    function s1Next() {
+        if (!s1Quiz || s1Quiz.picked == null) return;
+        s1Quiz.pos++; s1Quiz.picked = null;
+        if (s1Quiz.pos >= s1Quiz.queue.length) {
+            const ex = _exCurrent(), st = _exState();
+            st.s1 = { done: true, first: s1Quiz.total - s1Quiz.wrong.size, total: s1Quiz.total, missed: [...s1Quiz.wrong].map(i => ex.vocab[i].ko), at: Date.now() };
+            _exSave(); s1Quiz = null; s1View = 'result';
+        }
+        renderExerciseMode(false);
+    }
+    document.addEventListener('keydown', e => {
+        if (s1View !== 'quiz' || !s1Quiz || !document.querySelector('.q1')) return;
+        if (/^[1-4]$/.test(e.key) && s1Quiz.picked == null) { e.preventDefault(); s1Pick(Number(e.key) - 1); }
+        else if (e.key === 'Enter' && s1Quiz.picked != null) { e.preventDefault(); s1Next(); }
+    });
+    function _s1ResultHtml(ex, st) {
+        const r = st.s1, pct = Math.round(r.first / r.total * 100);
+        return `<div class="q1-res"><div class="exh-ring" style="--p:${pct}"><b>${r.first}/${r.total}</b><small>lần đầu</small></div>`
+            + `<div class="q1-res-t"><b>${pct >= 80 ? 'Rất tốt! Đã nhớ gần hết biểu hiện mới.' : 'Đã hoàn thành quiz biểu hiện.'}</b>`
+            + `<span>Đúng ngay lần đầu ${r.first}/${r.total} biểu hiện. Các câu sai đã được hỏi lại cho đến khi đúng.</span>`
+            + (r.missed && r.missed.length ? `<div class="q1-miss"><small>Cần ôn thêm:</small>${r.missed.map(k => `<span>${_escHtml(k)}</span>`).join('')}</div>` : '')
+            + `</div></div>`
+            + _stgNav(0, `<div class="stg-nav-r"><button class="stg-btn ghost" onclick="s1View='learn';renderExerciseMode(false)">Xem lại thẻ</button>`
+            + `<button class="stg-btn" onclick="exGoStage(2)">Tiếp: Nghe bài đọc ${ic('arrowRight')}</button></div>`);
+    }
+
+    // ---------- BƯỚC 2: NGHE 1 LẦN (tốc độ cố định, chưa hiện chữ) ----------
+    function _s2Render(ex, st) {
+        const rate = ex.listenSpeed || 0.8;
+        return `<div class="s2" id="s2-root"><div class="s2-card">`
+            + `<div class="s2-badge">${ic('headphones')} Nghe toàn bài · tốc độ ${rate}x</div>`
+            + `<h3>Nghe trước, chưa nhìn chữ</h3>`
+            + `<p>Khi nghe, hãy chú ý: ở mỗi nơi, việc gì <b>được làm</b> và việc gì <b>không được làm</b>?</p>`
+            + `<div class="s2-scenes">` + ex.passages.map((p, i) => `<div class="s2-scene" data-i="${i}">`
+                + (p.img ? `<img src="${p.img}" alt="" loading="lazy">` : '') + `<span class="s2-scene-n">${_escHtml(p.name)}</span><span class="s2-scene-s"></span></div>`).join('') + `</div>`
+            + `<div class="s2-player"><button class="s2-play" id="s2-play" onclick="s2Toggle()"></button>`
+            + `<div class="s2-track"><i id="s2-fill"></i></div><span class="s2-time" id="s2-time">0:00</span></div>`
+            + `<div class="s2-msg" id="s2-msg"></div></div>`
+            + _stgNav(1, `<button class="stg-btn" id="s2-next" ${st.listened ? '' : 'disabled'} onclick="exGoStage(3)">Tiếp: Đọc & trả lời ${ic('arrowRight')}</button>`)
+            + `</div>`;
+    }
+    function s2Toggle() {
+        const ex = _exCurrent(); if (!ex) return;
+        _exStopAt = null;
+        if (exAudio.getAttribute('src') !== ex.audio) exAudio.src = ex.audio;
+        if (exAudio.paused) {
+            if (exAudio.ended) exAudio.currentTime = 0;
+            exAudio.playbackRate = ex.listenSpeed || 0.8;
+            exAudio.play().catch(() => {});
+        } else exAudio.pause();
+    }
+    function _s2Sync(ev) {
+        const root = document.getElementById('s2-root'); if (!root) return;
+        const ex = _exCurrent(), st = _exState(); if (!ex) return;
+        const mine = exAudio.getAttribute('src') === ex.audio, t = mine ? exAudio.currentTime : 0, d = (mine && exAudio.duration) || 0;
+        const playing = mine && !exAudio.paused && !exAudio.ended;
+        if (ev === 'ended' && mine && !st.listened) { st.listened = true; _exSave(); renderExerciseMode(false); return; }
+        const btn = document.getElementById('s2-play');
+        if (btn.dataset.state !== String(playing)) {
+            btn.dataset.state = String(playing);
+            btn.innerHTML = playing ? ic('pause') : ic('playSolid');
+            btn.setAttribute('aria-label', playing ? 'Tạm dừng' : 'Phát');
+        }
+        document.getElementById('s2-fill').style.width = (d ? t / d * 100 : 0) + '%';
+        document.getElementById('s2-time').innerText = _fmtTime(t) + (d ? ' / ' + _fmtTime(d) : '');
+        root.querySelectorAll('.s2-scene').forEach((el, i) => {
+            const p = ex.passages[i], now = playing && t >= p.start && t <= p.end + 1, heard = st.listened || t > p.end;
+            el.classList.toggle('now', now); el.classList.toggle('heard', heard && !now);
+            el.querySelector('.s2-scene-s').innerHTML = now ? 'Đang nghe' : heard ? ic('check') + ' Đã nghe' : '';
+        });
+        document.getElementById('s2-msg').innerHTML = st.listened
+            ? `${ic('checkCircle')} Đã nghe xong. Có thể nghe lại hoặc qua bước tiếp theo.`
+            : (t > 0 ? 'Nghe hết bài để mở bước tiếp theo.' : 'Bấm nút phát để bắt đầu nghe.');
+        document.getElementById('s2-next').disabled = !st.listened;
+    }
+
+    // ---------- BƯỚC 3: ĐỌC + O/X (sách) + CÂU HỎI BỔ SUNG ----------
+    function _s3Render(ex, st) {
+        const fin = st.done, picks = st.picks || {};
+        let h = `<div class="ex-player s3-player">`
+            + '<button class="ex-play-btn" id="ex-play-btn" onclick="toggleExerciseAudio()"></button>'
+            + '<input type="range" class="ex-seek" id="ex-seek" min="0" max="1000" value="0" oninput="this.dataset.dragging=1" onchange="delete this.dataset.dragging; seekExerciseAudio(this.value)">'
+            + '<span class="ex-time" id="ex-time">0:00 / 0:00</span>'
+            + '<div class="ex-speeds">' + EX_SPEEDS.map(s => `<button class="ex-speed-btn" data-speed="${s}" onclick="setExerciseSpeed(${s})">${s}x</button>`).join('') + '</div>'
+            + '<div class="ex-marks"><span>Nghe đoạn:</span>' + ex.passages.map(p =>
+                `<button class="ex-mark-btn" data-start="${p.start}" onclick="jumpExerciseAudio(${p.start})">${ic('playSolid')} ${_escHtml(p.name)}</button>`).join('') + '</div></div>';
+        h += `<div class="ex-block-title">Phần 1 · Đọc đoạn văn và chọn O (đúng) / X (sai)</div>`;
+        const oxBtn = (qi, m, oi, label) => {
+            let c = 'ox-btn ' + (oi ? 'x' : 'o');
+            if (!fin) { if (picks[qi] === oi) c += ' picked'; }
+            else if (oi === m.ans) c += ' correct'; else if (picks[qi] === oi) c += ' wrong';
+            return `<button class="${c}" ${fin ? 'disabled' : ''} aria-label="${oi ? 'Sai' : 'Đúng'}" onclick="pickExerciseOption(${qi}, ${oi})">${label}</button>`;
+        };
+        let oxN = 0;
+        ex.passages.forEach((p, pi) => {
+            h += `<div class="s3-pass"><div class="s3-pass-main">`
+                + (p.img ? `<img class="s3-img" src="${p.img}" alt="" loading="lazy">` : '')
+                + `<div class="ex-passage"><div class="ex-passage-name">${_escHtml(p.name)} <button class="ex-passage-play" title="Nghe đoạn này" onclick="jumpExerciseAudio(${p.start})">${ic('headphones')}</button></div>`
+                + `<p>${p.segs.map(sg => _renderSeg(sg, ex.glossary)).join(' ')}</p>`
+                + (fin && p.vi ? `<div class="s3-vi">${ic('languages')}<span><b>Dịch:</b> ${_escHtml(p.vi)}</span></div>` : '')
+                + `</div></div><div class="s3-ox">`;
+            ex.mcq.forEach((m, qi) => {
+                if (!m.ox || m.p !== pi) return;
+                const ok = fin && picks[qi] === m.ans;
+                h += `<div class="s3-ox-row${fin ? (ok ? ' ok' : ' no') : ''}"><span class="s3-ox-n">${EX_CIRCLED[oxN++ % 2]}</span>`
+                    + `<span class="s3-ox-q">${_escHtml(m.q)}</span><span class="s3-ox-btns">${oxBtn(qi, m, 0, 'O')}${oxBtn(qi, m, 1, '✕')}</span>`
+                    + (fin ? `<div class="s3-why">${ok ? ic('check') + ' Đúng' : ic('x') + ' Chưa đúng — đáp án ' + (m.ans ? 'X' : 'O')}${m.why ? ` · <span>${_escHtml(m.why)}</span>` : ''}</div>` : '')
+                    + `</div>`;
+            });
+            oxN = 0;
+            h += `</div></div>`;
+        });
+        h += `<div class="ex-gloss-tip">${ic('bulb')} Chạm vào từ gạch chân để xem nghĩa.</div>`;
+        h += `<div class="ex-block-title">Phần 2 · Câu hỏi bổ sung</div>`;
+        let k = 0;
+        ex.mcq.forEach((m, qi) => {
+            if (m.ox) return;
+            const pick = picks[qi];
+            h += `<div class="ex-q"><div class="ex-q-head">Câu ${++k}. ${_escHtml(m.q)}</div>` + (m.sub ? `<div class="ex-q-sub">${_escHtml(m.sub)}</div>` : '')
+                + '<div class="ex-opts">' + m.opts.map((o, oi) => {
+                    let c = 'ex-opt';
+                    if (!fin) { if (oi === pick) c += ' picked'; }
+                    else if (oi === m.ans) c += ' correct'; else if (oi === pick) c += ' wrong';
+                    return `<button class="${c}" ${fin ? 'disabled' : ''} onclick="pickExerciseOption(${qi}, ${oi})">${EX_CIRCLED[oi]} ${_escHtml(o)}</button>`;
+                }).join('') + '</div>'
+                + (fin ? `<div class="ex-fb ${pick === m.ans ? 'ok' : 'no'}">${pick === m.ans ? ic('check') + ' Chính xác!' : `${ic('x')} Chưa đúng — đáp án là ${EX_CIRCLED[m.ans]}`}</div>`
+                    + (m.why ? `<div class="s3-why plain">${ic('bulb')} <span>${_escHtml(m.why)}</span></div>` : '') : '')
+                + '</div>';
+        });
+        const answered = Object.keys(picks).length, all = answered >= ex.mcq.length;
+        h += _stgNav(2, `<div class="stg-nav-r"><span class="stg-note">${fin ? '' : `Đã làm ${answered}/${ex.mcq.length} câu`}</span>`
+            + `<button class="stg-btn" ${all ? '' : 'disabled'} onclick="exGoStage(4)">Tiếp: Luyện đọc & thu âm ${ic('arrowRight')}</button></div>`);
+        if (!fin) h += `<div class="ex-submit-note" style="text-align:right">Đáp án và bản dịch hiện sau khi nộp bài (ở bước 4).</div>`;
+        return h;
+    }
+
+    // ---------- BƯỚC 4: LUYỆN ĐỌC & THU ÂM ----------
+    function _s4Takes(st, p) { return (st.recTakes || []).filter(t => p == null || t.p === p).sort((a, b) => b.at - a.at); }
+    function _s4Render(ex, st) {
+        if (s4Pick == null) { const ch = (st.recTakes || []).find(t => t.id === st.recPick); s4Pick = ch ? ch.p : 0; }
+        const p = ex.passages[s4Pick], takes = _s4Takes(st, s4Pick);
+        let h = `<div class="stg-intro"><span class="stg-intro-ic">${ic('mic')}</span><div><b>Chọn 1 đoạn để luyện đọc thành tiếng</b>`
+            + `<span>Nghe mẫu → thu âm giọng đọc → nghe lại và so sánh. Có thể thu nhiều lần rồi chọn bản tốt nhất để nộp.</span>`
+            + `<span class="s4-privacy">${ic('lock')} Bản thu được nộp kèm bài, chỉ gửi riêng cho giáo viên, không công khai.</span></div></div>`;
+        h += `<div class="s4-picks" role="radiogroup">` + ex.passages.map((q, i) => {
+            const n = _s4Takes(st, i).length;
+            return `<button class="s4-pick${i === s4Pick ? ' on' : ''}" role="radio" aria-checked="${i === s4Pick}" onclick="s4Choose(${i})">`
+                + (q.img ? `<img src="${q.img}" alt="" loading="lazy">` : '')
+                + `<span class="s4-pick-t"><b>${_escHtml(q.name)}</b><small>${q.segs.length} câu · ${Math.round(q.end - q.start)} giây</small></span>`
+                + (n ? `<span class="s4-pick-badge">${ic('mic')} ${n}</span>` : '') + `<span class="s4-pick-radio"></span></button>`;
+        }).join('') + `</div>`;
+        h += `<div class="s4-studio">`
+            + `<div class="s4-sec"><span class="s4-step">1</span><b>Nghe mẫu</b><span class="s4-sub">Chạm vào từng câu để nghe riêng câu đó.</span></div>`
+            + `<div class="s4-script ex-passage" id="s4-script"><p>${p.segs.map(sg => _renderSeg(sg, null)).join(' ')}</p></div>`
+            + `<div class="s4-model"><button class="s4-btn" id="s4-model-btn" onclick="s4PlayModel()">${ic('headphones')} Nghe mẫu cả đoạn</button>`
+            + `<div class="ex-speeds">${[0.6, 0.8, 1].map(r => `<button class="ex-speed-btn${r === s4Rate ? ' active' : ''}" onclick="s4SetRate(${r})">${r}x</button>`).join('')}</div></div>`
+            + `<div class="s4-sec"><span class="s4-step">2</span><b>Thu âm</b><span class="s4-sub">Đọc rõ ràng, không cần nhanh. Tối đa 2 phút.</span></div>`
+            + `<div class="s4-rec" id="s4-rec"><button class="s4-mic" id="s4-mic" onclick="s4ToggleRec()" aria-label="Thu âm"></button>`
+            + `<div class="s4-rec-mid"><div class="s4-rec-state" id="s4-rec-state"></div><canvas class="s4-meter" id="s4-meter"></canvas></div>`
+            + `<span class="s4-rec-time" id="s4-rec-time">0:00</span></div>`
+            + `<div class="s4-msg${_s4MsgText ? ' show' : ''}" id="s4-msg">${_s4MsgText}</div>`
+            + `<div class="s4-sec"><span class="s4-step">3</span><b>Nghe lại & chọn bản nộp</b></div>`
+            + (takes.length ? `<div class="s4-takes">` + takes.map((t, k) => {
+                const on = t.id === st.recPick;
+                return `<div class="s4-take${on ? ' on' : ''}"><button class="s4-take-play" data-take="${t.id}" onclick="s4PlayTake('${t.id}')" aria-label="Nghe bản thu">${ic('playSolid')}</button>`
+                    + `<span class="s4-take-t"><b>Bản thu ${takes.length - k}</b><small>${_fmtTime(t.dur)} · ${_fmtDoneAt(t.at).split(',')[0]}</small></span>`
+                    + `<span class="s4-take-acts"><button class="s4-chip" onclick="s4Compare('${t.id}')">${ic('swap')} So với mẫu</button>`
+                    + `<button class="s4-chip${on ? ' sel' : ''}" onclick="s4PickTake('${t.id}')">${on ? ic('check') + ' Bản nộp' : 'Chọn nộp'}</button>`
+                    + `<button class="s4-ico" title="Lưu file / gửi giáo viên" onclick="s4SaveTake('${t.id}')">${ic('download')}</button>`
+                    + `<button class="s4-ico" title="Xóa bản thu" onclick="s4DelTake('${t.id}')">${ic('trash')}</button></span></div>`;
+            }).join('') + `</div>` : `<div class="s4-empty">Chưa có bản thu cho đoạn này.</div>`)
+            + `</div>`;
+        const pickT = (st.recTakes || []).find(t => t.id === st.recPick);
+        if (st.done) h += _stgNav(3, `<button class="stg-btn" onclick="exGoStage(3)">Xem đáp án & bản dịch ${ic('arrowRight')}</button>`);
+        else h += _stgNav(3, `<div class="stg-nav-r"><span class="stg-note">${pickT ? `${ic('mic')} Bản nộp: ${_escHtml(ex.passages[pickT.p].name)} · ${_fmtTime(pickT.dur)}` : 'Chưa chọn bản thu'}</span>`
+            + `<button class="stg-btn submit" onclick="submitExercise()">${ic('flag')} Nộp bài</button></div>`)
+            + `<div class="ex-submit-note" style="text-align:right">Nộp xong sẽ hiện điểm, đáp án và bản dịch đầy đủ.</div>`;
+        return h;
+    }
+    function _s4Msg(t) { _s4MsgText = t || ''; const m = document.getElementById('s4-msg'); if (m) { m.innerHTML = _s4MsgText; m.classList.toggle('show', !!_s4MsgText); } }
+    function s4Choose(i) { if (_rec) return; _takeStop(); stopExerciseAudio(); _exStopAt = null; s4Pick = i; _s4MsgText = ''; renderExerciseMode(false); }
+    function s4SetRate(r) { s4Rate = r; document.querySelectorAll('.s4-model .ex-speed-btn').forEach(b => b.classList.toggle('active', b.textContent === r + 'x')); }
+    function s4PlayModel() {
+        const ex = _exCurrent(), p = ex.passages[s4Pick];
+        if (_exStopAt != null && !exAudio.paused) { exAudio.pause(); _exStopAt = null; _exRangeDone = null; return; }
+        exPlayRange(p.segs[0][0], p.segs[p.segs.length - 1][1] + 0.2, s4Rate);
+    }
+    function _s4SyncModel() {
+        const b = document.getElementById('s4-model-btn'); if (!b) return;
+        _syncKaraoke();
+        if (!exAudio.paused && !_karaokeRaf) _karaokeRaf = requestAnimationFrame(_karaokeLoop);
+        const on = _exStopAt != null && !exAudio.paused;
+        if (b.dataset.on !== String(on)) { b.dataset.on = String(on); b.innerHTML = on ? ic('pause') + ' Dừng nghe mẫu' : ic('headphones') + ' Nghe mẫu cả đoạn'; }
+    }
+    // Chạm vào 1 câu trong khung bước 4 -> nghe câu đó
+    document.addEventListener('click', e => {
+        const seg = e.target.closest && e.target.closest('#s4-script .ex-seg');
+        if (!seg || _rec) return;
+        exPlayRange(Number(seg.dataset.s), Number(seg.dataset.e) + 0.15, s4Rate);
+    });
+
+    // 🎙️ Ghi âm (MediaRecorder) + đồng hồ + thanh mức âm thanh
+    let _rec = null, _recBlobs = {};
+    function _recSupported() { return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder); }
+    async function s4ToggleRec() {
+        if (_rec) { _recStop(); return; }
+        _takeStop(); stopExerciseAudio(); _exStopAt = null; _s4Msg('');
+        if (!_recSupported()) { _s4Msg('Trình duyệt này chưa hỗ trợ thu âm. Vui lòng dùng Chrome hoặc Safari bản mới.'); return; }
+        let stream;
+        _exDialogOpen = true;   // hộp xin quyền micro không tính là chuyển tab
+        try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }); }
+        catch (e) {
+            _s4Msg(e && e.name === 'NotAllowedError'
+                ? 'Chưa cho phép dùng micro. Bấm biểu tượng ổ khóa cạnh địa chỉ trang, cho phép Micro rồi thử lại.'
+                : 'Không mở được micro. Vui lòng kiểm tra micro / tai nghe rồi thử lại.');
+            return;
+        } finally { setTimeout(() => { _exDialogOpen = false; }, 400); }
+        const mime = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg'].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
+        let mr;
+        try { mr = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined); } catch (e) { mr = new MediaRecorder(stream); }
+        const r = _rec = { mr, stream, chunks: [], t0: Date.now(), p: s4Pick, mime: mr.mimeType || mime || 'audio/webm', levels: [] };
+        mr.ondataavailable = e => { if (e.data && e.data.size) r.chunks.push(e.data); };
+        mr.onstop = () => _recFinish(r);
+        mr.start(250);
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const an = ctx.createAnalyser(); an.fftSize = 1024;
+            ctx.createMediaStreamSource(stream).connect(an);
+            r.ctx = ctx; r.an = an; r.buf = new Uint8Array(an.fftSize);
+        } catch (e) {}
+        r.timer = setInterval(() => { if (Date.now() - r.t0 >= 120000) _recStop(); else _s4RefreshRecUI(); }, 200);
+        _recDraw();
+        _s4RefreshRecUI();
+    }
+    function _recStop() {
+        const r = _rec; if (!r) return;
+        _rec = null;
+        clearInterval(r.timer); cancelAnimationFrame(r.raf);
+        r.dur = (Date.now() - r.t0) / 1000;
+        try { if (r.mr.state !== 'inactive') r.mr.stop(); } catch (e) {}
+        r.stream.getTracks().forEach(t => t.stop());
+        if (r.ctx) r.ctx.close().catch(() => {});
+        _s4RefreshRecUI();
+    }
+    function _recDraw() {
+        const r = _rec, cv = document.getElementById('s4-meter');
+        if (!r) return;
+        r.raf = requestAnimationFrame(_recDraw);
+        if (!cv) return;
+        const dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight;
+        if (cv.width !== Math.round(w * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+        let lvl = 0;
+        if (r.an) { r.an.getByteTimeDomainData(r.buf); let sum = 0; for (let i = 0; i < r.buf.length; i++) { const v = (r.buf[i] - 128) / 128; sum += v * v; } lvl = Math.min(1, Math.sqrt(sum / r.buf.length) * 4); }
+        r.levels.push(lvl);
+        const g = cv.getContext('2d'), bw = 3 * dpr, gap = 2 * dpr, n = Math.floor(cv.width / (bw + gap));
+        if (r.levels.length > n) r.levels.splice(0, r.levels.length - n);
+        g.clearRect(0, 0, cv.width, cv.height);
+        g.fillStyle = '#e53e3e';
+        r.levels.forEach((v, i) => {
+            const bh = Math.max(2 * dpr, v * cv.height);
+            g.fillRect(cv.width - (r.levels.length - i) * (bw + gap), (cv.height - bh) / 2, bw, bh);
+        });
+    }
+    function _s4RefreshRecUI() {
+        const btn = document.getElementById('s4-mic'); if (!btn) return;
+        const on = !!_rec;
+        btn.classList.toggle('on', on);
+        btn.innerHTML = on ? ic('stopSolid') : ic('mic');
+        btn.setAttribute('aria-label', on ? 'Dừng thu âm' : 'Bắt đầu thu âm');
+        document.getElementById('s4-rec').classList.toggle('on', on);
+        document.getElementById('s4-rec-state').innerHTML = on ? '<span class="s4-dot"></span> Đang thu âm… bấm nút để dừng' : 'Bấm micro để bắt đầu thu âm';
+        document.getElementById('s4-rec-time').innerText = _fmtTime(on ? (Date.now() - _rec.t0) / 1000 : 0);
+        if (!on) { const cv = document.getElementById('s4-meter'); if (cv) cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); }
+    }
+    function _recId() { return _exStoreKey(_exKey()) + '|' + Date.now(); }
+    async function _recFinish(r) {
+        const blob = new Blob(r.chunks, { type: (r.mime || '').split(';')[0] || 'audio/webm' });
+        if (r.dur < 1 || !blob.size) { _s4Msg('Bản thu quá ngắn. Vui lòng thu lại.'); return; }
+        const st = _exState(), id = _recId();
+        _recBlobs[id] = blob;
+        await _recDbPut(id, blob);
+        st.recTakes = (st.recTakes || []).concat([{ id, p: r.p, dur: Math.round(r.dur * 10) / 10, at: Date.now(), mime: blob.type }]);
+        // Giữ tối đa 3 bản / đoạn (bỏ bản cũ nhất không phải bản nộp)
+        const mine = _s4Takes(st, r.p);
+        if (mine.length > 3) {
+            const drop = mine.slice(3).filter(t => t.id !== st.recPick && t.id !== id);
+            drop.forEach(t => _recDbDel(t.id));
+            st.recTakes = st.recTakes.filter(t => !drop.includes(t));
+        }
+        if (!st.done) st.recPick = id;   // bản mới nhất tự thành bản nộp (có thể đổi)
+        _exSave();
+        _s4MsgText = `${ic('checkCircle')} Đã lưu bản thu. Bấm ${ic('playSolid')} để nghe lại.`;
+        const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
+    }
+    // IndexedDB: lưu file thu âm trên máy (không gửi lên server)
+    function _recDb() {
+        return new Promise((ok, no) => {
+            const q = indexedDB.open('thth2_rec', 1);
+            q.onupgradeneeded = () => q.result.createObjectStore('takes');
+            q.onsuccess = () => ok(q.result); q.onerror = () => no(q.error);
+        });
+    }
+    async function _recDbPut(id, blob) { try { const db = await _recDb(); await new Promise(ok => { const tx = db.transaction('takes', 'readwrite'); tx.objectStore('takes').put(blob, id); tx.oncomplete = ok; tx.onerror = ok; }); } catch (e) {} }
+    async function _recDbGet(id) { if (_recBlobs[id]) return _recBlobs[id]; try { const db = await _recDb(); return await new Promise(ok => { const q = db.transaction('takes').objectStore('takes').get(id); q.onsuccess = () => ok(q.result || null); q.onerror = () => ok(null); }); } catch (e) { return null; } }
+    async function _recDbDel(id) { delete _recBlobs[id]; try { const db = await _recDb(); db.transaction('takes', 'readwrite').objectStore('takes').delete(id); } catch (e) {} }
+
+    // Nghe lại bản thu
+    const _takeAudio = new Audio();
+    let _takeId = null;
+    ['play', 'pause', 'ended'].forEach(ev => _takeAudio.addEventListener(ev, () => {
+        const playing = !_takeAudio.paused && !_takeAudio.ended;
+        document.querySelectorAll('.s4-take-play').forEach(b => {
+            const on = playing && b.dataset.take === _takeId;
+            b.classList.toggle('on', on); b.innerHTML = on ? ic('pause') : ic('playSolid');
+        });
+    }));
+    function _takeStop() { if (!_takeAudio.paused) _takeAudio.pause(); }
+    async function s4PlayTake(id) {
+        if (_rec) return;
+        if (_takeId === id && !_takeAudio.paused) { _takeAudio.pause(); return; }
+        stopExerciseAudio(); _exStopAt = null; _exRangeDone = null;
+        const blob = await _recDbGet(id);
+        if (!blob) { _s4Msg('Không tìm thấy file của bản thu này trên thiết bị (có thể đã thu trên máy khác).'); return; }
+        if (_takeId !== id) { if (_takeAudio.src) URL.revokeObjectURL(_takeAudio.src); _takeAudio.src = URL.createObjectURL(blob); _takeId = id; }
+        _takeAudio.currentTime = 0;
+        _takeAudio.play().catch(() => {});
+    }
+    function s4Compare(id) {
+        const ex = _exCurrent(), t = (_exState().recTakes || []).find(x => x.id === id); if (!t) return;
+        const p = ex.passages[t.p];
+        _s4Msg(`${ic('headphones')} Đang phát giọng mẫu, sau đó phát bản thu của bạn.`);
+        exPlayRange(p.segs[0][0], p.segs[p.segs.length - 1][1] + 0.2, s4Rate, () => { _s4Msg(`${ic('mic')} Bản thu của bạn:`); s4PlayTake(id); });
+    }
+    function s4PickTake(id) {
+        const st = _exState(); if (st.done) { _s4Msg('Bài đã nộp nên không đổi được bản nộp.'); return; }
+        st.recPick = id; _exSave();
+        const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
+    }
+    function s4DelTake(id) {
+        const st = _exState();
+        if (st.done && id === st.recPick) { _s4Msg('Đây là bản đã nộp nên không xóa được.'); return; }
+        if (!_exDialog(() => confirm('Xóa bản thu này?'))) return;
+        if (_takeId === id) { _takeStop(); _takeId = null; }
+        _recDbDel(id);
+        st.recTakes = (st.recTakes || []).filter(t => t.id !== id);
+        if (st.recPick === id) { const n = _s4Takes(st, null)[0]; st.recPick = n ? n.id : null; }
+        _exSave(); _s4MsgText = '';
+        const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
+    }
+    // Lưu file / gửi giáo viên: điện thoại -> bảng chia sẻ (Zalo, …), máy tính -> tải file
+    async function s4SaveTake(id) {
+        const ex = _exCurrent(), t = (_exState().recTakes || []).find(x => x.id === id), blob = await _recDbGet(id);
+        if (!t || !blob) { _s4Msg('Không tìm thấy file của bản thu này trên thiết bị.'); return; }
+        const ext = /mp4|m4a|aac/.test(blob.type) ? 'm4a' : /ogg/.test(blob.type) ? 'ogg' : 'webm';
+        const user = (localStorage.getItem('studentSession_QuyenClass') || 'HocVien');
+        const fname = `LuyenDoc_${ex.id}_${user}_doan${t.p + 1}.${ext}`;
+        const file = new File([blob], fname, { type: blob.type });
+        if (navigator.canShare && navigator.canShare({ files: [file] }) && /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
+            _exDialogOpen = true;
+            try { await navigator.share({ files: [file], title: 'Bản thu luyện đọc' }); } catch (e) {}
+            setTimeout(() => { _exDialogOpen = false; }, 400);
+        } else {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = fname;
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+        }
+    }
+
+    // 📤 Gửi bản thu đã chọn nộp lên máy chủ (lưu riêng tư trên Drive của giáo viên; chỉ giữ bản mới nhất)
+    const _recUpTried = {};
+    let _recUpBusy = false;
+    function _recUpHtml(st) {
+        const t = (st.recTakes || []).find(x => x.id === st.recPick), u = st.recUp && st.recUp.take === st.recPick ? st.recUp : null;
+        if (!t) return '';
+        if (_recUpBusy) return `<div class="rec-up" id="rec-up"><span class="rec-up-spin"></span><span>Đang gửi bản thu cho giáo viên…</span></div>`;
+        if (u && u.ok) return `<div class="rec-up ok" id="rec-up">${ic('checkCircle')}<span>Đã gửi bản thu luyện đọc cho giáo viên.</span></div>`;
+        return `<div class="rec-up bad" id="rec-up">${ic('alert')}<span>Chưa gửi được bản thu cho giáo viên${u && u.msg ? ' — ' + _escHtml(u.msg) : ''}.</span>`
+            + `<button class="s4-chip" onclick="_recUpload(true)">Gửi lại</button></div>`;
+    }
+    function _recUpUI() {
+        const el = document.getElementById('rec-up'), ex = _exCurrent();
+        if (!el || !ex || ex.flow !== 'staged') return;
+        el.outerHTML = _recUpHtml(_exState()) || '<div id="rec-up"></div>';
+    }
+    function _blobToB64(blob) {
+        return new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1] || ''); r.onerror = no; r.readAsDataURL(blob); });
+    }
+    async function _recUpload() {
+        const ex = _exCurrent(); if (!ex || ex.flow !== 'staged' || _recUpBusy) return;
+        const k = _exKey(), st = _exState();
+        const t = st.done && (st.recTakes || []).find(x => x.id === st.recPick);
+        if (!t) return;
+        const save = () => { try { localStorage.setItem(_exStoreKey(k), JSON.stringify(st)); } catch (e) {} scheduleProgressPush(1500); };
+        const user = localStorage.getItem('studentSession_QuyenClass'), pass = getSyncPass();
+        if (!user || !pass) { st.recUp = { take: t.id, ok: false, msg: 'cần đăng nhập lại' }; save(); _recUpUI(); return; }
+        const blob = await _recDbGet(t.id);
+        if (!blob) { st.recUp = { take: t.id, ok: false, msg: 'bản thu nằm trên thiết bị khác' }; save(); _recUpUI(); return; }
+        _recUpBusy = true; _recUpUI();
+        try {
+            const data = await _blobToB64(blob);
+            const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ action: 'uploadRec', user, pass, exKey: k, exId: ex.id, passage: t.p, name: ex.passages[t.p].name, dur: t.dur, mime: blob.type || t.mime, data }) });
+            const j = await res.json();
+            st.recUp = j && j.success ? { take: t.id, ok: true, at: Date.now() }
+                : { take: t.id, ok: false, msg: j && j.message === 'Yêu cầu không hợp lệ' ? 'hệ thống chưa sẵn sàng nhận bản thu, vui lòng báo giáo viên' : String((j && j.message) || 'lỗi máy chủ') };
+        } catch (e) {
+            st.recUp = { take: t.id, ok: false, msg: 'lỗi kết nối mạng' };
+        }
+        _recUpBusy = false;
+        save(); _recUpUI();
+    }
+
+    // ---------- Nộp bài ----------
+    function _stgConfirmSubmit(ex, st) {
+        _recStop();
+        if (!(st.recTakes || []).some(t => t.id === st.recPick))
+            return _exDialog(() => confirm('Chưa có bản thu âm luyện đọc. Vẫn nộp bài?'));
+        return _exDialog(() => confirm('Nộp bài? Sau khi nộp sẽ không đổi được đáp án.'));
+    }
+    function _stgDoneExtra(ex, st) {
+        const t = (st.recTakes || []).find(x => x.id === st.recPick);
+        return { s1: st.s1 ? { first: st.s1.first, total: st.s1.total } : null,
+                 rec: t ? { p: t.p, name: ex.passages[t.p].name, dur: t.dur } : null };
+    }
+    function _stgDoneRows(ex, d, row) {
+        return (d.s1 ? row(ic('sparkles'), 'Quiz biểu hiện', `<b>${d.s1.first}/${d.s1.total}</b> đúng lần đầu`) : '')
+            + (d.rec ? row(ic('mic'), 'Luyện đọc', `<b>${_escHtml(d.rec.name)}</b>`, '', _fmtTime(d.rec.dur)) : row(ic('mic'), 'Luyện đọc', 'Chưa thu âm', 'warn'));
     }
 
     function showAppMode(modeName) {
