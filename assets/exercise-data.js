@@ -173,10 +173,10 @@ window.EXERCISE_DATA = {
                 '앉으면서': 'vừa ngồi xuống', '껐어요': 'đã tắt', '소리가 나면 안 되니까요': 'vì không được phát ra tiếng'
             },
             // Bước 2: sau khi nghe, mỗi đoạn 1 câu hỏi nghe hiểu (p = đoạn). Luyện tập, không tính vào điểm bài.
-            listenQ: [
-                { p: 0, q: '미술관에서 하면 안 되는 것은 무엇입니까?', opts: ['휴대전화를 사용해요.', '차를 마셔요.', '그림에 손을 대요.', '쉬어요.'], ans: 2 },
-                { p: 1, q: '민재 씨는 지금 어디에 있습니까?', opts: ['미술관', '병원', '연주회장', '집'], ans: 1 },
-                { p: 2, q: '지난 주말에 친구와 어디에 갔습니까?', opts: ['미술관', '병원', '피아노 연주회', '식당'], ans: 2 }
+            listenQ: [   // Bước 2: hết mỗi đoạn audio tự dừng, hiện 1 câu hỏi (hỏi tiếng Hàn, đáp tiếng Việt); đúng mới nghe tiếp
+                { p: 0, q: '미술관에서 무엇을 하면 안 돼요?', opts: ['Uống trà', 'Chạm tay vào tranh', 'Dùng điện thoại', 'Ngồi nghỉ'], ans: 1 },
+                { p: 1, q: '민재 씨는 지금 어디에 있어요?', opts: ['Ở bệnh viện', 'Ở bảo tàng mỹ thuật', 'Ở nhà', 'Ở trường học'], ans: 0 },
+                { p: 2, q: '지난 주말에 친구와 어디에 갔어요?', opts: ['Bệnh viện', 'Nhà hàng', 'Bảo tàng mỹ thuật', 'Buổi hòa nhạc piano'], ans: 3 }
             ],
             // ox: true = câu Đúng/Sai trong sách (p = đoạn số mấy). Các câu còn lại: câu hỏi bổ sung.
             mcq: [
