@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://vocabTable" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Chiron+GoRound+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Chiron+Sung+HK:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #f0f4f8;
@@ -1693,8 +1694,11 @@
             .stg-step:not(.on) .stg-lbl { display: none; }
             .s4-take-acts { width: 100%; }
         }
-        .stg-body { animation: stgIn .25s ease; }
+        .stg-body.enter { animation: stgIn .25s ease; }
         @keyframes stgIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+        .s2-q-tag { display: inline-block; font-size: 12px; font-weight: 800; color: var(--point-color); background: var(--point-light); border-radius: 99px; padding: 2px 10px; margin-bottom: 6px; }
+        .stg-ask { font-size: 15.5px; font-weight: 700; color: #1a202c; margin: 4px 0 12px; line-height: 1.5; }
+        .stg-body .stg-ask:not(:first-child) { margin-top: 22px; }
         .stg-intro { display: flex; gap: 12px; align-items: flex-start; background: var(--point-light); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 14px; }
         .stg-intro-ic { width: 36px; height: 36px; flex-shrink: 0; border-radius: 10px; background: var(--point-color); color: #fff; display: inline-flex; align-items: center; justify-content: center; }
         .stg-intro-ic .ic { width: 19px; height: 19px; }
@@ -1763,9 +1767,9 @@
         .s2-badge .ic { width: 14px; height: 14px; }
         .s2-card h3 { font-size: 19px; margin: 12px 0 4px; color: #1a202c; }
         .s2-card > p { font-size: 14.5px; color: var(--text-color); margin: 0 0 16px; line-height: 1.6; }
-        .s2-scenes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
+        .s2-scenes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
         .s2-scene { position: relative; border-radius: 14px; overflow: hidden; border: 2px solid transparent; background: var(--bg-color); transition: border-color .2s, transform .2s, opacity .2s; opacity: .7; }
-        .s2-scene img { display: block; width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+        .s2-scene img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
         .s2-scene-n { display: block; font-size: 13.5px; font-weight: 800; padding: 6px 4px 2px; color: #1a202c; }
         .s2-scene-s { display: flex; align-items: center; justify-content: center; gap: 3px; min-height: 20px; padding-bottom: 6px; font-size: 11.5px; font-weight: 700; color: var(--sub-text); }
         .s2-scene-s .ic { width: 12px; height: 12px; }
@@ -1783,10 +1787,15 @@
         .s2-msg { margin-top: 14px; font-size: 13.5px; font-weight: 700; color: var(--sub-text); display: flex; align-items: center; justify-content: center; gap: 6px; }
         .s2-msg .ic { width: 16px; height: 16px; color: var(--success-color); }
         /* Bước 3 */
-        .s3-player { position: sticky; top: 118px; z-index: 12; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
-        .s3-pass { border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px; background: #fff; }
-        .s3-pass-main { display: flex; gap: 12px; align-items: flex-start; }
-        .s3-img { width: 132px; flex-shrink: 0; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
+        .s3-player { position: sticky; top: 90px; z-index: 12; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
+        .s3-pass { border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; background: #fff; }
+        .s3-pass-main { display: flex; gap: 18px; align-items: stretch; }
+        @media (max-width: 900px) { .s3-pass-main { flex-direction: column; } .s3-img { width: min(100%, 420px); align-self: center; } }
+        /* Bài đọc: font tiếng Hàn dễ đọc, chữ lớn */
+        .stg-body .ex-passage p, .s4-script p { font-family: 'Gowun Dodum', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; font-size: 22px !important; line-height: 2 !important; letter-spacing: .2px; }
+        .stg-body .ex-passage-name { font-size: 16px; }
+        .s3-pass-main .ex-passage { display: flex; flex-direction: column; justify-content: center; padding: 18px 22px; }
+        .s3-img { width: 300px; flex-shrink: 0; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
         .s3-pass-main .ex-passage { flex: 1; min-width: 0; }
         .s3-vi { display: flex; gap: 6px; margin-top: 10px; padding-top: 8px; border-top: 1px dashed rgba(97,76,255,0.25); font-size: 14px; line-height: 1.6; color: var(--text-color); }
         .s3-vi .ic { width: 16px; height: 16px; flex-shrink: 0; margin-top: 3px; color: var(--point-color); }
@@ -1810,7 +1819,7 @@
         /* Bước 4 */
         .s4-picks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
         .s4-pick { position: relative; display: flex; flex-direction: column; text-align: left; border: 2px solid #e2e8f0; border-radius: 14px; background: #fff; padding: 0; overflow: hidden; cursor: pointer; font-family: inherit; transition: border-color .15s, box-shadow .15s; }
-        .s4-pick img { width: 100%; aspect-ratio: 16/10; object-fit: cover; display: block; }
+        .s4-pick img { width: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
         .s4-pick-t { padding: 8px 10px 10px; }
         .s4-pick-t b { display: block; font-size: 14px; color: #1a202c; }
         .s4-pick-t small { font-size: 12px; color: var(--sub-text); font-weight: 600; }
@@ -1825,7 +1834,6 @@
         .s4-sec b { font-size: 15px; color: #1a202c; }
         .s4-step { width: 22px; height: 22px; border-radius: 50%; background: var(--point-color); color: #fff; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; }
         .s4-sub { font-size: 12.5px; color: var(--sub-text); font-weight: 600; }
-        .s4-script p { font-size: 19px !important; line-height: 2 !important; }
         .stg-body .ex-passage p, .voc-ex, .s3-ox-q, .q1-ex { word-break: keep-all; }
         .s4-script .ex-seg { cursor: pointer; }
         .s4-script .ex-seg:hover { background: rgba(97,76,255,0.08); }
@@ -1877,9 +1885,9 @@
         .s4-empty { font-size: 13.5px; color: var(--sub-text); background: var(--bg-color); border-radius: 12px; padding: 12px; text-align: center; }
         @media (max-width: 640px) {
             .stg-head { padding: 10px 10px 8px; }
-            .s3-player { top: 132px; }
-            .s3-pass-main { flex-direction: column; }
-            .s3-img { width: 100%; aspect-ratio: 16/9; }
+            .s3-player { top: 100px; }
+            .s3-img { width: 100%; max-width: 420px; aspect-ratio: 1; align-self: center; }
+            .stg-body .ex-passage p, .s4-script p { font-size: 19px !important; }
             .q1-opts { grid-template-columns: 1fr; }
             .q1-prompt { font-size: 22px; }
             .q1-res { flex-direction: column; text-align: center; }
@@ -1890,7 +1898,6 @@
             .s4-pick { flex-direction: row; align-items: center; }
             .s4-pick img { width: 84px; aspect-ratio: 1; }
             .s4-pick-badge { left: auto; right: 36px; }
-            .s4-script p { font-size: 17px !important; }
             .stg-nav .stg-btn { flex: 1; justify-content: center; }
             .stg-nav-r { width: 100%; }
         }
@@ -2811,7 +2818,7 @@
     </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261118"></script>
+<script src="assets/exercise-data.js?v=20261118c"></script>
 <script>
     // ===================================================================
     // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
@@ -4302,7 +4309,7 @@
         exerciseState[_exKey()] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0,
             first: old.first || old.done || null, attempts: (old.attempts || []).concat(old.done ? [old.done] : []),
             history: old.history || [] };
-        if (old.s1) Object.assign(exerciseState[_exKey()], { s1: old.s1, listened: old.listened, stage: 3, recTakes: old.recTakes || [] }); // bài nhiều bước: không phải học lại biểu hiện
+        if (old.s1) Object.assign(exerciseState[_exKey()], { s1: old.s1, s2: old.s2, listened: old.listened, stage: 3, recTakes: old.recTakes || [] }); // bài nhiều bước: không phải học lại biểu hiện
         _exSave();
         renderExerciseMode(false);
     }
@@ -4383,14 +4390,15 @@
        Đáp án đúng/sai + bản dịch chỉ hiện SAU KHI NỘP.
        State bài: stage, s1 {done, first, total, missed}, listened, recTakes [{id,p,dur,at,mime}], recPick.
        File thu âm lưu trong IndexedDB của máy học viên (không gửi lên server). */
-    const STG_NAMES = ['Biểu hiện mới', 'Nghe bài đọc', 'Đọc & trả lời', 'Luyện đọc & thu âm'];
+    const STG_NAMES = ['Biểu hiện mới', 'Nghe', 'Đọc hiểu', 'Luyện đọc'];
     var _exStopAt = null, _exRangeRaf = 0, _exRangeDone = null;
+    let _stgLastView = '';
     let s1View = 'learn', s1Quiz = null, s4Pick = null, s4Rate = 0.8, _s4MsgText = '';
 
     function _stgShuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
     function _stgStepDone(ex, st, n) {
         if (n === 1) return !!(st.s1 && st.s1.done);
-        if (n === 2) return !!st.listened;
+        if (n === 2) return !!st.listened && (ex.listenQ || []).every((q, i) => st.s2 && st.s2[i] !== undefined);
         if (n === 3) return Object.keys(st.picks || {}).length >= ex.mcq.length;
         return !!st.done;
     }
@@ -4447,7 +4455,7 @@
         const cur = _stgCur(ex, st), max = _stgMax(ex, st);
         const doneCount = [1, 2, 3, 4].filter(n => _stgStepDone(ex, st, n)).length;
         let h = `<div class="stg-head"><div class="stg-head-top"><span class="stg-kicker">Bước ${cur}/4</span><b class="stg-title">${STG_NAMES[cur - 1]}</b>`
-            + `<span class="stg-pct">${Math.round(doneCount / 4 * 100)}% hoàn thành</span></div>`
+            + `</div>`
             + `<div class="stg-bar"><i style="width:${doneCount / 4 * 100}%"></i></div><div class="stg-steps">`
             + STG_NAMES.map((name, i) => {
                 const n = i + 1, ok = _stgStepDone(ex, st, n), lock = n > max;
@@ -4455,12 +4463,14 @@
                     + `<span class="stg-dot">${ok ? ic('check') : lock ? ic('lock') : n}</span><span class="stg-lbl">${name}</span></button>`;
             }).join('') + `</div></div>`;
         if (st.done) h += _recUpHtml(st);
-        h += `<div class="stg-body">` + [_s1Render, _s2Render, _s3Render, _s4Render][cur - 1](ex, st) + `</div>`;
+        const enter = _stgLastView !== _exKey() + '#' + cur + s1View; _stgLastView = _exKey() + '#' + cur + s1View;   // hiệu ứng chỉ khi đổi bước
+        h += `<div class="stg-body${enter ? ' enter' : ''}">` + [_s1Render, _s2Render, _s3Render, _s4Render][cur - 1](ex, st) + `</div>`;
         return h;
     }
     function _stgAfterRender(ex) {
         const st = _exState(), cur = _stgCur(ex, st);
         if (cur === 2) _s2Sync();
+        if (cur === 3) { const hd = document.querySelector('.stg-head'), pl = document.querySelector('.s3-player'); if (hd && pl) pl.style.top = (hd.offsetHeight + 4) + 'px'; } // trình phát dính ngay dưới thanh tiến độ
         if (cur === 4) { _s4SyncModel(); _s4RefreshRecUI(); }
         // Bài đã nộp nhưng bản thu chưa gửi được (mất mạng, đóng trang…) -> tự gửi lại 1 lần mỗi lần mở trang
         if (st.done && !(st.recUp && st.recUp.ok && st.recUp.take === st.recPick) && !_recUpTried[_exKey()]) { _recUpTried[_exKey()] = 1; setTimeout(_recUpload, 800); }
@@ -4478,18 +4488,17 @@
         if (s1View === 'quiz' && s1Quiz) return _s1QuizHtml(ex);
         if (s1View === 'result' && st.s1 && st.s1.done) return _s1ResultHtml(ex, st);
         const n = ex.vocab.length;
-        let h = `<div class="stg-intro"><span class="stg-intro-ic">${ic('sparkles')}</span><div><b>Làm quen ${n} biểu hiện mới trong bài đọc</b>`
-            + `<span>Đọc nghĩa, bấm ${ic('speaker')} để nghe phát âm, bấm vào câu ví dụ để nghe câu đó trong bài. Sau đó làm quiz nhỏ để kiểm tra.</span></div></div>`;
+        let h = `<div class="stg-ask">Hãy đọc và ghi nhớ các biểu hiện sau.</div>`;
         h += `<div class="voc-grid">` + ex.vocab.map((v, i) => `<div class="voc-card">`
             + `<div class="voc-top"><span class="voc-n">${String(i + 1).padStart(2, '0')}</span>`
             + `<button class="voc-say" title="Nghe phát âm" onclick="_s1Say(${i}, this)">${ic('speaker')}</button></div>`
             + `<div class="voc-ko">${_escHtml(v.ko)}</div><div class="voc-vi">${_escHtml(v.vi)}</div>`
-            + (v.ex ? `<button class="voc-ex" onclick="_s1Ctx(${i})" title="Nghe câu này trong bài">${ic('playSolid')}<span>${_stgMark(v.ex, v.hl)}</span></button>` : '')
+            + (v.ex ? `<button class="voc-ex" onclick="_s1Ctx(${i})" title="Nghe">${ic('playSolid')}<span>${_stgMark(v.ex, v.hl)}</span></button>` : '')
             + `</div>`).join('') + `</div>`;
         const done = st.s1 && st.s1.done;
-        h += _stgNav(0, `<div class="stg-nav-r">${done ? `<span class="stg-note">${ic('checkCircle')} Quiz: đúng ngay lần đầu ${st.s1.first}/${st.s1.total}</span>` : ''}`
-            + `<button class="stg-btn${done ? ' ghost' : ''}" onclick="s1StartQuiz()">${done ? 'Làm lại quiz' : `Làm quiz kiểm tra · ${n} câu`} ${ic('arrowRight')}</button>`
-            + (done ? `<button class="stg-btn" onclick="exGoStage(2)">Tiếp: Nghe bài đọc ${ic('arrowRight')}</button>` : '') + `</div>`);
+        h += _stgNav(0, `<div class="stg-nav-r">`
+            + `<button class="stg-btn${done ? ' ghost' : ''}" onclick="s1StartQuiz()">${done ? 'Kiểm tra lại' : 'Kiểm tra'}${done ? '' : ' ' + ic('arrowRight')}</button>`
+            + (done ? `<button class="stg-btn" onclick="exGoStage(2)">Tiếp tục ${ic('arrowRight')}</button>` : '') + `</div>`);
         return h;
     }
     function _s1Say(i, btn) { const v = _exCurrent().vocab[i]; triggerKoreanVoice(v.ko.replace(/\s*\+.*$/, ''), false, btn); }
@@ -4510,18 +4519,18 @@
         const answered = s1Quiz.picked != null, ok = answered && q.opts[s1Quiz.picked] === q.i;
         const pct = Math.round(s1Quiz.pos / s1Quiz.queue.length * 100);
         let h = `<div class="q1"><div class="q1-head"><span>Câu ${s1Quiz.pos + 1}/${s1Quiz.queue.length}</span><div class="q1-bar"><i style="width:${pct}%"></i></div>`
-            + `<button class="q1-link" onclick="s1View='learn';renderExerciseMode(false)">Xem lại thẻ</button></div>`
-            + `<div class="q1-card"><div class="q1-ask">${ko2vi ? 'Chọn nghĩa đúng của biểu hiện' : 'Chọn biểu hiện tiếng Hàn đúng'}</div>`
+            + `<button class="q1-link" onclick="s1View='learn';renderExerciseMode(false)">Xem lại</button></div>`
+            + `<div class="q1-card"><div class="q1-ask">${ko2vi ? 'Chọn nghĩa đúng' : 'Chọn biểu hiện đúng'}</div>`
             + `<div class="q1-prompt ${ko2vi ? 'ko' : 'vi'}">${_escHtml(ko2vi ? v.ko : v.vi)}</div><div class="q1-opts">`
             + q.opts.map((j, oi) => {
                 let c = 'q1-opt' + (ko2vi ? '' : ' ko');
                 if (answered && j === q.i) c += ' correct'; else if (answered && oi === s1Quiz.picked) c += ' wrong';
                 return `<button class="${c}" ${answered ? 'disabled' : ''} onclick="s1Pick(${oi})"><span class="q1-k">${oi + 1}</span>${_escHtml(ko2vi ? ex.vocab[j].vi : ex.vocab[j].ko)}</button>`;
             }).join('') + `</div>`;
-        if (answered) h += `<div class="q1-fb ${ok ? 'ok' : 'no'}"><span>${ok ? ic('check') + ' Chính xác!' : ic('x') + ' Chưa đúng. Câu này sẽ được hỏi lại ở cuối.'}</span>`
+        if (answered) h += `<div class="q1-fb ${ok ? 'ok' : 'no'}"><span>${ok ? ic('check') + ' Chính xác!' : ic('x') + ' Chưa đúng.'}</span>`
             + `<span class="q1-ex">${_stgMark(v.ex, v.hl)}</span></div>`
             + `<button class="stg-btn q1-next" id="q1-next" onclick="s1Next()">${s1Quiz.pos + 1 >= s1Quiz.queue.length ? 'Xem kết quả' : 'Câu tiếp theo'} ${ic('arrowRight')}</button>`;
-        return h + `</div><div class="q1-tip">Mẹo: dùng phím 1–4 để chọn, Enter để qua câu.</div></div>`;
+        return h + `</div></div>`;
     }
     function s1Pick(oi) {
         if (!s1Quiz || s1Quiz.picked != null) return;
@@ -4550,30 +4559,52 @@
     });
     function _s1ResultHtml(ex, st) {
         const r = st.s1, pct = Math.round(r.first / r.total * 100);
-        return `<div class="q1-res"><div class="exh-ring" style="--p:${pct}"><b>${r.first}/${r.total}</b><small>lần đầu</small></div>`
-            + `<div class="q1-res-t"><b>${pct >= 80 ? 'Rất tốt! Đã nhớ gần hết biểu hiện mới.' : 'Đã hoàn thành quiz biểu hiện.'}</b>`
-            + `<span>Đúng ngay lần đầu ${r.first}/${r.total} biểu hiện. Các câu sai đã được hỏi lại cho đến khi đúng.</span>`
-            + (r.missed && r.missed.length ? `<div class="q1-miss"><small>Cần ôn thêm:</small>${r.missed.map(k => `<span>${_escHtml(k)}</span>`).join('')}</div>` : '')
+        return `<div class="q1-res"><div class="exh-ring" style="--p:${pct}"><b>${r.first}/${r.total}</b><small>câu đúng</small></div>`
+            + `<div class="q1-res-t"><b>${pct >= 80 ? 'Rất tốt!' : 'Hoàn thành!'}</b>`
+            + (r.missed && r.missed.length ? `<div class="q1-miss"><small>Cần ôn lại:</small>${r.missed.map(k => `<span>${_escHtml(k)}</span>`).join('')}</div>` : '')
             + `</div></div>`
-            + _stgNav(0, `<div class="stg-nav-r"><button class="stg-btn ghost" onclick="s1View='learn';renderExerciseMode(false)">Xem lại thẻ</button>`
-            + `<button class="stg-btn" onclick="exGoStage(2)">Tiếp: Nghe bài đọc ${ic('arrowRight')}</button></div>`);
+            + _stgNav(0, `<div class="stg-nav-r"><button class="stg-btn ghost" onclick="s1View='learn';renderExerciseMode(false)">Xem lại</button>`
+            + `<button class="stg-btn" onclick="exGoStage(2)">Tiếp tục ${ic('arrowRight')}</button></div>`);
     }
 
     // ---------- BƯỚC 2: NGHE 1 LẦN (tốc độ cố định, chưa hiện chữ) ----------
     function _s2Render(ex, st) {
-        const rate = ex.listenSpeed || 0.8;
-        return `<div class="s2" id="s2-root"><div class="s2-card">`
-            + `<div class="s2-badge">${ic('headphones')} Nghe toàn bài · tốc độ ${rate}x</div>`
-            + `<h3>Nghe trước, chưa nhìn chữ</h3>`
-            + `<p>Khi nghe, hãy chú ý: ở mỗi nơi, việc gì <b>được làm</b> và việc gì <b>không được làm</b>?</p>`
+        return `<div class="s2" id="s2-root"><div class="stg-ask">Hãy nghe kỹ nội dung sau đây và quan sát bức tranh.</div><div class="s2-card">`
             + `<div class="s2-scenes">` + ex.passages.map((p, i) => `<div class="s2-scene" data-i="${i}">`
                 + (p.img ? `<img src="${p.img}" alt="" loading="lazy">` : '') + `<span class="s2-scene-n">${_escHtml(p.name)}</span><span class="s2-scene-s"></span></div>`).join('') + `</div>`
             + `<div class="s2-player"><button class="s2-play" id="s2-play" onclick="s2Toggle()"></button>`
             + `<div class="s2-track"><i id="s2-fill"></i></div><span class="s2-time" id="s2-time">0:00</span></div>`
-            + `<div class="s2-msg" id="s2-msg"></div></div>`
-            + _stgNav(1, `<button class="stg-btn" id="s2-next" ${st.listened ? '' : 'disabled'} onclick="exGoStage(3)">Tiếp: Đọc & trả lời ${ic('arrowRight')}</button>`)
+            + `</div>`
+            + (st.listened ? _s2QuestionsHtml(ex, st) : '')
+            + _stgNav(1, `<button class="stg-btn" id="s2-next" ${_stgStepDone(ex, st, 2) ? '' : 'disabled'} onclick="exGoStage(3)">Tiếp tục ${ic('arrowRight')}</button>`)
             + `</div>`;
     }
+    // Câu hỏi nghe hiểu (mỗi đoạn 1 câu) — hiện sau khi nghe hết 1 lần, chấm ngay, không tính vào điểm bài
+    function _s2QuestionsHtml(ex, st) {
+        const qs = ex.listenQ || []; if (!qs.length) return '';
+        const picks = st.s2 || {};
+        return `<div class="stg-ask">Hãy chọn đáp án đúng.</div>` + qs.map((q, qi) => {
+            const pick = picks[qi], done = pick !== undefined;
+            return `<div class="ex-q"><div class="s2-q-tag">${_escHtml(ex.passages[q.p].name)}</div><div class="ex-q-head">${_escHtml(q.q)}</div><div class="ex-opts">`
+                + q.opts.map((o, oi) => {
+                    let c = 'ex-opt';
+                    if (done && oi === q.ans) c += ' correct'; else if (done && oi === pick) c += ' wrong';
+                    return `<button class="${c}" ${done ? 'disabled' : ''} onclick="s2Pick(${qi}, ${oi})">${EX_CIRCLED[oi]} ${_escHtml(o)}</button>`;
+                }).join('') + `</div>`
+                + (done ? `<div class="ex-fb ${pick === q.ans ? 'ok' : 'no'}">${pick === q.ans ? ic('check') + ' Chính xác!' : ic('x') + ' Chưa đúng.'}</div>` : '')
+                + `</div>`;
+        }).join('');
+    }
+    function s2Pick(qi, oi) {
+        const ex = _exCurrent(), st = _exState();
+        if (!ex || !st.listened) return;
+        st.s2 = st.s2 || {};
+        if (st.s2[qi] !== undefined) return;
+        st.s2[qi] = oi; _exSave();
+        try { const a = new Audio(oi === ex.listenQ[qi].ans ? SND_CORRECT : SND_WRONG); a.volume = 0.5; a.play().catch(() => {}); } catch (e) {}
+        const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
+    }
+
     function s2Toggle() {
         const ex = _exCurrent(); if (!ex) return;
         _exStopAt = null;
@@ -4601,12 +4632,9 @@
         root.querySelectorAll('.s2-scene').forEach((el, i) => {
             const p = ex.passages[i], now = playing && t >= p.start && t <= p.end + 1, heard = st.listened || t > p.end;
             el.classList.toggle('now', now); el.classList.toggle('heard', heard && !now);
-            el.querySelector('.s2-scene-s').innerHTML = now ? 'Đang nghe' : heard ? ic('check') + ' Đã nghe' : '';
+            el.querySelector('.s2-scene-s').innerHTML = heard && !now ? ic('check') : '';
         });
-        document.getElementById('s2-msg').innerHTML = st.listened
-            ? `${ic('checkCircle')} Đã nghe xong. Có thể nghe lại hoặc qua bước tiếp theo.`
-            : (t > 0 ? 'Nghe hết bài để mở bước tiếp theo.' : 'Bấm nút phát để bắt đầu nghe.');
-        document.getElementById('s2-next').disabled = !st.listened;
+        document.getElementById('s2-next').disabled = !_stgStepDone(ex, st, 2);
     }
 
     // ---------- BƯỚC 3: ĐỌC + O/X (sách) + CÂU HỎI BỔ SUNG ----------
@@ -4617,9 +4645,9 @@
             + '<input type="range" class="ex-seek" id="ex-seek" min="0" max="1000" value="0" oninput="this.dataset.dragging=1" onchange="delete this.dataset.dragging; seekExerciseAudio(this.value)">'
             + '<span class="ex-time" id="ex-time">0:00 / 0:00</span>'
             + '<div class="ex-speeds">' + EX_SPEEDS.map(s => `<button class="ex-speed-btn" data-speed="${s}" onclick="setExerciseSpeed(${s})">${s}x</button>`).join('') + '</div>'
-            + '<div class="ex-marks"><span>Nghe đoạn:</span>' + ex.passages.map(p =>
+            + '<div class="ex-marks">' + ex.passages.map(p =>
                 `<button class="ex-mark-btn" data-start="${p.start}" onclick="jumpExerciseAudio(${p.start})">${ic('playSolid')} ${_escHtml(p.name)}</button>`).join('') + '</div></div>';
-        h += `<div class="ex-block-title">Phần 1 · Đọc đoạn văn và chọn O (đúng) / X (sai)</div>`;
+        h += `<div class="stg-ask">1. Hãy đọc đoạn văn và chọn O nếu đúng, X nếu sai.</div>`;
         const oxBtn = (qi, m, oi, label) => {
             let c = 'ox-btn ' + (oi ? 'x' : 'o');
             if (!fin) { if (picks[qi] === oi) c += ' picked'; }
@@ -4645,8 +4673,7 @@
             oxN = 0;
             h += `</div></div>`;
         });
-        h += `<div class="ex-gloss-tip">${ic('bulb')} Chạm vào từ gạch chân để xem nghĩa.</div>`;
-        h += `<div class="ex-block-title">Phần 2 · Câu hỏi bổ sung</div>`;
+        h += `<div class="stg-ask">2. Hãy chọn đáp án đúng.</div>`;
         let k = 0;
         ex.mcq.forEach((m, qi) => {
             if (m.ox) return;
@@ -4663,9 +4690,7 @@
                 + '</div>';
         });
         const answered = Object.keys(picks).length, all = answered >= ex.mcq.length;
-        h += _stgNav(2, `<div class="stg-nav-r"><span class="stg-note">${fin ? '' : `Đã làm ${answered}/${ex.mcq.length} câu`}</span>`
-            + `<button class="stg-btn" ${all ? '' : 'disabled'} onclick="exGoStage(4)">Tiếp: Luyện đọc & thu âm ${ic('arrowRight')}</button></div>`);
-        if (!fin) h += `<div class="ex-submit-note" style="text-align:right">Đáp án và bản dịch hiện sau khi nộp bài (ở bước 4).</div>`;
+        h += _stgNav(2, `<button class="stg-btn" ${all ? '' : 'disabled'} onclick="exGoStage(4)">Tiếp tục ${ic('arrowRight')}</button>`);
         return h;
     }
 
@@ -4674,27 +4699,25 @@
     function _s4Render(ex, st) {
         if (s4Pick == null) { const ch = (st.recTakes || []).find(t => t.id === st.recPick); s4Pick = ch ? ch.p : 0; }
         const p = ex.passages[s4Pick], takes = _s4Takes(st, s4Pick);
-        let h = `<div class="stg-intro"><span class="stg-intro-ic">${ic('mic')}</span><div><b>Chọn 1 đoạn để luyện đọc thành tiếng</b>`
-            + `<span>Nghe mẫu → thu âm giọng đọc → nghe lại và so sánh. Có thể thu nhiều lần rồi chọn bản tốt nhất để nộp.</span>`
-            + `<span class="s4-privacy">${ic('lock')} Bản thu được nộp kèm bài, chỉ gửi riêng cho giáo viên, không công khai.</span></div></div>`;
+        let h = `<div class="stg-ask">Hãy chọn 1 đoạn, nghe mẫu và thu âm giọng đọc của bạn.</div>`;
         h += `<div class="s4-picks" role="radiogroup">` + ex.passages.map((q, i) => {
             const n = _s4Takes(st, i).length;
             return `<button class="s4-pick${i === s4Pick ? ' on' : ''}" role="radio" aria-checked="${i === s4Pick}" onclick="s4Choose(${i})">`
                 + (q.img ? `<img src="${q.img}" alt="" loading="lazy">` : '')
-                + `<span class="s4-pick-t"><b>${_escHtml(q.name)}</b><small>${q.segs.length} câu · ${Math.round(q.end - q.start)} giây</small></span>`
+                + `<span class="s4-pick-t"><b>${_escHtml(q.name)}</b></span>`
                 + (n ? `<span class="s4-pick-badge">${ic('mic')} ${n}</span>` : '') + `<span class="s4-pick-radio"></span></button>`;
         }).join('') + `</div>`;
         h += `<div class="s4-studio">`
-            + `<div class="s4-sec"><span class="s4-step">1</span><b>Nghe mẫu</b><span class="s4-sub">Chạm vào từng câu để nghe riêng câu đó.</span></div>`
+            + `<div class="s4-sec"><span class="s4-step">1</span><b>Nghe mẫu</b></div>`
             + `<div class="s4-script ex-passage" id="s4-script"><p>${p.segs.map(sg => _renderSeg(sg, null)).join(' ')}</p></div>`
-            + `<div class="s4-model"><button class="s4-btn" id="s4-model-btn" onclick="s4PlayModel()">${ic('headphones')} Nghe mẫu cả đoạn</button>`
+            + `<div class="s4-model"><button class="s4-btn" id="s4-model-btn" onclick="s4PlayModel()">${ic('headphones')} Nghe</button>`
             + `<div class="ex-speeds">${[0.6, 0.8, 1].map(r => `<button class="ex-speed-btn${r === s4Rate ? ' active' : ''}" onclick="s4SetRate(${r})">${r}x</button>`).join('')}</div></div>`
-            + `<div class="s4-sec"><span class="s4-step">2</span><b>Thu âm</b><span class="s4-sub">Đọc rõ ràng, không cần nhanh. Tối đa 2 phút.</span></div>`
+            + `<div class="s4-sec"><span class="s4-step">2</span><b>Thu âm</b></div>`
             + `<div class="s4-rec" id="s4-rec"><button class="s4-mic" id="s4-mic" onclick="s4ToggleRec()" aria-label="Thu âm"></button>`
             + `<div class="s4-rec-mid"><div class="s4-rec-state" id="s4-rec-state"></div><canvas class="s4-meter" id="s4-meter"></canvas></div>`
             + `<span class="s4-rec-time" id="s4-rec-time">0:00</span></div>`
             + `<div class="s4-msg${_s4MsgText ? ' show' : ''}" id="s4-msg">${_s4MsgText}</div>`
-            + `<div class="s4-sec"><span class="s4-step">3</span><b>Nghe lại & chọn bản nộp</b></div>`
+            + `<div class="s4-sec"><span class="s4-step">3</span><b>Nghe lại</b></div>`
             + (takes.length ? `<div class="s4-takes">` + takes.map((t, k) => {
                 const on = t.id === st.recPick;
                 return `<div class="s4-take${on ? ' on' : ''}"><button class="s4-take-play" data-take="${t.id}" onclick="s4PlayTake('${t.id}')" aria-label="Nghe bản thu">${ic('playSolid')}</button>`
@@ -4703,13 +4726,11 @@
                     + `<button class="s4-chip${on ? ' sel' : ''}" onclick="s4PickTake('${t.id}')">${on ? ic('check') + ' Bản nộp' : 'Chọn nộp'}</button>`
                     + `<button class="s4-ico" title="Lưu file / gửi giáo viên" onclick="s4SaveTake('${t.id}')">${ic('download')}</button>`
                     + `<button class="s4-ico" title="Xóa bản thu" onclick="s4DelTake('${t.id}')">${ic('trash')}</button></span></div>`;
-            }).join('') + `</div>` : `<div class="s4-empty">Chưa có bản thu cho đoạn này.</div>`)
+            }).join('') + `</div>` : `<div class="s4-empty">Chưa có bản thu.</div>`)
             + `</div>`;
         const pickT = (st.recTakes || []).find(t => t.id === st.recPick);
-        if (st.done) h += _stgNav(3, `<button class="stg-btn" onclick="exGoStage(3)">Xem đáp án & bản dịch ${ic('arrowRight')}</button>`);
-        else h += _stgNav(3, `<div class="stg-nav-r"><span class="stg-note">${pickT ? `${ic('mic')} Bản nộp: ${_escHtml(ex.passages[pickT.p].name)} · ${_fmtTime(pickT.dur)}` : 'Chưa chọn bản thu'}</span>`
-            + `<button class="stg-btn submit" onclick="submitExercise()">${ic('flag')} Nộp bài</button></div>`)
-            + `<div class="ex-submit-note" style="text-align:right">Nộp xong sẽ hiện điểm, đáp án và bản dịch đầy đủ.</div>`;
+        if (st.done) h += _stgNav(3, `<button class="stg-btn" onclick="exGoStage(3)">Xem đáp án ${ic('arrowRight')}</button>`);
+        else h += _stgNav(3, `<button class="stg-btn submit" onclick="submitExercise()">${ic('flag')} Nộp bài</button>`);
         return h;
     }
     function _s4Msg(t) { _s4MsgText = t || ''; const m = document.getElementById('s4-msg'); if (m) { m.innerHTML = _s4MsgText; m.classList.toggle('show', !!_s4MsgText); } }
@@ -4725,7 +4746,7 @@
         _syncKaraoke();
         if (!exAudio.paused && !_karaokeRaf) _karaokeRaf = requestAnimationFrame(_karaokeLoop);
         const on = _exStopAt != null && !exAudio.paused;
-        if (b.dataset.on !== String(on)) { b.dataset.on = String(on); b.innerHTML = on ? ic('pause') + ' Dừng nghe mẫu' : ic('headphones') + ' Nghe mẫu cả đoạn'; }
+        if (b.dataset.on !== String(on)) { b.dataset.on = String(on); b.innerHTML = on ? ic('pause') + ' Dừng' : ic('headphones') + ' Nghe'; }
     }
     // Chạm vào 1 câu trong khung bước 4 -> nghe câu đó
     document.addEventListener('click', e => {
@@ -4740,14 +4761,14 @@
     async function s4ToggleRec() {
         if (_rec) { _recStop(); return; }
         _takeStop(); stopExerciseAudio(); _exStopAt = null; _s4Msg('');
-        if (!_recSupported()) { _s4Msg('Trình duyệt này chưa hỗ trợ thu âm. Vui lòng dùng Chrome hoặc Safari bản mới.'); return; }
+        if (!_recSupported()) { _s4Msg('Trình duyệt này không hỗ trợ thu âm. Vui lòng dùng Chrome hoặc Safari.'); return; }
         let stream;
         _exDialogOpen = true;   // hộp xin quyền micro không tính là chuyển tab
         try { stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } }); }
         catch (e) {
             _s4Msg(e && e.name === 'NotAllowedError'
-                ? 'Chưa cho phép dùng micro. Bấm biểu tượng ổ khóa cạnh địa chỉ trang, cho phép Micro rồi thử lại.'
-                : 'Không mở được micro. Vui lòng kiểm tra micro / tai nghe rồi thử lại.');
+                ? 'Vui lòng cho phép trang dùng micro rồi thử lại.'
+                : 'Không mở được micro. Vui lòng thử lại.');
             return;
         } finally { setTimeout(() => { _exDialogOpen = false; }, 400); }
         const mime = ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg'].find(m => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(m)) || '';
@@ -4803,7 +4824,7 @@
         btn.innerHTML = on ? ic('stopSolid') : ic('mic');
         btn.setAttribute('aria-label', on ? 'Dừng thu âm' : 'Bắt đầu thu âm');
         document.getElementById('s4-rec').classList.toggle('on', on);
-        document.getElementById('s4-rec-state').innerHTML = on ? '<span class="s4-dot"></span> Đang thu âm… bấm nút để dừng' : 'Bấm micro để bắt đầu thu âm';
+        document.getElementById('s4-rec-state').innerHTML = on ? '<span class="s4-dot"></span> Đang thu âm' : 'Bấm để thu âm';
         document.getElementById('s4-rec-time').innerText = _fmtTime(on ? (Date.now() - _rec.t0) / 1000 : 0);
         if (!on) { const cv = document.getElementById('s4-meter'); if (cv) cv.getContext('2d').clearRect(0, 0, cv.width, cv.height); }
     }
@@ -4824,7 +4845,7 @@
         }
         if (!st.done) st.recPick = id;   // bản mới nhất tự thành bản nộp (có thể đổi)
         _exSave();
-        _s4MsgText = `${ic('checkCircle')} Đã lưu bản thu. Bấm ${ic('playSolid')} để nghe lại.`;
+        _s4MsgText = '';
         const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
     }
     // IndexedDB: lưu file thu âm trên máy (không gửi lên server)
@@ -4855,7 +4876,7 @@
         if (_takeId === id && !_takeAudio.paused) { _takeAudio.pause(); return; }
         stopExerciseAudio(); _exStopAt = null; _exRangeDone = null;
         const blob = await _recDbGet(id);
-        if (!blob) { _s4Msg('Không tìm thấy file của bản thu này trên thiết bị (có thể đã thu trên máy khác).'); return; }
+        if (!blob) { _s4Msg('Không tìm thấy bản thu trên thiết bị này.'); return; }
         if (_takeId !== id) { if (_takeAudio.src) URL.revokeObjectURL(_takeAudio.src); _takeAudio.src = URL.createObjectURL(blob); _takeId = id; }
         _takeAudio.currentTime = 0;
         _takeAudio.play().catch(() => {});
@@ -4863,8 +4884,7 @@
     function s4Compare(id) {
         const ex = _exCurrent(), t = (_exState().recTakes || []).find(x => x.id === id); if (!t) return;
         const p = ex.passages[t.p];
-        _s4Msg(`${ic('headphones')} Đang phát giọng mẫu, sau đó phát bản thu của bạn.`);
-        exPlayRange(p.segs[0][0], p.segs[p.segs.length - 1][1] + 0.2, s4Rate, () => { _s4Msg(`${ic('mic')} Bản thu của bạn:`); s4PlayTake(id); });
+        exPlayRange(p.segs[0][0], p.segs[p.segs.length - 1][1] + 0.2, s4Rate, () => s4PlayTake(id));
     }
     function s4PickTake(id) {
         const st = _exState(); if (st.done) { _s4Msg('Bài đã nộp nên không đổi được bản nộp.'); return; }
@@ -4908,9 +4928,9 @@
     function _recUpHtml(st) {
         const t = (st.recTakes || []).find(x => x.id === st.recPick), u = st.recUp && st.recUp.take === st.recPick ? st.recUp : null;
         if (!t) return '';
-        if (_recUpBusy) return `<div class="rec-up" id="rec-up"><span class="rec-up-spin"></span><span>Đang gửi bản thu cho giáo viên…</span></div>`;
-        if (u && u.ok) return `<div class="rec-up ok" id="rec-up">${ic('checkCircle')}<span>Đã gửi bản thu luyện đọc cho giáo viên.</span></div>`;
-        return `<div class="rec-up bad" id="rec-up">${ic('alert')}<span>Chưa gửi được bản thu cho giáo viên${u && u.msg ? ' — ' + _escHtml(u.msg) : ''}.</span>`
+        if (_recUpBusy) return `<div class="rec-up" id="rec-up"><span class="rec-up-spin"></span><span>Đang gửi bản thu…</span></div>`;
+        if (u && u.ok) return `<div class="rec-up ok" id="rec-up">${ic('checkCircle')}<span>Đã gửi bản thu cho giáo viên.</span></div>`;
+        return `<div class="rec-up bad" id="rec-up">${ic('alert')}<span>Chưa gửi được bản thu.</span>`
             + `<button class="s4-chip" onclick="_recUpload(true)">Gửi lại</button></div>`;
     }
     function _recUpUI() {
@@ -4950,16 +4970,19 @@
     function _stgConfirmSubmit(ex, st) {
         _recStop();
         if (!(st.recTakes || []).some(t => t.id === st.recPick))
-            return _exDialog(() => confirm('Chưa có bản thu âm luyện đọc. Vẫn nộp bài?'));
-        return _exDialog(() => confirm('Nộp bài? Sau khi nộp sẽ không đổi được đáp án.'));
+            return _exDialog(() => confirm('Bạn chưa thu âm. Vẫn nộp bài?'));
+        return _exDialog(() => confirm('Bạn có chắc muốn nộp bài?'));
     }
     function _stgDoneExtra(ex, st) {
         const t = (st.recTakes || []).find(x => x.id === st.recPick);
+        const lq = ex.listenQ || [];
         return { s1: st.s1 ? { first: st.s1.first, total: st.s1.total } : null,
+                 s2: lq.length ? { ok: lq.filter((q, i) => (st.s2 || {})[i] === q.ans).length, total: lq.length } : null,
                  rec: t ? { p: t.p, name: ex.passages[t.p].name, dur: t.dur } : null };
     }
     function _stgDoneRows(ex, d, row) {
         return (d.s1 ? row(ic('sparkles'), 'Quiz biểu hiện', `<b>${d.s1.first}/${d.s1.total}</b> đúng lần đầu`) : '')
+            + (d.s2 ? row(ic('headphones'), 'Nghe hiểu', `<b>${d.s2.ok}/${d.s2.total}</b> câu đúng`) : '')
             + (d.rec ? row(ic('mic'), 'Luyện đọc', `<b>${_escHtml(d.rec.name)}</b>`, '', _fmtTime(d.rec.dur)) : row(ic('mic'), 'Luyện đọc', 'Chưa thu âm', 'warn'));
     }
 

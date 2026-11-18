@@ -628,7 +628,7 @@
   </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261118"></script>
+<script src="assets/exercise-data.js?v=20261118c"></script>
 <script>
   // 🎨 Icon SVG phẳng 1 màu (không dùng emoji hệ thống)
   const ICON_PATHS = {
@@ -1225,6 +1225,7 @@
       if (old && !off.picks) meta.push('<span class="rv-warn">Bản nộp này không lưu chi tiết câu trả lời</span>');
       if (ex.flow === 'staged') {   // bài nhiều bước: quiz biểu hiện + bản thu luyện đọc (file thu âm nằm trên máy học viên)
         if (off.s1) meta.push(`Quiz biểu hiện ${off.s1.first}/${off.s1.total} đúng lần đầu`);
+        if (off.s2) meta.push(`Nghe hiểu ${off.s2.ok}/${off.s2.total}`);
         meta.push(off.rec ? `Đã thu âm ${escapeHtml(off.rec.name)} · ${Math.round(off.rec.dur)} giây` : '<span class="rv-warn">Chưa thu âm luyện đọc</span>');
       }
     } else { const n = Object.keys(picks).length + Object.values(essays).filter(v => (v || []).some(x => String(x || '').trim())).length;
