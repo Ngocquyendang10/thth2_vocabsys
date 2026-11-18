@@ -84,5 +84,93 @@ window.EXERCISE_DATA = {
                 { q: '풍 dự định làm gì ở Singapore vào ban ngày và ban đêm?', fields: ['Ban ngày (낮)', 'Ban đêm (밤)'], check: [['쇼핑'], ['센토사|쇼(?!핑)']], answer: '낮: 쇼핑을 할 겁니다.<br>밤: 센토사 섬에 갈 겁니다. / 섬에서 쇼를 볼 겁니다.<br><i style="color:var(--sub-text);font-size:12px;">Phần buổi tối chấp nhận cả hai cách trả lời vì đều đúng với bài đọc.</i>' }
             ]
         }
+    ],
+    12: [
+        {
+            id: 'U12-DOC',
+            key: 'reading',
+            label: 'Đọc',
+            title: 'Quy tắc ở nơi công cộng',
+            // flow 'staged': làm theo 4 bước — 1 Biểu hiện mới + quiz → 2 Nghe 1 lần (0.8x) → 3 Đọc & trả lời → 4 Luyện đọc, thu âm
+            flow: 'staged',
+            audio: 'assets/doc/unit12-doc.mp3',
+            listenSpeed: 0.8,
+            passages: [
+                { name: '(1) 미술관', img: 'assets/doc/u12_misulgwan.webp', start: 2.6, end: 16.75,
+                  vi: 'Ở bảo tàng mỹ thuật phải giữ trật tự. Không được chạm tay vào tranh. Ngoài ra cũng không được chụp ảnh nên tuyệt đối đừng chụp. Được phép sử dụng điện thoại di động. Tuy nhiên, đừng nói chuyện to. Có thể vừa uống trà vừa nghỉ ngơi.',
+                  segs: [
+                    [2.75, 5.15, '미술관에서는 질서를 지켜야 합니다.'],
+                    [5.2, 6.65, '그림에 손을 대면 안 돼요.'],
+                    [6.8, 10.0, '그리고 사진도 찍으면 안 되니까 절대로 찍지 마세요.'],
+                    [10.7, 12.4, '휴대전화는 사용해도 돼요.'],
+                    [12.45, 14.3, '그렇지만 크게 이야기하지 마세요.'],
+                    [14.72, 16.6, '차를 마시면서 쉬어도 좋아요.'] ] },
+                { name: '(2) 병원', img: 'assets/doc/u12_byeongwon.webp', start: 20.6, end: 36.95,
+                  vi: 'Anh Phùng, ngày mai anh sẽ đến bệnh viện nơi anh Min-jae nhập viện phải không? Nhất định phải tuân thủ giờ thăm bệnh của bệnh viện. Giờ thăm bệnh là từ 1 giờ đến 5 giờ chiều. Không được mang hoa vào phòng bệnh. Anh đi cẩn thận nhé.',
+                  segs: [
+                    [20.75, 21.3, '풍 씨,'],
+                    [21.65, 24.38, '내일 민재 씨가 입원한 병원에 갈 거지요?'],
+                    [25.4, 27.94, '병원 면회 시간을 꼭 지켜야 합니다.'],
+                    [28.6, 31.88, '면회 시간은 오후 1시부터 5시까지예요.'],
+                    [32.65, 35.02, '병실에 꽃은 가져가면 안 돼요.'],
+                    [35.78, 36.82, '잘 다녀오세요.'] ] },
+                { name: '(3) 연주회', img: 'assets/doc/u12_yeonjuhoe.webp', start: 40.55, end: 54.9,
+                  vi: 'Cuối tuần trước tôi đã cùng bạn đi xem buổi hòa nhạc piano. Không được vừa nghe biểu diễn vừa ăn. Vì vậy chúng tôi ăn tối trước rồi mới vào hội trường. Vừa ngồi vào chỗ, tôi tắt điện thoại. Vì trong buổi hòa nhạc không được để phát ra tiếng động.',
+                  segs: [
+                    [40.7, 43.34, '지난 주말 친구와 피아노 연주회에 갔어요.'],
+                    [43.72, 45.9, '연주를 들으면서 음식을 먹으면 안 돼요.'],
+                    [46.44, 48.08, '그래서 먼저 저녁을 먹고'],
+                    [48.36, 49.68, '연주회장에 들어갔어요.'],
+                    [50.48, 52.54, '자리에 앉으면서 휴대전화를 껐어요.'],
+                    [52.9, 54.85, '연주회 때 소리가 나면 안 되니까요.'] ] }
+            ],
+            // Bước 1: biểu hiện mới (p = đoạn có biểu hiện, t = [bắt đầu, kết thúc] câu chứa biểu hiện trong file nghe)
+            vocab: [
+                { ko: '질서를 지키다', hl: '질서를 지켜야', vi: 'giữ trật tự', ex: '미술관에서는 질서를 지켜야 합니다.', t: [2.75, 5.15] },
+                { ko: '꼭 지키다', hl: '꼭 지켜야', vi: 'nhất định phải tuân thủ, giữ đúng', ex: '병원 면회 시간을 꼭 지켜야 합니다.', t: [25.4, 27.94] },
+                { ko: '손을 대다', hl: '손을 대면', vi: 'chạm tay vào, sờ vào', ex: '그림에 손을 대면 안 돼요.', t: [5.2, 6.65] },
+                { ko: '절대로 + V', hl: '절대로 찍지 마세요', vi: 'tuyệt đối (không) … — thường đi với câu phủ định', ex: '절대로 찍지 마세요.', t: [6.8, 10.0] },
+                { ko: '크게 이야기하다', hl: '크게 이야기하지', vi: 'nói chuyện to, nói lớn tiếng', ex: '크게 이야기하지 마세요.', t: [12.45, 14.3] },
+                { ko: '입원하다', hl: '입원한', vi: 'nhập viện', ex: '민재 씨가 입원한 병원에 갈 거지요?', t: [21.65, 24.38] },
+                { ko: '병원 면회', hl: '병원 면회', vi: 'việc thăm người bệnh ở bệnh viện', ex: '병원 면회 시간을 꼭 지켜야 합니다.', t: [25.4, 27.94] },
+                { ko: '면회 시간', hl: '면회 시간', vi: 'giờ thăm bệnh, giờ thăm nuôi', ex: '면회 시간은 오후 1시부터 5시까지예요.', t: [28.6, 31.88] },
+                { ko: '병실', hl: '병실', vi: 'phòng bệnh', ex: '병실에 꽃은 가져가면 안 돼요.', t: [32.65, 35.02] },
+                { ko: '가져가다', hl: '가져가면', vi: 'mang theo (đến nơi khác), mang đi', ex: '병실에 꽃은 가져가면 안 돼요.', t: [32.65, 35.02] },
+                { ko: '잘 다녀오세요', hl: '잘 다녀오세요', vi: 'đi cẩn thận, đi vui vẻ (chào người sắp ra ngoài rồi sẽ quay về)', ex: '잘 다녀오세요.', t: [35.78, 36.82] },
+                { ko: '연주회', hl: '연주회', vi: 'buổi hòa nhạc, buổi biểu diễn nhạc cụ', ex: '친구와 피아노 연주회에 갔어요.', t: [40.7, 43.34] },
+                { ko: '연주를 듣다', hl: '연주를 들으면서', vi: 'nghe biểu diễn (nhạc cụ)', ex: '연주를 들으면서 음식을 먹으면 안 돼요.', t: [43.72, 45.9] },
+                { ko: '들어가다', hl: '들어갔어요', vi: 'đi vào', ex: '연주회장에 들어갔어요.', t: [48.36, 49.68] },
+                { ko: '휴대 전화를 끄다', hl: '휴대전화를 껐어요', vi: 'tắt điện thoại di động', ex: '자리에 앉으면서 휴대전화를 껐어요.', t: [50.48, 52.54] },
+                { ko: '소리가 나다', hl: '소리가 나면', vi: 'phát ra tiếng, có tiếng động', ex: '연주회 때 소리가 나면 안 되니까요.', t: [52.9, 54.85] }
+            ],
+            glossary: {
+                '미술관': 'bảo tàng mỹ thuật', '질서를 지켜야': 'phải giữ trật tự', '그림': 'bức tranh', '손을 대면 안 돼요': 'không được chạm tay vào',
+                '그리고': 'và, ngoài ra', '사진': 'ảnh', '찍으면 안 되니까': 'vì không được chụp nên', '절대로': 'tuyệt đối', '찍지 마세요': 'đừng chụp',
+                '휴대전화': 'điện thoại di động', '사용해도 돼요': 'được phép sử dụng', '그렇지만': 'tuy nhiên', '크게 이야기하지 마세요': 'đừng nói to',
+                '차': 'trà', '마시면서': 'vừa uống … vừa', '쉬어도 좋아요': 'nghỉ ngơi cũng được',
+                '내일': 'ngày mai', '입원한': '(đã) nhập viện', '병원': 'bệnh viện', '갈 거지요?': 'sẽ đi phải không?', '면회 시간': 'giờ thăm bệnh',
+                '꼭': 'nhất định', '지켜야 합니다': 'phải tuân thủ', '오후': 'buổi chiều', '1시부터 5시까지': 'từ 1 giờ đến 5 giờ',
+                '병실': 'phòng bệnh', '꽃': 'hoa', '가져가면 안 돼요': 'không được mang theo', '잘 다녀오세요': 'đi cẩn thận nhé',
+                '지난 주말': 'cuối tuần trước', '친구와': 'với bạn', '피아노': 'piano', '연주회': 'buổi hòa nhạc', '갔어요': 'đã đi',
+                '연주를 들으면서': 'vừa nghe biểu diễn', '음식': 'đồ ăn', '먹으면 안 돼요': 'không được ăn', '그래서': 'vì vậy', '먼저': 'trước',
+                '저녁': 'bữa tối', '먹고': 'ăn … rồi', '연주회장': 'nhà hát, hội trường hòa nhạc', '들어갔어요': 'đã đi vào', '자리': 'chỗ ngồi',
+                '앉으면서': 'vừa ngồi xuống', '껐어요': 'đã tắt', '소리가 나면 안 되니까요': 'vì không được phát ra tiếng'
+            },
+            // ox: true = câu Đúng/Sai trong sách (p = đoạn số mấy). Các câu còn lại: câu hỏi bổ sung.
+            mcq: [
+                { ox: true, p: 0, q: '미술관에서 사진을 찍어도 됩니다.', why: '사진도 찍으면 안 되니까 절대로 찍지 마세요.', opts: ['O · Đúng', 'X · Sai'], ans: 1 },
+                { ox: true, p: 0, q: '미술관에서 이야기를 하고 차를 마셔도 됩니다.', why: '크게 이야기하지 마세요. / 차를 마시면서 쉬어도 좋아요. (Được nói chuyện, chỉ không nói to)', opts: ['O · Đúng', 'X · Sai'], ans: 0 },
+                { ox: true, p: 1, q: '병실에 꽃이나 주스를 가져가도 됩니다.', why: '병실에 꽃은 가져가면 안 돼요.', opts: ['O · Đúng', 'X · Sai'], ans: 1 },
+                { ox: true, p: 1, q: '면회는 오전이나 오후에 가도 돼요.', why: '면회 시간은 오후 1시부터 5시까지예요.', opts: ['O · Đúng', 'X · Sai'], ans: 1 },
+                { ox: true, p: 2, q: '저녁을 먹으면서 연주를 들었어요.', why: '그래서 먼저 저녁을 먹고 연주회장에 들어갔어요.', opts: ['O · Đúng', 'X · Sai'], ans: 1 },
+                { ox: true, p: 2, q: '연주회 때 소리가 나면 안 되니까 휴대전화를 껐어요.', why: '자리에 앉으면서 휴대전화를 껐어요. 연주회 때 소리가 나면 안 되니까요.', opts: ['O · Đúng', 'X · Sai'], ans: 0 },
+                { q: 'Ở bảo tàng mỹ thuật (미술관), hành động nào ĐƯỢC PHÉP làm?', opts: ['그림에 손을 대요.', '사진을 찍어요.', '휴대전화를 사용해요.', '친구와 크게 이야기해요.'], ans: 2, why: '휴대전화는 사용해도 돼요.' },
+                { q: 'Chọn từ phù hợp để điền vào chỗ trống.', sub: '민재 씨가 아파서 병원에 __________. 그래서 풍 씨가 내일 면회를 가요.', opts: ['입원했어요', '들어갔어요', '가져갔어요', '연주했어요'], ans: 0, why: '민재 씨가 입원한 병원 — 입원하다: nhập viện.' },
+                { q: 'Theo bài đọc, 풍 có thể đến thăm 민재 vào lúc mấy giờ?', opts: ['오전 10시', '낮 12시', '오후 3시', '저녁 7시'], ans: 2, why: '면회 시간은 오후 1시부터 5시까지예요.' },
+                { q: 'Chọn thứ tự việc người viết đã làm vào cuối tuần trước.', opts: ['연주회장에 들어갔어요 → 저녁을 먹었어요 → 휴대전화를 껐어요', '저녁을 먹었어요 → 연주회장에 들어갔어요 → 휴대전화를 껐어요', '휴대전화를 껐어요 → 저녁을 먹었어요 → 연주회장에 들어갔어요', '연주를 들었어요 → 저녁을 먹었어요 → 휴대전화를 껐어요'], ans: 1, why: '먼저 저녁을 먹고 연주회장에 들어갔어요. 자리에 앉으면서 휴대전화를 껐어요.' },
+                { q: 'Chọn từ phù hợp để điền vào chỗ trống.', sub: '미술관에서는 사진을 찍으면 안 돼요. __________ 찍지 마세요.', opts: ['절대로', '먼저', '크게', '같이'], ans: 0, why: '절대로 + câu phủ định (-지 마세요): tuyệt đối đừng …' }
+            ],
+            essay: []
+        }
     ]
 };
