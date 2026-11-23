@@ -628,7 +628,7 @@
   </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261119a"></script>
+<script src="assets/exercise-data.js?v=20261123a"></script>
 <script>
   // 🎨 Icon SVG phẳng 1 màu (không dùng emoji hệ thống)
   const ICON_PATHS = {
@@ -671,7 +671,7 @@
     { key:'typing', label:'Viết từ' },
     { key:'writesentence', label:'Viết câu' }
   ];
-  const EX_TAB_LABELS = { reading:'Đọc' };   // tên các dạng Bài tập (menu "Bài tập" bên học sinh)
+  const EX_TAB_LABELS = { reading:'Đọc', listening:'Nghe' };   // tên các dạng Bài tập (menu "Bài tập" bên học sinh)
   // 📝 DANH MỤC BÀI TẬP — PHẢI KHỚP với EXERCISE_DATA trong index.html (mã bài = cột A tab BaiTap)
   const EX_CATALOG = {
     'U11-DOC': { unit:'11', key:'reading', label:'Đọc', title:'Kế hoạch du lịch của 3 người', mcq:10,
@@ -1182,9 +1182,9 @@
   const recCache = {};
   function rvRecHtml(e){
     const f = e.recFile;
-    if (!f) return `<div class="rv-rec"><div class="rv-rec-h">Bản thu luyện đọc</div><div class="rv-rec-s">Học viên chưa gửi bản thu.</div></div>`;
+    if (!f) return `<div class="rv-rec"><div class="rv-rec-h">Bản thu âm của học viên</div><div class="rv-rec-s">Học viên chưa gửi bản thu.</div></div>`;
     const m = Math.floor((f.dur||0)/60), s = String(Math.round((f.dur||0)%60)).padStart(2,'0');
-    return `<div class="rv-rec"><div class="rv-rec-h">Bản thu luyện đọc</div>`
+    return `<div class="rv-rec"><div class="rv-rec-h">Bản thu âm của học viên</div>`
       + `<div class="rv-rec-s">${escapeHtml(f.name || '')} · ${m}:${s} · gửi ${fmtDate(f.at)}</div>`
       + `<div id="rv-rec-box"><button class="btn btn-ghost rv-rec-btn" onclick="rvLoadRec()">${ic('play')} Nghe bản thu</button></div></div>`;
   }
@@ -1226,13 +1226,13 @@
       if (ex.flow === 'staged') {   // bài nhiều bước: quiz biểu hiện + bản thu luyện đọc (file thu âm nằm trên máy học viên)
         if (off.s1) meta.push(`Quiz biểu hiện ${off.s1.first}/${off.s1.total} câu đúng`);
         if (off.s2) meta.push(`Nghe hiểu ${off.s2.ok}/${off.s2.total} đúng lần đầu`);
-        meta.push(off.rec ? `Đã thu âm ${escapeHtml(off.rec.name)} · ${Math.round(off.rec.dur)} giây` : '<span class="rv-warn">Chưa thu âm luyện đọc</span>');
+        meta.push(off.rec ? `Đã thu âm ${escapeHtml(off.rec.name)} · ${Math.round(off.rec.dur)} giây` : `<span class="rv-warn">Chưa thu âm ${ex.key === 'listening' ? 'luyện nói' : 'luyện đọc'}</span>`);
       }
     } else { const n = Object.keys(picks).length + Object.values(essays).filter(v => (v || []).some(x => String(x || '').trim())).length;
       meta.push(n ? `Đang làm · ${n}/${rvMax()} câu` : 'Chưa làm trong đợt này'); }
 
     // ---------- Đề + bài làm ----------
-    let paper = `<div class="rv-sec">Bài đọc</div>` + ex.passages.map(ps =>
+    let paper = `<div class="rv-sec">${ex.key === 'listening' ? 'Lời thoại' : 'Bài đọc'}</div>` + ex.passages.map(ps =>
       `<div class="rv-passage"><b>${escapeHtml(ps.name)}</b><p>${ps.segs.map(sg => escapeHtml(sg[2])).join(' ')}</p></div>`).join('');
     const mcqOk = rvMcqScore();
     paper += `<div class="rv-sec">Phần 1. Trắc nghiệm <span class="rv-sec-s">${mcqOk}/${ex.mcq.length} câu đúng</span></div>`;

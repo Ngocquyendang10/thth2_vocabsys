@@ -1469,6 +1469,9 @@
         .exd-unit { background: none; color: var(--sub-text); padding: 0; font-size: 11.5px; letter-spacing: .5px; text-transform: uppercase; }
         .exd-name { font-size: 16px; }
         .exd-due { display: inline-flex; align-items: center; gap: 6px; }
+        .exd-wipe { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 12.5px; font-weight: 700; color: #c05621; background: #fff4e5; border: 1px dashed #f6ad55; border-radius: 999px; padding: 5px 12px; cursor: pointer; }
+        .exd-due + .exd-wipe { margin-left: 0; }
+        .exd-wipe:hover { background: #ffe8cc; }
         .exd-note { display: flex; align-items: flex-start; gap: 8px; font-size: 14px; color: #4a5568; background: #f6f5ff; border-radius: 12px; padding: 10px 14px; margin-bottom: 14px; }
         .exd-note .ic { color: var(--point-color); margin-top: 3px; flex: 0 0 auto; }
         .exh-pill { display: inline-flex; align-items: center; gap: 5px; }
@@ -1733,7 +1736,7 @@
         .voc-ex:hover { background: var(--point-light); }
         .q1 { max-width: 560px; margin: 0 auto; }
         /* Bước 1 — danh sách dạng cột */
-        .vl { display: flex; flex-direction: column; gap: 10px; max-width: 960px; }
+        .vl { display: flex; flex-direction: column; gap: 10px; }
         .vl-row { display: flex; gap: 16px; align-items: stretch; border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 12px; background: #fff; }
         .vl-img { width: 132px; flex-shrink: 0; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: #edf2f7; }
         .vl-img img { width: 100%; height: 100%; object-fit: contain; display: block; }
@@ -1808,6 +1811,11 @@
         .s2-modal-opt.wrong { border-color: var(--error-color); background: rgba(245,101,101,0.08); color: #c53030; opacity: .75; cursor: default; animation: s2shake .3s; }
         .s2-modal-opt.correct { border-color: var(--success-color); background: rgba(72,187,120,0.12); color: #2f855a; }
         .s2-modal-fb { min-height: 22px; margin-top: 12px; font-size: 14px; font-weight: 700; text-align: center; }
+        .s2-modal-foot { display: flex; flex-direction: column; align-items: center; }
+        .s2-modal-foot .s2-modal-fb:empty { min-height: 0; }
+        .s2-modal-replay { margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; font: inherit; font-size: 14px; font-weight: 700; color: var(--point-color); background: rgba(97,76,255,0.08); border: 1px solid rgba(97,76,255,0.25); border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+        .s2-modal-replay:hover { background: rgba(97,76,255,0.14); }
+        .s2-modal-replay .ic { width: 16px; height: 16px; }
         .s2-modal-fb.ok { color: #2f855a; } .s2-modal-fb.no { color: #c53030; }
         @keyframes s2shake { 0%,100% { transform: none; } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
         body.s2-modal-open #mobile-dash-toggle { visibility: hidden; }
@@ -1914,6 +1922,12 @@
         .s4-pick.on .s4-pick-radio { border: 6px solid var(--point-color); }
         .s4-pick-badge { position: absolute; top: 8px; left: 8px; display: inline-flex; align-items: center; gap: 3px; background: rgba(26,32,44,0.75); color: #fff; font-size: 11px; font-weight: 800; border-radius: 99px; padding: 2px 8px; }
         .s4-pick-badge .ic { width: 11px; height: 11px; }
+        .s4-pick-badge.ok { background: #2f855a; padding: 3px; left: auto; right: 34px; }
+        .s4-pick.rec-ok .s4-pick-t small { color: #2f855a; }
+        .s4-allbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: -4px 0 12px; font-size: 14px; color: var(--text-color); }
+        .s4-vi { display: flex; gap: 6px; align-items: flex-start; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e2e8f0; font-size: 14px; color: var(--sub-text); line-height: 1.5; }
+        .s4-vi .ic { width: 15px; height: 15px; flex-shrink: 0; margin-top: 2px; }
+        .s4-next { display: flex; justify-content: flex-end; margin-top: 12px; }
         .s4-studio { border: 1px solid #e2e8f0; border-radius: var(--radius-lg); padding: 16px; background: #fff; }
         .s4-sec { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0 10px; }
         .s4-sec:not(:first-child) { margin-top: 20px; }
@@ -2904,7 +2918,7 @@
     </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261119a"></script>
+<script src="assets/exercise-data.js?v=20261123a"></script>
 <script>
     // ===================================================================
     // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
@@ -3892,7 +3906,7 @@
     let exerciseState = {}; // "unit|tab" -> { picks: {qIdx: optIdx} }
 
     // 🎧 Trình phát file nghe bài đọc: tự phát khi mở bài, mặc định tốc độ 0.8
-    const EX_SPEEDS = [0.6, 0.8, 1, 1.2];
+    const EX_SPEEDS = [0.6, 0.7, 0.8, 1, 1.2];
     let exSpeed = 0.8;
     const exAudio = new Audio();
     exAudio.preload = 'auto';
@@ -4048,6 +4062,7 @@
             + `<button class="exd-back" onclick="closeExercise()">${ic('arrowLeft')} Tất cả bài tập</button>`
             + `<div class="exd-crumb"><span class="exd-unit">Unit ${info.unit} · ${_escHtml(ex.label)}</span><span class="exd-name">${_escHtml(ex.title || '')}</span></div>`
             + (info.win.due ? `<span class="exd-due${left != null && left <= 1 && !info.st.done ? ' warn' : ''}">${ic('clock')} Hạn nộp ${_exDay(info.win.due)} · ${_exLeftText(left)}</span>` : '')
+            + (isTeacherAccount ? `<button class="exd-wipe" onclick="exTeacherWipe()" title="Chỉ tài khoản giáo viên: xoá toàn bộ bài làm để thử lại như học viên mới">${ic('swap')} Làm mới bài</button>` : '')
             + `</div>`
             + (info.win.note ? `<div class="exd-note">${ic('message')}<span><b>Lời dặn của giáo viên:</b> ${_escHtml(info.win.note)}</span></div>` : '');
         document.getElementById('exercise-content').insertAdjacentHTML('afterbegin', bar);
@@ -4062,6 +4077,21 @@
         exOpen = { unit: String(unit), key: key };
         currentExerciseTab = key;
         renderExerciseMode(true);
+        window.scrollTo(0, 0);
+    }
+    // 🧹 Tài khoản giáo viên (đang dùng làm tài khoản thử): xoá sạch bài làm của 1 bài để làm lại như học viên mới
+    //    (khác "Làm lại" của học viên: không giữ lần nộp đầu, lịch sử, quiz từ mới, bản thu trên máy).
+    function exTeacherWipe() {
+        if (!isTeacherAccount || !exOpen) return;
+        if (!_exDialog(() => confirm('Xoá toàn bộ bài làm của bài này (kể cả lần nộp, quiz từ mới, bản thu trên máy) để làm lại từ đầu?'))) return;
+        if (typeof _recStop === 'function') { _recStop(); _takeStop(); _s2Abort(); }
+        stopExerciseAudio(); _exStopAt = null;
+        const k = _exKey(), old = exerciseState[k] || {};
+        (old.recTakes || []).forEach(t => { try { _recDbDel(t.id); } catch (e) {} });
+        exerciseState[k] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), tabSwitches: 0, awayMs: 0 };
+        s1View = 'learn'; s1Quiz = null; s4Pick = null; _s4MsgText = '';
+        _exSave();
+        renderExerciseMode(false);
         window.scrollTo(0, 0);
     }
     function closeExercise() {
@@ -4397,7 +4427,7 @@
         exerciseState[_exKey()] = { picks: {}, essays: {}, done: null, startedAt: Date.now(), resetAt: Date.now(), tabSwitches: 0, awayMs: 0,
             first: old.first || old.done || null, attempts: (old.attempts || []).concat(old.done ? [old.done] : []),
             history: old.history || [] };
-        if (old.s1) Object.assign(exerciseState[_exKey()], { s1: old.s1, s2: old.s2, listened: old.listened, stage: 3, recTakes: old.recTakes || [] }); // bài nhiều bước: không phải học lại biểu hiện
+        if (old.s1) Object.assign(exerciseState[_exKey()], { s1: old.s1, s2: old.s2, listened: old.listened, stage: 3, recTakes: old.recTakes || [], recSel: old.recSel || {} }); // bài nhiều bước: không phải học lại biểu hiện
         _exSave();
         renderExerciseMode(false);
     }
@@ -4479,6 +4509,9 @@
        State bài: stage, s1 {done, first, total, missed}, listened, recTakes [{id,p,dur,at,mime}], recPick.
        File thu âm lưu trong IndexedDB của máy học viên; bản chọn nộp được gửi lên Drive riêng của giáo viên khi nộp bài. */
     const STG_NAMES = ['Biểu hiện mới', 'Nghe', 'Đọc hiểu', 'Luyện đọc'];
+    // Bài nghe (key 'listening') dùng cùng 4 bước nhưng đổi tên bước / câu hướng dẫn qua exercise-data.js:
+    // stageNames, s2Ask, s3Ask, s4Ask; hideScript: true = bước 3 chưa hiện lời thoại cho tới khi nộp bài.
+    function _stgNames(ex) { return (ex && ex.stageNames) || STG_NAMES; }
     var _exStopAt = null, _exRangeRaf = 0, _exRangeDone = null;
     let _stgLastView = '';
     let s1View = 'learn', s1Quiz = null, s4Pick = null, s4Rate = 0.8, _s4MsgText = '';
@@ -4542,16 +4575,17 @@
     function _stgRender(ex, st) {
         const cur = _stgCur(ex, st), max = _stgMax(ex, st);
         const doneCount = [1, 2, 3, 4].filter(n => _stgStepDone(ex, st, n)).length;
-        let h = `<div class="stg-head"><div class="stg-head-top"><span class="stg-kicker">Bước ${cur}/4</span><b class="stg-title">${STG_NAMES[cur - 1]}</b>`
+        const names = _stgNames(ex);
+        let h = `<div class="stg-head"><div class="stg-head-top"><span class="stg-kicker">Bước ${cur}/4</span><b class="stg-title">${names[cur - 1]}</b>`
             + (isTeacherAccount && !st.done && cur < 4 ? `<button class="stg-quick" onclick="stgQuickFill()" title="Chỉ tài khoản giáo viên">${ic('zap')} Điền nhanh đáp án</button>` : '')
             + `</div>`
             + `<div class="stg-bar"><i style="width:${doneCount / 4 * 100}%"></i></div><div class="stg-steps">`
-            + STG_NAMES.map((name, i) => {
+            + names.map((name, i) => {
                 const n = i + 1, ok = _stgStepDone(ex, st, n), lock = n > max;
                 return `<button class="stg-step${n === cur ? ' on' : ''}${ok ? ' ok' : ''}${lock ? ' lock' : ''}" ${lock ? 'disabled' : ''} onclick="exGoStage(${n})">`
                     + `<span class="stg-dot">${ok ? ic('check') : lock ? ic('lock') : n}</span><span class="stg-lbl">${name}</span></button>`;
             }).join('') + `</div></div>`;
-        if (st.done) h += _recUpHtml(st);
+        if (st.done) h += _recUpHtml(st, ex);
         const enter = _stgLastView !== _exKey() + '#' + cur + s1View; _stgLastView = _exKey() + '#' + cur + s1View;   // hiệu ứng chỉ khi đổi bước
         h += `<div class="stg-body${enter ? ' enter' : ''}">` + [_s1Render, _s2Render, _s3Render, _s4Render][cur - 1](ex, st) + `</div>`;
         return h;
@@ -4562,7 +4596,7 @@
         if (cur === 3) { const hd = document.querySelector('.stg-head'), pl = document.querySelector('.s3-player'); if (hd && pl) pl.style.top = (getComputedStyle(hd).position === 'sticky' ? hd.offsetHeight - 1 : 0) + 'px'; } // trình phát dính ngay dưới thanh tiến độ
         if (cur === 4) { _s4SyncModel(); _s4RefreshRecUI(); }
         // Bài đã nộp nhưng bản thu chưa gửi được (mất mạng, đóng trang…) -> tự gửi lại 1 lần mỗi lần mở trang
-        if (st.done && !(st.recUp && st.recUp.ok && st.recUp.take === st.recPick) && !_recUpTried[_exKey()]) { _recUpTried[_exKey()] = 1; setTimeout(_recUpload, 800); }
+        if (st.done && _recSig(ex, st) && !(st.recUp && st.recUp.ok && st.recUp.take === _recSig(ex, st)) && !_recUpTried[_exKey()]) { _recUpTried[_exKey()] = 1; setTimeout(_recUpload, 800); }
     }
     function _stgNav(back, nextHtml) {
         return `<div class="stg-nav">${back ? `<button class="stg-btn ghost" onclick="exGoStage(${back})">${ic('arrowLeft')} Bước ${back}</button>` : '<span></span>'}${nextHtml || ''}</div>`;
@@ -4584,7 +4618,7 @@
             + `<b class="vl-ko">${_escHtml(v.ko)}</b>`
             + `<button class="voc-say" title="Nghe phát âm" onclick="_s1Say(${i}, this)">${ic('speaker')}</button></div>`
             + `<div class="vl-vi">${_escHtml(v.vi)}</div>`
-            + (v.ex ? `<div class="vl-ex"><button class="vl-play" title="Nghe" onclick="_s1Ctx(${i})">${ic('playSolid')}</button>`
+            + (v.ex ? `<div class="vl-ex"><button class="vl-play" title="Nghe" onclick="_s1Ctx(${i}, this)">${ic('playSolid')}</button>`
                 + `<span class="vl-ex-t">${_stgMark(v.ex, v.hl)}</span>`
                 + (v.exVi ? `<button class="vl-bulb" title="Xem nghĩa" onclick="s1Bulb(this)">${ic('bulb')}</button>` : '') + `</div>`
                 + (v.exVi ? `<div class="vl-ex-vi">${_escHtml(v.exVi)}</div>` : '') : '')
@@ -4602,7 +4636,18 @@
         const on = row.classList.toggle('show-vi'); btn.classList.toggle('on', on);
     }
     function _s1Say(i, btn) { const v = _exCurrent().vocab[i]; triggerKoreanVoice(v.ko.replace(/\s*\+.*$/, ''), false, btn); }
-    function _s1Ctx(i) { const v = _exCurrent().vocab[i]; if (v.t) exPlayRange(v.t[0], v.t[1] + 0.15, 0.8); }
+    // Nghe câu ví dụ: câu trùng y hệt 1 câu trong file nghe -> phát đúng khúc đó;
+    // câu ví dụ khác với file nghe (rút gọn, bỏ "네,"…) -> giọng AI đọc đúng câu ví dụ.
+    // Chỉ áp dụng cho bài có ctxExact: true; bài cũ (Unit 12) giữ cách phát theo mốc t.
+    function _s1Ctx(i, btn) {
+        const ex = _exCurrent(), v = ex.vocab[i], norm = s => String(s || '').replace(/\s+/g, ' ').trim();
+        if (!ex.ctxExact) { if (v.t) exPlayRange(v.t[0], v.t[1] + 0.15, ex.ctxSpeed || 0.8); return; }
+        let seg = null;
+        if (ex.audio) for (const p of ex.passages) { seg = (p.segs || []).find(sg => norm(sg[2]) === norm(v.ex)); if (seg) break; }
+        if (seg) { _stopVoice(); exPlayRange(seg[0], seg[1] + 0.15, ex.ctxSpeed || 0.8); return; }
+        stopExerciseAudio(); _exStopAt = null;
+        triggerKoreanVoice(v.ex, false, btn, { rate: ex.ttsSpeed || 1 });   // giọng AI vốn đã đọc chậm
+    }
 
     // Quiz: mỗi biểu hiện được hỏi đúng 1 lần, trộn nhiều dạng câu; sai không hỏi lại
     const S1_CAT = { mus: 'bảo tàng', hos: 'bệnh viện', con: 'buổi hòa nhạc' };
@@ -4650,6 +4695,19 @@
         s1View = 'quiz'; stopExerciseAudio();
         renderExerciseMode(false);
     }
+    // Chữ có trong danh sách nghĩa (quizGloss) -> gạch chấm, rê chuột / chạm hiện nghĩa (khớp cụm dài nhất trước)
+    function _glossHtml(text, gloss) {
+        const keys = Object.keys(gloss || {}).sort((a, b) => b.length - a.length);
+        if (!keys.length) return _escHtml(text);
+        const re = new RegExp(keys.map(k => k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'g');
+        let out = '', last = 0, m;
+        while ((m = re.exec(text))) {
+            out += _escHtml(text.slice(last, m.index))
+                + `<span class="ex-w" tabindex="0" data-tip="${_escHtml(gloss[m[0]])}">${_escHtml(m[0])}</span>`;
+            last = m.index + m[0].length;
+        }
+        return out + _escHtml(text.slice(last));
+    }
     function _s1Correct(q) { return q.type === 'fill' ? q.opts.indexOf(q.ans) : q.opts.indexOf(q.i); }
     function _s1QuizHtml(ex) {
         const V = ex.vocab, q = s1Quiz.items[s1Quiz.pos], n = s1Quiz.items.length;
@@ -4663,7 +4721,7 @@
         if (q.type === 'ko2vi') h += `<div class="q1-prompt">${_escHtml(v.ko)}</div>`;
         else if (q.type === 'vi2ko') h += `<div class="q1-prompt vi">${_escHtml(v.vi)}</div>`;
         else if (q.type === 'img') h += `<div class="q1-pic"><img src="${v.img}" alt=""></div>`;
-        else if (q.type === 'fill') h += `<div class="q1-prompt fill">${_escHtml(v.fill.q).replace('___', `<span class="q1-blank">${answered ? _escHtml(q.ans) : ''}</span>`)}</div>`;
+        else if (q.type === 'fill') h += `<div class="q1-prompt fill">${String(v.fill.q).split('___').map(s => _glossHtml(s, ex.quizGloss)).join(`<span class="q1-blank">${answered ? _escHtml(q.ans) : ''}</span>`)}</div>`;
         else h += `<div class="q1-sp"></div>`;
         const label = j => q.type === 'fill' ? j : q.type === 'ko2vi' ? V[j].vi : V[j].ko;
         const isKo = q.type !== 'ko2vi';
@@ -4781,7 +4839,7 @@
     // Đúng mới nghe tiếp; sai thì chọn lại đến khi đúng. st.s2 = lựa chọn đầu tiên (thống kê), st.s2ok = đã trả lời đúng.
     let _s2Ask = null, _s2Raf = 0;   // _s2Ask: { qi, wrong: [], ok: false }
     function _s2Render(ex, st) {
-        return `<div class="s2" id="s2-root"><div class="stg-ask">Hãy nghe kỹ nội dung sau đây và quan sát bức tranh.</div><div class="s2-card">`
+        return `<div class="s2" id="s2-root"><div class="stg-ask">${_escHtml(ex.s2Ask || 'Hãy nghe kỹ nội dung sau đây và quan sát bức tranh.')}</div><div class="s2-card">`
             + `<div class="s2-scenes">` + ex.passages.map((p, i) => `<div class="s2-scene" data-i="${i}">`
                 + (p.img ? `<img src="${p.img}" alt="" loading="lazy">` : '') + `<span class="s2-scene-n">${_escHtml(p.name)}</span><span class="s2-scene-s"></span></div>`).join('') + `</div>`
             + `<div class="s2-player"><button class="s2-play" id="s2-play" onclick="s2Toggle()"></button>`
@@ -4816,11 +4874,13 @@
         m.innerHTML = `<div class="s2-modal-card"><div class="s2-q-tag">${_escHtml(ex.passages[q.p].name)}</div>`
             + `<div class="s2-modal-q">${_escHtml(q.q)}</div><div class="s2-modal-opts">`
             + q.opts.map((o, oi) => {
-                const bad = a.wrong.includes(oi), good = a.ok && oi === q.ans;
-                return `<button class="s2-modal-opt${bad ? ' wrong' : ''}${good ? ' correct' : ''}" ${bad || a.ok ? 'disabled' : ''} onclick="s2Answer(${oi})">`
+                const bad = a.wrong.includes(oi), good = a.ok && oi === q.ans, lockAll = ex.s2Replay && a.wrong.length;
+                return `<button class="s2-modal-opt${bad ? ' wrong' : ''}${good ? ' correct' : ''}" ${bad || a.ok || lockAll ? 'disabled' : ''} onclick="s2Answer(${oi})">`
                     + `<span class="q1-k">${oi + 1}</span>${_escHtml(o)}${good ? ic('check') : bad ? ic('x') : ''}</button>`;
             }).join('') + `</div>`
-            + `<div class="s2-modal-fb${a.ok ? ' ok' : a.wrong.length ? ' no' : ''}">${a.ok ? 'Chính xác!' : a.wrong.length ? 'Chưa đúng. Hãy chọn lại.' : ''}</div></div>`;
+            + `<div class="s2-modal-foot"><div class="s2-modal-fb${a.ok ? ' ok' : a.wrong.length ? ' no' : ''}">${a.ok ? 'Chính xác!' : a.wrong.length ? (ex.s2Replay ? 'Chưa đúng. Nghe lại câu này.' : 'Chưa đúng. Hãy chọn lại.') : ''}</div>`
+            + (ex.s2Replay && !a.ok && !a.wrong.length ? `<button class="s2-modal-replay" onclick="s2ReplayNow()">${ic('headphones')} Nghe lại</button>` : '')
+            + `</div></div>`;
         requestAnimationFrame(() => m.classList.add('show'));
         document.body.classList.add('s2-modal-open');
     }
@@ -4833,7 +4893,12 @@
         const q = ex.listenQ[a.qi], right = oi === q.ans;
         st.s2 = st.s2 || {}; if (st.s2[a.qi] === undefined) st.s2[a.qi] = oi;   // lựa chọn đầu tiên
         try { const s = new Audio(right ? SND_CORRECT : SND_WRONG); s.volume = 0.5; s.play().catch(() => {}); } catch (e) {}
-        if (!right) { a.wrong.push(oi); _exSave(); _s2ModalShow(); return; }
+        if (!right) {
+            a.wrong.push(oi); _exSave(); _s2ModalShow();
+            // s2Replay: chọn sai -> đóng câu hỏi, nghe lại câu đó; hết câu sẽ hỏi lại từ đầu
+            if (ex.s2Replay) setTimeout(() => { if (_s2Ask === a) s2ReplayNow(); }, 1300);
+            return;
+        }
         a.ok = true; st.s2ok = st.s2ok || {}; st.s2ok[a.qi] = true; _exSave(); _s2ModalShow();
         setTimeout(() => {
             if (_s2Ask !== a) return;
@@ -4846,6 +4911,16 @@
             } else if (!_s2Gate(false)) { exAudio.playbackRate = ex.listenSpeed || 0.8; exAudio.play().catch(() => {}); }
         }, 900);
     }
+    // Nghe lại câu đang hỏi (bấm nút "Nghe lại" hoặc tự động sau khi chọn sai): đóng câu hỏi, phát lại câu, hết câu hỏi lại
+    function s2ReplayNow() {
+        const ex = _exCurrent(), a = _s2Ask; if (!ex || !a || a.ok) return;
+        const q = ex.listenQ[a.qi];
+        _s2Ask = null; _s2ModalHide();
+        if (!document.getElementById('s2-root')) return;
+        exAudio.currentTime = ex.passages[q.p].start;
+        exAudio.playbackRate = ex.listenSpeed || 0.8;
+        exAudio.play().catch(() => {});
+    }
     // Rời bước 2 khi popup đang mở -> đóng popup (lần sau nghe tới đó sẽ hỏi lại)
     function _s2Abort() { if (_s2Ask) { _s2Ask = null; _s2ModalHide(); } }
 
@@ -4855,6 +4930,7 @@
         if (exAudio.getAttribute('src') !== ex.audio) exAudio.src = ex.audio;
         if (exAudio.paused) {
             if (exAudio.ended || exAudio.currentTime >= (exAudio.duration || 1e9) - 0.05) exAudio.currentTime = 0;
+            if (ex.audioStart && exAudio.currentTime < ex.audioStart) exAudio.currentTime = ex.audioStart;   // bỏ câu đề bài ở đầu file
             exAudio.playbackRate = ex.listenSpeed || 0.8;
             exAudio.play().catch(() => {});
         } else exAudio.pause();
@@ -4907,7 +4983,9 @@
             + '<div class="ex-speeds">' + EX_SPEEDS.map(s => `<button class="ex-speed-btn" data-speed="${s}" onclick="setExerciseSpeed(${s})">${s}x</button>`).join('') + '</div>'
             + '<div class="ex-marks">' + ex.passages.map(p =>
                 `<button class="ex-mark-btn" data-start="${p.start}" onclick="jumpExerciseAudio(${p.start})">${ic('playSolid')} ${_escHtml(p.name)}</button>`).join('') + '</div></div>';
-        h += `<div class="stg-ask">1. Hãy đọc đoạn văn và chọn O nếu đúng, X nếu sai.</div>`;
+        const hasOx = ex.mcq.some(m => m.ox), hide = ex.hideScript && !fin;   // bài nghe: chưa nộp thì chưa hiện lời thoại
+        if (hasOx) h += `<div class="stg-ask">1. Hãy đọc đoạn văn và chọn O nếu đúng, X nếu sai.</div>`;
+        else if (fin && ex.hideScript) h += `<div class="stg-ask">Lời thoại</div>`;
         const oxBtn = (qi, m, oi, label) => {
             let c = 'ox-btn ' + (oi ? 'x' : 'o');
             if (!fin) { if (picks[qi] === oi) c += ' picked'; }
@@ -4915,7 +4993,7 @@
             return `<button class="${c}" ${fin ? 'disabled' : ''} aria-label="${oi ? 'Sai' : 'Đúng'}" onclick="pickExerciseOption(${qi}, ${oi})">${label}</button>`;
         };
         let oxN = 0;
-        ex.passages.forEach((p, pi) => {
+        if (!hide) ex.passages.forEach((p, pi) => {
             h += `<div class="s3-pass"><div class="s3-pass-main">`
                 + (p.img ? `<img class="s3-img" src="${p.img}" alt="" loading="lazy">` : '')
                 + `<div class="ex-passage"><div class="ex-passage-name">${_escHtml(p.name)} <button class="ex-passage-play" title="Nghe đoạn này" onclick="jumpExerciseAudio(${p.start})">${ic('headphones')}</button></div>`
@@ -4933,7 +5011,7 @@
             oxN = 0;
             h += `</div></div>`;
         });
-        h += `<div class="stg-ask">2. Hãy chọn đáp án đúng.</div>`;
+        h += `<div class="stg-ask">${hasOx ? '2. ' : ''}${_escHtml(ex.s3Ask || 'Hãy chọn đáp án đúng.')}</div>`;
         let k = 0;
         ex.mcq.forEach((m, qi) => {
             if (m.ox) return;
@@ -4956,22 +5034,40 @@
 
     // ---------- BƯỚC 4: LUYỆN ĐỌC & THU ÂM ----------
     function _s4Takes(st, p) { return (st.recTakes || []).filter(t => p == null || t.p === p).sort((a, b) => b.at - a.at); }
+    // s4Mode 'all' (bài nghe): thu âm ĐỦ các câu; mỗi câu có 1 bản được chọn (st.recSel[câu] = id bản thu);
+    // khi nộp, các bản được chọn được gộp theo thứ tự thành 1 file .wav gửi cho giáo viên.
+    function _s4All(ex) { return !!(ex && ex.s4Mode === 'all'); }
+    function _s4Sel(st) { return st.recSel || (st.recSel = {}); }
+    function _s4Chosen(ex, st, t) { return _s4All(ex) ? _s4Sel(st)[t.p] === t.id : t.id === st.recPick; }
+    function _s4SelTakes(ex, st) {   // các bản được chọn, theo thứ tự câu (bỏ câu chưa thu)
+        const all = st.recTakes || [], sel = _s4Sel(st);
+        return ex.passages.map((_, i) => all.find(t => t.id === sel[i])).filter(Boolean);
+    }
+    function _recSig(ex, st) { return _s4All(ex) ? _s4SelTakes(ex, st).map(t => t.id).join(',') : (st.recPick || ''); }
     function _s4Render(ex, st) {
+        const all = _s4All(ex);
         if (s4Pick == null) { const ch = (st.recTakes || []).find(t => t.id === st.recPick); s4Pick = ch ? ch.p : 0; }
         const p = ex.passages[s4Pick], takes = _s4Takes(st, s4Pick);
-        let h = `<div class="stg-ask">Hãy chọn 1 đoạn, nghe mẫu và thu âm giọng đọc của bạn.</div>`;
+        let h = `<div class="stg-ask">${_escHtml(ex.s4Ask || 'Hãy chọn 1 đoạn, nghe mẫu và thu âm giọng đọc của bạn.')}</div>`;
         h += `<div class="s4-picks" role="radiogroup">` + ex.passages.map((q, i) => {
-            const n = _s4Takes(st, i).length;
-            return `<button class="s4-pick${i === s4Pick ? ' on' : ''}" role="radio" aria-checked="${i === s4Pick}" onclick="s4Choose(${i})">`
+            const n = _s4Takes(st, i).length, ok = all && _s4Sel(st)[i] && (st.recTakes || []).some(t => t.id === _s4Sel(st)[i]);
+            return `<button class="s4-pick${i === s4Pick ? ' on' : ''}${ok ? ' rec-ok' : ''}" role="radio" aria-checked="${i === s4Pick}" onclick="s4Choose(${i})">`
                 + (q.img ? `<img src="${q.img}" alt="" loading="lazy">` : '')
-                + `<span class="s4-pick-t"><b>${_escHtml(q.name)}</b></span>`
-                + (n ? `<span class="s4-pick-badge">${ic('mic')} ${n}</span>` : '') + `<span class="s4-pick-radio"></span></button>`;
+                + `<span class="s4-pick-t"><b>${_escHtml(q.name)}</b>${all ? `<small>${ok ? 'Đã thu âm' : 'Chưa thu âm'}</small>` : ''}</span>`
+                + (n && !all ? `<span class="s4-pick-badge">${ic('mic')} ${n}</span>` : '')
+                + (ok ? `<span class="s4-pick-badge ok">${ic('check')}</span>` : '') + `<span class="s4-pick-radio"></span></button>`;
         }).join('') + `</div>`;
+        if (all) {
+            const done = _s4SelTakes(ex, st).length;
+            h += `<div class="s4-allbar"><span>Đã thu <b>${done}/${ex.passages.length}</b> câu</span>`
+                + (done ? `<button class="s4-chip" id="s4-all-play" onclick="s4PlayAll()">${ic('playSolid')} Nghe lại bài thu âm</button>` : '') + `</div>`;
+        }
         h += `<div class="s4-studio">`
             + `<div class="s4-sec"><span class="s4-step">1</span><b>Nghe mẫu</b></div>`
-            + `<div class="s4-script ex-passage" id="s4-script"><p>${p.segs.map(sg => _renderSeg(sg, null)).join(' ')}</p></div>`
+            + `<div class="s4-script ex-passage" id="s4-script"><p>${p.segs.map(sg => _renderSeg(sg, null)).join(' ')}</p>`
+            + (all && p.vi ? `<div class="s4-vi">${ic('languages')}<span>${_escHtml(p.vi)}</span></div>` : '') + `</div>`
             + `<div class="s4-model"><button class="s4-btn" id="s4-model-btn" onclick="s4PlayModel()">${ic('headphones')} Nghe</button>`
-            + `<div class="ex-speeds">${[0.6, 0.8, 1].map(r => `<button class="ex-speed-btn${r === s4Rate ? ' active' : ''}" onclick="s4SetRate(${r})">${r}x</button>`).join('')}</div></div>`
+            + `<div class="ex-speeds">${[0.6, 0.7, 0.8, 1].map(r => `<button class="ex-speed-btn${r === s4Rate ? ' active' : ''}" onclick="s4SetRate(${r})">${r}x</button>`).join('')}</div></div>`
             + `<div class="s4-sec"><span class="s4-step">2</span><b>Thu âm</b></div>`
             + `<div class="s4-rec" id="s4-rec"><button class="s4-mic" id="s4-mic" onclick="s4ToggleRec()" aria-label="Thu âm"></button>`
             + `<div class="s4-rec-mid"><div class="s4-rec-state" id="s4-rec-state"></div><canvas class="s4-meter" id="s4-meter"></canvas></div>`
@@ -4979,14 +5075,16 @@
             + `<div class="s4-msg${_s4MsgText ? ' show' : ''}" id="s4-msg">${_s4MsgText}</div>`
             + `<div class="s4-sec"><span class="s4-step">3</span><b>Nghe lại</b></div>`
             + (takes.length ? `<div class="s4-takes">` + takes.map((t, k) => {
-                const on = t.id === st.recPick;
+                const on = _s4Chosen(ex, st, t);
                 return `<div class="s4-take${on ? ' on' : ''}"><button class="s4-take-play" data-take="${t.id}" onclick="s4PlayTake('${t.id}')" aria-label="Nghe bản thu">${ic('playSolid')}</button>`
                     + `<span class="s4-take-t"><b>Bản thu ${takes.length - k}</b><small>${_fmtTime(t.dur)} · ${_fmtDoneAt(t.at).split(',')[0]}</small></span>`
                     + `<span class="s4-take-acts"><button class="s4-chip" onclick="s4Compare('${t.id}')">${ic('swap')} So với mẫu</button>`
-                    + `<button class="s4-chip${on ? ' sel' : ''}" onclick="s4PickTake('${t.id}')">${on ? ic('check') + ' Bản nộp' : 'Chọn nộp'}</button>`
+                    + `<button class="s4-chip${on ? ' sel' : ''}" onclick="s4PickTake('${t.id}')">${on ? ic('check') + (all ? ' Bản dùng' : ' Bản nộp') : (all ? 'Dùng bản này' : 'Chọn nộp')}</button>`
                     + `<button class="s4-ico" title="Lưu file / gửi giáo viên" onclick="s4SaveTake('${t.id}')">${ic('download')}</button>`
                     + `<button class="s4-ico" title="Xóa bản thu" onclick="s4DelTake('${t.id}')">${ic('trash')}</button></span></div>`;
             }).join('') + `</div>` : `<div class="s4-empty">Chưa có bản thu.</div>`)
+            + (all && s4Pick < ex.passages.length - 1 && takes.length && !st.done
+                ? `<div class="s4-next"><button class="stg-btn" onclick="s4Choose(${s4Pick + 1})">Câu tiếp theo ${ic('arrowRight')}</button></div>` : '')
             + `</div>`;
         const pickT = (st.recTakes || []).find(t => t.id === st.recPick);
         if (st.done) h += _stgNav(3, `<button class="stg-btn" onclick="exGoStage(3)">Xem đáp án ${ic('arrowRight')}</button>`);
@@ -5099,11 +5197,12 @@
         // Giữ tối đa 3 bản / đoạn (bỏ bản cũ nhất không phải bản nộp)
         const mine = _s4Takes(st, r.p);
         if (mine.length > 3) {
-            const drop = mine.slice(3).filter(t => t.id !== st.recPick && t.id !== id);
+            const keep = Object.values(st.recSel || {});
+            const drop = mine.slice(3).filter(t => t.id !== st.recPick && t.id !== id && !keep.includes(t.id));
             drop.forEach(t => _recDbDel(t.id));
             st.recTakes = st.recTakes.filter(t => !drop.includes(t));
         }
-        if (!st.done) st.recPick = id;   // bản mới nhất tự thành bản nộp (có thể đổi)
+        if (!st.done) { st.recPick = id; (st.recSel = st.recSel || {})[r.p] = id; }   // bản mới nhất tự thành bản nộp (có thể đổi)
         try { localStorage.setItem(_exStoreKey(r.k), JSON.stringify(st)); } catch (e) {}
         scheduleProgressPush();
         if (_exKey() !== r.k) return;   // đã rời bài: chỉ lưu, không vẽ lại
@@ -5151,17 +5250,19 @@
     }
     function s4PickTake(id) {
         const st = _exState(); if (st.done) { _s4Msg('Bài đã nộp nên không đổi được bản nộp.'); return; }
-        st.recPick = id; _exSave();
+        const t = (st.recTakes || []).find(x => x.id === id);
+        st.recPick = id; if (t) _s4Sel(st)[t.p] = id; _exSave();
         const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
     }
     function s4DelTake(id) {
-        const st = _exState();
-        if (st.done && id === st.recPick) { _s4Msg('Đây là bản đã nộp nên không xóa được.'); return; }
+        const st = _exState(), tk = (st.recTakes || []).find(x => x.id === id);
+        if (st.done && (id === st.recPick || (_s4All(_exCurrent()) && Object.values(st.recSel || {}).includes(id)))) { _s4Msg('Đây là bản đã nộp nên không xóa được.'); return; }
         if (!_exDialog(() => confirm('Xóa bản thu này?'))) return;
         if (_takeId === id) { _takeStop(); _takeId = null; }
         _recDbDel(id);
         st.recTakes = (st.recTakes || []).filter(t => t.id !== id);
         if (st.recPick === id) { const n = _s4Takes(st, null)[0]; st.recPick = n ? n.id : null; }
+        if (tk && _s4Sel(st)[tk.p] === id) { const n = _s4Takes(st, tk.p)[0]; if (n) _s4Sel(st)[tk.p] = n.id; else delete _s4Sel(st)[tk.p]; }
         _exSave(); _s4MsgText = '';
         const y = window.scrollY; renderExerciseMode(false); window.scrollTo(0, y);
     }
@@ -5188,9 +5289,10 @@
     // 📤 Gửi bản thu đã chọn nộp lên máy chủ (lưu riêng tư trên Drive của giáo viên; chỉ giữ bản mới nhất)
     const _recUpTried = {};
     let _recUpBusy = false;
-    function _recUpHtml(st) {
-        const t = (st.recTakes || []).find(x => x.id === st.recPick), u = st.recUp && st.recUp.take === st.recPick ? st.recUp : null;
-        if (!t) return '';
+    function _recUpHtml(st, ex) {
+        ex = ex || _exCurrent();
+        const sig = _recSig(ex, st), u = st.recUp && st.recUp.take === sig ? st.recUp : null;
+        if (!sig) return '';
         if (_recUpBusy) return `<div class="rec-up" id="rec-up"><span class="rec-up-spin"></span><span>Đang gửi bản thu…</span></div>`;
         if (u && u.ok) return `<div class="rec-up ok" id="rec-up">${ic('checkCircle')}<span>Đã gửi bản thu cho giáo viên.</span></div>`;
         return `<div class="rec-up bad" id="rec-up">${ic('alert')}<span>Chưa gửi được bản thu.</span>`
@@ -5199,31 +5301,83 @@
     function _recUpUI() {
         const el = document.getElementById('rec-up'), ex = _exCurrent();
         if (!el || !ex || ex.flow !== 'staged') return;
-        el.outerHTML = _recUpHtml(_exState()) || '<div id="rec-up"></div>';
+        el.outerHTML = _recUpHtml(_exState(), ex) || '<div id="rec-up"></div>';
+    }
+    // 🔗 Gộp nhiều bản thu (mỗi câu 1 bản) thành 1 file WAV mono 16 kHz, giữa các câu cách 0,6 giây
+    async function _recMergeWav(blobs) {
+        const AC = window.AudioContext || window.webkitAudioContext, ctx = new AC(), rate = 16000, parts = [];
+        try {
+            for (const b of blobs) {
+                const ab = await b.arrayBuffer();
+                const buf = await new Promise((ok, no) => ctx.decodeAudioData(ab, ok, no));
+                const src = buf.getChannelData(0), ratio = buf.sampleRate / rate, n = Math.floor(src.length / ratio), out = new Float32Array(n);
+                for (let i = 0; i < n; i++) {
+                    const a = Math.floor(i * ratio), e = Math.max(a + 1, Math.min(src.length, Math.floor((i + 1) * ratio)));
+                    let s = 0; for (let j = a; j < e; j++) s += src[j]; out[i] = s / (e - a);
+                }
+                parts.push(out);
+            }
+        } finally { try { ctx.close(); } catch (e) {} }
+        const gap = Math.round(rate * 0.6), total = parts.reduce((s, x) => s + x.length, 0) + gap * Math.max(0, parts.length - 1);
+        const buf = new ArrayBuffer(44 + total * 2), v = new DataView(buf), w = (o, s) => { for (let i = 0; i < s.length; i++) v.setUint8(o + i, s.charCodeAt(i)); };
+        w(0, 'RIFF'); v.setUint32(4, 36 + total * 2, true); w(8, 'WAVE'); w(12, 'fmt '); v.setUint32(16, 16, true); v.setUint16(20, 1, true);
+        v.setUint16(22, 1, true); v.setUint32(24, rate, true); v.setUint32(28, rate * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+        w(36, 'data'); v.setUint32(40, total * 2, true);
+        let o = 44;
+        parts.forEach((x, k) => {
+            for (let i = 0; i < x.length; i++, o += 2) { const s = Math.max(-1, Math.min(1, x[i])); v.setInt16(o, s < 0 ? s * 0x8000 : s * 0x7FFF, true); }
+            if (k < parts.length - 1) o += gap * 2;
+        });
+        return new Blob([buf], { type: 'audio/wav' });
+    }
+    async function _s4AllBlob(ex, st) {
+        const sel = _s4SelTakes(ex, st), blobs = [];
+        for (const t of sel) { const b = await _recDbGet(t.id); if (!b) return null; blobs.push(b); }
+        return blobs.length ? _recMergeWav(blobs) : null;
+    }
+    // Nghe lại cả bài của mình (gộp các câu đã chọn)
+    let _s4AllUrl = null;
+    async function s4PlayAll() {
+        if (_rec) return;
+        const ex = _exCurrent(), st = _exState(), btn = document.getElementById('s4-all-play');
+        if (_takeId === '__all' && !_takeAudio.paused) { _takeAudio.pause(); return; }
+        stopExerciseAudio(); _exStopAt = null; _exRangeDone = null;
+        if (btn) btn.disabled = true;
+        let blob = null; try { blob = await _s4AllBlob(ex, st); } catch (e) {}
+        if (btn) btn.disabled = false;
+        if (!blob) { _s4Msg('Không ghép được bản thu trên thiết bị này.'); return; }
+        if (_takeAudio.src) URL.revokeObjectURL(_takeAudio.src);
+        _takeAudio.src = URL.createObjectURL(blob); _takeId = '__all';
+        _takeAudio.currentTime = 0; _takeAudio.play().catch(() => {});
     }
     function _blobToB64(blob) {
         return new Promise((ok, no) => { const r = new FileReader(); r.onload = () => ok(String(r.result).split(',')[1] || ''); r.onerror = no; r.readAsDataURL(blob); });
     }
     async function _recUpload() {
         const ex = _exCurrent(); if (!ex || ex.flow !== 'staged' || _recUpBusy) return;
-        const k = _exKey(), st = _exState();
-        const t = st.done && (st.recTakes || []).find(x => x.id === st.recPick);
-        if (!t) return;
+        const k = _exKey(), st = _exState(), all = _s4All(ex);
+        const sig = st.done ? _recSig(ex, st) : '';
+        if (!sig) return;
+        const t = all ? null : (st.recTakes || []).find(x => x.id === st.recPick);
+        const sel = all ? _s4SelTakes(ex, st) : null;
         const save = () => { try { localStorage.setItem(_exStoreKey(k), JSON.stringify(st)); } catch (e) {} scheduleProgressPush(1500); };
         const user = localStorage.getItem('studentSession_QuyenClass'), pass = getSyncPass();
-        if (!user || !pass) { st.recUp = { take: t.id, ok: false, msg: 'cần đăng nhập lại' }; save(); _recUpUI(); return; }
-        const blob = await _recDbGet(t.id);
-        if (!blob) { st.recUp = { take: t.id, ok: false, msg: 'bản thu nằm trên thiết bị khác' }; save(); _recUpUI(); return; }
+        if (!user || !pass) { st.recUp = { take: sig, ok: false, msg: 'cần đăng nhập lại' }; save(); _recUpUI(); return; }
         _recUpBusy = true; _recUpUI();
+        let blob = null;
+        try { blob = all ? await _s4AllBlob(ex, st) : await _recDbGet(t.id); } catch (e) {}
+        if (!blob) { _recUpBusy = false; st.recUp = { take: sig, ok: false, msg: all ? 'không ghép được bản thu (bản thu nằm trên thiết bị khác?)' : 'bản thu nằm trên thiết bị khác' }; save(); _recUpUI(); return; }
         try {
             const data = await _blobToB64(blob);
+            const meta = all ? { passage: -1, name: `Cả bài (${sel.length}/${ex.passages.length} câu)`, dur: Math.round(sel.reduce((s, x) => s + (x.dur || 0), 0) * 10) / 10 }
+                : { passage: t.p, name: ex.passages[t.p].name, dur: t.dur };
             const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ action: 'uploadRec', user, pass, exKey: k, exId: ex.id, passage: t.p, name: ex.passages[t.p].name, dur: t.dur, mime: blob.type || t.mime, data }) });
+                body: JSON.stringify(Object.assign({ action: 'uploadRec', user, pass, exKey: k, exId: ex.id, mime: blob.type || (t && t.mime), data }, meta)) });
             const j = await res.json();
-            st.recUp = j && j.success ? { take: t.id, ok: true, at: Date.now() }
-                : { take: t.id, ok: false, msg: j && j.message === 'Yêu cầu không hợp lệ' ? 'hệ thống chưa sẵn sàng nhận bản thu, vui lòng báo giáo viên' : String((j && j.message) || 'lỗi máy chủ') };
+            st.recUp = j && j.success ? { take: sig, ok: true, at: Date.now() }
+                : { take: sig, ok: false, msg: j && j.message === 'Yêu cầu không hợp lệ' ? 'hệ thống chưa sẵn sàng nhận bản thu, vui lòng báo giáo viên' : String((j && j.message) || 'lỗi máy chủ') };
         } catch (e) {
-            st.recUp = { take: t.id, ok: false, msg: 'lỗi kết nối mạng' };
+            st.recUp = { take: sig, ok: false, msg: 'lỗi kết nối mạng' };
         }
         _recUpBusy = false;
         save(); _recUpUI();
@@ -5232,21 +5386,28 @@
     // ---------- Nộp bài ----------
     function _stgConfirmSubmit(ex, st) {
         if (_rec) { _recStop(); _s4Msg('Đã dừng thu âm. Hãy nghe lại bản thu rồi bấm Nộp bài.'); return false; }
+        if (_s4All(ex)) {
+            const left = ex.passages.length - _s4SelTakes(ex, st).length;
+            if (left) return _exDialog(() => confirm(`Còn ${left} câu chưa thu âm. Vẫn nộp bài?`));
+            return _exDialog(() => confirm('Bạn có chắc muốn nộp bài?'));
+        }
         if (!(st.recTakes || []).some(t => t.id === st.recPick))
             return _exDialog(() => confirm('Bạn chưa thu âm. Vẫn nộp bài?'));
         return _exDialog(() => confirm('Bạn có chắc muốn nộp bài?'));
     }
     function _stgDoneExtra(ex, st) {
         const t = (st.recTakes || []).find(x => x.id === st.recPick);
-        const lq = ex.listenQ || [];
+        const lq = ex.listenQ || [], sel = _s4All(ex) ? _s4SelTakes(ex, st) : null;
+        const rec = sel ? (sel.length ? { p: -1, name: `Cả bài (${sel.length}/${ex.passages.length} câu)`, dur: Math.round(sel.reduce((s, x) => s + (x.dur || 0), 0) * 10) / 10 } : null)
+            : (t ? { p: t.p, name: ex.passages[t.p].name, dur: t.dur } : null);
         return { s1: st.s1 ? { first: st.s1.first, total: st.s1.total } : null,
                  s2: lq.length ? { ok: lq.filter((q, i) => (st.s2 || {})[i] === q.ans).length, total: lq.length } : null,
-                 rec: t ? { p: t.p, name: ex.passages[t.p].name, dur: t.dur } : null };
+                 rec };
     }
     function _stgDoneRows(ex, d, row) {
         return (d.s1 ? row(ic('sparkles'), 'Quiz biểu hiện', `<b>${d.s1.first}/${d.s1.total}</b> câu đúng`) : '')
             + (d.s2 ? row(ic('headphones'), 'Nghe hiểu', `<b>${d.s2.ok}/${d.s2.total}</b> đúng lần đầu`) : '')
-            + (d.rec ? row(ic('mic'), 'Luyện đọc', `<b>${_escHtml(d.rec.name)}</b>`, '', _fmtTime(d.rec.dur)) : row(ic('mic'), 'Luyện đọc', 'Chưa thu âm', 'warn'));
+            + (d.rec ? row(ic('mic'), _stgNames(ex)[3], `<b>${_escHtml(d.rec.name)}</b>`, '', _fmtTime(d.rec.dur)) : row(ic('mic'), _stgNames(ex)[3], 'Chưa thu âm', 'warn'));
     }
 
     function showAppMode(modeName) {
