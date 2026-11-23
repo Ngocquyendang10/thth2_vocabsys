@@ -194,5 +194,138 @@ window.EXERCISE_DATA = {
             ],
             essay: []
         }
+    ],
+    13: [
+        {
+            id: 'U13-NGHE',
+            key: 'listening',
+            label: 'Nghe',
+            title: 'Hiền và Minjae nói về TP. Hồ Chí Minh',
+            // Bài nghe dùng chung dạng 4 bước với bài đọc: 1 Từ mới + quiz → 2 Nghe từng câu, chọn nghĩa
+            // → 3 Nghe cả bài, trả lời câu hỏi (chưa hiện lời thoại cho tới khi nộp) → 4 Nói lại cả bài: thu âm từng câu, khi nộp gộp 6 câu thành 1 file
+            flow: 'staged',
+            audio: 'assets/doc/unit13-nghe.mp3',   // file 120.mp3 (track 53, bài 3.2). 0–4s là câu đề bài "듣고 질문에 답하십시오"
+            audioStart: 5.40,                      // bước 2 bắt đầu phát từ câu 1 (bỏ câu đề bài)
+            listenSpeed: 0.8,                      // bước 2 nghe từng câu
+            ctxSpeed: 0.85,                        // bước 1 nghe câu ví dụ (file nghe)
+            ctxExact: true,                        // câu ví dụ trùng y file nghe -> phát file nghe; khác -> giọng AI đọc đúng câu ví dụ
+            hideScript: true,
+            s2Replay: true,                        // bước 2: chọn sai -> nghe lại câu đó rồi chọn lại
+            s4Mode: 'all',                         // bước 4: thu âm đủ 6 câu (có nghĩa tiếng Việt), nộp = gộp 6 câu thành 1 file
+            stageNames: ['Từ mới', 'Nghe từng câu', 'Nghe hiểu', 'Luyện nói'],
+            s2Ask: 'Nghe từng câu và chọn nghĩa đúng.',
+            s3Ask: 'Nghe cả bài hội thoại và chọn đáp án đúng.',
+            s4Ask: 'Nghe mẫu từng câu và thu âm. Thu âm đủ 6 câu trước khi nộp bài.',
+            passages: [
+                { name: 'Câu 1 · 히엔', start: 5.55, end: 9.45,
+                  vi: 'Anh Minjae đã từng đến TP. Hồ Chí Minh chưa?',
+                  segs: [ [5.68, 9.30, '민재 씨는 호치민에 가 봤어요?'] ] },
+                { name: 'Câu 2 · 민재', start: 10.10, end: 16.75,
+                  vi: 'Vâng, năm ngoái tôi đã đi công tác TP. Hồ Chí Minh khoảng một tuần. Đó là một thành phố rất thú vị.',
+                  segs: [ [10.24, 14.24, '네, 작년에 일주일쯤 호치민으로 출장을 갔어요.'], [14.24, 16.62, '아주 재미있는 도시였어요.'] ] },
+                { name: 'Câu 3 · 히엔', start: 17.60, end: 26.00,
+                  vi: 'Vậy à? Hồi nhỏ tôi đã sống ở TP. Hồ Chí Minh 10 năm.',
+                  segs: [ [17.72, 18.64, '그래요?'], [20.00, 25.86, '저는 어렸을 때 10년 동안 호치민에 살았어요.'] ] },
+                { name: 'Câu 4 · 민재', start: 26.75, end: 38.85,
+                  vi: 'Tận 10 năm á? Tôi cũng muốn thử sống ở đó. TP. Hồ Chí Minh là một thành phố đẹp, có tính lịch sử, nơi có thể thấy cả hiện tại lẫn quá khứ của Việt Nam.',
+                  segs: [ [26.86, 27.82, '10년이나요?'], [29.28, 31.56, '저도 거기에서 살아 보고 싶어요.'],
+                          [32.42, 38.72, '호치민은 베트남의 현재와 과거를 모두 볼 수 있는 역사적이고 아름다운 도시예요.'] ] },
+                { name: 'Câu 5 · 히엔', start: 39.70, end: 53.50,
+                  vi: 'Anh Minjae thích TP. Hồ Chí Minh như vậy nên tôi cũng vui. Lần sau có dịp thì đi du lịch theo đoàn chắc cũng hay.',
+                  segs: [ [39.84, 46.40, '민재 씨가 이렇게 호치민을 좋아하시니까 저도 기분이 좋네요.'], [47.54, 53.36, '다음에 기회가 되면 단체 여행을 가도 좋을 것 같아요.'] ] },
+                { name: 'Câu 6 · 민재', start: 54.00, end: 58.70,
+                  vi: 'Vâng, nếu chị Hiền hướng dẫn thì chắc sẽ vui hơn.',
+                  segs: [ [54.12, 58.46, '네, 히엔 씨가 안내해 주시면 더 재밌을 것 같아요.'] ] }
+            ],
+            // Bước 1: từ mới (t = [bắt đầu, kết thúc] câu chứa từ trong file nghe). fill.opts[0] = đáp án đúng (trộn khi hiện)
+            vocab: [
+                { ko: '출장을 가다', hl: '출장을 갔어요', vi: 'đi công tác', ex: '작년에 일주일쯤 호치민으로 출장을 갔어요.', t: [10.24, 14.24], exVi: 'Năm ngoái tôi đã đi công tác TP. Hồ Chí Minh khoảng một tuần.',
+                  fill: { q: '회사 일로 다음 주에 부산에 ___.', opts: ['출장을 가요', '살아 봐요', '안내해요', '기회가 돼요'] } },
+                { ko: '어렸을 때', hl: '어렸을 때', vi: 'khi còn nhỏ, hồi nhỏ', ex: '저는 어렸을 때 10년 동안 호치민에 살았어요.', t: [20.00, 25.86], exVi: 'Hồi nhỏ tôi đã sống ở TP. Hồ Chí Minh 10 năm.',
+                  fill: { q: '저는 ___ 시골에서 살았어요. 지금은 서울에 살아요.', opts: ['어렸을 때', '다음에', '기회가 되면', '안내하면'] } },
+                { ko: '살아 보다', hl: '살아 보고', vi: 'thử sống (ở một nơi nào đó)', ex: '저도 거기에서 살아 보고 싶어요.', t: [29.28, 31.56], exVi: 'Tôi cũng muốn thử sống ở đó.',
+                  fill: { q: '제주도는 정말 아름다워요. 저도 제주도에서 한번 ___ 싶어요.', opts: ['살아 보고', '출장을 가고', '안내하고', '기분이 좋고'] } },
+                { ko: '현재와 과거', hl: '현재와 과거', vi: 'hiện tại và quá khứ', ex: '베트남의 현재와 과거를 모두 볼 수 있는 도시예요.', t: [32.42, 38.72], exVi: 'Là thành phố có thể thấy cả hiện tại lẫn quá khứ của Việt Nam.',
+                  fill: { q: '이 도시에서는 옛날 건물과 새 건물, 즉 ___를 모두 볼 수 있어요.', opts: ['현재와 과거', '단체 여행', '출장', '기회'] } },
+                { ko: '역사적이다', hl: '역사적이고', vi: 'mang tính lịch sử, có giá trị lịch sử', ex: '역사적이고 아름다운 도시예요.', t: [32.42, 38.72], exVi: 'Là một thành phố đẹp và có tính lịch sử.',
+                  fill: { q: '경주에는 오래된 절과 왕릉이 많아요. 아주 ___ 도시예요.', opts: ['역사적인', '어렸을 때', '출장을 가는', '안내하는'] } },
+                { ko: '기회가 되다', hl: '기회가 되면', vi: 'có dịp, có cơ hội', ex: '다음에 기회가 되면 단체 여행을 가도 좋을 것 같아요.', t: [47.54, 53.36], exVi: 'Lần sau có dịp thì đi du lịch theo đoàn chắc cũng hay.',
+                  fill: { q: '지금은 바빠서 못 가요. 다음에 ___ 같이 가요.', opts: ['기회가 되면', '출장을 가면', '어렸을 때', '현재와 과거'] } },
+                { ko: '단체 여행', hl: '단체 여행', vi: 'du lịch theo đoàn', ex: '다음에 기회가 되면 단체 여행을 가도 좋을 것 같아요.', t: [47.54, 53.36], exVi: 'Lần sau có dịp thì đi du lịch theo đoàn chắc cũng hay.',
+                  fill: { q: '반 친구 20명이 함께 ___을 갔어요.', opts: ['단체 여행', '출장', '현재', '기회'] } },
+                { ko: '안내하다', hl: '안내해', vi: 'hướng dẫn, dẫn đường', ex: '히엔 씨가 안내해 주시면 더 재밌을 것 같아요.', t: [54.12, 58.46], exVi: 'Nếu chị Hiền hướng dẫn thì chắc sẽ vui hơn.',
+                  fill: { q: '호치민에 오면 제가 맛집을 ___ 드릴게요.', opts: ['안내해', '출장을 가', '살아 봐', '기회가 돼'] } }
+            ],
+            glossary: {
+                '호치민': 'TP. Hồ Chí Minh', '가 봤어요?': 'đã từng đến chưa?', '작년에': 'năm ngoái', '일주일쯤': 'khoảng một tuần',
+                '출장을 갔어요': 'đã đi công tác', '재미있는': 'thú vị', '도시': 'thành phố', '그래요?': 'vậy à?',
+                '어렸을 때': 'hồi nhỏ', '10년 동안': 'trong 10 năm', '살았어요': 'đã sống', '10년이나요?': 'tận 10 năm á?',
+                '거기에서': 'ở đó', '살아 보고 싶어요': 'muốn thử sống', '베트남': 'Việt Nam', '현재와 과거': 'hiện tại và quá khứ',
+                '모두': 'tất cả, cả', '볼 수 있는': 'có thể thấy', '역사적이고': 'có tính lịch sử và', '아름다운': 'đẹp',
+                '이렇게': 'như thế này', '좋아하시니까': 'vì (anh) thích', '기분이 좋네요': 'thấy vui quá', '다음에': 'lần sau',
+                '기회가 되면': 'nếu có dịp', '단체 여행': 'du lịch theo đoàn', '좋을 것 같아요': 'chắc là hay', '안내해 주시면': 'nếu (chị) hướng dẫn cho',
+                '더': 'hơn', '재밌을 것 같아요': 'chắc sẽ vui'
+            },
+            // Bước 1 (quiz điền chỗ trống): từ ngoài bài trong câu hỏi -> rê chuột / chạm để xem nghĩa
+            quizGloss: {
+                '회사 일로': 'vì việc công ty', '다음 주': 'tuần sau', '부산': 'Busan', '시골': 'nông thôn, quê',
+                '서울': 'Seoul', '제주도': 'đảo Jeju', '정말': 'thật sự', '아름다워요': 'đẹp', '한번': 'thử một lần',
+                '도시': 'thành phố', '옛날 건물': 'tòa nhà ngày xưa', '새 건물': 'tòa nhà mới', '즉': 'tức là', '모두': 'tất cả, cả',
+                '볼 수 있어요': 'có thể thấy', '경주': 'Gyeongju (cố đô của Hàn Quốc)', '오래된': 'lâu đời, cũ', '절': 'chùa',
+                '왕릉': 'lăng mộ vua', '많아요': 'nhiều', '바빠서': 'vì bận', '못 가요': 'không đi được', '같이': 'cùng nhau',
+                '반 친구': 'bạn cùng lớp', '함께': 'cùng nhau', '호치민': 'TP. Hồ Chí Minh', '맛집': 'quán ăn ngon',
+                '드릴게요': '(tôi) sẽ … cho (kính ngữ)', '지금은': 'bây giờ thì', '살아요': 'sống'
+            },
+            // Bước 2: hết mỗi câu audio tự dừng, hiện câu hỏi chọn nghĩa; đúng mới nghe tiếp. Luyện tập, không tính điểm bài.
+            // 4 đáp án đều gần giống nhau, chỉ khác 1 chi tiết (thời gian, con số, việc làm, ai làm…) -> phải nghe chắc mới chọn đúng
+            listenQ: [
+                { p: 0, q: 'Câu vừa nghe có nghĩa là gì?', opts: [
+                    'Anh Minjae có muốn đến TP. Hồ Chí Minh không?',
+                    'Anh Minjae đã từng đến TP. Hồ Chí Minh chưa?',
+                    'Anh Minjae đã từng sống ở TP. Hồ Chí Minh chưa?',
+                    'Anh Minjae sắp đến TP. Hồ Chí Minh phải không?'], ans: 1 },
+                { p: 1, q: 'Câu vừa nghe có nghĩa là gì?', opts: [
+                    'Vâng, năm ngoái tôi đi du lịch TP. Hồ Chí Minh khoảng một tuần. Thành phố rất thú vị.',
+                    'Vâng, năm ngoái tôi đi công tác TP. Hồ Chí Minh khoảng một tháng. Thành phố rất thú vị.',
+                    'Vâng, tuần trước tôi đi công tác TP. Hồ Chí Minh. Thành phố rất thú vị.',
+                    'Vâng, năm ngoái tôi đi công tác TP. Hồ Chí Minh khoảng một tuần. Thành phố rất thú vị.'], ans: 3 },
+                { p: 2, q: 'Câu vừa nghe có nghĩa là gì?', opts: [
+                    'Vậy à? Hồi nhỏ tôi đã sống ở TP. Hồ Chí Minh 10 năm.',
+                    'Vậy à? Hồi nhỏ tôi đã sống ở TP. Hồ Chí Minh 1 năm.',
+                    'Vậy à? Hồi nhỏ tôi đã đến TP. Hồ Chí Minh 10 lần.',
+                    'Vậy à? Tôi đang sống ở TP. Hồ Chí Minh được 10 năm rồi.'], ans: 0 },
+                { p: 3, q: 'Câu vừa nghe có nghĩa là gì?', opts: [
+                    'Chỉ 10 năm thôi à? Tôi cũng muốn thử sống ở đó. TP. Hồ Chí Minh đẹp, có tính lịch sử, thấy được cả hiện tại lẫn quá khứ của Việt Nam.',
+                    'Tận 10 năm á? Tôi cũng muốn đến đó du lịch thêm lần nữa. TP. Hồ Chí Minh đẹp, có tính lịch sử, thấy được cả hiện tại lẫn quá khứ của Việt Nam.',
+                    'Tận 10 năm á? Tôi cũng muốn thử sống ở đó. TP. Hồ Chí Minh đẹp, có tính lịch sử, thấy được cả hiện tại lẫn quá khứ của Việt Nam.',
+                    'Tận 10 năm á? Tôi cũng muốn thử sống ở đó. TP. Hồ Chí Minh hiện đại, chỉ thấy được hiện tại của Việt Nam.'], ans: 2 },
+                { p: 4, q: 'Câu vừa nghe có nghĩa là gì?', opts: [
+                    'Anh Minjae thích TP. Hồ Chí Minh như vậy nên tôi cũng vui. Lần sau có dịp thì đi du lịch một mình chắc cũng hay.',
+                    'Anh Minjae thích TP. Hồ Chí Minh như vậy nên tôi cũng vui. Lần sau có dịp thì đi du lịch theo đoàn chắc cũng hay.',
+                    'Anh Minjae thích TP. Hồ Chí Minh như vậy nên tôi cũng vui. Lần sau có dịp thì cùng đi công tác chắc cũng hay.',
+                    'Anh Minjae không thích TP. Hồ Chí Minh nên tôi hơi buồn. Lần sau có dịp thì đi du lịch theo đoàn chắc cũng hay.'], ans: 1 },
+                { p: 5, q: 'Câu vừa nghe có nghĩa là gì?', opts: [
+                    'Vâng, nếu tôi hướng dẫn chị Hiền thì chắc sẽ vui hơn.',
+                    'Vâng, nếu chị Hiền hướng dẫn thì chắc sẽ tiện hơn.',
+                    'Vâng, nếu chị Hiền hướng dẫn thì chắc sẽ vui hơn.',
+                    'Vâng, nếu chị Hiền đi cùng thì chắc sẽ vui hơn.'], ans: 2 }
+            ],
+            // Bước 3: 2 câu đầu là câu hỏi trong sách, 3 câu sau là câu hỏi bổ sung
+            mcq: [
+                { q: '민재 씨가 호치민을 좋아하는 이유가 아닌 것은?', sub: 'Lý do nào KHÔNG phải là lý do Minjae thích TP. Hồ Chí Minh?',
+                  opts: ['호치민에서 산 적이 있기 때문에', '역사적인 도시이고 아름답기 때문에', '현재와 과거를 모두 볼 수 있기 때문에'], ans: 0,
+                  why: '호치민에서 10년 동안 산 사람은 히엔 씨예요. 민재 씨는 출장으로 일주일쯤 갔어요.' },
+                { q: '들은 내용과 맞는 것은?', sub: 'Chọn câu đúng với nội dung bài nghe.',
+                  opts: ['민재 씨는 호치민에서 살고 싶어 합니다.', '히엔 씨의 가족은 호치민에 살고 있습니다.', '민재 씨는 다음에 단체 여행을 가면 호치민을 안내할 것입니다.'], ans: 0,
+                  why: '저도 거기에서 살아 보고 싶어요. (Người hướng dẫn là Hiền, không phải Minjae.)' },
+                { q: '민재 씨는 언제, 왜 호치민에 갔어요?', opts: ['어렸을 때 가족과 같이 갔어요.', '작년에 출장으로 갔어요.', '작년에 단체 여행으로 갔어요.', '올해 출장으로 갈 거예요.'], ans: 1,
+                  why: '네, 작년에 일주일쯤 호치민으로 출장을 갔어요.' },
+                { q: '히엔 씨는 호치민에서 얼마 동안 살았어요?', opts: ['일주일쯤', '1년', '10년', '아직 안 살았어요'], ans: 2,
+                  why: '저는 어렸을 때 10년 동안 호치민에 살았어요.' },
+                { q: '다음에 기회가 되면 두 사람은 무엇을 할 것 같아요?', opts: ['같이 출장을 갈 것 같아요.', '호치민에서 같이 살 것 같아요.', '서울을 구경할 것 같아요.', '단체 여행을 갈 것 같아요.'], ans: 3,
+                  why: '다음에 기회가 되면 단체 여행을 가도 좋을 것 같아요.' }
+            ],
+            essay: []
+        }
     ]
 };
