@@ -373,6 +373,9 @@
         .quiz-shuffle-btn { display: inline-flex; align-items: center; justify-content: center; gap: 7px; line-height: 1; white-space: nowrap; background: transparent; border: 1px solid rgba(148,163,184,0.35); border-radius: 18px; padding: 7px 14px; font-size: 12px; font-weight: 700; color: var(--sub-text); cursor: pointer; box-shadow: none; outline: none; transition: all 0.18s ease; }
         .quiz-shuffle-btn:hover { color: var(--point-color); border-color: rgba(97,76,255,0.4); background: var(--point-light); }
         .quiz-shuffle-btn svg { width: 14px; height: 14px; flex: 0 0 auto; display: block; }
+        /* Nút Ngẫu nhiên đang BẬT (mặc định) */
+        #quiz-shuffle-btn.on { background: var(--point-color); border-color: var(--point-color); color: #fff; box-shadow: 0 4px 12px rgba(97,76,255,0.25); }
+        #quiz-shuffle-btn.on:hover { filter: brightness(1.06); }
         /* Nút "Làm lại" — chữ tím nhạt để phân biệt */
         .quiz-restart-btn { color: var(--point-color); }
         .quiz-restart-btn:hover { color: #4a37c9; }
@@ -770,6 +773,20 @@
             .ws-body.has-pic .ws-pic { position: sticky; top: 12px; padding: 16px; min-height: 220px; }
             .ws-body.has-pic .ws-pic img { width: 100%; max-height: 380px; }
         }
+        /* Nghe & tìm nghĩa (dạng câu): hình minh hoạ đặt cạnh nút nghe */
+        .guess-pic { display: none; }
+        .guess-stage.has-pic { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 18px; align-items: stretch; margin-bottom: 26px; }
+        .guess-stage.has-pic .listen-box { margin-bottom: 0; }
+        .guess-stage.has-pic .guess-pic { display: flex; align-items: center; justify-content: center; background: #fff; border-radius: var(--radius-md); padding: 12px; }
+        .guess-pic img { display: block; width: 100%; max-height: 300px; object-fit: contain; border-radius: 10px; }
+        @media (max-width: 700px) {
+            .guess-stage.has-pic { grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
+            .guess-pic img { max-height: 220px; }
+        }
+        /* Từ lạ trong câu: rê chuột (hoặc chạm) để xem nghĩa */
+        .ws-gloss { position: relative; border-bottom: 2px dotted #9f8cff; cursor: help; }
+        .ws-gloss::after { content: attr(data-gloss); position: absolute; left: 50%; bottom: calc(100% + 8px); transform: translateX(-50%); background: #2d2a4a; color: #fff; font-family: Nunito, "Be Vietnam Pro", sans-serif; font-size: 13.5px; font-weight: 600; line-height: 1.4; white-space: normal; width: max-content; max-width: 240px; text-align: center; padding: 6px 11px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,.18); opacity: 0; pointer-events: none; transition: opacity .12s; z-index: 30; }
+        .ws-gloss:hover::after, .ws-gloss.open::after { opacity: 1; }
         .ws-hintbox { font-size: 14px; color: var(--sub-text); background: #fdfaf1; border: 1px dashed #ecc94b; border-radius: 10px; padding: 10px 14px; }
         .ws-hintbox b { font-weight: 700; color: #7a5b00; }
         .ws-hintbox b.ko { font-size: 17px; letter-spacing: .5px; line-height: 1.8; }
@@ -2137,7 +2154,7 @@
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                                 Làm lại
                             </button>
-                            <button class="quiz-shuffle-btn" onclick="handleMixAction()">
+                            <button class="quiz-shuffle-btn on" id="quiz-shuffle-btn" onclick="handleMixAction()" title="Ngẫu nhiên: bật">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line><line x1="4" y1="4" x2="9" y2="9"></line></svg>
                                 Ngẫu nhiên
                             </button>
@@ -2352,10 +2369,13 @@
 
                 <!-- 7. ĐOÁN NGHĨA -->
                 <div id="guess-tab" class="tab-render-view">
+                    <div class="guess-stage" id="guess-stage">
+                    <div class="guess-pic" id="guess-pic"></div>
                     <div class="listen-box">
                         <button class="listen-circle-btn" id="btn-guess-play" onclick="triggerKoreanVoice(vocabData[tabState.guess.indices[tabState.guess.current]].ko, false, this); event.stopPropagation();"><span style="font-size:20px;margin-bottom:2px;line-height:1;"><svg viewBox="0 0 24 24" fill="currentColor" style="width:22px;height:22px;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg></span>듣기</button>
                         <button class="hint-btn-bottom-right" id="guess-hint-btn" onclick="toggleListenHint(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><path d="M9 18h6M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1h6c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg></button>
                         <div class="text-hint-display" id="guess-hint-text"></div>
+                    </div>
                     </div>
                     <div class="quiz-question" id="guess-question">Nghĩa của từ vừa nghe?</div>
                     <div class="quiz-options" id="guess-opts"></div>
@@ -3492,13 +3512,16 @@
     }
     let blurColumns = { ko: false, vi: false };
 
+    // Lựa chọn bật/tắt nhớ theo máy; mặc định BẬT cho tới khi học viên tự tắt
+    function wsPrefOn(k) { try { return localStorage.getItem(k) !== '0'; } catch (e) { return true; } }
+    function wsPrefSet(k, on) { try { localStorage.setItem(k, on ? '1' : '0'); } catch (e) {} }
     let tabState = {
         lecture: { indices: [0], current: 0 },
         vocabTable: { indices: [0], current: 0, showKo: true, showVi: true, showEx: true, filterStarred: false },
         flashcard: { indices: [], current: 0, isShuffleMode: false },
         quiz: { indices: [], current: 0, answered: false },
         typing: { indices: [], current: 0, direction: "vi-to-ko" },
-        writesentence: { indices: [], current: 0, mode: 'vi2ko', seen: [], right: 0, wrong: 0, results: {}, checked: false, match: null, inputValue: '', showAnswer: false, showGrammar: false },
+        writesentence: { indices: [], current: 0, mode: 'vi2ko', seen: [], right: 0, wrong: 0, results: {}, checked: false, match: null, inputValue: '', showAnswer: wsPrefOn('wsShowAnswer'), showGrammar: wsPrefOn('wsShowGrammar') },
         listen: { indices: [], current: 0, answered: false },
         guess: { indices: [], current: 0, answered: false },
         visual: { indices: [], current: 0, answered: false },
@@ -6812,6 +6835,7 @@
         const quizTools = document.getElementById('quiz-tools');
         if (quizTools) quizTools.style.display = inQuizGroup ? 'flex' : 'none';
         renderQuizModeSelect(tabName); // đổ đúng nút xổ (ngôn ngữ/dạng) theo tab
+        syncShuffleBtn();
         document.getElementById('ctrl-mix-btn').style.visibility = (tabName === 'lecture' || inQuizGroup) ? 'hidden' : 'visible';
 
         // Luôn chừa chỗ cho dòng trạng thái để khung không nhảy khi có/không đáp án
@@ -6894,12 +6918,29 @@
         updateDashboardStats();
     }
 
+    // Nút "Ngẫu nhiên" là công tắc: mỗi lần mở trang đều BẬT sẵn (câu hỏi xáo từ kho từ của Unit).
+    // Học sinh tắt -> làm lại từ đầu theo thứ tự trong bài; bật lại -> xáo và làm lại từ đầu.
+    var quizShuffleOff = {};              // tab -> true khi học sinh đã tắt Ngẫu nhiên (không lưu: mở lại trang là bật)
+    function quizShuffleOn(tab) { return !(quizShuffleOff || {})[tab || currentTab]; }
+    function orderIsSequential(order) { return Array.isArray(order) && order.length > 2 && order.every((v, i) => i === 0 || v > order[i - 1]); }
+    function syncShuffleBtn() {
+        const b = document.getElementById('quiz-shuffle-btn');
+        if (!b) return;
+        const on = quizShuffleOn(currentTab);
+        b.classList.toggle('on', on);
+        b.title = on ? 'Ngẫu nhiên: bật — bấm để tắt' : 'Ngẫu nhiên: tắt — bấm để bật';
+    }
     function handleMixAction() {
         let state = tabState[currentTab];
-        if (!state || !state.indices || state.indices.length === 0) return;
-        if (currentTab === 'typing' && hasTypingProgress() &&
-            !confirm("Xáo trộn sẽ xoá các đáp án đã nhập. Tiếp tục?")) return;
-        // Xáo lại từ đầu = bắt đầu vòng mới -> xoá tiến độ đã lưu của dạng này.
+        if (!state) return;
+        const turningOff = quizShuffleOn(currentTab);
+        const msg = turningOff
+            ? 'Tắt Ngẫu nhiên sẽ làm lại dạng này từ đầu, câu hỏi theo thứ tự trong bài. Tiếp tục?'
+            : 'Bật Ngẫu nhiên sẽ xáo lại câu hỏi và làm lại dạng này từ đầu. Tiếp tục?';
+        if (!confirm(msg)) return;
+        quizShuffleOff = quizShuffleOff || {};
+        if (turningOff) quizShuffleOff[currentTab] = true; else delete quizShuffleOff[currentTab];
+        syncShuffleBtn();
         restartTab(currentTab);
     }
 
@@ -7034,6 +7075,568 @@
         const topSimilar = shuffleArray(similar.slice(0, Math.max(n * 3, 8))); // trộn trong nhóm giống nhất
         const rest = shuffleArray(cands.filter(it => it.__sim === 0));
         return topSimilar.concat(rest).slice(0, n).map(it => it.exVi);
+    }
+
+    /* ===== NGHE & TÌM NGHĨA (dạng câu) + CHÚ THÍCH TỪ LẠ ===== */
+    function _koKey(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
+    // Câu dùng cho "Nghe câu tìm nghĩa": ưu tiên câu đi kèm hình (ví dụ 2), thiếu mới dùng ví dụ 1
+    function guessPairOf(item) {
+        if (!item) return null;
+        const ko2 = String(item.ex2 || '').trim(), vi2 = String(item.ex2Vi || '').trim();
+        if (ko2 && vi2) return { ko: ko2, vi: vi2, withPic: true };
+        const ko1 = String(item.ex || '').trim(), vi1 = String(item.exVi || '').trim();
+        return (ko1 && vi1) ? { ko: ko1, vi: vi1, withPic: false } : null;
+    }
+
+    // Đáp án nhiễu soạn tay: chỉ lệch 1 chi tiết so với câu đúng (khoá = câu tiếng Hàn).
+    // Unit nào chưa soạn thì máy tự tạo (đổi số / đổi từ khoá sang từ phát âm gần giống).
+    const GUESS_DISTRACTORS = {
+        // ---- Unit 13 ----
+        '베트남의 인구는 1억 명이나 돼요.': ['Dân số Việt Nam chỉ khoảng 10 triệu người.', 'Dân số Hàn Quốc lên tới 100 triệu người.', 'Dân số Việt Nam năm sau sẽ lên tới 100 triệu người.'],
+        '이 공원은 면적이 아주 넓은 것 같아요.': ['Hình như công viên này có diện tích không rộng lắm.', 'Hình như công viên kia có diện tích rất rộng.', 'Hình như sân vận động này có diện tích rất rộng.'],
+        '지도에서 호텔 위치까지 선을 그었어요.': ['Tôi đã tìm vị trí khách sạn trên bản đồ.', 'Tôi đã kẻ một đường trên bản đồ đến vị trí nhà ga.', 'Tôi sẽ kẻ một đường trên bản đồ đến vị trí khách sạn.'],
+        '물가가 비싸서 커피 한 잔이 6,000원이나 해요.': ['Vật giá rẻ nên một cốc cà phê chỉ 6.000 won.', 'Vật giá đắt nên một cốc cà phê tận 16.000 won.', 'Vật giá đắt nên một cái bánh mì tận 6.000 won.'],
+        '어젯밤에 이 지역에 눈이 많이 온 것 같아요.': ['Hình như tối nay ở khu vực này tuyết sẽ rơi nhiều.', 'Hình như tối qua ở khu vực này trời đã mưa nhiều.', 'Hình như tối qua ở khu vực này tuyết rơi không nhiều.'],
+        '도시 중심지에 큰 백화점을 지을 거예요.': ['Người ta đã xây trung tâm thương mại lớn ở khu trung tâm thành phố.', 'Người ta sẽ xây bệnh viện lớn ở khu trung tâm thành phố.', 'Người ta sẽ xây trung tâm thương mại lớn ở vùng ngoại ô thành phố.'],
+        '섬에서 육지까지 배로 3시간이나 걸려요.': ['Từ đảo vào đất liền đi tàu chỉ mất 3 tiếng.', 'Từ đảo vào đất liền đi tàu mất tận 4 tiếng.', 'Từ đảo vào đất liền đi máy bay mất tận 3 tiếng.'],
+        '날씨가 더워서 주말에 바다에 사람이 많이 갈 것 같아요.': ['Trời lạnh nên chắc cuối tuần sẽ ít người đi biển.', 'Trời nóng nên chắc cuối tuần sẽ có nhiều người đi núi.', 'Trời nóng nên cuối tuần trước đã có nhiều người đi biển.'],
+        '큰 다리로 섬과 육지를 이었어요.': ['Người ta sẽ nối đảo với đất liền bằng một cây cầu lớn.', 'Người ta đã nối hai hòn đảo bằng một cây cầu lớn.', 'Người ta đã nối đảo với đất liền bằng một con đường lớn.'],
+        '이 가게 빵은 최고예요. 그래서 열 개나 샀어요.': ['Bánh mì tiệm này không ngon. Vì thế tôi chỉ mua 1 cái.', 'Bánh mì tiệm này là số một. Vì thế tôi mua tận 20 cái.', 'Cà phê tiệm này là số một. Vì thế tôi mua tận 10 cốc.'],
+        '옛날에는 이 시장이 한국 최대의 시장인 것 같아요.': ['Hình như bây giờ chợ này là chợ lớn nhất Hàn Quốc.', 'Hình như ngày xưa chợ này từng là chợ lớn nhất Seoul.', 'Hình như ngày xưa chợ này từng là chợ nhỏ nhất Hàn Quốc.'],
+        '한국의 수도 서울에 새 건물을 많이 지었어요.': ['Người ta sẽ xây nhiều tòa nhà mới ở Seoul, thủ đô Hàn Quốc.', 'Người ta đã xây nhiều con đường mới ở Seoul, thủ đô Hàn Quốc.', 'Người ta đã sửa nhiều tòa nhà cũ ở Seoul, thủ đô Hàn Quốc.'],
+        '이 도시에는 지하철 노선이 9개나 있어요.': ['Thành phố này chỉ có 9 tuyến tàu điện ngầm.', 'Thành phố này có tới 5 tuyến tàu điện ngầm.', 'Thành phố này có tới 9 tuyến xe buýt.'],
+        '10년 전에는 이 시골이 아주 조용한 것 같아요.': ['Hình như 10 năm sau vùng quê này sẽ rất yên tĩnh.', 'Hình như bây giờ vùng quê này rất yên tĩnh.', 'Hình như 10 năm trước vùng quê này rất ồn ào.'],
+        '공업 도시는 공기가 나빠서 감기가 잘 안 나아요.': ['Ở thành phố công nghiệp không khí trong lành nên bệnh cảm mau khỏi.', 'Ở thành phố công nghiệp không khí xấu nên dễ bị cảm.', 'Ở vùng nông thôn không khí xấu nên bệnh cảm khó khỏi.'],
+        '이 상업 지역에는 가게가 백 개나 있어요.': ['Khu thương mại này chỉ có 100 cửa hàng.', 'Khu thương mại này có tới 1.000 cửa hàng.', 'Khu thương mại này có tới 100 nhà hàng.'],
+        '이 마을 사람들은 대부분 농업을 하는 것 같아요.': ['Hình như một số ít người dân làng này làm nông nghiệp.', 'Hình như phần lớn người dân làng này làm việc ở nhà máy.', 'Hình như phần lớn người dân thành phố này làm nông nghiệp.'],
+        '관광업 일은 하루 종일 서 있어서 다리가 부어요.': ['Làm ngành du lịch phải ngồi cả ngày nên lưng bị đau.', 'Làm ngành du lịch phải đi bộ cả ngày nên chân bị đau.', 'Làm ngành du lịch phải nói cả ngày nên họng bị đau.'],
+        '이 식당은 유명해서 한 시간이나 기다렸어요.': ['Nhà hàng này nổi tiếng nên tôi chỉ chờ 10 phút.', 'Nhà hàng này nổi tiếng nên tôi đã chờ tận 2 tiếng.', 'Nhà hàng này không nổi tiếng nên tôi không phải chờ.'],
+        '산 위에 올라가면 경치가 아름다울 것 같아요.': ['Nếu lên đỉnh núi thì chắc trời sẽ lạnh.', 'Nếu ra biển thì chắc phong cảnh sẽ đẹp.', 'Vì đã lên đỉnh núi nên phong cảnh rất đẹp.'],
+        '이 집은 역사가 깊어요. 200년 전에 지었어요.': ['Ngôi nhà này có lịch sử lâu đời. Được xây từ 100 năm trước.', 'Ngôi nhà này mới được xây. Chỉ mới 2 năm.', 'Ngôi chùa này có lịch sử lâu đời. Được xây từ 200 năm trước.'],
+        '방향을 잘못 알아서 30분이나 걸었어요.': ['Vì đi nhầm hướng nên tôi đã đi bộ tận 3 tiếng.', 'Vì đi nhầm hướng nên tôi đã chạy tận 30 phút.', 'Vì biết rõ hướng nên tôi chỉ đi bộ 10 phút.'],
+        '해가 저쪽에서 뜨니까 저쪽이 동쪽인 것 같아요.': ['Mặt trời lặn ở phía kia nên hình như phía kia là hướng tây.', 'Mặt trời mọc ở phía này nên hình như phía này là hướng đông.', 'Mặt trời mọc ở phía kia nên hình như phía kia là hướng nam.'],
+        '서쪽 하늘이 너무 예뻐서 친구가 웃었어요.': ['Bầu trời phía đông đẹp quá nên bạn tôi đã cười.', 'Bầu trời phía tây đẹp quá nên bạn tôi đã chụp ảnh.', 'Bầu trời phía tây đẹp quá nên tôi đã cười.'],
+        '남쪽으로 기차를 타고 5시간이나 갔어요.': ['Tôi đi tàu về phía bắc mất tận 5 tiếng.', 'Tôi đi xe buýt về phía nam mất tận 5 tiếng.', 'Tôi đi tàu về phía nam chỉ mất 5 tiếng.'],
+        '산이 있는 저쪽이 북쪽일 것 같아요.': ['Chắc phía đằng kia, chỗ có biển, là hướng bắc.', 'Chắc phía đằng kia, chỗ có núi, là hướng nam.', 'Chắc phía bên này, chỗ có núi, là hướng bắc.']
+    };
+
+    // Độ giống phát âm của 2 từ Hàn (so jamo) -> từ "nghe na ná" làm đáp án nhiễu
+    function _jamoDice(a, b) {
+        const A = toJamo(String(a || '').replace(/\s+/g, '')), B = toJamo(String(b || '').replace(/\s+/g, ''));
+        if (!A.length || !B.length) return 0;
+        const cnt = {}; A.forEach(x => { cnt[x] = (cnt[x] || 0) + 1; });
+        let common = 0; B.forEach(x => { if (cnt[x] > 0) { cnt[x]--; common++; } });
+        return (2 * common) / (A.length + B.length) + (A[0] === B[0] ? 0.05 : 0);
+    }
+    function _viVariants(item) {
+        const out = [];
+        [item.vi, item.viAlt].forEach(v => String(v || '').split(/[,;\/]|\s+-\s+/).forEach(x => {
+            x = x.replace(/\([^)]*\)/g, '').trim();
+            if (x.length >= 2 && out.indexOf(x) < 0) out.push(x);
+        }));
+        return out.sort((a, b) => b.length - a.length);
+    }
+    // Tìm nguyên CỤM TỪ (không khớp nửa chữ: "và" không khớp trong "vào")
+    function _findWord(text, find) {
+        const T = text.toLowerCase(), F = find.toLowerCase(), isL = c => !!c && /[\p{L}\p{N}]/u.test(c);
+        let at = T.indexOf(F);
+        while (at >= 0) {
+            if (!isL(T[at - 1]) && !isL(T[at + F.length])) return at;
+            at = T.indexOf(F, at + 1);
+        }
+        return -1;
+    }
+    function _replaceCI(text, find, repl) {
+        const at = _findWord(text, find);
+        if (at < 0) return null;
+        if (at === 0 || /[.!?:]\s*$/.test(text.slice(0, at))) repl = repl.charAt(0).toUpperCase() + repl.slice(1);
+        return text.slice(0, at) + repl + text.slice(at + find.length);
+    }
+    // Đổi 1 con số trong câu (100 -> 200, 3 -> 5, 6.000 -> 8.000...)
+    function _numberVariant(vi) {
+        const m = String(vi).match(/\d[\d.,]*/);
+        if (!m) return null;
+        const raw = m[0].replace(/[.,]$/, ''), n = parseInt(raw.replace(/[.,]/g, ''), 10);
+        if (!isFinite(n)) return null;
+        const opts = n <= 1 ? [2, 3] : n < 10 ? [n + 2, n + 1, Math.max(1, n - 1)] : [n * 2, n + n / 2, n / 2].map(Math.round);
+        let v = opts.find(x => x > 0 && x !== n); if (!v) return null;
+        let s = String(v);
+        if (/[.,]\d{3}/.test(raw)) s = s.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return vi.replace(raw, s);
+    }
+    function guessSimilarDistractors(item, pair, n) {
+        const correct = String(pair.vi || '').trim();
+        const out = [], seen = new Set([correct.toLowerCase()]);
+        const add = x => { x = String(x || '').trim(); if (x && !seen.has(x.toLowerCase())) { seen.add(x.toLowerCase()); out.push(x); } };
+        // 1) Soạn tay
+        const sd = quizSentDataOf(item, pair.ko);
+        (GUESS_DISTRACTORS[_koKey(pair.ko)] || (sd && sd[1]) || []).forEach(add);
+        if (out.length >= n) return shuffleArray(out).slice(0, n);
+        // 2) Đổi số
+        add(_numberVariant(correct));
+        // 3) Đổi từ khoá sang nghĩa của từ phát âm gần giống (cùng loại: danh từ / động-tính từ)
+        const key = _viVariants(item).find(v => v.length >= 3 && _findWord(correct, v) >= 0);
+        if (key) {
+            const isPred = /다$/.test(String(item.ko || '').trim());
+            const seenKo = new Set([item.ko]);
+            const cands = vocabData.filter(it => { // chỉ lấy từ cùng Unit -> câu nhiễu vẫn hợp chủ đề
+                if (!it || !it.ko || !it.vi || seenKo.has(it.ko) || sameMeaning(it, item)) return false;
+                seenKo.add(it.ko);
+                return /다$/.test(String(it.ko).trim()) === isPred;
+            });
+            cands.forEach(it => { it.__snd = _jamoDice(item.ko, it.ko); });
+            const top = cands.sort((a, b) => b.__snd - a.__snd).slice(0, 6);
+            shuffleArray(top.slice(0, 4)).concat(top.slice(4)).forEach(it => {
+                if (out.length >= n) return;
+                const rv = _viVariants(it)[0] || it.vi;
+                add(_replaceCI(correct, key, rv.split(',')[0].trim()));
+            });
+        }
+        // 4) Thiếu thì lấy câu nghĩa hao hao trong kho
+        if (out.length < n) {
+            const fake = Object.assign({}, item, { exVi: correct });
+            const dlg = isDialogue(correct);   // câu hội thoại A/B chỉ lấy câu hội thoại, câu thường lấy câu thường
+            pickSimilarExViDistractors(fake, 40).filter(x => isDialogue(x) === dlg).forEach(x => { if (out.length < n) add(x); });
+            if (out.length < n) pickSimilarExViDistractors(fake, n + 3).forEach(x => { if (out.length < n) add(x); });
+        }
+        return out.slice(0, n);
+    }
+
+    // Chú thích từ lạ trong câu Hàn: rê chuột (hoặc chạm) lên từ để xem nghĩa.
+    // Khoá = câu tiếng Hàn; mỗi mục [chữ đúng như trong câu, chú thích]. Chỉ ghi từ mới/lạ, không ghi từ đã quen.
+    const WS_GLOSSES = {
+        // ---- Unit 13 (ví dụ chính, cột I) ----
+        '베트남의 인구는 1억 명이나 돼요.': [['1억', '억: trăm triệu (1억 = 100 triệu)'], ['돼요', '되다: lên tới, đạt (con số)']],
+        '지도에서 호텔 위치까지 선을 그었어요.': [['선을', '선: đường kẻ, đường nét'], ['그었어요', '긋다: kẻ, vạch (bất quy tắc ㅅ)']],
+        '어젯밤에 이 지역에 눈이 많이 온 것 같아요.': [['어젯밤에', '어젯밤: tối qua, đêm qua']],
+        '도시 중심지에 큰 백화점을 지을 거예요.': [['지을', '짓다: xây, dựng (bất quy tắc ㅅ)']],
+        '섬에서 육지까지 배로 3시간이나 걸려요.': [['배로', '배: tàu, thuyền (배로: bằng tàu)']],
+        '큰 다리로 섬과 육지를 이었어요.': [['다리로', '다리: cây cầu'], ['이었어요', '잇다: nối (bất quy tắc ㅅ)']],
+        '옛날에는 이 시장이 한국 최대의 시장인 것 같아요.': [['옛날에는', '옛날: ngày xưa']],
+        '한국의 수도 서울에 새 건물을 많이 지었어요.': [['건물을', '건물: tòa nhà'], ['지었어요', '짓다: xây, dựng (bất quy tắc ㅅ)']],
+        '이 도시에는 지하철 노선이 9개나 있어요.': [['노선이', '노선: tuyến (đường)']],
+        '공업 도시는 공기가 나빠서 감기가 잘 안 나아요.': [['공기가', '공기: không khí'], ['나아요', '낫다: đỡ hơn, khoẻ hơn']],
+        '이 마을 사람들은 대부분 농업을 하는 것 같아요.': [['마을', '마을: làng'], ['대부분', '대부분: phần lớn, đa số']],
+        '관광업 일은 하루 종일 서 있어서 다리가 부어요.': [['하루 종일', '하루 종일: cả ngày'], ['서 있어서', '서 있다: đứng'], ['부어요', '붓다: sưng, phù (bất quy tắc ㅅ)']],
+        '산 위에 올라가면 경치가 아름다울 것 같아요.': [['올라가면', '올라가다: đi lên, leo lên']],
+        '이 집은 역사가 깊어요. 200년 전에 지었어요.': [['지었어요', '짓다: xây, dựng (bất quy tắc ㅅ)']],
+        '방향을 잘못 알아서 30분이나 걸었어요.': [['잘못', '잘못: nhầm, sai'], ['걸었어요', '걷다: đi bộ (bất quy tắc ㄷ)']],
+        '해가 저쪽에서 뜨니까 저쪽이 동쪽인 것 같아요.': [['해가', '해: mặt trời'], ['뜨니까', '뜨다: mọc (mặt trời)'], ['저쪽에서', '저쪽: phía kia']],
+        '서쪽 하늘이 너무 예뻐서 친구가 웃었어요.': [['하늘이', '하늘: bầu trời']],
+        '산이 있는 저쪽이 북쪽일 것 같아요.': [['저쪽이', '저쪽: phía kia']]
+    };
+    // Soạn tay cho các Unit (khoá = tên ảnh của từ). [mã câu, [3 câu nhiễu], [[chữ trong câu, chú thích]...]]
+    // Mã câu = mã của câu tiếng Hàn lúc soạn; Giáo viên sửa câu trong Sheet thì mã lệch -> tự bỏ, dùng bộ máy tạo.
+    const QUIZ_SENT_DATA = {
+        "u1_01_nampyeon": ["1nzoh6i", ["Vợ làm việc ở công ty.", "Chồng làm việc ở nhà hàng.", "Chồng không làm việc ở công ty."]],
+        "u1_02_anae": ["13dwoy3", ["Vợ đã mua hoa.", "Vợ đã nhận được quà.", "Chồng đã nhận được hoa."]],
+        "u1_03_seonbae": ["itbose", ["Tiền bối và hậu bối cùng đi đến thư viện.", "Tiền bối và bạn bè cùng đi đến câu lạc bộ.", "Tiền bối đi đến câu lạc bộ một mình."], [["동아리에", "동아리: câu lạc bộ (ở trường)"]]],
+        "u1_04_hubae": ["o92aib", ["Khi gặp tiền bối, tôi rất vui mừng.", "Khi gặp hậu bối, tôi rất ngại.", "Khi chia tay hậu bối, tôi rất buồn."]],
+        "u1_05_juin": ["1xpwh2q", ["Khách chờ đợi chủ nhà.", "Chủ nhà chờ đợi bạn bè.", "Chủ nhà mời khách vào nhà."]],
+        "u1_06_sonnim": ["9s4jr4", ["Hôm nay ở nhà hàng có rất nhiều khách.", "Hôm qua hầu như không có khách ở nhà hàng.", "Hôm nay hầu như không có nhân viên ở nhà hàng."], [["거의", "거의: hầu như"]]],
+        "u1_07_sangsa": ["n46oyz", ["Cấp dưới mua cà phê cho cấp trên.", "Cấp trên mua cơm cho cấp dưới.", "Cấp trên uống cà phê với cấp dưới."]],
+        "u1_08_buha": ["7rl4pr", ["Nhân viên đã điện thoại cho giám đốc.", "Giám đốc đã nhắn tin cho nhân viên.", "Giám đốc sẽ điện thoại cho nhân viên."], [["사장님은", "사장님: giám đốc"]]],
+        "u1_09_chodaehada": ["8s5h3t", ["Tôi đã mời bạn đến nhà.", "Tôi muốn mời bạn đến nhà hàng.", "Tôi muốn đến nhà bạn chơi."]],
+        "u1_10_chodaereul-badda": ["fffehy", ["Khi nhận được lời mời, tâm trạng tôi không tốt.", "Khi mời bạn bè, tâm trạng tôi rất vui.", "Khi nhận được quà, tâm trạng tôi rất vui."], [["기분이", "기분: tâm trạng"]]],
+        "u1_11_bangmunhada": ["10vrlkq", ["Hôm qua tôi đã đến thăm nhà bạn.", "Ngày mai bạn sẽ đến thăm nhà tôi.", "Ngày mai tôi sẽ đến thăm công ty của bạn."]],
+        "u1_12_sogaehada": ["1v4lie", ["Xin hãy giới thiệu giúp tôi những hậu bối của khoa Tiếng Nhật Bản.", "Xin hãy giới thiệu giúp tôi những tiền bối của khoa Tiếng Hàn.", "Tôi sẽ giới thiệu những tiền bối của khoa Tiếng Nhật Bản."], [["일본어학과의", "일본어학과: khoa Tiếng Nhật (학과: khoa)"]]],
+        "u1_13_sogaereul-badda": ["1lqh4hl", ["Tôi giới thiệu bản thân và đã chào hỏi.", "Tôi nhận lời mời và đã chào hỏi.", "Tôi nhận lời giới thiệu nhưng chưa chào hỏi."]],
+        "u1_14_insahada": ["1s9cs1l", ["Đứa bé vừa bước vào nhà đã chào hỏi ông.", "Đứa bé từ khi bước vào nhà thì chưa chào hỏi bà.", "Ông từ khi bước vào nhà thì chưa chào hỏi đứa bé."], [["아기는", "아기: em bé"], ["들어올", "들어오다: đi vào"], ["아직", "아직: vẫn chưa"]]],
+        "u1_15_jal-meoggessseubnida": ["1mkeutd", ["\"Tôi đã ăn ngon miệng\" trong tiếng Nhật là \"Itadakimasu\"", "\"Tôi sẽ ăn ngon miệng\" trong tiếng Anh là \"Itadakimasu\"", "\"Tôi sẽ ăn ngon miệng\" trong tiếng Nhật là \"Gochisousama\""], [["일본어로는", "일본어: tiếng Nhật"]]],
+        "u1_16_jal-meogeossseubnida": ["1gan52e", ["Trước bữa ăn, tôi đã chào \"Tôi sẽ ăn ngon miệng\".", "Sau bữa ăn, tôi đã chào \"Xin lỗi vì đã làm phiền\".", "Trước bữa ăn, tôi đã chào \"Tôi đã ăn rất ngon miệng\"."], [["식사", "식사: bữa ăn"]]],
+        "u1_17_silryehagessseubnida": ["ai31e4", ["Khi đi ra, tôi nói \"Xin lỗi vì đã làm phiền\".", "Khi đi vào, tôi nói \"Xin chào\".", "Khi đi vào, tôi gõ cửa nhưng không nói gì."], [["똑똑똑", "똑똑똑: cốc cốc (tiếng gõ cửa)"], ["들어갈", "들어가다: đi vào"]]],
+        "u1_18_silryehaessseubnida": ["1g2xuze", ["Khi đi vào, tôi đã chào \"Xin lỗi vì đã làm phiền\".", "Khi đi ra, tôi đã chào \"Tôi đã ăn rất ngon\".", "Khi đi ra, tôi đã không chào ai."], [["나갈", "나가다: đi ra"]]],
+        "u2_01_yagsoghada": ["y2jt72", ["Tôi hẹn với bạn ở quán cà phê vào ngày mai.", "Tôi hẹn với bạn ở nhà hàng vào hôm nay.", "Tôi hẹn với em ở nhà hàng vào ngày mai."]],
+        "u2_02_yagsogeul-jikida": ["8p2j7b", ["Bạn tôi giữ hẹn. Chỉ có em tôi là không giữ lời hẹn.", "Em tôi không giữ hẹn. Chỉ có bạn tôi là giữ lời hẹn.", "Bạn tôi không giữ hẹn. Em tôi cũng không giữ lời hẹn."]],
+        "u2_03_yagsogeul-an-jikida-mos-jikida": ["1nfg1kx", ["Chồng tôi giữ hẹn nên tâm trạng rất tốt.", "Vợ tôi không giữ hẹn nên tâm trạng không tốt.", "Chồng tôi không giữ hẹn nhưng tâm trạng vẫn tốt."], [["기분이", "기분: tâm trạng"]]],
+        "u2_04_yagsogeul-chwisohada": ["1yfunxa", ["Vì có nhiều thời gian nên tôi muốn hẹn gặp.", "Vì không có thời gian nên tôi muốn đổi lịch hẹn.", "Vì không có tiền nên tôi muốn hủy hẹn."]],
+        "u2_05_yagsogeul-bakkuda": ["kffcgk", ["Tôi muốn thay đổi lịch hẹn sang ngày mai.", "Tôi muốn hủy lịch hẹn tuần sau.", "Tôi đã thay đổi lịch hẹn sang tuần sau."]],
+        "u2_06_gidarida": ["1nxoatz", ["Hãy đợi ở quán cà phê nhé.", "Đừng đợi quá lâu ở nhà hàng nhé.", "Đừng ngồi quá lâu ở quán cà phê nhé."], [["오래", "오래: lâu"]]],
+        "u2_07_mannada": ["rkl81y", ["Tôi đã gặp bạn vào cuối tuần trước.", "Tôi sẽ gặp tiền bối vào cuối tuần này.", "Tôi sẽ gặp bạn vào ngày mai."]],
+        "u2_08_heeojida": ["2nm8jn", ["Chúng ta gặp nhau ở phòng lab cũng được.", "Chúng ta chào tạm biệt ở thư viện cũng được.", "Không được chia tay nhau ở phòng lab."], [["랩실에서", "랩실: phòng lab, phòng thí nghiệm"]]],
+        "u2_09_yeonraghada": ["42gy8f", ["Tôi thường xuyên liên lạc cho tiền bối.", "Tôi hầu như không liên lạc cho hậu bối.", "Tiền bối hầu như không liên lạc cho tôi."], [["거의", "거의: hầu như"]]],
+        "u2_10_keopisyob": ["mstvbz", ["Tôi không uống latte ở quán cafe này.", "Ở quán cafe này tôi chỉ uống trà.", "Tôi chỉ uống latte ở quán cafe kia."], [["라떼를", "라떼: cà phê latte"]]],
+        "u2_11_bagmulgwan": ["1pj21le", ["Cuối tuần hãy đến viện bảo tàng. Vắng người lắm.", "Cuối tuần đừng đến công viên. Đông người lắm.", "Hôm nay đừng đến viện bảo tàng. Đông người lắm."]],
+        "u2_12_misulgwan": ["1db15k5", ["Vì hôm nay trời mưa nên đi đến bảo tàng mỹ thuật cũng được.", "Vì hôm nay thời tiết tốt nên đi đến công viên cũng được.", "Vì hôm nay thời tiết tốt nên không cần đến bảo tàng mỹ thuật."]],
+        "u2_13_mannamui-gwangjang": ["15tl7ee", ["Tôi đã gặp bạn ở \"Quảng trường gặp gỡ\".", "Tôi định đợi bạn ở bến xe buýt.", "Tôi định gặp bạn ở ga tàu điện ngầm."]],
+        "u2_14_hotel": ["1jcp6b6", ["Hãy hút thuốc ở ngoài khách sạn.", "Đừng hút thuốc trong nhà hàng.", "Đừng ăn uống trong phòng khách sạn."], [["담배를", "담배를 피우다: hút thuốc"]]],
+        "u2_15_baeghwajeom": ["r0grxg", ["Tôi đã mua quần áo và giày ở trung tâm thương mại.", "Tôi đã mua quần áo và nhẫn ở chợ.", "Tôi sẽ mua quần áo và nhẫn ở trung tâm thương mại."], [["반지를", "반지: nhẫn"]]],
+        "u2_16_annae-deseukeu": ["cq4twv", ["Buổi sáng bạn đến khu bàn hướng dẫn cũng được.", "Buổi chiều bạn không được đến khu bàn hướng dẫn.", "Buổi chiều bạn đến quầy bán vé cũng được."]],
+        "u2_17_jeongryujang": ["oacvsm", ["Tôi chờ bạn ở trạm xe buýt.", "Tôi chờ tàu ở nhà ga.", "Tôi xuống xe buýt ở trạm xe buýt."]],
+        "u2_18_syopingmol": ["cydgsa", ["Hôm nay tôi sẽ không ghé khu mua sắm.", "Ngày mai tôi sẽ chỉ ghé khu mua sắm thôi.", "Hôm nay tôi sẽ chỉ ghé viện bảo tàng thôi."]],
+        "u3_01_beol": ["1acccvk", ["Hậu bối chỉ định mua 1 bộ đồ.", "Tiền bối chỉ định mua 2 bộ đồ.", "Hậu bối chỉ định mua 2 đôi giày."]],
+        "u3_02_kyeolre": ["pyrbr", ["Ba đôi tất mua hôm nay rất thoải mái.", "Hai đôi giày mua hôm nay rất thoải mái.", "Hai đôi tất mua hôm nay không thoải mái."], [["양말", "양말: tất, vớ"]]],
+        "u3_03_ssang": ["1th1hc1", ["Có ít khách hàng mua một đôi khuyên tai ở cửa hàng.", "Có nhiều khách hàng mua một chiếc nhẫn ở cửa hàng.", "Có nhiều khách hàng mua hai đôi khuyên tai ở chợ."], [["귀걸이", "귀걸이: khuyên tai, bông tai"]]],
+        "u3_04_jang": ["m443ru", ["Thư hôm nay ít hơn hôm qua 5 tờ.", "Thư hôm nay nhiều hơn hôm qua 3 tờ.", "Bưu thiếp hôm nay nhiều hơn hôm qua 5 tấm."], [["편지가", "편지: thư"]]],
+        "u3_05_songi": ["1rbnf66", ["Năm đóa hoa mà tôi nhận thật sự rất đẹp.", "Mười đóa hoa mà tôi tặng thật sự rất đẹp.", "Mười đóa hoa mà tôi nhận không đẹp lắm."]],
+        "u3_06_baguni": ["m82a6b", ["Có người mua một hộp táo ở chợ.", "Có người mua một giỏ cam ở chợ.", "Có người bán một giỏ táo ở chợ."]],
+        "u3_07_sangja": ["15p5ebm", ["Hộp bánh nhỏ nặng hơn hộp lớn.", "Hộp bánh lớn nhẹ hơn hộp nhỏ.", "Túi bánh nhỏ nhẹ hơn túi lớn."]],
+        "u3_08_bongji": ["1d7vsdz", ["Tôi đã mua cho em hai bịch bánh kẹo.", "Em đã mua cho tôi một bịch bánh kẹo.", "Tôi đã mua cho em một hộp bánh kẹo."]],
+        "u3_09_chajda": ["1du33ph", ["Có ít khách hàng tìm kiếm quần áo ở cửa hàng.", "Có nhiều khách hàng tìm kiếm giày ở cửa hàng.", "Có nhiều khách hàng đổi quần áo ở cửa hàng."]],
+        "u3_10_maeume-deulda": ["1fc4rz3", ["Tôi rất hài lòng với lời chào hỏi của hậu bối.", "Tôi không hài lòng với lời chào hỏi của tiền bối.", "Hậu bối không hài lòng với lời chào hỏi của tôi."]],
+        "u3_11_majda": ["1ht306r", ["Nhẫn rất vừa với tay của dì tôi.", "Nhẫn không vừa với tay của mẹ tôi.", "Găng tay không vừa với tay của dì tôi."], [["이모의", "이모: dì"]]],
+        "u3_12_eoulrida": ["ilg92r", ["Tôi đã tặng một chiếc áo hợp với em.", "Em đã tặng tôi một đôi giày hợp với tôi.", "Tôi đã mua một đôi giày hợp với em."], [["운동화를", "운동화: giày thể thao"]]],
+        "u3_13_jumunhada": ["1g1rn91", ["Có ít khách gọi món canh sườn.", "Có nhiều khách gọi món mì lạnh.", "Có nhiều khách thích món canh sườn."], [["갈비탕을", "갈비탕: canh sườn"]]],
+        "u3_14_gyesanhada": ["cbhffg", ["Tôi muốn tính tiền bằng thẻ hơn là bằng tiền mặt.", "Tôi chỉ có thể tính tiền bằng thẻ.", "Tôi muốn đổi tiền mặt hơn là dùng thẻ."], [["현금으로", "현금: tiền mặt"]]],
+        "u3_15_gyohwanhada": ["15a8c3m", ["Tôi đã đổi chiếc túi màu vàng thành màu đỏ.", "Tôi đã đổi chiếc túi màu đỏ thành màu đen.", "Tôi đã trả lại chiếc túi màu đỏ."]],
+        "u3_16_hwanbulhada": ["18w1t72", ["Khách hàng đổi đồ đi đến bàn hướng dẫn.", "Khách hàng trả đồ lấy lại tiền đi đến quầy thu ngân.", "Khách hàng mua đồ đi đến bàn hướng dẫn."]],
+        "u3_17_jjalbda": ["17fakf9", ["Chiếc quần này ngắn hơn chiếc quần kia.", "Chiếc quần kia dài hơn chiếc quần này.", "Chiếc váy kia ngắn hơn chiếc váy này."]],
+        "u3_18_gilda": ["v38j2q", ["Chiếc chân váy đã mặc hôm nay quá ngắn.", "Chiếc quần đã mặc hôm nay quá dài.", "Chiếc chân váy đã mặc hôm qua quá dài."]],
+        "u3_19_manhda": ["668757", ["Tuy tiền ít nhưng rất hạnh phúc.", "Vì tiền nhiều nên rất hạnh phúc.", "Tuy bạn bè nhiều nhưng không hạnh phúc."], [["행복하지", "행복하다: hạnh phúc"]]],
+        "u3_20_jeogda": ["azkvm3", ["Hôm nay khách nhiều hơn hôm qua.", "Hôm qua khách ít hơn hôm nay.", "Hôm nay nhân viên ít hơn hôm qua."]],
+        "u3_21_dukkeobda": ["1n7sopo", ["Vì áo mỏng nên bị lạnh.", "Vì áo dày nên rất ấm.", "Vì áo nhỏ nên bị chật."]],
+        "u3_22_yalbda": ["ujof34", ["Áo khoác dày nhưng lại đẹp.", "Áo khoác mỏng nên không đẹp.", "Áo len mỏng nhưng lại đẹp."], [["코트가", "코트: áo khoác (coat)"]]],
+        "u3_23_mugeobda": ["9ng9sv", ["Vì vở nặng hơn sách nên sẽ không mang vở.", "Vì sách nhẹ hơn vở nên sẽ mang sách.", "Vì sách nặng hơn vở nên sẽ không mua sách."], [["공책보다", "공책: vở"], ["가져갈", "가져가다: mang đi"]]],
+        "u3_24_gabyeobda": ["8l3q4r", ["Hãy chọn cái túi nặng đi.", "Hãy chọn cái hộp nhẹ đi.", "Hãy mua cái túi nhẹ đi."], [["고릅시다", "고르다: chọn"]]],
+        "u3_25_hwaryeohada": ["y12rlj", ["Hà Nội là một thành phố hoa lệ.", "TP.HCM là một thành phố yên tĩnh.", "TP.HCM không phải là một thành phố hoa lệ."]],
+        "u3_26_dansunhada": ["wlqmd5", ["Vì là thiết kế sặc sỡ nên em tôi muốn mặc.", "Vì là thiết kế đơn giản nên em tôi không muốn mặc.", "Vì là thiết kế đơn giản nên mẹ tôi muốn mặc."], [["디자인이라서", "디자인: thiết kế"]]],
+        "u3_27_pyeonhada": ["zhf25a", ["Liệu chiếc giường kia có thoải mái hơn chiếc giường này không nhỉ?", "Liệu chiếc ghế này có thoải mái hơn chiếc ghế kia không nhỉ?", "Chiếc giường này chắc chắn thoải mái hơn chiếc giường kia."], [["침대가", "침대: giường"]]],
+        "u3_28_bulpyeonhada": ["17ewwox", ["Áo rộng nên có thể thấy không thoải mái đấy!", "Áo chật nhưng vẫn thoải mái đấy!", "Giày chật nên có thể thấy không thoải mái đấy!"]],
+        "u4_01_ima": ["1s2xh4b", ["Trên má có cái chấm.", "Trên trán có vết thương.", "Trên trán không có cái chấm."], [["점이", "점: nốt ruồi, chấm"]]],
+        "u4_02_nunsseob": ["1pnwrfo", ["Tôi muốn đổi sang kiểu tóc hợp với gương mặt.", "Tôi không muốn đổi chân mày.", "Tôi muốn đổi sang chân mày hợp với đôi mắt."], [["얼굴하고", "얼굴: khuôn mặt"]]],
+        "u4_03_nun": ["uiax93", ["Mỗi lần nhìn điện thoại thông minh là đầu tôi lại đau.", "Mỗi lần đọc sách là mắt tôi lại đau.", "Lần đầu nhìn điện thoại thông minh mắt tôi đã đau."]],
+        "u4_04_ko": ["45jtmt", ["Vì bị cảm nên tôi phải lấy khăn giấy lau miệng.", "Vì bị cảm nên tôi phải uống thuốc.", "Vì bị sốt nên tôi phải lấy khăn giấy lau mũi."], [["휴지로", "휴지: khăn giấy"], ["닦아야", "닦다: lau"]]],
+        "u4_05_ib": ["1xk35xk", ["Mỗi bữa ăn, tôi rửa tay và mặt.", "Trước khi ngủ, tôi rửa tay và miệng.", "Mỗi bữa ăn, tôi chỉ rửa tay."], [["식사", "식사: bữa ăn"], ["씻어요", "씻다: rửa"]]],
+        "u4_06_ibsul": ["1osdn4f", ["Vì mũi bị chảy máu nên phải đi bệnh viện.", "Vì môi bị chảy máu nên phải đi hiệu thuốc.", "Môi bị chảy máu nhưng không cần đi bệnh viện."]],
+        "u4_07_gaseum": ["1hxs4my", ["Mỗi khi vận động, lưng tôi lại đau.", "Mỗi khi ăn cơm, ngực tôi lại đau.", "Mỗi khi vận động, ngực tôi không đau nữa."]],
+        "u4_08_bae": ["1g2bv9a", ["Mì tôi ăn hôm nay cay quá nên bụng tôi bị đau.", "Mì tôi ăn hôm qua cay quá nên đầu tôi bị đau.", "Mì tôi ăn hôm qua mặn quá nên bụng tôi bị đau."], [["매워서", "맵다: cay"]]],
+        "u4_09_son": ["n8ajq2", ["Vì chân bị thương nên đừng xách túi nặng nhé.", "Vì tay bị thương nên hãy xách túi nhẹ nhé.", "Vì tay bị thương nên đừng viết nhiều nhé."], [["들지", "들다: xách, cầm"]]],
+        "u4_10_songarag": ["w2kakg", ["Có thể đeo nhẫn ở mỗi ngón tay.", "Không thể đeo nhẫn ở mỗi ngón chân được.", "Không thể đeo đồng hồ ở mỗi tay được."], [["반지를", "반지: nhẫn"], ["낄", "끼다: đeo (nhẫn)"]]],
+        "u4_11_heori": ["15ls6sm", ["Vì đau lưng nên tôi không thể tập thể dục mỗi ngày.", "Vì đau vai nên tôi phải tập thể dục mỗi ngày.", "Vì đau lưng nên tôi phải đi bệnh viện mỗi ngày."]],
+        "u4_12_mureup": ["pouwhp", ["Đầu gối bị thương hôm nay đã chảy máu.", "Khuỷu tay bị thương hôm qua đã chảy máu.", "Đầu gối bị thương hôm qua không chảy máu."]],
+        "u4_13_bal": ["1bsljgr", ["Chân phải to hơn chân trái.", "Tay trái to hơn tay phải.", "Chân trái nhỏ hơn chân phải."], [["왼발이", "왼발: chân trái"], ["오른발보다", "오른발: chân phải"]]],
+        "u4_14_jongari": ["1cnx8un", ["Mỗi lần đi bộ, bắp chân tôi lại đau.", "Mỗi lần chạy bộ, đầu gối tôi lại đau.", "Mỗi lần chạy bộ, bắp chân tôi không đau."], [["조깅할", "조깅하다: chạy bộ"]]],
+        "u4_15_balgarag": ["1lwwhdp", ["Vì ngón chân bị thương nặng nên phải đi bệnh viện.", "Vì ngón tay chỉ bị thương nhẹ nên không cần đi bệnh viện.", "Vì ngón chân chỉ bị thương nhẹ nên không cần uống thuốc."]],
+        "u4_16_meori": ["1uh7d7b", ["Mỗi khi đau bụng, tôi phải uống thuốc giảm đau.", "Mỗi khi đau đầu, tôi phải uống thuốc hạ sốt.", "Mỗi khi đau đầu, tôi không uống thuốc."]],
+        "u4_17_gwi": ["12xb5qu", ["Khi nghe nhạc, đầu tôi bị đau.", "Khi xem phim, tai tôi bị đau.", "Khi nghe nhạc, tai tôi không đau."]],
+        "u4_18_teog": ["i8r41v", ["Cằm bị thương hôm qua không còn đau nữa.", "Trán bị thương hôm qua vẫn còn đau.", "Cằm bị thương tuần trước vẫn còn đau."], [["아직도", "아직도: vẫn còn"]]],
+        "u4_19_eokkae": ["1y1y6h3", ["Vì lưng bị đau nên tôi phải nghỉ ngơi một chút.", "Vì vai bị đau nên tôi phải đi bệnh viện.", "Vai bị đau nhưng tôi không thể nghỉ ngơi."]],
+        "u4_20_pal": ["1ro84ek", ["Tôi có thể xách túi bằng cánh tay bị thương.", "Tôi không thể viết bằng cánh tay bị thương.", "Tôi không thể xách túi bằng bàn tay bị thương."]],
+        "u4_21_deung": ["ec7q2s", ["Vai của bố tôi rất rộng.", "Lưng của anh tôi rất rộng.", "Lưng của bố tôi rất nhỏ."]],
+        "u4_22_eongdeongi": ["k4olgy", ["Cái ghế đó to nên ngồi rất thoải mái.", "Cái ghế đó nhỏ nên ngồi đau lưng.", "Cái giường đó nhỏ nên nằm không thoải mái."], [["의자는", "의자: ghế"]]],
+        "u4_23_dari": ["11jlnvo", ["Chị thì chân ngắn, em thì chân dài.", "Chị thì tóc dài, em thì tóc ngắn.", "Chị và em đều chân dài."]],
+        "u4_24_balmog": ["1yge4xj", ["Vì bị thương ở cổ tay nên tôi phải nghỉ ngơi vài ngày.", "Vì bị thương ở mắt cá chân nên tôi phải nghỉ ngơi vài tuần.", "Vì bị thương ở mắt cá chân nên tôi phải nằm viện vài ngày."], [["며칠", "며칠: vài ngày, mấy ngày"]]],
+        "u4_25_gamgidoggame-geolrida": ["11txs5r", ["Cứ mỗi mùa hè tôi lại bị cảm.", "Mùa đông năm nay tôi bị cảm.", "Cứ mỗi mùa đông tôi lại bị sốt."]],
+        "u4_26_gichimhada": ["1i3vset", ["Trong lớp học có ít học sinh đang ho.", "Trong lớp học có nhiều học sinh đang ngủ.", "Trong thư viện có nhiều học sinh đang ho."], [["교실에", "교실: lớp học"]]],
+        "u4_27_yeoli-nada": ["1wck89q", ["Vì bị sốt nên phải uống thuốc giảm đau.", "Vì bị ho nên phải uống thuốc hạ sốt.", "Vì bị sốt nên phải đi bệnh viện."]],
+        "u4_28_kosmuli-naoda": ["1oywy29", ["Vì bị sổ mũi nên tôi không đi học.", "Dù bị ho nhưng tôi vẫn phải đi học.", "Dù bị sổ mũi nhưng tôi vẫn phải đi làm."]],
+        "u4_29_baetali-nada": ["1dkhi77", ["Vì bị đau bụng nên hôm nay không ăn sáng cũng được.", "Vì bị đau đầu nên hôm nay không ăn tối cũng được.", "Dù bị đau bụng nhưng hôm nay phải ăn tối."]],
+        "u4_30_sohwaga-an-doeda": ["1sp5hw", ["Mỗi khi ăn ít, tôi lại bị khó tiêu.", "Mỗi khi ăn nhiều, tôi lại bị đau đầu.", "Mỗi khi uống nhiều, tôi lại bị khó tiêu."]],
+        "u4_31_dachida": ["1ms3cs", ["Khi chơi bóng đá, có ít người bị thương.", "Khi chơi bóng rổ, có nhiều người bị thương.", "Khi chơi bóng đá, có nhiều người xem."], [["축구할", "축구하다: chơi bóng đá"]]],
+        "u4_32_sangcheoga-nada": ["1xi87ng", ["Bị té nên tay bị thương.", "Bị té nhưng đầu gối không sao.", "Chạy nhiều nên đầu gối bị đau."], [["넘어져서", "넘어지다: té, ngã"]]],
+        "u4_33_piga-nada": ["1w5rkzp", ["Vết thương lớn nên chảy máu nhiều.", "Vết thương nhỏ nên chảy máu ít.", "Vết thương nhỏ nhưng đau nhiều."]],
+        "u4_34_simhada": ["s9abb1", ["Vì bị cảm nhẹ nên tôi vẫn đi học.", "Vì bị cảm nặng nên tôi không thể đi làm.", "Vì bị đau bụng nặng nên tôi không thể đi học."]],
+        "u4_35_dutong": ["10y4ieu", ["Cứ mỗi kỳ thi là tôi lại bị đau bụng.", "Cứ mỗi kỳ nghỉ là tôi lại bị đau đầu.", "Kỳ thi lần này tôi bị đau đầu."], [["시험", "시험: kỳ thi"]]],
+        "u4_36_chitong": ["1fsity6", ["Vì đau răng nhẹ nên không cần đi khoa răng.", "Vì đau mắt nặng nên tôi phải đi khoa mắt.", "Vì đau răng nặng nên tôi phải uống thuốc giảm đau."]],
+        "u4_37_bogtong": ["wlshvz", ["Mỗi lần ăn đồ ngọt, tôi lại bị đau bụng.", "Mỗi lần ăn đồ cay, tôi lại bị đau đầu.", "Mỗi lần ăn đồ cay, tôi lại bị đau răng."], [["매운", "맵다: cay"]]],
+        "u4_38_jintongje": ["jldbna", ["Mỗi khi bị đau bụng, tôi phải uống thuốc tiêu hóa.", "Mỗi khi bị đau đầu, tôi phải uống thuốc hạ sốt.", "Mỗi khi bị đau đầu, tôi phải đi ngủ sớm."]],
+        "u4_39_sohwaje": ["4wglie", ["Vì khó tiêu nên phải uống thuốc tiêu hóa.", "Vì tiêu hóa tốt nên không cần uống thuốc giảm đau.", "Vì tiêu hóa tốt nên không cần đi bệnh viện."]],
+        "u4_40_haeyeolje": ["mdpdx2", ["Cứ mỗi khi bị sốt là mẹ tôi lại uống thuốc hạ sốt.", "Cứ mỗi khi bị ho là em tôi lại uống thuốc hạ sốt.", "Cứ mỗi khi bị sốt là em tôi lại uống thuốc giảm đau."]],
+        "u4_41_alyag": ["1v9gye8", ["Tôi thích thuốc nước hơn thuốc viên.", "Tôi thích thuốc viên hơn thuốc bột.", "Tôi không thích cả thuốc viên lẫn thuốc nước."]],
+        "u4_42_garuyag": ["1obrdnb", ["Vì thuốc nước đắng nên trẻ con không muốn uống.", "Vì thuốc bột ngọt nên trẻ con thích uống.", "Vì thuốc bột đắng nên người lớn không muốn uống."], [["써서", "쓰다: đắng"]]],
+        "u4_43_mulyag": ["1a5nzwg", ["Vì không uống được thuốc nước nên uống thuốc viên cũng được.", "Vì không uống được thuốc viên nên uống thuốc bột cũng được.", "Vì không uống được thuốc viên nên không cần uống thuốc."]],
+        "u4_44_naegwa": ["jessua", ["Vì bụng cứ đau mãi nên tôi phải đến khoa ngoại.", "Vì đầu cứ đau mãi nên tôi phải đến khoa nội.", "Vì bụng đau một chút nên không cần đến khoa nội."], [["계속", "계속: liên tục, cứ mãi"]]],
+        "u4_45_oegwa": ["12le4nt", ["Có nhiều người bị thương ở chân tại khoa ngoại.", "Có nhiều người bị thương ở cánh tay tại khoa nội.", "Có ít người bị thương ở cánh tay tại khoa ngoại."]],
+        "u4_46_soagwa": ["128cspt", ["Có ít trẻ em đang chờ đợi ở khoa nhi.", "Có nhiều trẻ em đang chờ đợi ở khoa răng.", "Có nhiều trẻ em đang chơi ở khoa nhi."]],
+        "u4_47_ibiinhugwa": ["1a833x7", ["Tai bị đau nên tôi đã đến khoa tai mũi họng.", "Mắt bị đau nhưng tôi đã không đến khoa mắt.", "Tai bị đau nhưng tôi đã không uống thuốc."]],
+        "u4_48_angwa": ["1kua7bj", ["Vì cuối tuần này không có thời gian nên không thể đi khoa mắt.", "Vì cuối tuần này có thời gian nên phải đi khoa răng.", "Vì cuối tuần sau có thời gian nên phải đi khoa mắt."]],
+        "u4_49_chigwa": ["nqx4fu", ["Vì đau mắt nặng nên hãy đi khoa mắt đi.", "Vì đau răng nặng nên hãy uống thuốc giảm đau đi.", "Vì đau răng nhẹ nên chưa cần đi khoa răng."]],
+        "u4_50_yebangjusa": ["1kqg5yx", ["Trẻ em không cần tiêm phòng.", "Người lớn nhất định phải tiêm phòng.", "Trẻ em nhất định phải uống thuốc."], [["꼭", "꼭: nhất định"]]],
+        "u4_51_jusareul-majda": ["1yld4gc", ["Cánh tay đã tiêm hôm qua không còn đau nữa.", "Cánh tay đã tiêm tuần trước vẫn còn đau.", "Cánh tay bị thương hôm qua vẫn còn đau."], [["아직도", "아직도: vẫn còn"]]],
+        "u4_52_cheobanghada": ["11wn0t8", ["Vì có ít bệnh nhân nên bác sĩ kê đơn thuốc chậm rãi.", "Vì có nhiều bệnh nhân nên y tá phải làm việc nhanh.", "Vì có nhiều bệnh nhân nên bác sĩ phải về muộn."], [["환자가", "환자: bệnh nhân"]]],
+        "u4_53_eotteohge-osyeossseubnikka": ["12dvzy0", ["Hôm qua anh đến đây có việc gì?", "Hôm nay anh đi đâu vậy?", "Hôm nay anh đến đây bằng gì?"]],
+        "u4_54_eodiga-apeusibnikka": ["tx3ovn", ["Anh đau thế nào?", "Anh đi đâu?", "Anh đau từ khi nào?"]],
+        "u4_55_eotteohge-apeusibnikka": ["1kuy6hc", ["Anh đau ở đâu?", "Anh đến đây có việc gì?", "Anh đau bao lâu rồi?"]],
+        "u4_56_jeungsangi-eotteohseubnikka": ["rwyvno", ["Hôm qua triệu chứng của anh thế nào?", "Bây giờ anh đau ở đâu?", "Bây giờ tâm trạng của anh thế nào?"]],
+        "u5_01_geurigo": ["209jtt", ["Tôi viết lá thư đã gửi hôm qua. Và tôi cũng mua tem.", "Tôi viết lá thư sẽ gửi vào ngày mai. Nhưng tôi không mua tem.", "Tôi viết lá thư sẽ gửi vào ngày mai. Và tôi cũng mua phong bì."]],
+        "u5_02_geureona": ["wd3eil", ["Tôi đã muốn gửi bưu kiện. Vì vậy tôi đã đến bưu điện.", "Tôi đã muốn gửi thư. Tuy nhiên vì đau chân nên tôi đã không đến bưu điện được.", "Tôi đã muốn gửi bưu kiện. Tuy nhiên vì đau đầu nên tôi đã không đến bưu điện được."]],
+        "u5_03_hajiman": ["1tupapb", ["Tiêm vắc-xin cúm thì đỡ bị cảm hơn, và giá tiêm cũng rẻ.", "Tiêm vắc-xin cúm thì dễ bị cảm hơn, nhưng mà giá tiêm hơi đắt.", "Uống thuốc cảm thì đỡ bị cảm hơn, nhưng mà giá thuốc hơi đắt."], [["독감", "독감: cúm"]]],
+        "u5_04_geureohjiman": ["xenmon", ["Bưu kiện tôi sẽ gửi vào ngày mai nặng hơn bưu kiện kia. Thế nhưng phí thì giống nhau.", "Bưu kiện tôi sẽ gửi vào ngày mai nhẹ hơn bưu kiện kia. Vì vậy phí rẻ hơn.", "Bưu kiện tôi đã gửi hôm qua nhẹ hơn bưu kiện kia. Thế nhưng phí thì giống nhau."], [["요금은", "요금: phí, cước"], ["같아요", "같다: giống nhau"]]],
+        "u5_05_geureonde": ["19fsxlc", ["Bạn tôi có giới thiệu bưu điện. Vì vậy tôi định đi.", "Bạn tôi có giới thiệu ngân hàng. Nhưng mà tôi không định đi.", "Tôi có giới thiệu bưu điện cho bạn. Nhưng mà bạn không định đi."]],
+        "u5_06_geuraeseo": ["2t8ycj", ["Tôi đã cầm rất nhiều đồ. Nhưng vai và cánh tay không đau.", "Tôi đã cầm rất nhiều đồ. Vì vậy lưng và chân bị đau.", "Tôi đã mua rất nhiều đồ. Vì vậy vai và cánh tay bị đau."], [["물건을", "물건: đồ đạc"], ["들었어요", "들다: cầm, xách"]]],
+        "u5_07_geureom": ["1qvyxx8", ["A: Không có phong bì.\nB: Vậy thì hãy mua phong bì ở bưu điện.", "A: Không có tem.\nB: Vậy thì hãy mượn tem của tôi.", "A: Có tem rồi.\nB: Vậy thì hãy dán tem vào phong bì này."]],
+        "u5_08_geureomyeon": ["fcd2xr", ["Hôm nay tôi đã gửi được bưu kiện. Vậy thì ngày mai không cần đi nữa nhé?", "Hôm nay tôi đã không gửi được thư. Vậy thì ngày mai đi lại nhé?", "Hôm nay tôi đã không gửi được bưu kiện. Vậy thì tuần sau đi lại nhé?"], [["다시", "다시: lại, lần nữa"]]],
+        "u5_09_pyeonji": ["u7rgfu", ["Vì có thời gian viết thư nên tôi đã gửi được.", "Vì không có tem nên tôi đã không gửi được thư.", "Vì không có thời gian viết thiệp nên tôi đã không gửi được."]],
+        "u5_10_yeobseo": ["10mdab5", ["Khi đi du lịch tôi đã mua bưu thiếp và viết ngay.", "Khi đi du lịch tôi đã mua tem, nhưng tôi không dùng.", "Khi đi công tác tôi đã mua bưu thiếp, nhưng tôi không dùng."]],
+        "u5_11_kadeu": ["1225y3a", ["Tôi không mua thiệp ở cửa hàng này.", "Tôi chỉ mua tem đẹp ở cửa hàng này thôi.", "Tôi chỉ mua thiệp đẹp ở bưu điện thôi."]],
+        "u5_12_juso": ["1i7ey3f", ["Vì biết địa chỉ của bạn nên tôi đã gửi được thư.", "Vì không biết số điện thoại của bạn nên tôi đã không gọi được.", "Vì không biết địa chỉ của bạn nên tôi đã không gửi được bưu kiện."]],
+        "u5_13_upyeonbeonho": ["1c0q0oq", ["Tôi đã biết mã bưu chính sẽ ghi vào bưu kiện.", "Tôi vẫn chưa biết địa chỉ sẽ ghi vào bưu kiện.", "Tôi vẫn chưa biết mã bưu chính sẽ ghi vào phong bì."], [["아직", "아직: vẫn chưa"]]],
+        "u5_14_sopo": ["t6hqz", ["Vì bưu kiện nhẹ nên phí rẻ.", "Vì bưu kiện to nên phí đắt.", "Vì thư nặng nên phí đắt."], [["요금이", "요금: phí, cước"]]],
+        "u5_15_bongtu": ["1q78evw", ["Nếu không có phong bì to thì dùng phong bì nhỏ cũng được.", "Nếu không có phong bì nhỏ thì không được dùng phong bì to.", "Nếu không có hộp nhỏ thì dùng hộp to cũng được."]],
+        "u5_16_upyo": ["167wn0i", ["Nếu không có tem thì vẫn gửi được thư.", "Nếu không có địa chỉ thì không gửi được thư.", "Nếu không có tem thì không gửi được bưu thiếp."]],
+        "u5_17_gwiha": ["1v2oyny", ["Tôi đã nhận được thư hồi âm của quý vị.", "Tôi sẽ đợi cuộc gọi của quý vị.", "Quý vị hãy đợi thư hồi âm của tôi."], [["답장을", "답장: thư hồi âm, thư trả lời"]]],
+        "u5_18_olrim-deurim": ["eft932", ["Nếu viết \"kính thư\" ở cuối thư thì sẽ thất lễ.", "Nếu không viết \"kính thư\" ở đầu thư thì sẽ thất lễ.", "Nếu không viết địa chỉ ở cuối thư thì sẽ thất lễ."], [["끝에", "끝: cuối"], ["실례예요", "실례: sự thất lễ"]]],
+        "u5_19_ppareunupyeon": ["1jb8qp", ["Bức thư này phải gửi bằng chuyển phát nhanh.", "Bức thư này không cần gửi bằng thư bảo đảm cũng được.", "Bưu kiện này không cần gửi bằng chuyển phát nhanh cũng được."]],
+        "u5_20_deunggi": ["1wy2ren", ["Thư quan trọng thì phải gửi bằng chuyển phát nhanh.", "Thư bình thường thì phải gửi bằng thư bảo đảm.", "Thư quan trọng thì không cần gửi bằng thư bảo đảm."], [["중요한", "중요하다: quan trọng"]]],
+        "u5_21_hanggongpyeon": ["939ilz", ["Mỗi chuyến bay có giá giống nhau.", "Mỗi chuyến tàu có giá khác nhau.", "Mỗi chuyến bay có thời gian khác nhau."], [["가격이", "가격: giá cả"], ["다릅니다", "다르다: khác"]]],
+        "u5_22_bonaeda": ["jm6x6", ["Nếu gửi bưu kiện thì mất bao nhiêu tiền?", "Nếu gửi thư thì mất mấy ngày?", "Nếu gửi bưu kiện thì mất mấy tiếng?"], [["며칠", "며칠: mấy ngày"]]],
+        "u5_23_buchida": ["miq70b", ["Hôm nay có hai kiện bưu phẩm sẽ gửi.", "Hôm qua có ba kiện bưu phẩm đã gửi.", "Hôm nay có ba lá thư sẽ gửi."]],
+        "u5_24_butida": ["1etkjff", ["Tiền bối đã dán tem vào phong bì giúp tôi.", "Hậu bối đã viết địa chỉ lên phong bì giúp tôi.", "Tôi đã dán tem vào phong bì giúp hậu bối."]],
+        "u6_01_sinaebeoseu": ["6dy3ar", ["Tôi lên xe buýt liên tỉnh rồi đi đến trường.", "Tôi lên xe buýt nội thành rồi đi đến công ty.", "Tôi đi bộ đến trường."]],
+        "u6_02_sioebeoseu": ["1h2qkpv", ["Xe buýt tuyến ngắn to hơn xe buýt liên tỉnh.", "Xe buýt liên tỉnh nhỏ hơn xe buýt tuyến ngắn.", "Xe buýt liên tỉnh nhanh hơn xe buýt tuyến ngắn."]],
+        "u6_03_maeulbeoseu": ["1is8vh3", ["Hãy xuống ở trạm dừng thứ ba của xe buýt tuyến ngắn.", "Hãy lên xe ở trạm dừng thứ hai của xe buýt tuyến ngắn.", "Hãy xuống ở trạm dừng thứ hai của xe buýt nội thành."], [["두 번째", "두 번째: thứ hai"], ["내리세요", "내리다: xuống (xe)"]]],
+        "u6_04_syeoteulbeoseu": ["2bgvk2", ["Xe buýt shuttle của khách sạn đi đến tận nhà ga.", "Xe buýt shuttle của sân bay đi đến tận khách sạn.", "Xe buýt shuttle của khách sạn không đi đến sân bay."], [["공항까지", "공항: sân bay"]]],
+        "u6_05_ilban-taegsi": ["1vzhhq6", ["Chiếc taxi này là taxi cao cấp phải không?", "Chiếc taxi kia là taxi thường phải không?", "Chiếc xe buýt này là xe buýt thường phải không?"]],
+        "u6_06_koltaegsi": ["79zxlj", ["Khi gọi taxi vào buổi sáng, taxi tổng đài tiện lợi.", "Khi gọi taxi vào ban đêm, taxi tổng đài bất tiện.", "Khi gọi taxi vào ban đêm, taxi cao cấp tiện lợi."], [["부를", "부르다: gọi"]]],
+        "u6_07_mobeomtaegsi": ["10zg8u3", ["Không có tiền nên chúng ta đi taxi thường thôi.", "Có tiền nên chúng ta đi taxi limousine cũng được.", "Có thời gian nên chúng ta đi taxi cao cấp cũng được."]],
+        "u6_08_rimujin-taegsi": ["1y3tpae", ["Tôi đã lên taxi limousine từ khách sạn rồi đi đến sân bay.", "Tôi đã lên taxi thường từ sân bay rồi đi đến khách sạn.", "Tôi đã lên taxi limousine từ sân bay rồi đi về nhà."]],
+        "u6_09_1beon-chulgu": ["dymufr", ["Cửa ra số 1 phía bên phải nhưng không cần đi đến đó cũng được.", "Cửa ra số 2 phía bên trái nhưng không cần đi đến đó cũng được.", "Cửa ra số 1 phía bên trái nên phải đi đến đó."]],
+        "u6_10_1hoseon": ["1oj3ifz", ["Nếu đổi sang tuyến số 2 thì nhanh hơn phải không?", "Nếu đổi sang tuyến số 1 thì chậm hơn phải không?", "Nếu đi tuyến số 1 luôn thì nhanh hơn phải không?"], [["갈아타면", "갈아타다: đổi (xe, tàu)"], ["빠르지요", "빠르다: nhanh"]]],
+        "u6_11_hwanseungyeog": ["1cl5pbi", ["Ở ga trung chuyển đợi một chút được không?", "Ở bến xe buýt nghỉ một chút được không?", "Ở ga trung chuyển không được nghỉ phải không?"]],
+        "u6_12_galataneun-gos": ["83qezx", ["Đây là lối ra phải không?", "Kia là nơi đổi tuyến phải không?", "Đây không phải là nơi đổi tuyến à?"]],
+        "u6_13_bangmyeon": ["16irmom", ["Ở đây không thể lên xe buýt hướng Seoul.", "Ở đây chỉ có thể lên xe buýt hướng Busan thôi.", "Ở đây chỉ có thể xuống xe buýt hướng Seoul thôi."]],
+        "u6_14_haeng": ["18btbgj", ["Xe buýt này đi Busan phải không?", "Xe buýt kia đi Seoul phải không?", "Tàu này đi Seoul phải không?"]],
+        "u6_15_gyotong-kadeu": ["1kaeoy", ["Tôi mua thẻ giao thông rồi đi xe buýt.", "Tôi nạp tiền thẻ giao thông rồi đi tàu điện ngầm.", "Tôi mua vé rồi đi tàu điện ngầm."]],
+        "u6_16_gibonyogeum": ["zen57y", ["Vì phí cơ bản rẻ nên mình đi taxi nhé?", "Vì phí cơ bản đắt nên mình đi xe buýt nhé?", "Vì phí cơ bản đắt nên mình đi bộ nhé?"]],
+        "u6_17_noseondo": ["eg7qhf", ["Tôi nhận bản đồ lộ trình ở bàn hướng dẫn rồi tìm đường.", "Tôi nhận thẻ giao thông ở ga rồi tìm đường.", "Tôi nhận bản đồ lộ trình ở ga nhưng vẫn lạc đường."], [["역에서", "역: ga"]]],
+        "u6_18_golmog": ["14r8zne", ["Hãy đi vào con hẻm này.", "Đừng đi vào con hẻm kia.", "Đừng đi qua ngã tư này."]],
+        "u6_19_motungi": ["hvauxq", ["Ở góc đường kia thì rẽ phải phải không?", "Ở góc đường này thì rẽ trái phải không?", "Ở ngã tư kia thì rẽ trái phải không?"]],
+        "u6_20_geonneolmog": ["1nrj11r", ["Băng qua chỗ đường tàu rồi rẽ trái.", "Băng qua ngã tư rồi rẽ phải.", "Băng qua chỗ đường tàu rồi đi thẳng."]],
+        "u6_21_samgeori": ["1wl5wkd", ["Có rất ít người ở ngã ba này.", "Có rất nhiều người ở ngã tư này.", "Có rất nhiều xe ở ngã ba này."]],
+        "u6_22_sageori": ["1l4r0c1", ["Có nhiều người đang đợi ở ngã ba.", "Có ít người đang đợi ở ngã tư.", "Có nhiều xe đang đợi ở ngã tư."]],
+        "u6_23_beoseu-jeonyong-doro": ["15ewekd", ["Taxi được đi vào đường dành riêng cho xe buýt phải không?", "Xe máy không được đi vào đường dành riêng cho xe buýt phải không?", "Taxi không được đỗ ở đường dành riêng cho xe buýt phải không?"], [["다니지", "다니다: đi lại"]]],
+        "u6_27_oreunjjogeuro-gada": ["e87u5l", ["Ở ngã tư hãy đi về bên trái rồi tìm ngân hàng.", "Ở ngã ba hãy đi về bên phải rồi tìm ngân hàng.", "Ở ngã tư hãy đi về bên phải rồi tìm bưu điện."], [["은행을", "은행: ngân hàng"]]],
+        "u6_28_uhoejeonhada": ["9tpuha", ["Ở đây rẽ trái phải không?", "Ở kia rẽ phải phải không?", "Ở đây quay đầu xe phải không?"]],
+        "u6_29_oenjjogeuro-gada": ["1nokwtf", ["Ở ngã ba thì đi về bên phải phải không?", "Ở ngã tư thì đi về bên trái phải không?", "Ở ngã ba thì đi thẳng phải không?"]],
+        "u6_30_jwahoejeonhada": ["182l7yd", ["Hãy rẽ phải ở ngã tư thứ nhất rồi đi thẳng.", "Hãy rẽ trái ở ngã tư thứ hai rồi đi thẳng.", "Hãy rẽ trái ở ngã ba thứ nhất rồi đi thẳng."], [["첫번째", "첫 번째: thứ nhất"]]],
+        "u6_31_ttogbaro-gada": ["7ffk4i", ["Hãy rẽ trái theo con đường mà bạn tôi đã chỉ.", "Hãy đi thẳng theo con đường mà thầy giáo đã chỉ.", "Đừng đi theo con đường mà bạn tôi đã chỉ."], [["알려", "알려 주다: cho biết, chỉ cho"]]],
+        "u6_32_jigjinhada": ["1hmo8qa", ["Ở con đường này thì phải rẽ trái.", "Ở con đường kia thì phải đi thẳng.", "Ở con đường này thì không được đi thẳng."]],
+        "u6_33_godjang-gada": ["1fws1e9", ["Từ đây đi thẳng luôn thì sẽ thấy ngân hàng phải không?", "Từ đây rẽ phải thì sẽ thấy bệnh viện phải không?", "Từ kia đi thẳng luôn thì sẽ thấy bệnh viện phải không?"], [["나오지요", "나오다: hiện ra, xuất hiện"]]],
+        "u6_34_jug-gada": ["18uag30", ["Từ hiệu thuốc rẽ trái rồi tìm cửa hàng tiện lợi.", "Từ ngân hàng đi thẳng miết rồi tìm cửa hàng tiện lợi.", "Từ hiệu thuốc đi thẳng miết rồi tìm bệnh viện."], [["편의점을", "편의점: cửa hàng tiện lợi"]]],
+        "u6_35_jinagada": ["jjunfg", ["Có ít xe buýt đi qua con đường này phải không?", "Có nhiều taxi đi qua con đường này phải không?", "Có nhiều xe buýt đỗ ở con đường này phải không?"]],
+        "u6_36_geonneogada": ["qlo36t", ["Hãy băng qua ở đèn tín hiệu thứ hai.", "Hãy rẽ phải ở đèn tín hiệu đầu tiên.", "Hãy dừng lại ở đèn tín hiệu đầu tiên."], [["신호등에서", "신호등: đèn giao thông"]]],
+        "u6_37_dolagada": ["2sa5d4", ["Vì tắc đường nên tôi đã về nhà muộn.", "Vì tắc đường nên tôi đã không thể đến công ty.", "Đường thông thoáng nên tôi đã về nhà sớm."], [["막혀서", "막히다: bị tắc"]]],
+        "u6_38_yuteonhada": ["i85qvs", ["Hãy quay đầu xe ở trước đèn giao thông kia.", "Đừng quay đầu xe ở sau đèn giao thông kia.", "Đừng dừng xe ở trước đèn giao thông kia."], [["신호등", "신호등: đèn giao thông"]]],
+        "u6_39_nagada": ["1v7410u", ["Tôi đi ra khỏi quán cà phê rồi đến văn phòng.", "Tôi đi ra khỏi văn phòng rồi đến nhà hàng.", "Tôi đi vào văn phòng rồi đến quán cà phê."], [["사무실에서", "사무실: văn phòng"]]],
+        "u6_40_naoda": ["rg0jdn", ["Người vừa đi vào cửa hàng là cấp trên của tôi phải không?", "Người vừa đi ra khỏi cửa hàng là bạn của tôi phải không?", "Người vừa đi ra khỏi ngân hàng là cấp trên của tôi phải không?"]],
+        "u7_01_gugjejeonhwa": ["15njz46", ["Sau khi gọi điện thoại quốc tế, phải trả phí.", "Trước khi gọi điện thoại quốc tế, phải biết mã quốc gia.", "Trước khi gọi điện thoại liên tỉnh, phải biết mức phí."], [["요금을", "요금: phí, cước"]]],
+        "u7_02_sioejeonhwa": ["jql5ke", ["Tôi gọi điện thoại quốc tế để nói chuyện với bố mẹ ở quê.", "Tôi gọi điện thoại liên tỉnh để nói chuyện với bạn ở quê.", "Tôi gửi tin nhắn để nói chuyện với bố mẹ ở quê."], [["겁니다", "걸다: gọi (điện thoại)"]]],
+        "u7_03_sinaejeonhwa": ["7etsof", ["Tôi sẽ gọi bạn bằng điện thoại quốc tế từ bàn hướng dẫn.", "Tôi sẽ gọi bạn bằng điện thoại nội hạt từ phòng làm việc.", "Tôi sẽ đợi bạn ở bàn hướng dẫn."]],
+        "u7_04_gugga-beonho": ["qih59x", ["Tôi đã tìm mã quốc gia để gọi điện cho bạn người Nhật.", "Tôi đã tìm mã khu vực để gọi điện cho bạn người Mỹ.", "Tôi đã tìm mã quốc gia để gửi thư cho bạn người Mỹ."], [["미국", "미국: nước Mỹ"]]],
+        "u7_05_jiyeog-beonho": ["428b61", ["Tôi đã tìm giúp đồng nghiệp mã vùng.", "Đồng nghiệp đã tìm giúp tôi mã quốc gia.", "Bạn tôi đã tìm giúp tôi mã vùng."], [["동료가", "동료: đồng nghiệp"]]],
+        "u7_06_tonghwahada": ["1m21fer", ["Sau khi nói chuyện điện thoại với cấp trên, tôi đã huỷ cuộc hẹn.", "Trước khi nói chuyện điện thoại với cấp trên, tôi đã đổi cuộc hẹn.", "Trước khi nói chuyện điện thoại với bạn, tôi đã huỷ cuộc hẹn."]],
+        "u7_07_tonghwa-jungida": ["1he69oq", ["Bây giờ anh đang gặp khách phải không ạ?", "Bây giờ anh đang bận máy với cấp trên phải không ạ?", "Lúc nãy anh đã bận máy với khách phải không ạ?"]],
+        "u7_08_jarie-eobsda-jarie-an-gyesida": ["10qy9wy", ["Tôi đã đến định gặp cấp trên và người có ở văn phòng.", "Tôi đã đến định gặp khách nhưng người không có ở văn phòng.", "Tôi đã gọi điện cho cấp trên nhưng người không nghe máy."]],
+        "u7_09_yeongyeolhada": ["1jus68v", ["Để tôi kết nối điện thoại đến phòng họp giúp anh/chị.", "Anh/chị hãy kết nối điện thoại đến văn phòng giúp tôi.", "Để tôi để lại tin nhắn ở văn phòng giúp anh/chị."], [["사무실로", "사무실: văn phòng"]]],
+        "u7_10_mesijireul-namgida": ["1ehrmbq", ["Nếu cấp trên có ở chỗ làm việc thì tôi gặp được không ạ?", "Nếu cấp trên không có ở chỗ làm việc thì tôi gọi lại sau được không ạ?", "Nếu khách không có ở chỗ làm việc thì tôi để lại lời nhắn được không ạ?"]],
+        "u7_11_beonhoreul-nureuda": ["7iwrdu", ["Sau khi bấm số, phải bấm mã quốc gia.", "Trước khi bấm số, phải bấm mã vùng trước tiên.", "Trước khi bấm số, phải bấm phím sao trước tiên."]],
+        "u7_12_byeolpyo": ["1frgud3", ["Điện thoại này khi bấm phím thăng thì phát ra tiếng.", "Điện thoại này khi bấm phím sao thì không có tiếng.", "Điện thoại này khi bấm phím sao thì màn hình sáng lên."], [["소리가", "소리: tiếng, âm thanh"]]],
+        "u7_13_umul-jeongja": ["1j9ah2a", ["Để tôi bấm phím sao.", "Bạn hãy bấm phím thăng đi.", "Để tôi bấm số điện thoại."]],
+        "u7_14_munja-mesijiga-oda": ["1aeb3bw", ["Mỗi lần có tin nhắn đến, tâm trạng tôi lại không tốt.", "Mỗi lần có cuộc gọi đến, tâm trạng tôi lại vui.", "Mỗi lần gửi tin nhắn, tâm trạng tôi lại vui."], [["기분이", "기분: tâm trạng"]]],
+        "u7_15_munja-mesijireul-bonaeda": ["m2wpop", ["Tôi đã tìm số điện thoại để gọi điện cho bạn.", "Tôi đã tìm số điện thoại để gửi tin nhắn cho mẹ.", "Tôi đã tìm địa chỉ để gửi thư cho bạn."]],
+        "u7_16_jeonhwagireul-kkeuda": ["n6zl49", ["Sau khi nghe giảng, phải bật điện thoại.", "Trước khi nghe giảng, phải để điện thoại ở chế độ rung.", "Trước khi đi ngủ, phải tắt điện thoại."], [["수업을", "수업: giờ học"]]],
+        "u7_17_jindongeuro-hada": ["vasu", ["Khi đến thư viện, phải tắt điện thoại.", "Khi đến rạp chiếu phim, phải để điện thoại ở chế độ rung.", "Khi đến thư viện, không cần để điện thoại ở chế độ rung."]],
+        "u7_18_baeteoriga-nagada": ["c879ym", ["Tôi đã bật máy ảnh lên để chụp hình và chụp được nhiều ảnh.", "Tôi đã bật điện thoại lên để gọi điện nhưng máy lại hết pin.", "Tôi đã bật máy ảnh lên để quay video nhưng máy lại hết pin."], [["켰지만", "켜다: bật (máy)"]]],
+        "u8_01_melro-yeonghwa": ["ibvd3e", ["Bạn hãy thử xem bộ phim kinh dị này xem.", "Tôi đã thử xem bộ phim tình cảm này rồi.", "Bạn đừng xem bộ phim tình cảm này."], [["한번", "한번: thử một lần"]]],
+        "u8_02_gongpo-yeonghwa": ["ees8pv", ["Nếu xem bộ phim kinh dị này một mình thì chắc sẽ rất đáng sợ.", "Nếu xem bộ phim hài này cùng với bạn thì chắc sẽ vui.", "Nếu xem bộ phim kinh dị này cùng với bạn thì chắc vẫn đáng sợ."]],
+        "u8_03_eseuepeusf-yeonghwa": ["ti006n", ["Nếu đi xem phim hành động với chồng thì chắc sẽ vui.", "Nếu đi xem phim khoa học viễn tưởng với bạn thì chắc sẽ vui.", "Nếu đi xem phim khoa học viễn tưởng với chồng thì chắc sẽ chán."]],
+        "u8_04_aegsyeon-yeonghwa": ["1ao1ezh", ["Bộ phim hành động tôi đã xem cùng em trai thật hay đấy!", "Bộ phim hài tôi đã xem cùng anh trai thật hay đấy!", "Bộ phim hành động tôi đã xem cùng anh trai chán quá!"]],
+        "u8_05_komidi-yeonghwa": ["m648qr", ["Phim kinh dị thú vị hơn phim hài đúng không?", "Phim hài thú vị hơn phim tình cảm đúng không?", "Phim hài đáng sợ hơn phim kinh dị đúng không?"]],
+        "u8_06_aenimeisyeon-yeonghwa": ["lhtctm", ["Tôi đã cùng các em nhỏ đến rạp xem phim hài.", "Tôi đã cùng bạn bè đến rạp xem phim hoạt hình.", "Tôi đã cùng các em nhỏ xem phim hoạt hình ở nhà."], [["극장에", "극장: rạp chiếu phim"]]],
+        "u8_07_yeonghwa-jemog": ["16xyro7", ["Nhìn tên phim, chắc là vui lắm.", "Nhìn diễn viên, chắc là buồn lắm.", "Nhìn tên phim, chắc là đáng sợ lắm."]],
+        "u8_08_yeonghwagamdog": ["uab5cx", ["Diễn viên điện ảnh đã đi ra ngoài và chào người hâm mộ.", "Đạo diễn phim đã đi vào trong và chào người hâm mộ.", "Đạo diễn phim đã đi ra ngoài và ký tên cho người hâm mộ."]],
+        "u8_09_yeonghwabaeu": ["3ep5cm", ["Tôi chưa từng gặp diễn viên đó ngoài đời thực.", "Tôi đã từng gặp đạo diễn đó ngoài đời thực.", "Tôi đã từng xem phim của diễn viên đó."], [["실제로", "실제로: ngoài đời thực, thật sự"]]],
+        "u8_10_paen": ["3061rg", ["Người hâm mộ nào cũng thích cùng một diễn viên.", "Mỗi người hâm mộ thích bộ phim khác nhau.", "Mỗi diễn viên có người hâm mộ khác nhau."], [["달라요", "다르다: khác"]]],
+        "u8_11_yeongihada": ["jkcffi", ["Nếu diễn viên đó diễn xuất thì chắc chán lắm.", "Nếu diễn viên đó hát thì chắc hay lắm.", "Diễn viên đó đã diễn xuất rất hay."]],
+        "u8_12_sangyeonghada": ["1qkgm36", ["Bộ phim này trình chiếu từ tuần này đến tháng sau.", "Bộ phim này trình chiếu từ tuần sau đến năm sau.", "Bộ phim này trình chiếu từ tháng sau."]],
+        "u8_13_maepyoso": ["jx2puq", ["Ở quầy bán vé có rất nhiều người nhỉ!", "Ở quầy bán vé chỉ có 2 người nhỉ!", "Ở bàn hướng dẫn chỉ có 1 người nhỉ!"]],
+        "u8_14_yeonghwa-pyo": ["6o24cu", ["Bạn hãy mua vé xem phim đi.", "Để tôi mua bỏng ngô.", "Để tôi đặt trước vé xem phim."]],
+        "u8_15_gaebonghada": ["3ye13u", ["Bộ phim đó đã công chiếu tại Hàn Quốc vào tháng trước.", "Bộ phim đó dự kiến sẽ công chiếu tại Việt Nam vào tháng sau.", "Bộ phim đó dự kiến sẽ công chiếu tại Hàn Quốc vào tuần sau."], [["예정입니다", "예정: dự kiến"]]],
+        "u8_16_gippeuda": ["9jkntd", ["Tôi rất buồn vì không nhận được thư từ người bạn Hàn Quốc.", "Tôi rất vui vì nhận được thư và quà từ người bạn Nhật Bản.", "Tôi rất vui vì đã gửi thư và bưu kiện cho người bạn Hàn Quốc."]],
+        "u8_17_seulpeuda": ["1xgmngz", ["Nếu nghe câu chuyện đó thì chắc sẽ vui lắm.", "Nếu xem bộ phim đó thì chắc sẽ buồn lắm.", "Nghe câu chuyện đó tôi đã rất buồn."]],
+        "u8_18_haengboghada": ["mfk98j", ["Phải khỏe mạnh thì mới sống tốt được.", "Phải có tiền thì mới sống tốt được.", "Dù không hạnh phúc vẫn có thể sống tốt được."]],
+        "u8_19_sogsanghada": ["tfbsu0", ["Cũng có người dù nhận quà nhưng thấy cô đơn.", "Ai nhận quà cũng thấy vui.", "Cũng có người dù tặng quà nhưng thấy tủi thân."]],
+        "u8_20_jeulgeobda": ["4p1nq4", ["Hôm nay thật buồn chán!", "Hôm qua thật vui vẻ!", "Hôm nay thật mệt mỏi!"]],
+        "u8_21_jiruhada": ["1lmh32d", ["Vui quá. Chúng ta xem phim nhé?", "Chán quá. Chúng ta đi dạo nhé?", "Chán quá. Chúng ta ăn gì đó nhé?"]],
+        "u8_22_oerobda": ["14qzer9", ["Nếu không có bạn bè thì chắc cô đơn lắm.", "Nếu không có gia đình thì chắc buồn chán lắm.", "Có gia đình bên cạnh nên không cô đơn."]],
+        "u8_23_uulhada": ["eo46i2", ["Hôm nay từ sáng đến đêm trong lòng tôi rất u sầu.", "Hôm qua từ sáng đến đêm trong lòng tôi rất vui vẻ.", "Hôm qua từ sáng đến trưa trong lòng tôi rất u sầu."], [["마음이", "마음: lòng, tâm trạng"]]],
+        "u8_24_simsimhada": ["13q89xa", ["Nếu thấy buồn thì liên lạc với tôi nhé.", "Nếu thấy chán thì đến nhà tôi chơi nhé.", "Nếu thấy chán thì tôi sẽ liên lạc với bạn nhé."]],
+        "u8_25_museobda": ["po3w3i", ["Tôi đã thử xem một bộ phim buồn cười.", "Tôi chưa từng xem phim đáng sợ.", "Tôi muốn thử xem một bộ phim đáng sợ."]],
+        "u8_26_nolrada": ["1aj3c2d", ["Nghe tin đó nên tôi vui thật đấy!", "Đọc tin đó nên tôi ngạc nhiên thật đấy!", "Nghe tin đó nhưng tôi không ngạc nhiên."], [["소식을", "소식: tin tức"]]],
+        "u8_27_usgida": ["1oogfj", ["Diễn viên đó thật đáng sợ nhỉ!", "Bộ phim đó thật buồn cười nhỉ!", "Diễn viên đó thật đẹp trai nhỉ!"]],
+        "u8_28_usda": ["1jx85u3", ["Đứa trẻ hay khóc thật đấy!", "Đứa trẻ ít cười thật đấy!", "Người mẹ hay cười thật đấy!"]],
+        "u8_29_ulda": ["kfd0zo", ["Tôi đã xem phim buồn nên đã khóc nhiều.", "Tôi đã xem phim hài nhưng không cười.", "Tôi đã đọc truyện buồn nhưng không khóc."]],
+        "u8_30_sinnada": ["12lqqq6", ["Nếu ngày mai đi làm thì chắc sẽ mệt lắm.", "Hôm qua đi du lịch rất hứng khởi.", "Nếu tuần sau đi du lịch thì chắc sẽ hứng khởi lắm."]],
+        "u8_31_hwanada": ["fh7u1i", ["Tôi đã định nổi giận nhưng lại giữ im lặng.", "Tôi đã định giữ im lặng nhưng lại bật khóc.", "Tôi đã giữ im lặng và không nổi giận."], [["조용히", "조용히: yên lặng"]]],
+        "u8_32_jolrida": ["svwoff", ["Tôi đem sách lại để làm bài tập mà chán quá.", "Tôi đem sách lại để đọc mà buồn ngủ quá.", "Tôi đem máy tính lại để làm bài tập mà buồn ngủ quá."], [["숙제하려고", "숙제하다: làm bài tập"], ["가져왔지만", "가져오다: mang đến"]]],
+        "u8_33_geuribda": ["vxanhv", ["Thật nhớ lúc tôi cùng chơi với bạn bè ở công viên.", "Thật nhớ lúc tôi cùng chơi với anh chị em họ ở trường.", "Tôi không nhớ lúc cùng chơi với anh chị em họ ở công viên."], [["사촌들하고", "사촌: anh chị em họ"]]],
+        "u9_01_hyuil": ["1mnz7ms", ["Kỳ nghỉ này bận nhiều nên chúng ta ở nhà nhé?", "Kỳ nghỉ này rảnh nhiều nên chúng ta đi leo núi hay đi biển nhé?", "Cuối tuần này rảnh nhiều nên chúng ta đi leo núi hay bơi nhé?"], [["등산이나", "등산: leo núi"], ["수영을", "수영: bơi lội"]]],
+        "u9_02_gonghyuil": ["n6vub3", ["Vì là ngày lễ nên tôi đã được nghỉ ở nhà.", "Tuy là ngày lễ nhưng bài tập nhiều nên tôi đã không thể nghỉ được.", "Tuy là cuối tuần nhưng công việc công ty nhiều nên tôi đã không thể nghỉ được."]],
+        "u9_03_ginyeomil": ["1kuisen", ["Mong là món quà kỷ niệm mà tôi sẽ tặng chồng sẽ vừa ý anh ấy.", "Mong là món quà sinh nhật mà tôi sẽ nhận từ chồng sẽ vừa ý tôi.", "Món quà kỷ niệm mà tôi nhận từ chồng không vừa ý tôi."]],
+        "u9_04_yeonhyu": ["f85wzl", ["Giá mà tôi gặp bạn rồi cùng đi du lịch vào cuối tuần này thì tốt.", "Giá mà tôi gặp gia đình rồi cùng đi du lịch trong kỳ nghỉ dài này thì tốt.", "Tôi đã gặp bạn rồi cùng đi du lịch trong kỳ nghỉ dài."]],
+        "u9_05_gaecheonjeol": ["aru2bl", ["Ngày Lập quốc là ngày 9 tháng 10 và là ngày lễ quốc gia của Hàn Quốc.", "Ngày Giải phóng là ngày 3 tháng 10 và là ngày lễ quốc gia của Hàn Quốc.", "Ngày Lập quốc là ngày 3 tháng 10 nhưng không phải ngày nghỉ."], [["국경일입니다", "국경일: ngày lễ quốc gia"]]],
+        "u9_06_gwangbogjeol": ["oio3fr", ["Ở Hàn Quốc, ngày 15 tháng 9 được kỷ niệm là Ngày Giải phóng.", "Ở Hàn Quốc, ngày 15 tháng 8 được kỷ niệm là Ngày Lập quốc.", "Ở Hàn Quốc, ngày 5 tháng 8 được kỷ niệm là Ngày Giải phóng."], [["기념합니다", "기념하다: kỷ niệm"]]],
+        "u9_07_hyeonchungil": ["mxk0rq", ["Vào Ngày Tưởng niệm, người dân cảm ơn các thầy cô giáo.", "Vào Ngày Giải phóng, người dân tưởng nhớ những người đã hy sinh vì đất nước.", "Vào Ngày Tưởng niệm, người dân đi du lịch cùng gia đình."], [["나라를", "나라: đất nước"], ["희생한", "희생하다: hy sinh"], ["추모합니다", "추모하다: tưởng nhớ"]]],
+        "u9_08_seuseungui-nal": ["16mh5ba", ["Vào Ngày Nhà giáo, tôi đã tặng hoa cho thầy/cô.", "Vào ngày sinh nhật, tôi đã viết thư cảm ơn thầy/cô.", "Vào Ngày Nhà giáo, tôi đã viết thư cảm ơn bố mẹ."], [["감사의", "감사: sự cảm ơn"]]],
+        "u9_09_hangeulnal": ["xtl3rz", ["Ngày Hangeul là ngày để trân trọng giá trị của văn hóa Hàn Quốc.", "Ngày Hangeul là ngày để cùng nhìn lại và trân trọng giá trị của chữ Hán.", "Ngày Nhà giáo là ngày để trân trọng giá trị của thầy cô."], [["소중함을", "소중하다: quý giá"], ["되새기는", "되새기다: nhìn lại, ôn lại"]]],
+        "u9_10_seol": ["1nobftb", ["Cứ đến Trung thu là tôi đến nhà bà nội, và lần này chắc việc chuẩn bị đồ ăn cũng sẽ vất vả.", "Cứ đến Tết là tôi đến nhà bà nội, và lần này chắc việc chuẩn bị đồ ăn sẽ nhẹ nhàng.", "Cứ đến Tết là bà nội đến nhà tôi, và lần này chắc việc chuẩn bị đồ ăn cũng sẽ vất vả."], [["댁에", "댁: nhà (kính ngữ)"], ["준비가", "준비: sự chuẩn bị"], ["힘들겠어요", "힘들다: vất vả"]]],
+        "u9_11_chuseog-hangawi": ["1i6q742", ["Tết năm ngoái, gia đình tôi đã thử ăn bánh songpyeon do tôi làm.", "Trung thu năm ngoái, gia đình tôi đã thử ăn canh bánh gạo do tôi làm.", "Trung thu năm nay, gia đình tôi đã thử ăn bánh songpyeon do mẹ làm."], [["작년", "작년: năm ngoái"]]],
+        "u9_12_tteoggug": ["ayjy2k", ["Canh bánh gạo mẹ nấu cho ngon thật đấy! Sang năm tôi cũng mong được ăn cùng nhau.", "Canh bánh gạo bà nội nấu cho ngon thật đấy! Năm ngoái chúng tôi cũng đã ăn cùng nhau.", "Bánh songpyeon bà nội làm cho ngon thật đấy! Sang năm tôi cũng mong được ăn cùng nhau."], [["끓여", "끓이다: nấu (canh), đun"], ["내년에도", "내년: năm sau"]]],
+        "u9_13_songpyeon": ["1bnmzen", ["Bánh songpyeon tuy ngọt nhưng dễ làm, lần này giá mà tôi làm được nhiều hơn thì tốt.", "Bánh songpyeon tuy ngọt nhưng khó làm, lần này giá mà tôi làm ít lại thì tốt.", "Canh bánh gạo tuy ngon nhưng khó nấu, lần này giá mà tôi nấu được nhiều hơn thì tốt."], [["달지만", "달다: ngọt"]]],
+        "u9_14_yuchnoli": ["1gg3b6y", ["Khi gia đình tụ họp lại, tôi muốn chơi trò chơi yut hoặc đấu vật.", "Khi bạn bè tụ họp lại, tôi muốn chơi trò chơi yut hoặc thả diều.", "Khi gia đình tụ họp lại, tôi muốn ăn bánh songpyeon hoặc thả diều."]],
+        "u9_15_yeonnalrigi": ["kt5rjs", ["Gió thổi ít nên nếu thả diều thì chắc sẽ chán.", "Gió thổi nhiều nên nếu chơi yut thì chắc sẽ rất thú vị.", "Trời mưa nhiều nên nếu thả diều thì chắc sẽ khó."], [["바람이", "바람: gió"], ["불어서", "불다: thổi"]]],
+        "u9_16_ganggangsulrae": ["1cpe8zt", ["Mong là vào Tết, tôi sẽ cùng người dân trong làng thử múa Ganggangsullae.", "Mong là vào Trung thu, tôi sẽ cùng gia đình thử múa Ganggangsullae.", "Mong là vào Trung thu, tôi sẽ cùng người dân trong làng thử chơi trò yut."], [["마을", "마을: làng"], ["춰", "추다: múa, nhảy"]]],
+        "u9_17_ssireum": ["1jfvt90", ["Vì sức khỏe, tôi muốn thử học bơi.", "Vì sở thích, tôi muốn thử học đấu vật.", "Vì sức khỏe, tôi muốn thử xem đấu vật."], [["건강을", "건강: sức khoẻ"]]],
+        "u9_18_sebaereul-hada": ["9r9g8m", ["Để cầu chúc phúc lành cho ông bà, mỗi sáng Tết tôi đều lạy mừng đầu năm.", "Để nhận tiền mừng tuổi, mỗi sáng Tết tôi đều lạy mừng đầu năm.", "Để cầu chúc phúc lành cho bố mẹ, mỗi tối Tết tôi đều lạy mừng đầu năm."], [["빌어", "빌다: cầu chúc, cầu mong"]]],
+        "u9_19_sebaesdoneul-badda": ["1onym2b", ["Nếu lạy mừng đầu năm thì có thể nhận được quà từ bạn bè.", "Nếu lạy mừng đầu năm thì có thể nhận được tiền mừng tuổi từ trẻ em.", "Nếu không lạy mừng đầu năm thì không nhận được tiền mừng tuổi."], [["어른들한테", "어른: người lớn"]]],
+        "u9_20_bogeul-badda": ["c9sb0w", ["Mong là cả nhà đều khỏe mạnh và có nhiều tiền.", "Mong là bạn bè đều khỏe mạnh và nhận được nhiều may mắn.", "Cả nhà đều khỏe mạnh và đã nhận được nhiều may mắn."], [["모두", "모두: tất cả"]]],
+        "u9_21_soweoneul-bilda": ["amlblz", ["Sau khi Tết đến, tôi nhắm mắt và cầu mong điều ước.", "Trước khi Trung thu đến, tôi nhắm mắt và cầu mong điều ước.", "Trước khi Tết đến, tôi nhìn trăng và cầu mong điều ước."], [["감고", "감다: nhắm (mắt)"]]],
+        "u9_22_charyereul-jinaeda": ["1uqk082", ["Mẹ cũng đến nên cả nhà tụ họp lại và cúng tổ tiên.", "Bố cũng đến nên cả nhà tụ họp lại và ăn cơm.", "Bố không đến nên cả nhà không cúng tổ tiên."], [["온 가족", "온 가족: cả nhà"], ["모여서", "모이다: tụ họp"]]],
+        "u9_23_gohyange-naeryeogada-olragada": ["somodu", ["Nếu mua vé xe buýt trước thì việc về quê sẽ thoải mái hơn.", "Nếu không mua vé tàu trước thì việc về quê sẽ khó khăn.", "Nếu mua vé tàu trước thì việc đi du lịch sẽ thoải mái hơn."], [["기차표를", "기차표: vé tàu hoả"], ["미리", "미리: trước"]]],
+        "u9_24_minjog-daeidong": ["1mtdu7o", ["Vào Tết Seollal hoặc Chuseok, rất ít người về quê nên đường xá vắng vẻ.", "Vào cuối tuần, rất nhiều người về quê nên diễn ra cuộc đại di chuyển trên toàn quốc.", "Vào Tết Seollal hoặc Chuseok, rất nhiều người đi du lịch nước ngoài."], [["일어납니다", "일어나다: xảy ra, diễn ra"]]],
+        "u9_25_seongmyoreul-gada": ["a1anw6", ["Sáng Tết, tôi cùng gia đình đi tảo mộ tổ tiên.", "Sáng Chuseok, tôi cùng bạn bè đi tảo mộ tổ tiên.", "Tối Chuseok, tôi cùng gia đình đi tảo mộ tổ tiên."], [["조상님의", "조상: tổ tiên"], ["묘에", "묘: mộ"]]],
+        "u10_01_oemo": ["1l2fod5", ["Tôi tập thể dục để sức khỏe tốt hơn.", "Tôi ăn kiêng để ngoại hình trở nên ngầu/bảnh bao hơn.", "Tôi tập thể dục để ngoại hình trở nên thon thả hơn."]],
+        "u10_02_gin-meori": ["c6fts5", ["Vì mùa hè nóng nên để tóc ngắn sẽ mát mẻ.", "Vì mùa đông lạnh nên đội mũ sẽ ấm áp.", "Vì mùa đông lạnh nên để tóc dài sẽ khó chịu."]],
+        "u10_03_jjalbeun-meori": ["hza4e5", ["Vào mùa đông vì lạnh nên tóc dài rất thoải mái.", "Vào mùa hè vì nóng nên tóc dài rất khó chịu.", "Vào mùa hè vì nóng nên mặc áo mỏng rất thoải mái."]],
+        "u10_04_danbalmeori": ["11yrg14", ["Nếu bạn thử để tóc dài thì tốt biết mấy.", "Nếu bạn thử uốn tóc thì tốt biết mấy.", "Tôi đã thử để tóc ngắn ngang vai rồi."]],
+        "u10_05_pamameori": ["y99l9f", ["Vì để tóc thẳng nên buổi sáng không cần soi gương lâu.", "Vì làm tóc uốn nên buổi tối soi gương lâu.", "Vì làm tóc uốn nên buổi sáng gội đầu lâu."], [["거울을", "거울: gương"], ["오래", "오래: lâu"]]],
+        "u10_06_saengmeori": ["1gw9lf3", ["Bạn của bạn tóc ngắn và là tóc thẳng tự nhiên đúng không?", "Bạn của bạn tóc dài và là tóc xoăn đúng không?", "Em của bạn tóc dài và là tóc thẳng tự nhiên đúng không?"]],
+        "u10_07_gobseulmeori": ["j8oide", ["Vì trời nắng nên mái tóc xoăn tự nhiên càng xoăn nhiều hơn.", "Vì trời mưa nên mái tóc thẳng bị ướt.", "Vì trời mưa nên mái tóc xoăn tự nhiên đã thẳng hơn."]],
+        "u10_08_nalssinhada": ["h5nnn2", ["Vì không tập thể dục nên dáng người đã trở nên mập mạp.", "Nhờ ăn ít mỗi ngày nên dáng người đã trở nên thon thả.", "Nhờ tập thể dục mỗi ngày nên sức khỏe đã tốt hơn."], [["몸이", "몸: cơ thể, dáng người"]]],
+        "u10_09_botongida": ["1vx21dz", ["Vì chiều cao cao nên tôi sẽ thử mặc chiếc quần dài này.", "Vì chiều cao ở mức bình thường nên tôi sẽ thử mặc chiếc váy này.", "Vì cân nặng ở mức bình thường nên tôi sẽ thử mặc chiếc quần này."], [["키가", "키: chiều cao"]]],
+        "u10_10_tongtonghada": ["32bwi1", ["Do ăn nhiều cơm và thịt nên bụng đã trở nên hơi mũm mĩm một chút.", "Do ăn ít bánh mì và bánh kẹo nên bụng đã trở nên thon gọn.", "Do ăn nhiều bánh mì và bánh kẹo nên mặt đã trở nên hơi mũm mĩm một chút."]],
+        "u10_11_jalsaenggida": ["56bxdl", ["Nếu đeo kính vào thì sẽ trở nên đẹp trai hơn đúng không?", "Nếu tháo mũ ra thì sẽ trở nên đẹp trai hơn đúng không?", "Nếu tháo kính ra thì sẽ trở nên dễ thương hơn đúng không?"], [["안경을", "안경: kính mắt"]]],
+        "u10_12_meosissda": ["hgaa29", ["Mặc áo khoác cũ vào trông không ngầu lắm.", "Mặc áo sơ mi mới vào trông trở nên ngầu hơn hẳn.", "Đội mũ mới vào trông trở nên ngầu hơn hẳn."], [["코트를", "코트: áo khoác (coat)"]]],
+        "u10_13_yeppeuda": ["1rd3lpa", ["Cắt tóc xong là gương mặt trở nên xinh đẹp hơn.", "Trang điểm lên một chút là gương mặt trở nên khác hẳn.", "Không trang điểm nhưng gương mặt vẫn xinh đẹp."], [["화장을", "화장: trang điểm"]]],
+        "u10_14_gwiyeobda": ["hpeflp", ["Vì đội mũ dễ thương nên em bé trở nên rất đáng yêu.", "Vì mặc quần áo dễ thương nên chú chó trở nên rất đáng yêu.", "Vì mặc quần áo dày nên em bé trông rất mũm mĩm."], [["아기가", "아기: em bé"]]],
+        "u10_15_dalmda": ["vei8vv", ["Đứa bé càng trở nên giống mẹ nhiều hơn.", "Đứa bé không giống bố lắm.", "Đứa bé càng trở nên giống ông nội nhiều hơn."]],
+        "u10_16_sarangseureobda": ["1o29jfq", ["Để chuẩn bị cho bữa tiệc sinh nhật, tôi sẽ thử mặc một chiếc áo sơ mi đáng yêu.", "Để chuẩn bị cho đám cưới, tôi sẽ thử mặc một chiếc đầm đáng yêu.", "Để chuẩn bị cho bữa tiệc sinh nhật, tôi sẽ mua một chiếc đầm đáng yêu."], [["파티를", "파티: bữa tiệc"], ["원피스를", "원피스: váy liền, đầm"]]],
+        "u10_17_ppalgansaeg": ["1jxoyob", ["Vì uống rượu nên mặt trắng bệch.", "Vì trời nóng nên mặt đỏ.", "Vì xấu hổ nên mặt đỏ."], [["술을", "술: rượu"]]],
+        "u10_18_noransaeg": ["1ff51o1", ["Sao sắc mặt của bạn đỏ thế này?", "Sao sắc mặt của bạn trắng bệch thế này?", "Sao tóc của bạn vàng thế này?"]],
+        "u10_19_paransaeg": ["12qgouj", ["Vào mùa đông, bầu trời xanh biếc.", "Vào mùa thu, bầu trời xám xịt.", "Vào mùa thu, biển xanh biếc."], [["하늘이", "하늘: bầu trời"]]],
+        "u10_20_hayansaeg": ["1t25h4f", ["Mưa rơi làm tất cả trở nên ướt sũng.", "Tuyết rơi làm con đường trở nên trơn trượt.", "Tuyết tan làm tất cả trở nên xám xịt."], [["내려서", "내리다: rơi (tuyết, mưa)"]]],
+        "u10_21_kkamansaeg": ["rrpvnj", ["Bây giờ là buổi sáng cho nên con đường sáng hết.", "Bây giờ là ban đêm cho nên bầu trời tối đen đi hết.", "Bây giờ là ban đêm cho nên con đường vắng hết."]],
+        "u10_22_nogsaeg": ["1njfzkm", ["Mùa thu đến và lá cây chuyển sang màu vàng.", "Mùa xuân đến và lá cây chuyển sang màu nâu.", "Mùa hè đến và lá cây chuyển sang màu xanh lục."], [["나뭇잎이", "나뭇잎: lá cây"]]],
+        "u10_23_galsaeg": ["b9zn2n", ["Vì chiếc túi màu nâu nên tôi rất hài lòng.", "Vì chiếc túi màu đen nên tôi không hài lòng lắm.", "Vì đôi giày màu nâu nên tôi không hài lòng lắm."]],
+        "u10_24_bunhongsaeg": ["1dkirn7", ["Áo sơ mi màu hồng khá rẻ nhỉ.", "Áo sơ mi màu tím khá đắt nhỉ.", "Váy màu hồng khá đắt nhỉ."], [["셔츠가", "셔츠: áo sơ mi"]]],
+        "u10_25_hoesaeg": ["dh6gui", ["Vì bầu trời trong xanh nên tôi không mang theo ô.", "Vì bầu trời có màu xám xịt nên tôi mang theo áo khoác.", "Vì bầu trời có màu xám xịt nên tôi ở nhà."], [["우산을", "우산: ô, dù"]]],
+        "u10_26_borasaeg": ["r08tu9", ["Nếu áo có màu hồng thì tôi sẽ mua.", "Nếu áo có màu tím thì tôi sẽ không mua.", "Nếu túi có màu tím thì tôi sẽ mua."]],
+        "u10_27_juhwangsaeg": ["1szhpvi", ["Hôm nay không được mặc áo màu cam.", "Hôm nay mặc áo màu vàng cũng được.", "Ngày mai mặc áo màu cam cũng được."]],
+        "u10_28_beijisaeg": ["si3sxd", ["Vì sofa là màu xám nên phòng (trông) lạnh lẽo đúng không?", "Vì rèm cửa là màu be nên phòng (trông) ấm lên đúng không?", "Vì sofa là màu be nên phòng (trông) rộng ra đúng không?"], [["소파가", "소파: ghế sofa"]]],
+        "u10_29_ibda": ["1fncfat", ["Vì không mặc áo khoác nên bị lạnh.", "Vì đội mũ nên không bị lạnh.", "Vì mặc áo khoác nên bị nóng."]],
+        "u10_30_beosda": ["8ffc19", ["Vì là áo mỏng nên bây giờ tôi muốn mặc thêm áo.", "Vì là áo dày nên bây giờ tôi muốn mặc vào.", "Vì là giày chật nên bây giờ tôi muốn cởi ra."]],
+        "u10_31_sinda": ["o5dl6q", ["Vì đi đôi giày cao gót mới nên chân bị đau.", "Vì đi đôi giày thể thao cũ nên chân rất êm.", "Vì đi đôi tất mới nên chân rất ấm."]],
+        "u10_32_sseuda": ["1o20uwk", ["Vì vào mùa đông đeo găng tay nên tay rất ấm áp.", "Vì vào mùa đông không đội mũ nên đầu bị lạnh.", "Vì vào mùa hè đội mũ nên đầu bị nóng."]],
+        "u10_33_kkida": ["i0lpnz", ["Vì là quà tặng của mẹ nên tôi đeo chiếc nhẫn này.", "Vì là quà tặng của bạn nên tôi đeo chiếc đồng hồ này.", "Vì là quà tặng của bạn nên tôi cất chiếc nhẫn này đi."]],
+        "u10_35_chada": ["nwmo3z", ["Vì kỳ thi hôm nay nên tôi đã đeo kính.", "Vì kỳ thi ngày mai nên tôi đã đeo đồng hồ.", "Vì buổi phỏng vấn hôm nay nên tôi đã đeo đồng hồ."], [["시험", "시험: kỳ thi"], ["시계를", "시계: đồng hồ"]]],
+        "u11_01_gugnae-yeohaeng": ["jsqngy", ["Vào ngày nghỉ, tôi đi du lịch nước ngoài hoặc nghỉ ngơi ở nhà.", "Vào ngày nghỉ, tôi đi du lịch trong nước hoặc đi làm thêm.", "Vào ngày nghỉ, tôi chỉ nghỉ ngơi ở nhà."]],
+        "u11_02_sinhonyeohaeng": ["zpe3x2", ["Hai người họ đang đi tuần trăng mật đến Busan.", "Hai người họ đang đi du lịch gia đình đến đảo Jeju.", "Hai người họ sẽ đi tuần trăng mật đến đảo Jeju."]],
+        "u11_03_gajog-yeohaeng": ["1082mi3", ["Vào kỳ nghỉ, tôi chưa từng đi du lịch cùng gia đình.", "Vào kỳ nghỉ, tôi từng đi du lịch cùng bạn bè.", "Vào cuối tuần, tôi từng đi du lịch cùng gia đình."], [["방학에", "방학: kỳ nghỉ (của học sinh)"]]],
+        "u11_04_haeoeyeohaeng": ["165ff2b", ["Nếu có thời gian, tôi đi du lịch trong nước hoặc chụp ảnh.", "Nếu có thời gian, tôi đi du lịch nước ngoài hoặc đọc sách.", "Nếu có tiền, tôi đi du lịch nước ngoài hoặc chụp ảnh."]],
+        "u11_05_baenangyeohaeng": ["5cu7kf", ["Bạn tôi đang đi du lịch ba lô cùng gia đình.", "Bạn tôi đã đi du lịch ba lô một mình.", "Bạn tôi đang đi du lịch trọn gói một mình."]],
+        "u11_06_yeohaeng-sangpum": ["12blxwg", ["Tôi chưa từng mua tour du lịch ở công ty lữ hành.", "Tôi từng mua một vé máy bay rẻ tại công ty lữ hành.", "Tôi từng mua một tour du lịch rất ưng ý trên mạng."]],
+        "u11_07_hotel": ["1v6ozth", ["Khi đến điểm du lịch, tôi thường ở khách sạn hoặc căn hộ nghỉ dưỡng.", "Khi về quê, tôi thường ở khách sạn hoặc tìm nhà dân.", "Khi đến điểm du lịch, tôi chỉ ở khách sạn."], [["여행지에", "여행지: nơi du lịch"]]],
+        "u11_08_minbag": ["151aipi", ["Tôi đã từng ngủ lại ở một khách sạn lớn tại vùng quê.", "Tôi đã từng ngủ lại ở một nhà dân nhỏ tại thành phố.", "Tôi chưa từng ngủ lại ở nhà dân tại vùng quê."], [["마을의", "마을: làng"], ["잔", "자다: ngủ"]]],
+        "u11_09_kondo": ["17houdn", ["Tôi đang nướng thịt ở căn hộ nghỉ dưỡng cùng bạn bè.", "Tôi đang nấu canh ở căn hộ nghỉ dưỡng cùng gia đình.", "Tôi đang nướng thịt ở khách sạn cùng gia đình."], [["고기를", "고기: thịt"], ["굽고", "굽다: nướng"]]],
+        "u11_10_1bag-2il": ["1pfsmml", ["Vào cuối tuần, tôi đi du lịch 3 ngày 2 đêm hoặc đi leo núi.", "Vào cuối tuần, tôi đi du lịch 2 ngày 1 đêm hoặc đi bơi.", "Vào kỳ nghỉ dài, tôi đi du lịch 2 ngày 1 đêm hoặc đi leo núi."], [["등산을", "등산: leo núi"]]],
+        "u11_11_gwangwangji": ["uf8yhq", ["Tôi đang đi tham quan một viện bảo tàng nổi tiếng.", "Tôi đã đi tham quan một điểm du lịch nổi tiếng.", "Tôi đang đi tham quan một điểm du lịch yên tĩnh."]],
+        "u11_12_ibjangryo": ["plcuhz", ["Tôi chưa từng trả tiền vé vào cửa ở viện bảo tàng.", "Tôi đã từng trả tiền vé vào cửa ở bảo tàng mỹ thuật.", "Tôi đã từng mua vé xem phim ở viện bảo tàng."], [["낸", "내다: trả (tiền)"]]],
+        "u11_13_yeohaengsa": ["r96vtc", ["Tôi gọi điện thoại cho khách sạn hoặc đến tận nơi.", "Tôi gửi email cho công ty du lịch hoặc đến tận nơi.", "Tôi chỉ gọi điện thoại cho công ty du lịch."], [["걸거나", "걸다: gọi (điện thoại)"], ["직접", "직접: trực tiếp, tận nơi"]]],
+        "u11_14_yeohaeng-paekiji": ["s0nosj", ["Nhân viên khách sạn đang giải thích về gói tour du lịch.", "Nhân viên công ty du lịch đang giải thích về vé máy bay.", "Khách hàng đang hỏi về gói tour du lịch."], [["직원이", "직원: nhân viên"], ["설명하고", "설명하다: giải thích"]]],
+        "u11_15_josig": ["nll4ey", ["Tôi đã từng ăn bữa tối ở khách sạn vào buổi tối.", "Tôi đã từng ăn bữa sáng ở nhà hàng vào buổi sáng.", "Tôi chưa từng ăn bữa sáng ở khách sạn."]],
+        "u11_16_jungsig": ["giot02", ["Vào giờ nghỉ trưa, tôi ăn bữa trưa ở văn phòng hoặc uống trà.", "Vào giờ nghỉ trưa, tôi ăn bữa trưa ở nhà hàng hoặc uống cà phê.", "Vào buổi tối, tôi ăn bữa tối ở nhà hàng hoặc uống trà."], [["점심시간에", "점심시간: giờ nghỉ trưa"]]],
+        "u11_17_seogsig": ["1ltccla", ["Tôi đang ăn bữa trưa cùng bạn bè ở nhà hàng.", "Tôi đang ăn bữa tối cùng gia đình ở nhà hàng.", "Tôi đang ăn bữa tối cùng bạn bè ở khách sạn."]],
+        "u11_18_boheom": ["1cdpmau", ["Tôi từng mua bảo hiểm du lịch sau khi đi nước ngoài về.", "Tôi từng đổi tiền trước khi đi nước ngoài.", "Tôi chưa từng mua bảo hiểm du lịch trước khi đi nước ngoài."], [["신청한", "신청하다: đăng ký"]]],
+        "u11_19_bisangyag": ["77opp5", ["Tôi để thuốc dự phòng vào túi hoặc mang theo khăn tắm.", "Tôi để kính râm vào túi hoặc mang theo băng cá nhân.", "Tôi không mang theo thuốc dự phòng."], [["반창고를", "반창고: băng cá nhân"], ["챙겨요", "챙기다: mang theo, chuẩn bị"]]],
+        "u11_20_sinyongkadeu": ["x9xzzf", ["Tôi đang thanh toán bằng tiền mặt ở trung tâm thương mại.", "Tôi đang thanh toán bằng thẻ tín dụng ở siêu thị.", "Tôi đang đổi đồ ở trung tâm thương mại."]],
+        "u11_21_seulripeo": ["1sh4ikj", ["Tôi đã từng đi dép lê ở bãi biển.", "Tôi đã từng đi giày thể thao ở trong nhà.", "Tôi chưa từng đi dép lê ở trong nhà."]],
+        "u11_22_semyeondogu": ["821ip6", ["Tôi xếp đồ rửa mặt hoặc xếp quần áo vào túi.", "Tôi xếp thuốc dự phòng hoặc khăn tắm vào túi.", "Tôi lấy đồ rửa mặt và khăn tắm ra khỏi túi."], [["수건을", "수건: khăn tắm"]]],
+        "u11_23_seongeulraseu": ["1anqhn2", ["Vì ánh nắng gắt nên tôi (đang) đội mũ.", "Vì ánh nắng yếu nên tôi không đeo kính râm.", "Vì ánh nắng gắt nên tôi (đang) mang theo ô."], [["햇빛이", "햇빛: ánh nắng"], ["강해서", "강하다: mạnh, gắt"]]],
+        "u11_24_kamera": ["s4o3t3", ["Tôi đã từng tặng chiếc máy ảnh chất lượng tốt làm quà sinh nhật.", "Tôi đã từng nhận được chiếc điện thoại tốt làm quà sinh nhật.", "Tôi đã từng nhận được chiếc máy ảnh chất lượng tốt làm quà Tết."]],
+        "u11_25_hwanjeon": ["za91j6", ["Tôi đổi tiền sang won ở ngân hàng hoặc làm thẻ.", "Tôi đổi tiền sang đô la ở sân bay hoặc làm thẻ.", "Tôi đổi tiền sang đô la ở ngân hàng hoặc gửi tiền."], [["은행에서", "은행: ngân hàng"], ["달러로", "달러: đô la"]]],
+        "u11_26_bihaenggi-pyo": ["x9npw2", ["Hành khách đang chờ lấy hành lý ở sân bay.", "Hành khách đang chờ lấy vé tàu ở nhà ga.", "Hành khách đang mua vé máy bay ở công ty du lịch."], [["공항에서", "공항: sân bay"]]],
+        "u11_27_gabangeul-ssada": ["1myamky", ["Tôi đã từng xếp đồ vào một chiếc túi nhỏ trước khi đi du lịch.", "Tôi đã từng xếp đồ vào một chiếc túi lớn trước khi chuyển nhà.", "Tôi đã từng mua một chiếc túi lớn trước khi đi du lịch."]],
+        "u11_28_yeogweoneul-mandeulda": ["1yg6qdn", ["Tôi làm visa mới ở ủy ban quận hoặc chụp ảnh thẻ.", "Tôi làm hộ chiếu mới ở đại sứ quán hoặc chụp ảnh thẻ.", "Tôi làm hộ chiếu mới ở ủy ban quận hoặc đổi tiền."], [["구청에서", "구청: ủy ban quận"]]],
+        "u11_29_bijareul-badda": ["dv2zzk", ["Người đó đang làm hộ chiếu ở đại sứ quán.", "Người đó đang nhận visa ở ủy ban quận.", "Người đó đã nhận visa ở đại sứ quán."], [["대사관에서", "대사관: đại sứ quán"]]],
+        "u11_30_yeyag": ["153j7pd", ["Tôi đã từng đặt trước phòng khách sạn qua điện thoại.", "Tôi đã từng đặt trước vé máy bay qua mạng internet.", "Tôi chưa từng đặt trước phòng khách sạn qua mạng internet."]],
+        "u11_31_yemae": ["3fe62n", ["Tôi đặt mua trước vé máy bay ở quầy vé hoặc đi xe buýt.", "Tôi đặt mua trước vé tàu hỏa ở quầy vé hoặc đi taxi.", "Tôi đặt mua trước vé tàu hỏa trên mạng hoặc đi xe buýt."], [["기차표를", "기차표: vé tàu hoả"]]],
+        "u12_01_gonggongjangso": ["p51h62", ["Ở nơi công cộng thì không được hút thuốc.", "Ở nhà thì không được làm ồn.", "Ở nơi công cộng thì nói chuyện nhỏ cũng được."]],
+        "u12_02_doseogwan": ["9fy1yj", ["A: Hôm qua bạn đã đi đâu?\nB: Đến bảo tàng ạ.", "A: Hôm nay bạn sẽ đi đâu?\nB: Đến thư viện ạ.", "A: Hôm qua bạn đã đi đâu?\nB: Đến công viên ạ."]],
+        "u12_03_gongweon": ["3d76a2", ["Tôi vừa nghe nhạc vừa chạy bộ ở công viên.", "Tôi vừa nghe nhạc vừa đi dạo bộ ở bờ biển.", "Tôi vừa hát vừa đi dạo bộ ở công viên."], [["산책해요", "산책하다: đi dạo"]]],
+        "u12_04_misulgwan": ["tt1hcy", ["Ở bảo tàng mỹ thuật thì chụp ảnh cũng được.", "Ở thư viện thì không được chụp ảnh.", "Ở bảo tàng mỹ thuật thì không được ăn uống."]],
+        "u12_05_bagmulgwan": ["1v8ymm6", ["A: Sau khi ăn, bạn gặp bạn bè ở đâu?\nB: Ở viện bảo tàng ạ.", "A: Trước khi ăn, bạn gặp bạn bè ở đâu?\nB: Ở thư viện ạ.", "A: Trước khi ăn, bạn gặp bạn bè ở đâu?\nB: Ở công viên ạ."]],
+        "u12_06_yeonjuhoejang": ["1y22vq3", ["Trong nhà hát không được trò chuyện, kể cả nói nhỏ.", "Trong thư viện không được trò chuyện ồn ào, nhưng nói nhỏ cũng được.", "Trong nhà hát không được ăn uống, nhưng uống nước cũng được."], [["크게", "크게: to, lớn tiếng"], ["작게", "작게: nhỏ"]]],
+        "u12_07_gisugsa": ["unmrej", ["A: Để đến trường nhanh thì bạn sống ở đâu?\nB: Ở nhà bố mẹ ạ.", "A: Để đến công ty nhanh thì bạn sống ở đâu?\nB: Ở trọ hoặc ở ký túc xá ạ.", "A: Để đến trường nhanh thì bạn đi bằng gì?\nB: Bằng xe buýt hoặc tàu điện ngầm ạ."], [["하숙집이나", "하숙집: nhà trọ"]]],
+        "u12_08_geugjang": ["14vlheq", ["Tôi vừa mua bỏng ngô vừa đợi bạn.", "Tôi vừa mua vé xem phim vừa gọi điện cho bạn.", "Bạn tôi vừa mua vé xem phim vừa đợi tôi."]],
+        "u12_09_byeongweon": ["i9sw3q", ["Ở bệnh viện thì nói chuyện lớn tiếng cũng được.", "Ở thư viện thì không được nói chuyện lớn tiếng.", "Ở bệnh viện thì không được chạy."]],
+        "u12_10_gonghang": ["1qhxabz", ["A: Bây giờ phải đi đâu vậy?\nB: Đến nhà ga ạ.", "A: Ngày mai phải đi đâu vậy?\nB: Đến sân bay ạ.", "A: Bây giờ phải đi đâu vậy?\nB: Đến bệnh viện ạ."]],
+        "u12_11_jilseoreul-jikida": ["1yta69q", ["Tôi vừa chờ đợi ở bưu điện vừa giữ trật tự.", "Tôi vừa chờ đợi ở ngân hàng vừa làm ồn.", "Tôi vừa chờ đợi ở ngân hàng vừa đọc sách."]],
+        "u12_12_joyonghi-hada": ["1syadpn", ["Tôi vừa học bài vừa nói chuyện ở thư viện.", "Tôi vừa đọc sách vừa giữ im lặng ở thư viện.", "Tôi vừa học bài vừa giữ im lặng ở phòng học."]],
+        "u12_13_tteodeulda": ["1ewgp63", ["Không được làm ồn với bạn bè ở trong thư viện.", "Làm ồn với bạn bè ở trong phòng học cũng được.", "Không được ăn uống với bạn bè ở trong phòng học."]],
+        "u12_14_banghaehada": ["1tvois7", ["Không được làm phiền công việc của người khác.", "Hãy giúp đỡ việc học của người khác.", "Người khác không được làm phiền việc học của tôi."]],
+        "u12_15_geumyeonhada": ["1lk25zh", ["A: Sao bạn lại ở ngoài nhà hàng thế?\nB: Vì đông người quá ạ.", "A: Sao bạn lại ở trong nhà hàng thế?\nB: Vì cấm hút thuốc ạ.", "A: Sao bạn lại ở ngoài quán cà phê thế?\nB: Vì cấm hút thuốc ạ."], [["밖에", "밖: bên ngoài"]]],
+        "u12_16_soneul-daeda": ["193lboa", ["Ở viện bảo tàng thì không được chụp ảnh tranh.", "Ở viện bảo tàng thì chạm tay vào tranh cũng được.", "Ở công viên thì không được chạm tay vào hoa."], [["그림에", "그림: bức tranh"]]],
+        "u12_17_gaereul-deryeogada": ["gv3dln", ["A. Có được dắt chó theo đến công viên không?\nB. Vâng, được dắt chó theo đến công viên ạ.", "A. Có được dắt chó theo đến trung tâm thương mại không?\nB. Vâng, được dắt chó theo ạ.", "A. Có được mang đồ ăn vào trung tâm thương mại không?\nB. Không, không được mang đồ ăn vào ạ."]],
+        "u14_01_jinhag": ["7kgsv8", ["Năm nay tôi định học lên đại học. Tôi sẽ học tập chăm chỉ.", "Năm sau tôi định đi du học. Tôi sẽ học tập chăm chỉ.", "Năm sau tôi định đi làm. Tôi sẽ làm việc chăm chỉ."], [["내년에", "내년: năm sau"], ["열심히", "열심히: chăm chỉ"]]],
+        "u14_02_yuhag": ["emag3v", ["가: Học tiếng Hàn ở trong nước có tốt không?\n나: So với học trong nước thì đi du học Hàn Quốc không đắt tiền.", "가: Học tiếng Hàn ở trong nước có tốt không?\n나: So với đi du học Hàn Quốc thì đi học trong nước đắt hơn.", "가: Học tiếng Anh ở trong nước có tốt không?\n나: So với đi du học Mỹ thì đi học trong nước không đắt tiền."], [["국내에서", "국내: trong nước"]]],
+        "u14_03_eohagyeonsu": ["1aal0a1", ["Tôi đã đến Hàn Quốc để làm việc. Tôi sẽ học tiếng Hàn ở trường đại học.", "Tôi đã đến Hàn Quốc để học tiếng. Tôi sẽ học tiếng Hàn ở trung tâm ngoại ngữ.", "Tôi đã đến Nhật Bản để học tiếng. Tôi sẽ học tiếng Nhật ở trường đại học."]],
+        "u14_04_daehagweon": ["8e1i72", ["Mình đang chuẩn bị thi vào đại học để học tiếng Hàn.", "Mình đang chuẩn bị thi vào cao học để làm phiên dịch tiếng Hàn.", "Mình đang chuẩn bị đi du học để dạy tiếng Hàn."], [["가르치려고", "가르치다: dạy"], ["준비하고", "준비하다: chuẩn bị"]]],
+        "u14_05_yeonguja": ["1se66k4", ["Tiền bối của tôi làm việc ở thư viện. Nghề nghiệp là nhà nghiên cứu.", "Hậu bối của tôi làm việc ở viện bảo tàng. Nghề nghiệp là nhà nghiên cứu.", "Tiền bối của tôi làm việc ở viện bảo tàng. Nghề nghiệp là hướng dẫn viên."], [["직업이", "직업: nghề nghiệp"]]],
+        "u14_06_byeonhosa": ["1pkcrg3", ["Vì vấn đề đơn giản nên mình không cần gặp luật sư.", "Vì vấn đề phức tạp nên mình đã đi gặp bác sĩ.", "Vì vấn đề phức tạp nên mình đã gọi điện cho luật sư."], [["문제가", "문제: vấn đề"], ["복잡하기", "복잡하다: phức tạp"]]],
+        "u14_07_anaunseo": ["s3948s", ["A: Diễn viên đang xuất hiện trên ti vi.\nB: Giọng nói rất hay.", "A: Phát thanh viên đang xuất hiện trên ti vi.\nB: Khuôn mặt rất đẹp.", "A: Phát thanh viên đang nói trên radio.\nB: Giọng nói rất hay."], [["목소리가", "목소리: giọng nói"]]],
+        "u14_08_miyongsa": ["1a26pxs", ["Thợ làm tóc làm việc ở tiệm làm tóc. Họ cắt tóc và nhuộm tóc.", "Thợ làm tóc làm việc ở khách sạn. Họ cắt tóc và trang điểm.", "Bác sĩ làm việc ở bệnh viện. Họ khám bệnh và kê đơn thuốc."], [["미용실에서", "미용실: tiệm làm tóc"], ["자르고", "자르다: cắt"], ["화장을", "화장: trang điểm"]]],
+        "u14_09_gyeongyeongja": ["oowbxe", ["A: Bố bạn là nhân viên công ty phải không?\nB: Vâng, ông ấy làm việc ở công ty.", "A: Bố bạn là người điều hành công ty phải không?\nB: Không, ông ấy là giáo viên.", "A: Mẹ bạn là người điều hành công ty phải không?\nB: Vâng, bà ấy làm kinh doanh ở công ty."], [["사업을", "사업: kinh doanh"]]],
+        "u14_10_jubu": ["1sfdbiv", ["Người nội trợ đó chưa từng học nấu món Hàn Quốc.", "Người nội trợ đó từng học nấu món Nhật Bản.", "Người nội trợ đó từng dạy nấu món Hàn Quốc."], [["요리를", "요리: món ăn, nấu ăn"]]],
+        "u14_11_yeohaengsa": ["93itzk", ["A: Có thể đặt mua trước vé tàu ở công ty du lịch không?\nB: Vâng, có thể đặt mua trước qua internet.", "A: Có thể đặt mua trước vé máy bay ở công ty du lịch không?\nB: Không, chỉ có thể mua ở sân bay.", "A: Có thể đặt mua trước vé máy bay ở công ty du lịch không?\nB: Vâng, có thể đặt mua trước qua điện thoại."]],
+        "u14_12_hanggongsa": ["1hf738o", ["Tôi muốn làm việc ở hãng hàng không. Vì thế tôi sẽ học tiếng Hàn thật nhiều.", "Tôi muốn làm việc ở công ty du lịch. Vì thế tôi sẽ học tiếng Anh thật nhiều.", "Tôi đang làm việc ở hãng hàng không. Vì thế tôi đã học tiếng Anh thật nhiều."], [["영어를", "영어: tiếng Anh"]]],
+        "u14_13_sinmunsa": ["rrxhhz", ["A: Buổi sáng bạn đi làm đến đài truyền hình phải không?\nB: Vâng, tôi đi tàu điện ngầm rồi đến công ty.", "A: Buổi sáng bạn đi làm đến tòa soạn báo phải không?\nB: Vâng, tôi đi xe buýt rồi đến công ty.", "A: Buổi tối bạn tan làm ở tòa soạn báo phải không?\nB: Vâng, tôi đi tàu điện ngầm về nhà."], [["출근합니까", "출근하다: đi làm"]]],
+        "u14_14_bangsonggug": ["s4li98", ["Bên trong đài truyền hình có rất ít diễn viên điện ảnh và phát thanh viên.", "Bên trong đài truyền hình có rất nhiều ca sĩ và phát thanh viên.", "Bên trong rạp chiếu phim có rất nhiều diễn viên điện ảnh và người hâm mộ."]],
+        "u14_16_chulpansa": ["1eh7fhx", ["Tôi rất thích thư viện và sách. Sau này tôi muốn làm việc ở thư viện.", "Tôi rất thích báo và tạp chí. Sau này tôi muốn đi làm ở tòa soạn báo.", "Tôi không thích đọc sách. Sau này tôi không muốn làm ở nhà xuất bản."], [["나중에", "나중: sau này"]]],
+        "u14_17_muyeog-hoesa": ["19kh0cq", ["A: Em trai bạn là nhân viên công ty xây dựng phải không?\nB: Vâng, cậu ấy thường xuyên gặp gỡ người nước ngoài.", "A: Em gái bạn là nhân viên công ty thương mại phải không?\nB: Vâng, cô ấy thường xuyên gặp gỡ người nước ngoài.", "A: Em trai bạn là nhân viên công ty thương mại phải không?\nB: Vâng, cậu ấy thường xuyên đi công tác nước ngoài."], [["남동생은", "남동생: em trai"], ["외국", "외국: nước ngoài"]]],
+        "u14_18_geonseol-hoesa": ["17kbylk", ["Bố tôi làm việc ở công ty thương mại. Mỗi ngày ông thức dậy từ sáng sớm.", "Bố tôi làm việc ở công ty xây dựng. Mỗi ngày ông về nhà rất muộn.", "Mẹ tôi làm việc ở công ty xây dựng. Mỗi ngày bà thức dậy từ sáng sớm."], [["일찍", "일찍: sớm"]]],
+        "u14_19_gyehoegtujabu": ["7ck2ze", ["A: Bạn làm việc ở bộ Kế hoạch Đầu tư phải không?\nB: Vâng, tôi đã xin được việc ở đó vào năm nay.", "A: Bạn làm việc ở công ty tư vấn phải không?\nB: Vâng, tôi đã xin được việc ở đó vào năm ngoái.", "A: Bạn làm việc ở bộ Kế hoạch Đầu tư phải không?\nB: Không, tôi đã nghỉ việc ở đó vào năm ngoái."], [["작년에", "작년: năm ngoái"], ["취직했습니다", "취직하다: xin được việc"]]],
+        "u14_20_keonseolting-hoesa": ["gulso9", ["Trước khi tốt nghiệp, tôi muốn làm việc tại một công ty tư vấn quản lý.", "Sau khi tốt nghiệp, tôi muốn làm việc tại một công ty xây dựng.", "Sau khi tốt nghiệp, tôi muốn học lên cao học."], [["졸업", "졸업: tốt nghiệp"], ["경영", "경영: quản lý, kinh doanh"]]],
+        "u14_21_gongsa": ["1dwyezf", ["A: Anh trai bạn làm việc ở công ty quốc doanh phải không?\nB: Vâng, anh ấy làm việc ở công ty quốc doanh.", "A: Anh trai bạn làm việc ở công ty quốc doanh phải không?\nB: Không, anh ấy làm việc ở công ty xây dựng.", "A: Chị gái bạn làm việc ở công ty quốc doanh phải không?\nB: Không, chị ấy làm việc ở công ty thương mại."]],
+        "u14_22_saneob-danji": ["s22cxb", ["Khu công nghiệp có ít công ty và người. Vì thế đường không bị tắc.", "Khu công nghiệp có nhiều công ty và người. Vì thế đường bị tắc nghẽn vào cuối tuần.", "Khu trung tâm có nhiều công ty và người. Vì thế đường bị tắc nghẽn vào giờ đi làm và tan tầm."], [["출퇴근", "출퇴근: đi làm và tan làm"], ["막힙니다", "막히다: bị tắc"]]],
+        "u14_23_hyeobryeog-hoesa": ["10t2qj3", ["Vì là công ty hợp tác hôm nay đã gặp nên ngày mai hãy thử gọi điện xem sao nhé.", "Vì là công ty hợp tác ngày mai sẽ gặp nên sáng nay hãy thử gọi điện xem sao nhé.", "Vì là công ty hợp tác ngày mai sẽ gặp nên chiều nay hãy thử gửi email xem sao nhé."]],
+        "u14_24_oegug-tuja-hoesa": ["1w2enam", ["Tôi định làm việc với tư cách là kế toán ở công ty đầu tư nước ngoài. Tôi muốn nhận lương tháng cao.", "Tôi định làm việc với tư cách là thông dịch viên ở công ty thương mại. Tôi muốn nhận lương tháng cao.", "Tôi định làm việc với tư cách là thông dịch viên ở công ty đầu tư nước ngoài. Tôi muốn có nhiều thời gian nghỉ."], [["통역사로", "통역사: thông dịch viên"], ["월급을", "월급: lương tháng"]]],
+        "u14_25_habjagsa": ["5ay6qt", ["Hôm nay rảnh nên có thể gặp nhân viên công ty liên doanh.", "Hôm nay bận quá nên không thể gặp giám đốc công ty liên doanh.", "Ngày mai bận quá nên không thể gặp nhân viên công ty liên doanh."], [["직원을", "직원: nhân viên"]]],
+        "u15_01_igsughada": ["1tueanf", ["Phải nhanh chóng quen với cuộc sống ở Việt Nam.", "Phải nhanh chóng quen với đồ ăn ở Hàn Quốc.", "Không cần vội quen với cuộc sống ở Hàn Quốc."], [["생활에", "생활: cuộc sống, sinh hoạt"]]],
+        "u15_02_jeogeunghada": ["szyg4g", ["Tôi định thích ứng nhanh với cuộc sống nước ngoài. Vì thế tôi thường xuyên đi du lịch.", "Tôi định thích ứng nhanh với cuộc sống nước ngoài. Vì thế tôi thường xuyên gặp gỡ những người bạn Việt Nam.", "Tôi chưa thích ứng được với cuộc sống nước ngoài. Vì thế tôi ít gặp gỡ những người bạn Hàn Quốc."]],
+        "u15_03_igsughaejida": ["2srlub", ["A: Giao thông Seoul thế nào?\nB: Lúc đầu đã rất đơn giản. Thế nhưng bây giờ thì phức tạp.", "A: Đồ ăn Seoul thế nào?\nB: Lúc đầu đã rất lạ. Thế nhưng bây giờ tôi đã quen dần nhiều rồi.", "A: Giao thông Seoul thế nào?\nB: Lúc đầu đã rất phức tạp. Bây giờ vẫn chưa quen."], [["교통이", "교통: giao thông"], ["처음에는", "처음: lúc đầu"], ["복잡했습니다", "복잡하다: phức tạp"]]],
+        "u15_04_oerobda": ["1x2fmkn", ["Ăn cơm cùng gia đình thì thấy vui đúng không?", "Xem phim một mình thì thấy cô đơn đúng không?", "Ăn cơm một mình thì thấy thoải mái đúng không?"]],
+        "u15_05_nachseolda": ["1czda6s", ["A: Văn hóa Hàn Quốc lạ lẫm với bạn phải không?\nB: Không, tôi đã sống ở Hàn Quốc lâu rồi.", "A: Đồ ăn Hàn Quốc lạ lẫm với bạn phải không?\nB: Vâng, tôi lần đầu tiên đến Hàn Quốc. Vì thế đồ ăn hơi lạ lẫm.", "A: Văn hóa Nhật Bản lạ lẫm với bạn phải không?\nB: Vâng, tôi lần đầu tiên đến Nhật Bản. Vì thế văn hóa hơi lạ lẫm."], [["문화가", "문화: văn hoá"]]],
+        "u15_06_bulpyeonhada": ["pv9415", ["Nhà trọ này rất gần ga tàu điện ngầm. Và nhà vệ sinh rộng nên tiện lợi.", "Nhà trọ này rất xa ga tàu điện ngầm. Và phòng ngủ nhỏ nên bất tiện.", "Ký túc xá này rất xa ga tàu điện ngầm. Và nhà vệ sinh nhỏ nên bất tiện."], [["하숙집은", "하숙집: nhà trọ"], ["멉니다", "멀다: xa"], ["화장실이", "화장실: nhà vệ sinh"]]],
+        "u15_07_oegugin-deungrogjeung": ["79qhi9", ["Cái thẻ ở dưới bàn có vẻ là thẻ chứng nhận người nước ngoài đó.", "Cái thẻ ở trên bàn có vẻ là thẻ giao thông đó.", "Cái thẻ ở trên bàn chắc chắn là thẻ chứng nhận người nước ngoài đó."], [["책상", "책상: bàn học, bàn làm việc"]]],
+        "u15_08_chulibguggwanrisamuso": ["woylcs", ["Tôi đi đến Phòng quản lý xuất nhập cảnh để làm hộ chiếu. Vị trí ở đâu vậy?", "Tôi đi đến ủy ban quận để làm thẻ đăng ký người nước ngoài. Vị trí ở đâu vậy?", "Tôi đi đến Phòng quản lý xuất nhập cảnh để làm thẻ đăng ký người nước ngoài. Mấy giờ mở cửa vậy?"], [["위치가", "위치: vị trí"]]],
+        "u15_09_gyotong-kadeu": ["16xxfcj", ["A: Khi lên xe buýt bạn thanh toán bằng thẻ giao thông à?\nB: Không, tôi luôn trả bằng tiền mặt.", "A: Khi đi taxi bạn thanh toán bằng tiền mặt à?\nB: Không, tôi sử dụng thẻ tín dụng mỗi ngày.", "A: Khi lên xe buýt bạn thanh toán bằng tiền mặt à?\nB: Vâng, tôi không có thẻ giao thông."], [["현금으로", "현금: tiền mặt"], ["사용합니다", "사용하다: sử dụng"]]],
+        "u15_10_hyeongeumkadeu": ["1amy0nz", ["Không có tiền mặt trong ví. Vì thế tôi đã mua quần ở trung tâm mua sắm và thanh toán bằng thẻ tín dụng.", "Có nhiều tiền mặt trong ví. Vì thế tôi đã mua quần ở trung tâm mua sắm và thanh toán bằng tiền mặt.", "Không có tiền mặt trong ví. Vì thế tôi đã mua áo ở chợ và thanh toán bằng thẻ tiền mặt."], [["지갑에", "지갑: ví tiền"], ["현금이", "현금: tiền mặt"]]],
+        "u15_11_tongjangeul-mandeulda": ["1div340", ["A: Hôm nay bạn đi ngân hàng để làm gì vậy?\nB: Tôi đi đổi tiền để đi du lịch.", "A: Hôm nay bạn đi ngân hàng để làm gì vậy?\nB: Tôi đi rút tiền lương tháng ở công ty.", "A: Hôm nay bạn đi bưu điện để làm gì vậy?\nB: Tôi đi gửi bưu kiện cho công ty."], [["월급을", "월급: lương tháng"]]],
+        "u15_12_hwanjeonhada": ["2gj3b0", ["Cuối tuần này tôi sẽ khởi hành đi du lịch nước ngoài đến Hàn Quốc. Vì thế tôi sẽ đổi tiền ở ngân hàng.", "Cuối tuần này tôi sẽ khởi hành đi du lịch nước ngoài đến Việt Nam. Vì thế tôi sẽ đổi tiền ở sân bay.", "Cuối tuần trước tôi đã đi du lịch nước ngoài đến Việt Nam. Vì thế tôi đã đổi tiền ở ngân hàng."], [["떠날", "떠나다: khởi hành, rời đi"], ["베트남으로", "베트남: Việt Nam"]]],
+        "u15_13_gisugsa": ["lr70fm", ["Từ học kỳ này mình đã quyết định sẽ vào ở ký túc xá trường đại học.", "Từ học kỳ sau mình đã quyết định sẽ ra ở nhà trọ.", "Từ học kỳ sau mình đã quyết định sẽ vào ở ký túc xá của công ty."], [["학기부터", "학기: học kỳ"], ["들어가기로", "들어가다: vào (ở)"]]],
+        "u15_14_jachwibang": ["1dqy42g", ["Tôi không thích nấu ăn. Vì thế tôi muốn sống ở ký túc xá gần trường học.", "Tôi rất thích việc nấu ăn. Vì thế tôi muốn sống ở phòng thuê tự nấu ăn gần công ty.", "Tôi rất thích việc dọn dẹp. Vì thế tôi muốn sống ở phòng thuê tự nấu ăn gần trường học."], [["요리하기를", "요리하다: nấu ăn"], ["근처", "근처: gần, khu vực lân cận"]]],
+        "u15_15_hasugjib": ["r3615v", ["Hồi học đại học mình đã từng sống ở ký túc xá.", "Hồi học cấp ba mình đã từng sống thử ở nhà trọ.", "Hồi học đại học mình chưa từng sống ở nhà trọ."], [["다닐", "다니다: đi học, theo học"]]],
+        "u15_16_wichi": ["qzzjfn", ["Sau khi kiểm tra giá của quán ăn xong thì tụi mình cùng xuất phát nha", "Trước khi kiểm tra vị trí quán ăn thì tụi mình xuất phát luôn nha", "Sau khi kiểm tra vị trí khách sạn xong thì tụi mình cùng xuất phát nha"], [["확인한", "확인하다: kiểm tra, xác nhận"], ["출발합시다", "출발하다: xuất phát"]]],
+        "u15_17_rummeiteu": ["1tbsae4", ["Trong phòng được dùng đồ của bạn cùng phòng mà không cần hỏi.", "Trong phòng không được tự ý ăn đồ ăn của bạn cùng phòng.", "Trong lớp không được tự ý dùng đồ của bạn cùng lớp mà không nói tiếng nào."], [["물건을", "물건: đồ đạc"], ["말없이", "말없이: không nói tiếng nào"]]],
+        "u15_18_bojeunggeum": ["vkvgr1", ["Phòng thuê tự nấu ăn đó có tiền thuê nhà trả mỗi tháng đắt. Nhưng tiền đặt cọc rất rẻ.", "Phòng thuê tự nấu ăn đó có tiền thuê nhà trả mỗi tháng rẻ. Và tiền đặt cọc cũng rẻ.", "Ký túc xá đó có tiền thuê trả mỗi tháng rẻ. Nhưng tiền điện rất đắt."], [["매월", "매월: mỗi tháng"], ["내는", "내다: trả (tiền)"]]],
+        "u15_19_weolse": ["fnqrif", ["Mình ở trọ trả tiền thuê tháng tại căn nhà này được 2 năm rồi", "Mình ở ký túc xá tại tòa nhà này được 1 năm rồi", "Mình sẽ ở trọ trả tiền thuê tháng tại căn nhà này 1 năm"], [["내고", "내다: trả (tiền)"]]],
+        "u15_20_biyong": ["y8l94u", ["Nếu mua vé máy bay muộn thì tốn nhiều tiền.", "Nếu mua vé tàu trước thì không tốn nhiều tiền.", "Nếu mua vé máy bay trước thì không mất nhiều thời gian."], [["미리", "미리: trước"]]],
+        "u15_21_inteones-yogeum": ["air1hj", ["Tiền internet ở Hàn Quốc rẻ nhỉ!", "Tiền internet ở Việt Nam đắt nhỉ!", "Tiền điện ở Việt Nam rẻ nhỉ!"]],
+        "u15_22_gaseu-yogeum": ["9ixo7u", ["Bạn hãy check thử tiền điện tháng này đi.", "Bạn hãy check thử tiền gas tháng trước đi.", "Bạn hãy trả tiền gas tháng này đi."], [["확인해", "확인하다: kiểm tra"]]],
+        "u15_23_jeongi-yogeum": ["16m7o36", ["Vào mùa đông, vì sử dụng máy sưởi nhiều nên tiền điện khá cao.", "Vào mùa hè, vì sử dụng điều hòa nhiều nên tiền nước khá cao.", "Vào mùa hè, vì ít sử dụng điều hòa nên tiền điện khá thấp."], [["에어컨을", "에어컨: máy điều hoà"], ["사용해서", "사용하다: sử dụng"]]],
+        "u15_24_sudo-yogeum": ["dr3ksf", ["Tháng này tiền nước nhiều hơn tháng trước.", "Tháng này tiền điện ít hơn tháng trước.", "Tháng này tiền nước ít hơn tháng sau."], [["지난달보다", "지난달: tháng trước"]]]
+    };
+    function _koHash(s) { let x = 5381; for (const c of String(s)) x = ((x * 33) ^ c.codePointAt(0)) >>> 0; return x.toString(36); }
+    function _stemOf(item) { const m = String((item && item.img) || '').match(/([^\/]+)\.[a-z0-9]+$/i); return m ? m[1] : ''; }
+    // Dữ liệu soạn tay của câu này (chỉ dùng khi câu trong Sheet vẫn đúng như lúc soạn)
+    function quizSentDataOf(item, ko) {
+        const d = QUIZ_SENT_DATA[_stemOf(item)];
+        return (d && d[0] === _koHash(_koKey(ko))) ? d : null;
+    }
+    // Câu Hàn -> HTML (đã escape) có gạch chấm dưới từ lạ + bong bóng nghĩa
+    function wsKoGlossHtml(text, item) {
+        const sd = item ? quizSentDataOf(item, text) : null;
+        const list = (WS_GLOSSES[_koKey(text)] || (sd && sd[2]) || []).slice().sort((a, b) => b[0].length - a[0].length);
+        let html = wsEsc(text);
+        const slots = [];
+        list.forEach(([w, g]) => {
+            const ew = wsEsc(w), at = html.indexOf(ew);
+            if (at < 0) return;
+            slots.push(`<span class="ws-gloss" data-gloss="${wsEsc(g)}" tabindex="0" onclick="this.classList.toggle('open')" onmouseleave="this.classList.remove('open')">${ew}</span>`);
+            html = html.slice(0, at) + '\u0000' + (slots.length - 1) + '\u0000' + html.slice(at + ew.length);
+        });
+        html = html.replace(/\u0000(\d+)\u0000/g, (_, k) => slots[+k]);
+        return dialogBreak(html);
     }
 
     // Tách chuỗi Hàn thành danh sách "jamo" (phụ âm/nguyên âm) để so khớp
@@ -7452,7 +8055,7 @@
     }
 
     // Đồng bộ trạng thái thanh chọn dạng về mặc định (gọi khi đổi Unit)
-    function syncQuizModeToggles() { renderQuizModeSelect(currentTab); }
+    function syncQuizModeToggles() { renderQuizModeSelect(currentTab); syncShuffleBtn(); }
 
     // Vẽ thanh pills chọn dạng theo tab quiz đang mở; ẩn nếu tab không có lựa chọn.
     function renderQuizModeSelect(tab) {
@@ -8465,7 +9068,7 @@
             if ((it.ex2 || '').trim() && (it.ex2Vi || '').trim()) bank.push(i * 2 + 1);
             else if ((it.ex || '').trim() && (it.exVi || '').trim()) bank.push(i * 2);
         }
-        return shuffleArray(bank);
+        return quizShuffleOn('writesentence') ? shuffleArray(bank) : bank;
     }
 
     function wsStoreKey() { return `writeSentenceState_${getStudentKey()}`; }
@@ -8508,7 +9111,8 @@
         const bankIds = new Set(wsBuildBank());
         const valid = sess && Array.isArray(sess.order) && sess.order.length &&
             sess.order.length === bankIds.size && sess.order.every(id => bankIds.has(id)) &&
-            (sess.seen || []).length < sess.order.length;
+            (sess.seen || []).length < sess.order.length &&
+            !(quizShuffleOn('writesentence') && orderIsSequential(sess.order));
         if (valid) {
             ws.indices = sess.order.slice();
             ws.current = Math.min(sess.current || 0, ws.indices.length - 1);
@@ -8542,8 +9146,9 @@
     function wsKeyDown(e) {
         if (e.key === 'Enter') { const ws = tabState.writesentence; if (!ws.checked && (ws.inputValue || '').trim()) wsCheck(); }
     }
-    function wsToggleAnswer() { tabState.writesentence.showAnswer = !tabState.writesentence.showAnswer; wsRender(); }
-    function wsToggleGrammar() { tabState.writesentence.showGrammar = !tabState.writesentence.showGrammar; wsRender(); }
+    // 2 gợi ý mở sẵn; học viên tắt thì nhớ theo máy (lần sau mở lại trang giữ đúng lựa chọn)
+    function wsToggleAnswer() { const ws = tabState.writesentence; ws.showAnswer = !ws.showAnswer; wsPrefSet('wsShowAnswer', ws.showAnswer); wsRender(); }
+    function wsToggleGrammar() { const ws = tabState.writesentence; ws.showGrammar = !ws.showGrammar; wsPrefSet('wsShowGrammar', ws.showGrammar); wsRender(); }
     // Tự đọc câu tiếng Hàn khi sang câu mới (0.8x). Tắt bằng nút loa — nhớ theo máy.
     const WS_RATE = 0.8;
     function wsAutoOn() { try { return localStorage.getItem('wsAutoRead') !== '0'; } catch (e) { return true; } }
@@ -8727,7 +9332,7 @@
             <div class="ws-body${pic ? ' has-pic' : ''}">
               ${pic}
               <div class="ws-main">
-                <div class="ws-src">${speakBtn}<p class="ws-src-txt ${sourceIsKo ? 'ko' : 'vi'}">${wsDialogHtml(sourceText)}</p></div>
+                <div class="ws-src">${speakBtn}<p class="ws-src-txt ${sourceIsKo ? 'ko' : 'vi'}">${sourceIsKo ? wsKoGlossHtml(sourceText, s.item) : wsDialogHtml(sourceText)}</p></div>
                 ${workHtml}
                 ${fbHtml}
                 ${graHtml}
@@ -8853,6 +9458,9 @@
             ? 'Nghĩa của câu vừa nghe?'
             : 'Nghĩa của từ vừa nghe?';
 
+        const stage = document.getElementById('guess-stage'), picBox = document.getElementById('guess-pic');
+        stage.classList.remove('has-pic'); picBox.innerHTML = '';
+
         // Chế độ "Nghe câu" nhưng Unit không có câu ví dụ nào
         if (isSentence && state.indices.length === 0) {
             document.getElementById('guess-opts').innerHTML =
@@ -8863,18 +9471,27 @@
 
         let actualIndex = state.indices[state.current]; const currentItem = vocabData[actualIndex];
         document.getElementById('global-counter').innerText = (state.current + 1) + " / " + state.indices.length;
+        // Dạng câu: dùng câu đi kèm hình (ví dụ 2); từ nào thiếu mới dùng ví dụ 1
+        const gp = isSentence ? guessPairOf(currentItem) : null;
         // Gợi ý: hiện câu (dạng câu) hoặc từ (dạng từ) tiếng Hàn
-        document.getElementById('guess-hint-text').innerText = isSentence ? currentItem.ex : currentItem.ko;
+        document.getElementById('guess-hint-text').innerText = gp ? gp.ko : currentItem.ko;
 
-        const speakText = isSentence ? currentItem.ex : currentItem.ko;
+        // Hình minh hoạ đặt cạnh nút nghe -> vừa nghe vừa nhìn (chỉ khi câu là câu của hình)
+        if (gp && gp.withPic && String(currentItem.img || '').trim() && !(visualPoolReady && !visualHasImage(actualIndex))) {
+            const src = wordImgSrc(currentItem), goc = wordImgPaths(currentItem.img).goc, back = src !== goc ? goc : '';
+            picBox.innerHTML = `<img src="${wsEsc(src)}" alt="Hình minh hoạ" onerror="if(!this.dataset.b&&'${wsEsc(back)}'){this.dataset.b='1';this.src='${wsEsc(back)}';}else{this.onerror=null;var s=document.getElementById('guess-stage');if(s)s.classList.remove('has-pic');this.remove();}">`;
+            stage.classList.add('has-pic');
+        }
+
+        const speakText = gp ? gp.ko : currentItem.ko;
         const guessPlayBtn = document.getElementById('btn-guess-play');
         if (guessPlayBtn) guessPlayBtn.onclick = function(e) { e.stopPropagation(); triggerKoreanVoice(speakText, false); };
 
         let correctAnswer, wrong;
-        if (isSentence) {
-            correctAnswer = currentItem.exVi;
-            // Đáp án nhiễu = câu nghĩa HAO HAO câu đúng (lấy từ toàn bộ sheet, mọi Unit)
-            wrong = pickSimilarExViDistractors(currentItem, 3);
+        if (gp) {
+            correctAnswer = gp.vi;
+            // Đáp án nhiễu HAO HAO câu đúng: chỉ lệch 1 chi tiết (số, thời gian, nơi chốn, từ khoá...) -> phải nghe kỹ
+            wrong = guessSimilarDistractors(currentItem, gp, 3);
         } else {
             correctAnswer = currentItem.vi;
             wrong = pickWrongTexts(vocabData.filter((_, idx) => idx !== actualIndex).map(item => item.vi), correctAnswer, 3);
@@ -9696,9 +10313,9 @@
     function buildFreshIndices(tab, mode) {
         let base = Array.from({ length: vocabData.length }, (_, i) => i);
         if (tab === 'listen' && mode === 'sentence') base = base.filter(i => quizClozePairsOf(vocabData[i]).length > 0); // chỉ câu đục lỗ được
-        else if (tab === 'guess' && mode === 'sentence') base = base.filter(i => (vocabData[i].ex || '').trim() !== '' && (vocabData[i].exVi || '').trim() !== '');
+        else if (tab === 'guess' && mode === 'sentence') base = base.filter(i => { const p = guessPairOf(vocabData[i]); return !!(p && p.vi); }); // câu đi kèm hình (ví dụ 2), thiếu mới dùng ví dụ 1
         else if (tab === 'visual') base = visualIndicesOf(base); // chỉ từ có ảnh
-        return shuffleArray(base);
+        return quizShuffleOn(tab) ? shuffleArray(base) : base;   // tắt Ngẫu nhiên -> theo thứ tự trong bài
     }
     // 1 session đã lưu có phải "đã làm xong" không (xong rồi thì lần sau bắt đầu vòng mới).
     function isSessionFinished(tab, sess) {
@@ -9752,7 +10369,8 @@
             const validOrder = saved && Array.isArray(saved.order) && saved.order.length &&
                                saved.order.every(i => i >= 0 && i < vocabData.length) &&
                                (tab !== 'visual' || saved.order.every(i => visualHasImage(i)));
-            if (validOrder && !isSessionFinished(tab, saved)) sess = saved;
+            // Đang bật Ngẫu nhiên mà bài dở là bản theo thứ tự (lần trước đã tắt) -> xáo mới
+            if (validOrder && !isSessionFinished(tab, saved) && !(quizShuffleOn(tab) && orderIsSequential(saved.order))) sess = saved;
         }
         if (sess) {
             st.indices = sess.order.slice();
