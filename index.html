@@ -3349,6 +3349,10 @@
     const _sndWrong   = new Audio(SND_WRONG);
     _sndCorrect.preload = "auto";
     _sndWrong.preload   = "auto";
+    // Âm lượng hiệu ứng đúng/sai (1 = gốc). 27/11/2026: giảm còn 90% cho đỡ át tiếng bài nghe.
+    const SND_VOL = 0.9;
+    _sndCorrect.volume = SND_VOL;
+    _sndWrong.volume   = SND_VOL;
     function playFeedbackSound(isCorrect) {
         try {
             const a = isCorrect ? _sndCorrect : _sndWrong;
@@ -4812,7 +4816,7 @@
         if (ok) { q.done.push(j); q.bad = null; }
         else { s1Quiz.wrong.add(q.sel); q.bad = [q.sel, j]; }
         q.sel = null;
-        try { const a = new Audio(ok ? SND_CORRECT : SND_WRONG); a.volume = 0.5; a.play().catch(() => {}); } catch (e) {}
+        try { const a = new Audio(ok ? SND_CORRECT : SND_WRONG); a.volume = 0.5 * SND_VOL; a.play().catch(() => {}); } catch (e) {}
         renderExerciseMode(false);
         const nb = document.getElementById('q1-next'); if (nb) nb.focus({ preventScroll: true });
     }
@@ -4822,7 +4826,7 @@
         s1Quiz.picked = oi;
         const ok = oi === _s1Correct(q);
         if (!ok) s1Quiz.wrong.add(q.i);
-        try { const a = new Audio(ok ? SND_CORRECT : SND_WRONG); a.volume = 0.5; a.play().catch(() => {}); } catch (e) {}
+        try { const a = new Audio(ok ? SND_CORRECT : SND_WRONG); a.volume = 0.5 * SND_VOL; a.play().catch(() => {}); } catch (e) {}
         renderExerciseMode(false);
         const nb = document.getElementById('q1-next'); if (nb) nb.focus({ preventScroll: true });
     }
@@ -4942,7 +4946,7 @@
         const ex = _exCurrent(), st = _exState(), a = _s2Ask; if (!ex || !a || a.ok) return;
         const q = ex.listenQ[a.qi], right = oi === q.ans;
         st.s2 = st.s2 || {}; if (st.s2[a.qi] === undefined) st.s2[a.qi] = oi;   // lựa chọn đầu tiên
-        try { const s = new Audio(right ? SND_CORRECT : SND_WRONG); s.volume = 0.5; s.play().catch(() => {}); } catch (e) {}
+        try { const s = new Audio(right ? SND_CORRECT : SND_WRONG); s.volume = 0.5 * SND_VOL; s.play().catch(() => {}); } catch (e) {}
         if (!right) {
             a.wrong.push(oi); _exSave(); _s2ModalShow();
             // s2Replay: chọn sai -> đóng câu hỏi, nghe lại câu đó; hết câu sẽ hỏi lại từ đầu
