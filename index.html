@@ -773,15 +773,18 @@
             .ws-body.has-pic .ws-pic { position: sticky; top: 12px; padding: 16px; min-height: 220px; }
             .ws-body.has-pic .ws-pic img { width: 100%; max-height: 380px; }
         }
-        /* Nghe & tìm nghĩa (dạng câu): hình minh hoạ đặt cạnh nút nghe */
+        /* Nghe & tìm nghĩa (dạng câu): 1 khung gọn — hình ở giữa, hàng điều khiển nhỏ (loa + bóng đèn) ngay dưới hình */
         .guess-pic { display: none; }
-        .guess-stage.has-pic { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: 18px; align-items: stretch; margin-bottom: 26px; }
-        .guess-stage.has-pic .listen-box { margin-bottom: 0; }
-        .guess-stage.has-pic .guess-pic { display: flex; align-items: center; justify-content: center; background: #fff; border-radius: var(--radius-md); padding: 12px; }
-        .guess-pic img { display: block; width: 100%; max-height: 300px; object-fit: contain; border-radius: 10px; }
+        .guess-stage.has-pic { display: flex; flex-direction: column; align-items: center; gap: 12px; background: var(--bg-color); border-radius: var(--radius-md); box-shadow: var(--neu-concave); padding: 18px 18px 14px; margin-bottom: 22px; }
+        .guess-stage.has-pic .guess-pic { display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 14px; padding: 8px; max-width: 100%; }
+        .guess-pic img { display: block; max-width: 100%; max-height: 260px; width: auto; height: auto; object-fit: contain; border-radius: 10px; }
+        .guess-stage.has-pic .listen-box { background: transparent; box-shadow: none; min-height: 0 !important; padding: 0 !important; margin: 0 !important; width: 100%; display: flex; flex-flow: row wrap; align-items: center; justify-content: center; gap: 8px 14px; position: relative; }
+        .guess-stage.has-pic .listen-circle-btn { width: 54px !important; height: 54px !important; font-size: 11px !important; }
+        .guess-stage.has-pic .hint-btn-bottom-right { position: static; width: 38px; height: 38px; }
+        .guess-stage.has-pic .text-hint-display { position: static; transform: none; flex: 0 0 100%; max-width: 100%; white-space: normal; order: 3; }
         @media (max-width: 700px) {
-            .guess-stage.has-pic { grid-template-columns: 1fr; gap: 12px; margin-bottom: 16px; }
-            .guess-pic img { max-height: 220px; }
+            .guess-stage.has-pic { padding: 12px 12px 10px; gap: 10px; margin-bottom: 14px; }
+            .guess-pic img { max-height: 200px; }
         }
         /* Từ lạ trong câu: rê chuột (hoặc chạm) để xem nghĩa */
         .ws-gloss { position: relative; border-bottom: 2px dotted #9f8cff; cursor: help; }
@@ -843,7 +846,7 @@
             .ws-src-txt.vi { font-size: 16px; }
             .ws-speak { width: 36px; height: 36px; }
             /* ô nhập xuống dòng riêng, nút Kiểm tra full chiều ngang -> dễ bấm */
-            .ws-inputrow { flex-direction: column; }
+            .ws-inputrow { flex-direction: column; align-items: stretch; }
             .ws-inputrow .ws-btn { width: 100%; padding: 14px 0; }
             .ws-answerbox { padding: 4px 12px 8px; }
             /* nhãn "Bạn viết"/"Câu sửa" nằm trên, câu nằm dưới -> không bị bóp hẹp */
@@ -1045,6 +1048,7 @@
             .controls-left #global-counter { flex: 0 0 auto !important; }
             .controls-right { width: 100% !important; }
             .controls-right .btn-primary { width: 100% !important; padding: 12px !important; font-size: 14px !important; text-align: center !important; display: block !important; }
+            .controls-right .btn-primary[style*="display: none"] { display: none !important; } /* chưa trả lời thì không hiện "Tiếp theo" */
         }
 
         /* --- LAYOUT HAI CỘT NGỮ PHÁP NEUMORPHISM XỊN SÒ --- */
@@ -1259,7 +1263,8 @@
             .visual-scene-wrap { margin: 12px auto 8px !important; }
             .visual-hint-display { padding: 7px 12px !important; font-size: 14px !important; }
             /* Màn hẹp: không có gutter bên phải -> đưa bóng đèn lên GÓC TRÊN-PHẢI ngoài khung hình */
-            .visual-scene-wrap .hint-btn-bottom-right { top: -8px !important; right: 2px !important; bottom: auto !important; transform: translateY(-100%) !important; }
+            /* Màn hẹp: bóng đèn nằm gọn ở góc trên-phải BÊN TRONG khung hình, không lấn lên thanh Dạng luyện */
+            .visual-scene-wrap .hint-btn-bottom-right { top: 8px !important; right: 8px !important; bottom: auto !important; transform: none !important; width: 36px !important; height: 36px !important; background: rgba(255,255,255,0.92) !important; z-index: 2; }
             .quiz-question { font-size: 14px !important; margin-bottom: 8px !important; }
             .quiz-options { gap: 8px !important; margin-bottom: 8px !important; }
             .qmatch { gap: 7px !important; }
@@ -2149,7 +2154,7 @@
                             <span class="quiz-mode-lead" id="quiz-mode-lead">Dạng luyện:</span>
                             <div class="quiz-mode-pills" id="quiz-mode-pills"></div>
                         </div>
-                        <div style="display:inline-flex; gap:10px; align-items:center;">
+                        <div style="display:inline-flex; gap:10px; align-items:center; margin-left:auto;">
                             <button class="quiz-shuffle-btn quiz-restart-btn" id="ctrl-restart-btn" onclick="restartCurrentTab()" title="Làm lại dạng này từ đầu">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                                 Làm lại
@@ -2938,7 +2943,6 @@
     </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261123a"></script>
 <script>
     // ===================================================================
     // 🔄 TỰ ĐỘNG NHẬN PHIÊN BẢN MỚI KHI CÔ DEPLOY LÊN GITHUB
@@ -3278,9 +3282,9 @@
         if (_progressReady) return;
         var sess = localStorage.getItem('studentSession_QuyenClass'), pass = getSyncPass();
         if (!sess || !pass) return;
-        fetch(SCRIPT_URL + '?action=unlockUnit&unit=LOGIN_AUTH&pass=' + encodeURIComponent(sess + '||' + pass))
+        fetch(SCRIPT_URL + '?action=unlockUnit&unit=LOGIN_AUTH&pass=' + encodeURIComponent(sess + '||' + pass) + exvParam())
             .then(function (r) { return r.json(); })
-            .then(function (d) { if (d && d.success) applyServerProgress(sess, d.progress); })
+            .then(function (d) { if (d && d.success) { applyServerProgress(sess, d.progress); setExerciseData(d, sess); } })
             .catch(function () {});
     }
     function markProgressOfflineLogin() {
@@ -3302,14 +3306,15 @@
         var sess = localStorage.getItem('studentSession_QuyenClass'), pass = getSyncPass();
         if (!sess || !pass) return;
         _lastRefreshAt = Date.now(); _refreshing = true;
-        fetch(SCRIPT_URL + '?action=unlockUnit&unit=LOGIN_AUTH&nb=1&pass=' + encodeURIComponent(sess + '||' + pass))
+        fetch(SCRIPT_URL + '?action=unlockUnit&unit=LOGIN_AUTH&nb=1&pass=' + encodeURIComponent(sess + '||' + pass) + exvParam())
             .then(function (r) { return r.json(); })
             .then(function (d) {
                 if (!d || !d.success) return;
                 var before = _pStr(snapshotProgress(sess)), asBefore = JSON.stringify(exAssignments);
                 applyServerProgress(sess, d.progress);
                 if (d.assignments !== undefined) setExerciseAssignments(d.assignments, sess);
-                if (_pStr(snapshotProgress(sess)) !== before || JSON.stringify(exAssignments) !== asBefore) onProgressRefreshed();
+                var exChanged = setExerciseData(d, sess);   // 🔒 bài mới được giao / giáo viên sửa đề
+                if (exChanged || _pStr(snapshotProgress(sess)) !== before || JSON.stringify(exAssignments) !== asBefore) onProgressRefreshed();
             })
             .catch(function () {})
             .then(function () { _refreshing = false; });
@@ -3749,8 +3754,30 @@
 
     // ===== 📝 BÀI TẬP THEO UNIT =====
     // Mỗi unit có danh sách tab bài tập (Đọc, ...). Unit chưa có thì hiện "chưa có bài tập".
-    // Nội dung bài tập nằm ở assets/exercise-data.js (dùng chung với teacher.html)
-    const EXERCISE_DATA = window.EXERCISE_DATA || {};
+    // 🔒 Nội dung bài tập KHÔNG để công khai: server gửi kèm lúc đăng nhập, chỉ các bài được giao
+    //    (file gốc exercise-data.js nằm trong thư mục "🔒 RIÊNG TƯ" trên Drive, không đưa lên GitHub).
+    const EXERCISE_DATA = {};
+    let exDataVer = '';                 // phiên bản kho bài máy đang có (gửi lên để server khỏi gửi lại)
+    function exDataKey(user) { return 'exData_' + String(user || '').toLowerCase(); }
+    function _fillExData(obj) {
+        Object.keys(EXERCISE_DATA).forEach(k => { delete EXERCISE_DATA[k]; });
+        Object.keys(obj || {}).forEach(k => { EXERCISE_DATA[k] = obj[k]; });
+    }
+    // d = phản hồi đăng nhập. Trả true nếu nội dung bài tập vừa thay đổi.
+    function setExerciseData(d, user) {
+        if (!d || !d.exercises || typeof d.exercises !== 'object') return false;  // exSame / backend cũ -> giữ bản đang có
+        _fillExData(d.exercises); exDataVer = String(d.exVer || '');
+        try { localStorage.setItem(exDataKey(user), JSON.stringify({ v: exDataVer, d: d.exercises })); } catch (e) {}
+        return true;
+    }
+    function loadExerciseData(user) {
+        _fillExData({}); exDataVer = '';
+        try {
+            const p = JSON.parse(localStorage.getItem(exDataKey(user)) || 'null');
+            if (p && p.d) { _fillExData(p.d); exDataVer = String(p.v || ''); }
+        } catch (e) {}
+    }
+    function exvParam() { return exDataVer ? '&exv=' + encodeURIComponent(exDataVer) : ''; }
     const EX_CIRCLED = ['①', '②', '③', '④'];
     let currentExerciseTab = null;
     // 📝 Bài đang mở trong tab Bài tập: { unit, key } — null = đang ở danh sách bài được giao
@@ -4134,7 +4161,7 @@
         const content = document.getElementById('exercise-content');
         const all = exAssignedList(), items = all.filter(i => !i.preview), previews = all.filter(i => i.preview);
         const gvNote = isTeacherAccount ? `<div class="exd-note">${ic('eye')}<span><b>Chế độ giáo viên:</b> hiện toàn bộ kho bài. Học viên chỉ thấy bài được giao.</span></div>` : '';
-        if (!Object.keys(EXERCISE_DATA).length) {   // không tải được assets/exercise-data.js
+        if (!Object.keys(EXERCISE_DATA).length && !isTeacherAccount && exAssignments && exAssignments.some(a => !a.from || a.from <= _exToday())) {   // có bài được giao nhưng chưa nhận được nội dung
             content.innerHTML = `<div class="exh-empty"><div class="exh-empty-ic">${ic('alert')}</div><b>Không tải được nội dung bài tập.</b><span>Vui lòng tải lại trang. Nếu vẫn lỗi, vui lòng báo giáo viên.</span></div>`;
             return;
         }
@@ -5628,7 +5655,8 @@
         document.getElementById('loading-area').style.display = 'block';
         document.getElementById('loading-text').innerText = "Đang đăng nhập...";
         
-        const targetUrl = `${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}${hasFreshBundle(user) ? '&nb=1' : ''}`;
+        loadExerciseData(user);   // 🔒 bài tập đã lưu của chính tài khoản này (để server khỏi gửi lại nếu không đổi)
+        const targetUrl = `${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(user + "||" + pass)}${hasFreshBundle(user) ? '&nb=1' : ''}${exvParam()}`;
         
         try {
             let res = await fetch(targetUrl, {
@@ -5649,6 +5677,7 @@
                 applyServerProgress(user, data.progress); // nạp + GỘP tiến độ từ server
                 setLessonUnits(data.unlockLesson, user); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                 setExerciseAssignments(data.assignments, user); // 📝 bài tập được giao (undefined = backend cũ)
+                setExerciseData(data, user);             // 🔒 nội dung các bài được giao
                 setTeacherRole(data.isTeacher, user);    // 👩‍🏫 bật nút tải đề nếu là tài khoản giáo viên
                 startStatusWatch(user, pass); // 🔒 theo dõi nếu tài khoản bị vô hiệu hoá từ xa
                 useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản (chỉ Unit được mở)
@@ -5670,6 +5699,7 @@
         // Chỉ xoá phiên đăng nhập — GIỮ LẠI sổ tay/tiến độ riêng theo tài khoản để lần sau đăng nhập lại vẫn còn.
         try { flushProgressNow(); } catch (e) {}            // 💾 đẩy nốt tiến độ lên server TRƯỚC khi xoá phiên
         try { localStorage.removeItem(bundleCacheKey()); } catch (e) {} // 🛡️ xoá giáo trình đã lưu trên máy
+        try { localStorage.removeItem(exDataKey(localStorage.getItem('studentSession_QuyenClass'))); } catch (e) {} // 🔒 xoá bài tập đã lưu
         localStorage.removeItem('studentSession_QuyenClass');
         localStorage.removeItem('saved_user_QuyenClass');
         localStorage.removeItem('saved_pass_QuyenClass');
@@ -10168,13 +10198,15 @@
             }
             
             try {
-                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}${hasFreshBundle(savedUser) ? '&nb=1' : ''}`);
+                loadExerciseData(savedUser);   // 🔒 bài tập đã lưu trên máy
+                let res = await fetch(`${SCRIPT_URL}?action=unlockUnit&unit=LOGIN_AUTH&pass=${encodeURIComponent(savedUser + "||" + savedPass)}${hasFreshBundle(savedUser) ? '&nb=1' : ''}${exvParam()}`);
                 let data = await res.json();
                 if(data.success) {
                     setSyncPass(savedPass);
                     applyServerProgress(savedUser, data.progress); // nạp + GỘP tiến độ từ server
                     setLessonUnits(data.unlockLesson, savedUser); // 📘 unit được mở Bài giảng + Ngữ pháp (undefined = backend cũ)
                     setExerciseAssignments(data.assignments, savedUser); // 📝 bài tập được giao
+                    setExerciseData(data, savedUser);             // 🔒 nội dung các bài được giao
                     setTeacherRole(data.isTeacher, savedUser);    // 👩‍🏫 quyền tải đề
                     startStatusWatch(savedUser, savedPass); // 🔒 theo dõi vô hiệu hoá từ xa
                     useLoginBundle(data.bundle);  // 🛡️ giáo trình riêng của tài khoản
@@ -10190,6 +10222,7 @@
                 markProgressOfflineLogin();   // ⛔ chưa kéo được tiến độ server -> chưa cho đẩy, sẽ thử lại khi có mạng
                 loadLessonUnits(sessionUser); // 📘 khôi phục danh sách mở bài giảng đã lưu (offline)
                 loadExerciseAssignments(sessionUser); // 📝 bài tập được giao đã lưu (offline)
+                loadExerciseData(sessionUser);        // 🔒 nội dung bài tập đã lưu (offline)
                 setTimeout(() => renderExNotice(false), 1500);
                 loadTeacherRole(sessionUser); // 👩‍🏫 khôi phục quyền tải đề đã lưu (offline)
                 let oldHistory = localStorage.getItem('historyUnits_' + String(sessionUser).toLowerCase())
@@ -11355,6 +11388,42 @@
         return Math.random() < 0.5 ? 'ko' : 'vi';
     }
 
+    // "Nghe câu · Chọn chủ đề": chủ đề = từ khoá của câu. Đáp án nhiễu là các từ PHÁT ÂM GẦN GIỐNG
+    // (cùng Unit ưu tiên, cùng loại danh từ / động-tính từ) -> phải nghe đúng từ khoá mới chọn được.
+    // Loại các từ cũng có mặt trong câu (để không có 2 đáp án cùng đúng).
+    function _topicLabel(it) {
+        const t = String(it.vi || '').replace(/\([^)]*\)/g, ' ').split(/[;/,\n]|\.\.\./)[0].replace(/["“”']/g, '').replace(/\s{2,}/g, ' ').trim() || viShort(it.vi);
+        return t.charAt(0).toUpperCase() + t.slice(1);
+    }
+    function sumTopicOptions(item, pair, pool) {
+        const ko = _koKey(pair.ko), viLow = String(pair.vi || '').toLowerCase();
+        const correct = _topicLabel(item);
+        // Động/tính từ: cột tiếng Anh bắt đầu bằng "To ..." (không dựa vào đuôi 다 — 바다 là danh từ)
+        const predOf = w => /^to\s/i.test(String(w.en || '').trim()) || /(\s\S*다|하다)$/.test(String(w.ko || '').trim());
+        const isPred = predOf(item);
+        const koCore = w => String(w || '').split(/[\/(]/)[0].trim().replace(/다$/, '').split(/\s+/).pop();
+        const seen = new Set([item.ko, correct.toLowerCase()]);
+        const cands = (pool || []).filter(w => {
+            if (!w || !w.ko || !w.vi || seen.has(w.ko) || sameMeaning(w, item)) return false;
+            const lab = _topicLabel(w).toLowerCase();
+            if (seen.has(lab)) return false;
+            if (predOf(w) !== isPred) return false;
+            const core = koCore(w.ko);
+            if (core && core.length >= 1 && ko.indexOf(core) >= 0) return false;      // từ này cũng nằm trong câu
+            if (lab.length >= 2 && _findWord(viLow, lab) >= 0) return false;            // nghĩa này cũng nằm trong câu dịch
+            seen.add(w.ko); seen.add(lab);
+            return true;
+        });
+        // Ưu tiên tuyệt đối từ CÙNG UNIT (cùng chủ đề), trong đó xếp theo độ gần âm; thiếu mới lấy Unit khác
+        cands.forEach(w => { w.__tp = _jamoDice(item.ko, w.ko) + (String(w.__unit) === String(item.__unit) ? 10 : 0); });
+        const sorted = cands.sort((a, b) => b.__tp - a.__tp);
+        const same = sorted.filter(w => w.__tp >= 10);
+        const top = (same.length >= 3 ? same : sorted).slice(0, 5);
+        const wrongs = shuffleArray(top).slice(0, 3).map(_topicLabel);
+        return wrongs.length === 3 ? { correct, wrongs } : null;
+    }
+
+    function ctPlayAudio(i) { const q = sumTest && sumTest.questions[i]; if (q && q.audio) triggerKoreanVoice(q.audio, false); }
     function buildCombinedQuestion(item, type, pool) {
         const q = { type, item, userAnswer: null };
         function optsFrom(field, answer) {
@@ -11377,6 +11446,12 @@
             if (pool.length >= 5) cands.push({ t: 'match', w: CW.match });
             if (quizOrderPairsOf(item, lang).length) cands.push({ t: 'order', w: CW.order });
             if (sumPicSet.has(item) && picSentenceOf(item)) cands.push({ t: 'pic', w: CW.pic });
+            // 🎧 Nghe câu: mức KHÓ -> nghe & chọn nghĩa cả câu; mức thường -> nghe & chọn chủ đề của câu
+            const lPair = guessPairOf(item);
+            if (lPair) {
+                if (sumHardQuiz) cands.push({ t: 'lsent', w: 22 });
+                else if (sumTopicOptions(item, lPair, pool)) cands.push({ t: 'ltopic', w: 14 });
+            }
             let rw = Math.random() * cands.reduce((a, c) => a + c.w, 0), sub = 'word';
             for (const c of cands) { rw -= c.w; if (rw <= 0) { sub = c.t; break; } }
 
@@ -11395,6 +11470,24 @@
                 q.links = {}; q.sel = null;
                 q.badge = 'Ghép cặp';
                 q.answer = q.pairs.map(p => p.ko + ' = ' + p.vi).join(' · ');
+                return q;
+            }
+            if (sub === 'lsent' || sub === 'ltopic') {
+                const pr = guessPairOf(item);
+                q.sub = sub; q.audio = pr.ko;
+                q.transcript = pr.ko + ' — ' + pr.vi;
+                if (sub === 'lsent') {
+                    q.answer = pr.vi;
+                    q.options = shuffleArray([pr.vi, ...guessSimilarDistractors(item, pr, 3)]);
+                    q.promptLabel = 'Nghĩa của câu vừa nghe là gì?';
+                    q.badge = 'Nghe câu · Chọn nghĩa';
+                } else {
+                    const t = sumTopicOptions(item, pr, pool);
+                    q.answer = t.correct;
+                    q.options = shuffleArray([t.correct, ...t.wrongs]);
+                    q.promptLabel = 'Câu vừa nghe nói về điều gì?';
+                    q.badge = 'Nghe câu · Chọn chủ đề';
+                }
                 return q;
             }
             if (sub === 'order') {
@@ -11491,6 +11584,9 @@
                 } else {
                     inner += `<div class="ct-prompt-sub">Chọn từ vừa nghe:</div>`;
                 }
+            } else if (q.sub === 'lsent' || q.sub === 'ltopic') {
+                inner += `<button class="ct-audio-btn" onclick="ctPlayAudio(${i})"><svg viewBox="0 0 24 24" fill="currentColor" style="width:1em;height:1em;vertical-align:-0.14em;"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>Nghe</button>`;
+                inner += `<div class="ct-prompt-sub">${q.promptLabel}</div>`;
             } else if (q.sub === 'match') {
                 inner += `<div class="ct-prompt-sub">Bấm 1 từ tiếng Hàn rồi bấm nghĩa tương ứng để nối (bấm lại để gỡ).</div><div id="ct-body-${i}"></div>`;
             } else if (q.sub === 'order') {
@@ -11651,6 +11747,11 @@
                 if (hint) { hint.style.display = 'block'; hint.style.color = 'var(--error-color)'; hint.innerText = '✕ Đáp án đúng: ' + q.answer; }
                 recordSummaryWrong(q.item);
             }
+            // Câu nghe: chấm xong hiện lại câu đã nghe để học sinh đối chiếu
+            if (q.transcript) {
+                const hint = document.getElementById('ct-hint-' + i);
+                if (hint) { hint.style.display = 'block'; if (ok) hint.style.color = 'var(--sub-text)'; hint.innerText = (ok ? '' : hint.innerText + '\n') + 'Câu vừa nghe: ' + q.transcript; }
+            }
         });
         const pct = Math.round(correct / sumTest.questions.length * 100);
         logSummaryResult({ kind: 'test', units: sumTest.units, types: sumTest.types, right: correct,
@@ -11760,7 +11861,7 @@
     // Lọc bỏ câu Nghe + hỏi ý giáo viên trước khi tải
     function collectExamQuestions() {
         if (!sumTest || !sumTest.questions || !sumTest.questions.length) { alert('Chưa có đề nào để tải.'); return null; }
-        const keep = sumTest.questions.filter(q => q.type !== 'listen' && q.type !== 'guess');
+        const keep = sumTest.questions.filter(q => q.type !== 'listen' && q.type !== 'guess' && q.sub !== 'lsent' && q.sub !== 'ltopic');
         if (!keep.length) {
             alert('Đề này toàn câu Nghe nên không in ra giấy được.\nVui lòng bỏ chọn 2 dạng "Nghe & chọn từ" / "Nghe & tìm nghĩa" khi tạo đề.');
             return null;

@@ -628,7 +628,6 @@
   </div>
 </div>
 
-<script src="assets/exercise-data.js?v=20261123a"></script>
 <script>
   // 🎨 Icon SVG phẳng 1 màu (không dùng emoji hệ thống)
   const ICON_PATHS = {
@@ -769,6 +768,7 @@
   }
   // Áp dữ liệu báo cáo lên trang (dùng cho cả bộ nhớ đệm lẫn bản mới tải)
   function applyReport(data){
+      applyExData(data.exercises);        // 🔒 kho bài tập (trước khi bóc tiến độ / vẽ)
       students = data.students || [];
       parsed = students.map(parseStudent);
       assignRows = Array.isArray(data.assignments) ? data.assignments : null;
@@ -1106,13 +1106,21 @@
      Bên trái: đề + bài làm (đúng/sai từng câu) + công cụ vẽ chú thích khi share màn hình.
      Bên phải: điểm trắc nghiệm (máy chấm), điểm + ghi chú tự luận, nhận xét chung,
      Lưu nháp / Gửi kết quả / Thu hồi. Kết quả lưu vào tiến độ của học viên (exGrade_…). */
-  const EX_DATA = window.EXERCISE_DATA || {};
-  // Danh mục bài lấy thẳng từ assets/exercise-data.js (thêm bài mới không cần sửa trang này)
-  Object.keys(EX_DATA).forEach(u => (EX_DATA[u] || []).forEach(ex => {
-    if (!ex.id) return;
-    EX_CATALOG[ex.id] = { unit:String(u), key:ex.key, label:ex.label, title:ex.title || '', mcq:ex.mcq.length,
-      essay: ex.essay.map(e => ({ q:e.q, fields:e.fields })) };
-  }));
+  // 🔒 Kho bài tập KHÔNG để công khai: server gửi kèm báo cáo lớp (cần đúng mật mã giáo viên).
+  //    File gốc exercise-data.js nằm trong thư mục "🔒 RIÊNG TƯ" trên Drive (thêm bài mới không cần sửa trang này).
+  const EX_DATA = {};
+  function applyExData(obj){
+    if (!obj || typeof obj !== 'object') return;          // backend cũ -> giữ danh mục đang có
+    Object.keys(EX_DATA).forEach(k => { delete EX_DATA[k]; });
+    Object.keys(obj).forEach(u => {
+      EX_DATA[u] = obj[u];
+      (obj[u] || []).forEach(ex => {
+        if (!ex.id) return;
+        EX_CATALOG[ex.id] = { unit:String(u), key:ex.key, label:ex.label, title:ex.title || '', mcq:ex.mcq.length,
+          essay: ex.essay.map(e => ({ q:e.q, fields:e.fields })) };
+      });
+    });
+  }
   function exFull(id){ const c = EX_CATALOG[id]; return c ? (EX_DATA[c.unit] || []).find(x => x.key === c.key) || null : null; }
   const CIRCLED = ['①','②','③','④','⑤'];
   function num(v){ return String(Math.round((Number(v) || 0) * 100) / 100).replace('.', ','); }
